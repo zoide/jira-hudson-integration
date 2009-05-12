@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.  See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~  http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<atlassian-plugin name="Marvelution JIRA Hudson Integration" key="marvelution.jira.hudson.integration" system="false">
+    <plugin-info>
+        <description>Marvelution JIRA Hudson Integration</description>
+        <vendor name="Marvelution" url="http://www.marvelution.com"/>
+        <version>1.0</version>
+    </plugin-info>
+    
+    <resource type="i18n" name="i18n-hudson-plugin" location="templates.plugins.hudson.hudson-plugin"/>
+    <resource type="download" name="images/" location="templates/plugins/hudson/images/"/>
+    
+    <portlet key="hudsonStatus" name="Hudson Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonStatusPortlet">
+        <description key="hudson.jira.portlet.status.description">i18n description</description>
+        <resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonStatusPortlet.vm"/>
+        <resource type="i18n" name="i18n" location="templates.plugins.hudson.portlets.hudson-plugin" />
+        <label key="hudson.jira.portlet.status.name"/>
+        <objectdescriptor key="hudson.jira.portlet.status.name"/>
+        <properties />
+    </portlet>
+    
+    <webwork1 key="HudsonServerConfig" name="Configure Your Hudson Server">
+        <actions>
+            <action name="com.marvelution.jira.web.action.HudsonConfiguration" alias="ConfigureHudson">
+                <view name="success">/templates/plugins/hudson/configureHudson.vm</view>
+                <view name="input">/templates/plugins/hudson/configureHudson.vm</view>
+            </action>
+        </actions>
+    </webwork1>
+    
+    <web-item key="Hudson-server" name="Hudson Server" section="system.admin/globalsettings" weight="1002">
+    	<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+    	<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+			<param name="permission">admin</param>
+		</condition>
+        <label key="hudson.server"/>
+        <link linkId="hudson_server">/secure/admin/jira/ConfigureHudson!view.jspa</link>
+    </web-item>
+    
+    <component key="hudsonPropertyManager" name="Hudson Property Manager"
+               class="com.marvelution.jira.plugins.hudson.HudsonPropertyManager">
+        <interface>com.marvelution.jira.plugins.hudson.HudsonPropertyManager</interface>
+    </component>
+    <component key="hudsonServerImpl" name="Hudson Server Implementation"
+               class="com.marvelution.jira.plugins.hudson.HudsonServerImpl">
+        <interface>com.marvelution.jira.plugins.hudson.service.HudsonServer</interface>
+    </component>
+    <component key="hudsonServerAccessorImpl" name="Hudson Server Accessor Implementation"
+               class="com.marvelution.jira.plugins.hudson.HudsonServerAccessorImpl">
+        <interface>com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor</interface>
+    </component>
+
+</atlassian-plugin>
