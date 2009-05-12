@@ -1,0 +1,106 @@
+<style type="text/css">
+a {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+.hudsonStatusTable, .hudsonStatusTable td {
+    border-collapse: collapse;
+    border: 1px solid #bbbbbb;
+}
+.portletBody th {
+    background-color: #fffff0;
+}
+.portletBody table{
+    width: "100%";
+    height: "100%";
+}
+</style>
+
+#if ($isHudsonConfigured)
+    <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
+        <thead>
+            <tr class="rowHeader">
+                <td class="colHeaderLink" colspan="2">
+                    ${i18n.getText("hudson.portlet.jobsStatusSummary")}:
+                    <strong><a href=${serverUrl}>${serverName}</a></strong> ($i18n.getText("hudson.portlet.allJobs")) 
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+        	<tr class="portletBody">
+            	<td bgcolor=ffffff>
+            		#if ($error)
+                    <div align="center"><strong><em>${i18n.getText("hudson.portlet.error")}:</em></strong> $textutils.htmlEncode($errorMessage)</div>
+		            #else
+                    <table class="hudsonStatusTable" width="99%">
+                    	<thead>
+                    		<tr>
+                    			<th>${i18n.getText("hudson.portlet.status")}</th>
+                    			<th>${i18n.getText("hudson.portlet.job")}</th>
+                    			<th>${i18n.getText("hudson.portlet.lastSuccessfulBuild")}</th>
+                    			<th>${i18n.getText("hudson.portlet.lastFailedBuild")}</th>
+                    			<th>${i18n.getText("hudson.portlet.lastUnstableBuild")}</th>
+                    			<th>${i18n.getText("hudson.portlet.lastDuration")}</th>
+                    		</tr>
+                    	</thead>
+                    	<tbody>
+		    				#foreach ($job in $jobs)
+	                    	<tr>
+	                    		<td><img src=${serverImageUrl}/${job.result.icon} tooltip=${job.result.name} alt=${job.result.name} /></td>
+	                    		<td><a href=${job.url}>${job.name}</a></td>
+	                    		<td>
+	                    			#if (${jobUtils.hasLastSuccessfulBuild($job)} && $job.lastSuccessfulBuild.timestamp > 0)
+	                    			${dateTimeUtils.getTimeSpanString(${job.lastSuccessfulBuild.timestamp})}
+	                    			#else
+	                    			${i18n.getText("hudson.portlet.notApplicable")}
+	                    			#end
+	                    		</td>
+	                    		<td>
+	                    			#if (${jobUtils.hasLastFailedBuild($job)} && $job.lastFailedBuild.timestamp > 0)
+	                    			${dateTimeUtils.getTimeSpanString(${job.lastFailedBuild.timestamp})}
+	                    			#else
+	                    			${i18n.getText("hudson.portlet.notApplicable")}
+	                    			#end
+	                    		</td>
+	                    		<td>
+	                    			#if (${jobUtils.hasLastUnstableBuild($job)} && $job.lastUnstableBuild.timestamp > 0)
+	                    			${dateTimeUtils.getTimeSpanString(${job.lastUnstableBuild.timestamp})}
+	                    			#else
+	                    			${i18n.getText("hudson.portlet.notApplicable")}
+	                    			#end
+	                    		</td>
+	                    		<td>
+	                    			#if (${jobUtils.hasLastBuild($job)} && $job.lastBuild.timestamp > 0)
+	                    			${dateTimeUtils.getTimeSpanString(${job.lastBuild.duration})}
+	                    			#else
+	                    			${i18n.getText("hudson.portlet.notApplicable")}
+	                    			#end
+	                    		</td>
+	                    	</tr>
+				    		#end
+                    	</tbody>
+                    </table>
+		    		#end
+        	    </td>
+            </tr>
+        </tbody>
+    </table>
+#else
+    <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
+        <thead>
+            <tr class="rowHeader">
+                <td class="colHeaderLink">${i18n.getText("hudson.portlet.jobsStatusSummary")}:</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="portletBody"><td bgcolor=ffffff>
+                <div align="center">
+                    <strong><em>${i18n.getText("hudson.portlet.error")}:</em></strong> $textutils.htmlEncode($errorMessage)
+                </div>
+            </td></tr>
+        </tbody>
+    </table>
+    <br>
+#end
