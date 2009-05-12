@@ -67,6 +67,10 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
+
+	<properties>
+		<atlassian.jira.version>3.13.4</atlassian.jira.version>
+	</properties>
 	
 	<dependencies>
 		<dependency>
@@ -79,7 +83,7 @@
 		<dependency>
 			<groupId>com.atlassian.jira</groupId>
 			<artifactId>atlassian-jira</artifactId>
-			<version>3.13</version>
+			<version>${atlassian.jira.version}</version>
 			<type>jar</type>
 			<scope>provided</scope>
 			<exclusions>
