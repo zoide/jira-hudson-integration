@@ -35,7 +35,6 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
-import org.apache.log4j.Logger;
 
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
@@ -53,9 +52,7 @@ import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class HudsonServerAccessorImpl implements HudsonServerAccessor {
-
-	private static final Logger LOGGER = Logger.getLogger(HudsonServerAccessorImpl.class);
+public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 
 	private static final int TIMEOUT_MS = 30000;
 
@@ -68,7 +65,7 @@ public class HudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * Constructor
 	 */
-	public HudsonServerAccessorImpl() {
+	public DefaultHudsonServerAccessorImpl() {
 		final HttpConnectionManagerParams connectionManagerParams = new HttpConnectionManagerParams();
 		connectionManagerParams.setConnectionTimeout(TIMEOUT_MS);
 		connectionManagerParams.setDefaultMaxConnectionsPerHost(MAX_HOST_CONNECTIONS);
@@ -83,7 +80,6 @@ public class HudsonServerAccessorImpl implements HudsonServerAccessor {
 	 */
 	public List<Job> getJobs(HudsonServer hudsonServer) throws HudsonServerAccessorException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_JOBS_ACTION, null);
-		LOGGER.debug("Hudson Server GetJobs Response:" + '\n' + response);
 		final Jobs jobs = XStreamMarshaller.unmarshal(response, Jobs.class);
 		return jobs.getJobs();
 	}
@@ -96,7 +92,6 @@ public class HudsonServerAccessorImpl implements HudsonServerAccessor {
 		final Map<String, String> params = new HashMap<String, String>();
 		params.put("projectKey", project.getKey());
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_BUILDS_ACTION, params);
-		LOGGER.debug("Hudson Server GetBuilds for Project Response:" + '\n' + response);
 		final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
 		return builds.getBuilds();
 	}
@@ -115,15 +110,14 @@ public class HudsonServerAccessorImpl implements HudsonServerAccessor {
 		final List<?> versions = (List<?>) version.getProjectObject().getVersions();
 		if (versions.size() > 1) {
 			for (int i = (int) (version.getSequence().longValue() - 1); i >= 0; i--) {
-				final Version v = (Version) versions.get(i);
-				if (v.getSequence() < version.getSequence() && v.isReleased()) {
-					startDate = v.getReleaseDate().getTime();
+				final Version prevVersion = (Version) versions.get(i);
+				if (prevVersion.getSequence() < version.getSequence() && prevVersion.isReleased()) {
+					startDate = prevVersion.getReleaseDate().getTime();
 				}
 			}
 			params.put("startDate", String.valueOf(startDate));
 		}
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_BUILDS_ACTION, params);
-		LOGGER.debug("Hudson Server GetBuilds for Version Response:" + '\n' + response);
 		final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
 		return builds.getBuilds();
 	}
@@ -131,7 +125,7 @@ public class HudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Map<String, List<Build>> getBuilds(HudsonServer hudsonServer, Collection<String> issueKeys)
+	public List<Build> getBuilds(HudsonServer hudsonServer, Collection<String> issueKeys)
 			throws HudsonServerAccessorException {
 		final Map<String, String> params = new HashMap<String, String>();
 		String issueKeysString = "";
@@ -140,7 +134,8 @@ public class HudsonServerAccessorImpl implements HudsonServerAccessor {
 		}
 		params.put("issueKeys", issueKeysString);
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_BUILDS_ACTION, params);
-		return new HashMap<String, List<Build>>();
+		final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
+		return builds.getBuilds();
 	}
 
 	/**

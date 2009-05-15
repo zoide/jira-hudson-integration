@@ -28,14 +28,16 @@ import com.marvelution.jira.plugins.hudson.model.Job;
  */
 public class JobUtils {
 
+	private BuildUtils buildUtils = new BuildUtils();
+
 	/**
 	 * Check if a {@link Job} has a First {@link Build}
 	 * 
 	 * @param job the {@link Job} to check
 	 * @return {@link Boolean#TRUE} if the Job has a first build, {@link Boolean#FALSE} otherwise
 	 */
-	public Boolean hasFirstBuild(Job job) {
-		return job.getFirstBuild() != null;
+	public Boolean hasValidFirstBuild(Job job) {
+		return Boolean.valueOf(buildUtils.isValidBuild(job.getFirstBuild()));
 	}
 
 	/**
@@ -44,8 +46,8 @@ public class JobUtils {
 	 * @param job the {@link Job} to check
 	 * @return {@link Boolean#TRUE} if the Job has a last build, {@link Boolean#FALSE} otherwise
 	 */
-	public Boolean hasLastBuild(Job job) {
-		return job.getLastBuild() != null;
+	public Boolean hasValidLastBuild(Job job) {
+		return Boolean.valueOf(buildUtils.isValidBuild(job.getLastBuild()));
 	}
 
 	/**
@@ -54,8 +56,8 @@ public class JobUtils {
 	 * @param job the {@link Job} to check
 	 * @return {@link Boolean#TRUE} if the Job has a last successful build, {@link Boolean#FALSE} otherwise
 	 */
-	public Boolean hasLastSuccessfulBuild(Job job) {
-		return job.getLastSuccessfulBuild() != null;
+	public Boolean hasValidLastSuccessfulBuild(Job job) {
+		return Boolean.valueOf(buildUtils.isValidBuild(job.getLastSuccessfulBuild()));
 	}
 
 	/**
@@ -64,8 +66,8 @@ public class JobUtils {
 	 * @param job the {@link Job} to check
 	 * @return {@link Boolean#TRUE} if the Job has a last failed build, {@link Boolean#FALSE} otherwise
 	 */
-	public Boolean hasLastFailedBuild(Job job) {
-		return job.getLastFailedBuild() != null;
+	public Boolean hasValidLastFailedBuild(Job job) {
+		return Boolean.valueOf(buildUtils.isValidBuild(job.getLastFailedBuild()));
 	}
 
 	/**
@@ -74,8 +76,8 @@ public class JobUtils {
 	 * @param job the {@link Job} to check
 	 * @return {@link Boolean#TRUE} if the Job has a last stable build, {@link Boolean#FALSE} otherwise
 	 */
-	public Boolean hasLastStableBuild(Job job) {
-		return job.getLastStableBuild() != null;
+	public Boolean hasValidLastStableBuild(Job job) {
+		return Boolean.valueOf(buildUtils.isValidBuild(job.getLastStableBuild()));
 	}
 
 	/**
@@ -84,8 +86,8 @@ public class JobUtils {
 	 * @param job the {@link Job} to check
 	 * @return {@link Boolean#TRUE} if the Job has a last unstable build, {@link Boolean#FALSE} otherwise
 	 */
-	public Boolean hasLastUnstableBuild(Job job) {
-		return job.getLastUnstableBuild() != null;
+	public Boolean hasValidLastUnstableBuild(Job job) {
+		return Boolean.valueOf(buildUtils.isValidBuild(job.getLastUnstableBuild()));
 	}
 
 	/**
@@ -94,8 +96,8 @@ public class JobUtils {
 	 * @param job the {@link Job} to check
 	 * @return {@link Boolean#TRUE} if the Job has a last completed build, {@link Boolean#FALSE} otherwise
 	 */
-	public Boolean hasLastCompletedBuild(Job job) {
-		return job.getLastCompletedBuild() != null;
+	public Boolean hasValidLastCompletedBuild(Job job) {
+		return Boolean.valueOf(buildUtils.isValidBuild(job.getLastCompletedBuild()));
 	}
 
 }

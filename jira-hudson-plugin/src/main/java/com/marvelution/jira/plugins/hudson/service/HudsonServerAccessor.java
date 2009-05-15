@@ -21,7 +21,6 @@ package com.marvelution.jira.plugins.hudson.service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
@@ -75,10 +74,10 @@ public interface HudsonServerAccessor {
 	 * 
 	 * @param hudsonServer the {@link HudsonServer} to get the Builds from
 	 * @param issueKeys the {@link Collection} of issue keys
-	 * @return {@link Map} of issue keys with {@link List} of related {@link Build}s
+	 * @return {@link List} issue related {@link Build} objects
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
 	 */
-	Map<String, List<Build>> getBuilds(HudsonServer hudsonServer, Collection<String> issueKeys)
+	List<Build> getBuilds(HudsonServer hudsonServer, Collection<String> issueKeys)
 			throws HudsonServerAccessorException;
 
 }

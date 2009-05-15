@@ -19,6 +19,8 @@
 
 package com.marvelution.jira.plugins.hudson.utils;
 
+import java.util.Calendar;
+
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.web.bean.I18nBean;
 
@@ -50,7 +52,7 @@ public class DateTimeUtils {
 	 *            current user
 	 */
 	public DateTimeUtils(JiraAuthenticationContext authenticationContext) {
-		i18nBean = authenticationContext.getI18nBean();
+		i18nBean = authenticationContext.getI18nBean("com.marvelution.jira.plugins.hudson.hudson-datetime");
 	}
 
 	/**
@@ -131,6 +133,16 @@ public class DateTimeUtils {
 			text = text + ' ' + smallLabel;
 		}
 		return text;
+	}
+
+	/**
+	 * Gets the time past since the time
+	 * 
+	 * @param time the time in milliseconds given
+	 * @return the time in milliseconds that past
+	 */
+	public long getTimePastSince(long time) {
+		return Calendar.getInstance(i18nBean.getLocale()).getTimeInMillis() - time;
 	}
 
 }

@@ -19,6 +19,8 @@
 
 package com.marvelution.jira.plugins.hudson.service;
 
+import java.util.Collection;
+
 /**
  * Interface that represents a Hudson Server configured in JIRA
  * 
@@ -26,14 +28,55 @@ package com.marvelution.jira.plugins.hudson.service;
  */
 public interface HudsonServer {
 
-	String HUDSON_IMAGE_LOCATION = "/images/24x24";
+	String IMAGE_LOCATION = "/images";
+	
+	String SMALL_IMAGE_LOCATION = IMAGE_LOCATION + "/16x16";
+	
+	String MEDIUM_IMAGE_LOCATION = IMAGE_LOCATION + "/24x24";
+	
+	String LARGE_IMAGE_LOCATION = IMAGE_LOCATION + "/32x32";
+
+	/**
+	 * Gets the Id of the Hudson Server
+	 * 
+	 * @return the id of the Hudson Server
+	 */
+	int getServerId();
+
+	/**
+	 * Sets the Id of the Hudson Server
+	 * 
+	 * @param serverId of the Hudson Server
+	 */
+	void setServerId(int serverId);
 
 	/**
 	 * Gets the Hudson Server Name
 	 * 
 	 * @return the server name
 	 */
-	String getServername();
+	String getName();
+
+	/**
+	 * Sets the Hudson Server Name
+	 * 
+	 * @param serverName the server name
+	 */
+	void setName(String serverName);
+
+	/**
+	 * Gets the Hudson Server Description
+	 * 
+	 * @return the server description
+	 */
+	String getDescription();
+
+	/**
+	 * Sets the Hudson Server Description
+	 * 
+	 * @param description the server description
+	 */
+	void setDescription(String description);
 
 	/**
 	 * Gets the Hudson server host
@@ -43,11 +86,11 @@ public interface HudsonServer {
 	String getHost();
 
 	/**
-	 * Gets the image URL of the Hudson server
+	 * Sets the Hudson server host
 	 * 
-	 * @return the image URL
+	 * @param host the Hudson host
 	 */
-	String getImageUrl();
+	void setHost(String host);
 
 	/**
 	 * Gets the username to use to authenticate with
@@ -55,6 +98,13 @@ public interface HudsonServer {
 	 * @return the username
 	 */
 	String getUsername();
+
+	/**
+	 * Sets the username to authenticate with
+	 * 
+	 * @param username the username
+	 */
+	void setUsername(String username);
 
 	/**
 	 * Gets the password for the username
@@ -65,27 +115,6 @@ public interface HudsonServer {
 	String getPassword();
 
 	/**
-	 * Sets the Hudson Server Name
-	 * 
-	 * @param servername the server name
-	 */
-	void setServername(String servername);
-
-	/**
-	 * Sets the Hudson server host
-	 * 
-	 * @param host the Hudson host
-	 */
-	void setHost(String host);
-
-	/**
-	 * Sets the username to authenticate with
-	 * 
-	 * @param username the username
-	 */
-	void setUsername(String username);
-
-	/**
 	 * Sets the password for the username
 	 * 
 	 * @param password the password
@@ -94,14 +123,35 @@ public interface HudsonServer {
 	void setPassword(String password);
 
 	/**
-	 * Check if a Hudson server is configured
+	 * Gets all the associated project keys
 	 * 
-	 * @return <code>true</code> if a Hudson server is configured, <code>false</code> otherwise
+	 * @return {@link Collection} of {@link String} project keys
 	 */
-	boolean isHudsonConfigured();
+	Collection<String> getAssociatedProjectKeys();
+
+	/**
+	 * Sets all the associated project keys
+	 * 
+	 * @param projectKeys the {@link Collection} of {@link String} project keys
+	 */
+	void setAssociatedProjectKeys(Collection<String> projectKeys);
+
+	/**
+	 * Adds a project key to the project association {@link Collection}
+	 * 
+	 * @param projectKey the {@link String} project key to add
+	 */
+	void addAssociatedProjectKey(String projectKey);
+
+	/**
+	 * Removes a project key from the project association {@link Collection}
+	 * 
+	 * @param projectKey the {@link String} project key to remove
+	 */
+	void removeAssociatedProjectKey(String projectKey);
 	
 	/**
-	 * Check if the configured Hudson server is a secured server
+	 * Check if the Hudson server is a secured server
 	 * 
 	 * @return <code>true</code> if secured, <code>false</code> otherwise
 	 */
