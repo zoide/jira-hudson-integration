@@ -17,54 +17,76 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<atlassian-plugin name="Marvelution JIRA Hudson Integration" key="marvelution.jira.hudson.integration" system="false">
-    <plugin-info>
-        <description>Marvelution JIRA Hudson Integration</description>
-        <vendor name="Marvelution" url="http://www.marvelution.com"/>
-        <version>1.0</version>
-    </plugin-info>
-    
-    <resource type="i18n" name="i18n-hudson-plugin" location="templates.plugins.hudson.hudson-plugin"/>
-    <resource type="download" name="images/" location="templates/plugins/hudson/images/"/>
-    
-    <portlet key="hudsonStatus" name="Hudson Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonStatusPortlet">
-        <description key="hudson.jira.portlet.status.description">i18n description</description>
-        <resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonStatusPortlet.vm"/>
-        <resource type="i18n" name="i18n" location="templates.plugins.hudson.portlets.hudson-plugin" />
-        <label key="hudson.jira.portlet.status.name"/>
-        <objectdescriptor key="hudson.jira.portlet.status.name"/>
-        <properties />
-    </portlet>
-    
-    <webwork1 key="HudsonServerConfig" name="Configure Your Hudson Server">
-        <actions>
-            <action name="com.marvelution.jira.web.action.HudsonConfiguration" alias="ConfigureHudson">
-                <view name="success">/templates/plugins/hudson/configureHudson.vm</view>
-                <view name="input">/templates/plugins/hudson/configureHudson.vm</view>
-            </action>
-        </actions>
-    </webwork1>
-    
-    <web-item key="Hudson-server" name="Hudson Server" section="system.admin/globalsettings" weight="1002">
-    	<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
-    	<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+<atlassian-plugin name="Marvelution JIRA Hudson Integration" key="com.marvelution.jira.plugins.hudson" system="false">
+	<plugin-info>
+		<description>Marvelution JIRA Hudson Integration</description>
+		<vendor name="Marvelution" url="http://www.marvelution.com" />
+		<version>1.0</version>
+	</plugin-info>
+
+	<!-- R E S O U R C E S -->
+	<resource type="download" name="images/" location="templates/plugins/hudson/images/" />
+
+	<!-- P O R T L E T S -->
+	<portlet key="hudsonStatus" name="Hudson Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonStatusPortlet">
+		<objectdescriptor key="hudson.jira.portlet.status.name" />
+		<label key="hudson.jira.portlet.status.name" />
+		<description key="hudson.portlet.status.description" />
+		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonStatusPortlet.vm" />
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+		<properties />
+	</portlet>
+
+	<!-- H U D S O N   S E R V E R S   C O N F I G U R A T I O N -->
+	<webwork1 key="hudsonServerConfig" name="Configure Your Hudson Server">
+		<resource type="i18n" name="i18n" location="com.marvelution.jira.plugins.hudson.web.action.HudsonWebActionSupport" />
+		<actions>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServers" alias="ViewHudsonServers">
+				<view name="success">/templates/plugins/hudson/viewHudsonServers.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.AddHudsonServer" alias="AddHudsonServer">
+				<view name="input">/templates/plugins/hudson/addHudsonServer.vm</view>
+				<view name="error">/templates/plugins/hudson/addHudsonServer.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.UpdateHudsonServer" alias="UpdateHudsonServer">
+				<view name="input">/templates/plugins/hudson/updateHudsonServer.vm</view>
+				<view name="error">/templates/plugins/hudson/updateHudsonServer.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.DeleteHudsonServer" alias="DeleteHudsonServer">
+				<view name="input">/templates/plugins/hudson/deleteHudsonServer.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.UpdateHudsonServerProjectAssociations" alias="UpdateHudsonServerProjectAssociations">
+				<view name="input">/templates/plugins/hudson/updateHudsonServerProjectAssociations.vm</view>
+			</action>
+		</actions>
+	</webwork1>
+
+	<web-item key="hudson-servers" name="Hudson Servers" section="system.admin/globalsettings" weight="1002">
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
 			<param name="permission">admin</param>
 		</condition>
-        <label key="hudson.server"/>
-        <link linkId="hudson_server">/secure/admin/jira/ConfigureHudson!view.jspa</link>
-    </web-item>
-    
-    <component key="hudsonPropertyManager" name="Hudson Property Manager"
-               class="com.marvelution.jira.plugins.hudson.HudsonPropertyManager">
-        <interface>com.marvelution.jira.plugins.hudson.HudsonPropertyManager</interface>
-    </component>
-    <component key="hudsonServerImpl" name="Hudson Server Implementation"
-               class="com.marvelution.jira.plugins.hudson.HudsonServerImpl">
-        <interface>com.marvelution.jira.plugins.hudson.service.HudsonServer</interface>
-    </component>
-    <component key="hudsonServerAccessorImpl" name="Hudson Server Accessor Implementation"
-               class="com.marvelution.jira.plugins.hudson.HudsonServerAccessorImpl">
-        <interface>com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor</interface>
-    </component>
+		<label key="hudson.servers" />
+		<link linkId="hudson_servers">/secure/admin/jira/ViewHudsonServers.jspa</link>
+	</web-item>
+
+	<!-- C O M P O N E N T S -->
+	<component key="hudsonPropertyManager" name="Default Hudson Property Manager"
+			class="com.marvelution.jira.plugins.hudson.DefaultHudsonPropertyManagerImpl">
+		<interface>com.marvelution.jira.plugins.hudson.service.HudsonPropertyManager
+		</interface>
+	</component>
+	<component key="hudsonServerManagerImpl" name="Default Hudson Server Manager" 
+			class="com.marvelution.jira.plugins.hudson.DefaultHudsonServerManagerImpl">
+		<interface>com.marvelution.jira.plugins.hudson.service.HudsonServerManager</interface>
+	</component>
+	<component key="hudsonServerFactoryImpl" name="Default Hudson Server Factory" 
+			class="com.marvelution.jira.plugins.hudson.DefaultHudsonServerFactoryImpl">
+		<interface>com.marvelution.jira.plugins.hudson.service.HudsonServerFactory</interface>
+	</component>
+	<component key="hudsonServerAccessorImpl" name="Default Hudson Server Accessor"
+			class="com.marvelution.jira.plugins.hudson.DefaultHudsonServerAccessorImpl">
+		<interface>com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor</interface>
+	</component>
 
 </atlassian-plugin>

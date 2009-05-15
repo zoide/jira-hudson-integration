@@ -5,9 +5,12 @@ a {
 a:hover {
 	text-decoration: underline;
 }
-.hudsonStatusTable, .hudsonStatusTable td {
+.hudsonStatusTable, .hudsonStatusTable td, .hudsonJobsTable, .hudsonJobsTable td, .hudsonJobsTable th {
     border-collapse: collapse;
     border: 1px solid #bbbbbb;
+}
+.hudsonJobsTable, .hudsonJobsTable td, .hudsonJobsTable th {
+	text-align: center;
 }
 .portletBody th {
     background-color: #fffff0;
@@ -19,26 +22,32 @@ a:hover {
 </style>
 
 #if ($isHudsonConfigured)
+	#foreach ($result in $sorter.sort($results, "serverName"))
+	#set ($domId = "hudosn_status_${result.serverName}")
     <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
         <thead>
             <tr class="rowHeader">
-                <td class="colHeaderLink" colspan="2">
+                <td class="colHeaderLink">
+                	<span class="switch actionLinks subText" id="${domId}-switch" onclick="CookieUtil.toggleVisibility('${domId}', '[${i18n.getText("hudson.portlet.show")} >>]', '[${i18n.getText("hudson.portlet.hide")}]')">[${i18n.getText("hudson.portlet.hide")}]</span>
                     ${i18n.getText("hudson.portlet.jobsStatusSummary")}:
-                    <strong><a href=${serverUrl}>${serverName}</a></strong> ($i18n.getText("hudson.portlet.allJobs")) 
+                    <strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($i18n.getText("hudson.portlet.allJobs"))
                 </td>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="${domId}">
         	<tr class="portletBody">
-            	<td bgcolor=ffffff>
-            		#if ($error)
-                    <div align="center"><strong><em>${i18n.getText("hudson.portlet.error")}:</em></strong> $textutils.htmlEncode($errorMessage)</div>
-		            #else
-                    <table class="hudsonStatusTable" width="99%">
+            	<td bgcolor="#ffffff">
+            		#if ($result.hasError())
+                    <div align="center"><strong><em>${i18n.getText("hudson.portlet.error")}:</em></strong> $textutils.htmlEncode($result.error)</div>
+		            #elseif ($result.jobs.isEmpty())
+            		<div align="center"><strong>${i18n.getText("hudson.portlet.noJobs")}</strong></div>
+            		#else
+                    <table class="hudsonJobsTable" width="100%">
                     	<thead>
                     		<tr>
                     			<th>${i18n.getText("hudson.portlet.status")}</th>
                     			<th>${i18n.getText("hudson.portlet.job")}</th>
+                    			<th>${i18n.getText("hudson.portlet.lastBuild")}</th>
                     			<th>${i18n.getText("hudson.portlet.lastSuccessfulBuild")}</th>
                     			<th>${i18n.getText("hudson.portlet.lastFailedBuild")}</th>
                     			<th>${i18n.getText("hudson.portlet.lastUnstableBuild")}</th>
@@ -46,33 +55,44 @@ a:hover {
                     		</tr>
                     	</thead>
                     	<tbody>
-		    				#foreach ($job in $jobs)
+		    				#foreach ($job in $result.jobs)
 	                    	<tr>
-	                    		<td><img src=${serverImageUrl}/${job.result.icon} tooltip=${job.result.name} alt=${job.result.name} /></td>
-	                    		<td><a href=${job.url}>${job.name}</a></td>
+	                    		<td><img src=${result.serverImageUrl}/${job.result.icon} tooltip=${job.result.name()} alt=${job.result.name()} /></td>
+	                    		<td><a href=${result.serverUrl}${job.url}>${job.name}</a></td>
 	                    		<td>
-	                    			#if (${jobUtils.hasLastSuccessfulBuild($job)} && $job.lastSuccessfulBuild.timestamp > 0)
-	                    			${dateTimeUtils.getTimeSpanString(${job.lastSuccessfulBuild.timestamp})}
+	                    			#if (${jobUtils.hasValidLastBuild($job)})
+	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastBuild.timestamp})})}
+	                    			(<a href=${result.serverUrl}${job.lastBuild.url}>${i18n.getText("hudson.build.number", ${job.lastBuild.number})}</a>)
 	                    			#else
 	                    			${i18n.getText("hudson.portlet.notApplicable")}
 	                    			#end
 	                    		</td>
 	                    		<td>
-	                    			#if (${jobUtils.hasLastFailedBuild($job)} && $job.lastFailedBuild.timestamp > 0)
-	                    			${dateTimeUtils.getTimeSpanString(${job.lastFailedBuild.timestamp})}
+	                    			#if (${jobUtils.hasValidLastSuccessfulBuild($job)})
+	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastSuccessfulBuild.timestamp})})}
+	                    			(<a href=${result.serverUrl}${job.lastSuccessfulBuild.url}>${i18n.getText("hudson.build.number", ${job.lastSuccessfulBuild.number})}</a>)
 	                    			#else
 	                    			${i18n.getText("hudson.portlet.notApplicable")}
 	                    			#end
 	                    		</td>
 	                    		<td>
-	                    			#if (${jobUtils.hasLastUnstableBuild($job)} && $job.lastUnstableBuild.timestamp > 0)
-	                    			${dateTimeUtils.getTimeSpanString(${job.lastUnstableBuild.timestamp})}
+	                    			#if (${jobUtils.hasValidLastFailedBuild($job)})
+	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastFailedBuild.timestamp})})}
+	                    			(<a href=${result.serverUrl}${job.lastFailedBuild.url}>${i18n.getText("hudson.build.number", ${job.lastFailedBuild.number})}</a>)
 	                    			#else
 	                    			${i18n.getText("hudson.portlet.notApplicable")}
 	                    			#end
 	                    		</td>
 	                    		<td>
-	                    			#if (${jobUtils.hasLastBuild($job)} && $job.lastBuild.timestamp > 0)
+	                    			#if (${jobUtils.hasValidLastUnstableBuild($job)})
+	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastUnstableBuild.timestamp})})}
+	                    			(<a href=${result.serverUrl}${job.lastUnstableBuild.url}>${i18n.getText("hudson.build.number", ${job.lastUnstableBuild.number})}</a>)
+	                    			#else
+	                    			${i18n.getText("hudson.portlet.notApplicable")}
+	                    			#end
+	                    		</td>
+	                    		<td>
+	                    			#if (${jobUtils.hasValidLastBuild($job)})
 	                    			${dateTimeUtils.getTimeSpanString(${job.lastBuild.duration})}
 	                    			#else
 	                    			${i18n.getText("hudson.portlet.notApplicable")}
@@ -87,6 +107,11 @@ a:hover {
             </tr>
         </tbody>
     </table>
+    <br>
+    <script type="text/javascript" language="JavaScript">
+        cookieHide("${domId}", "[${i18n.getText("hudson.portlet.show")} >>]");
+    </script>
+    #end
 #else
     <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
         <thead>

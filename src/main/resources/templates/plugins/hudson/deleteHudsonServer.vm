@@ -1,0 +1,30 @@
+#set($i18n=$action)
+
+<form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="DeleteHudsonServer.jspa" />
+    <input type="hidden" name="hudsonServerId" value="${hudsonServerId}" />
+    <table class="jiraform maxWidth">
+        <tbody>
+            <tr>
+                <td class="jiraformheader">
+	                <h3 class="formtitle">
+						<img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/hudson-icon-24.png" align="absmiddle" border="0" height="24" width="24" />
+						$i18n.getText("hudson.config.server.delete.title")
+					</h3>
+                </td>
+            </tr>
+            <tr>
+                <td class="jiraformheader">
+                    $i18n.getText("hudson.config.server.delete.confirm", ${name})
+                </td>
+            <tr>
+                <td class="fullyCentered jiraformfooter" >
+                    <input type="submit" name="delete" value="$i18n.getText("common.words.delete")" accesskey="S"
+                    	title="Press Alt+Shift+S to submit form" class="spaced" />
+                    <input id="cancelButton" type="button" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt+Shift + `)"
+                    	name="ViewHudsonServers.jspa" value="$i18n.getText("common.forms.cancel")"
+                    	onclick="location.href='ViewHudsonServers.jspa'" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

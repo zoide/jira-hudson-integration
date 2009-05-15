@@ -20,15 +20,19 @@
 package com.marvelution.jira.plugins.hudson.portlets;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.portal.PortletConfiguration;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
+import com.marvelution.jira.plugins.hudson.model.HudsonStatusPortletResult;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
 /**
  * Jira {@link Portlet} for showing the statuses of all Hudson Jobs
@@ -44,12 +48,13 @@ public class HudsonStatusPortlet extends AbstractHudsonPorlet {
 	 * @param permissionManager the {@link PermissionManager}
 	 * @param applicationProperties the {@link ApplicationProperties}
 	 * @param hudsonServerAccessor the {@link HudsonServerAccessor}
-	 * @param hudsonServer the {@link HudsonServer}
+	 * @param hudsonServerManager the {@link HudsonServerManager}
 	 */
 	public HudsonStatusPortlet(JiraAuthenticationContext authenticationContext, PermissionManager permissionManager,
 			ApplicationProperties applicationProperties, HudsonServerAccessor hudsonServerAccessor,
-			HudsonServer hudsonServer) {
-		super(authenticationContext, permissionManager, applicationProperties, hudsonServerAccessor, hudsonServer);
+			HudsonServerManager hudsonServerManager) {
+		super(authenticationContext, permissionManager, applicationProperties, hudsonServerAccessor,
+			hudsonServerManager);
 	}
 
 	/**
@@ -57,24 +62,26 @@ public class HudsonStatusPortlet extends AbstractHudsonPorlet {
 	 */
 	protected Map<String, Object> getVelocityParams(PortletConfiguration portletConfiguration) {
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
-		if (!hudsonServer.isHudsonConfigured()) {
+		if (!hudsonServerManager.isHudsonConfigured()) {
 			params.put("isHudsonConfigured", Boolean.FALSE);
-			params.put("errorMessage", getText("hudson.error.hudsonnotconfigured"));
+			params.put("errorMessage", getErrorText("hudson.error.hudsonnotconfigured"));
 		} else {
 			params.put("isHudsonConfigured", Boolean.TRUE);
-			params.put("serverName", hudsonServer.getServername());
-			params.put("serverUrl", hudsonServer.getHost());
-			params.put("serverImageUrl", hudsonServer.getImageUrl());
-			try {
-				params.put("jobs", hudsonServerAccessor.getJobs(hudsonServer));
-			} catch (HudsonServerAccessorException e) {
-				params.put("error", Boolean.TRUE);
-				if (e.getCause() instanceof MalformedURLException) {
-					params.put("errorMessage", getText("hudson.error.invalidhudsonurl"));
-				} else {
-					params.put("errorMessage", getText("hudson.error.cannotconnecthudson"));
+			final List<HudsonStatusPortletResult> results = new ArrayList<HudsonStatusPortletResult>();
+			for (HudsonServer server : hudsonServerManager.getServers()) {
+				final HudsonStatusPortletResult result = new HudsonStatusPortletResult(server);
+				try {
+					result.setJobs(hudsonServerAccessor.getJobs(server));
+				} catch (HudsonServerAccessorException e) {
+					if (e.getCause() instanceof MalformedURLException) {
+						result.setError(getErrorText("hudson.error.invalidhudsonurl"));
+					} else {
+						result.setError(getErrorText("hudson.error.cannotconnecthudson"));
+					}
 				}
+				results.add(result);
 			}
+			params.put("results", results);
 		}
 		return params;
 	}

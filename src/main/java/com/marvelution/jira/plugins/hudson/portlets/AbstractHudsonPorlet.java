@@ -22,6 +22,7 @@ package com.marvelution.jira.plugins.hudson.portlets;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.velocity.tools.generic.SortTool;
 
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.portal.PortletConfiguration;
@@ -29,8 +30,8 @@ import com.atlassian.jira.portal.PortletImpl;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.web.bean.I18nBean;
-import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.utils.DateTimeUtils;
 import com.marvelution.jira.plugins.hudson.utils.JobUtils;
 
@@ -43,7 +44,7 @@ public class AbstractHudsonPorlet extends PortletImpl {
 
 	protected static final Logger LOGGER = Logger.getLogger(HudsonStatusPortlet.class);
 
-	protected HudsonServer hudsonServer;
+	protected HudsonServerManager hudsonServerManager;
 	
 	protected HudsonServerAccessor hudsonServerAccessor;
 	
@@ -56,13 +57,13 @@ public class AbstractHudsonPorlet extends PortletImpl {
 	 * @param permissionManager the {@link PermissionManager}
 	 * @param applicationProperties the {@link ApplicationProperties}
 	 * @param hudsonServerAccessor the {@link HudsonServerAccessor}
-	 * @param hudsonServer the {@link HudsonServer}
+	 * @param hudsonServerManager the {@link HudsonServer}
 	 */
 	public AbstractHudsonPorlet(JiraAuthenticationContext authenticationContext, PermissionManager permissionManager,
 			ApplicationProperties applicationProperties, HudsonServerAccessor hudsonServerAccessor,
-			HudsonServer hudsonServer) {
+			HudsonServerManager hudsonServerManager) {
 		super(authenticationContext, permissionManager, applicationProperties);
-		this.hudsonServer = hudsonServer;
+		this.hudsonServerManager = hudsonServerManager;
 		this.hudsonServerAccessor = hudsonServerAccessor;
 	}
 	
@@ -73,7 +74,7 @@ public class AbstractHudsonPorlet extends PortletImpl {
 	 */
 	protected I18nBean getI18nBean() {
 		if (i18nBean == null) {
-			i18nBean = authenticationContext.getI18nBean("com.marvelution.jira.plugins.hudson.hudson-portlets");
+			i18nBean = authenticationContext.getI18nBean("com.marvelution.jira.plugins.hudson.hudson-portlet");
 		}
 		return i18nBean;
 	}
@@ -89,12 +90,22 @@ public class AbstractHudsonPorlet extends PortletImpl {
 	}
 
 	/**
+	 * Gets the error text for an internationalisation key
+	 * 
+	 * @param i18nKey the internationalisation key
+	 * @return the error text
+	 */
+	protected String getErrorText(String i18nKey) {
+		return authenticationContext.getI18nBean("com.marvelution.jira.plugins.hudson.hudson-error").getText(i18nKey);
+	}
+
+	/**
 	 * Checks if a Hudson Server is configured
 	 * 
 	 * @return <code>true</code> if a Hudson server is configured, <code>false</code> otherwise
 	 */
 	public boolean isHudsonConfigured() {
-		return hudsonServer.isHudsonConfigured();
+		return hudsonServerManager.isHudsonConfigured();
 	}
 
 	/**
@@ -105,6 +116,7 @@ public class AbstractHudsonPorlet extends PortletImpl {
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
 		params.put("dateTimeUtils", new DateTimeUtils(authenticationContext));
 		params.put("jobUtils", new JobUtils());
+		params.put("sorter", new SortTool());
 		return params;
 	}
 

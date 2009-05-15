@@ -1,0 +1,77 @@
+#set($i18n=$action)
+<table class="jiraform maxWidth">
+	<tbody>
+		<tr>
+            <td class="jiraformheader">
+				<h3 class="formtitle">
+					<img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/hudson-icon-24.png" align="absmiddle" border="0" height="24" width="24" />
+					$i18n.getText("hudson.config.server.associated-projects.title", ${name})
+				</h3>
+            </td>
+        </tr>
+		<tr>
+			<td class="jiraformbody">
+				<p>$i18n.getText("hudson.config.server.associated-projects.description")</p>
+				<p>
+					<img src="/images/icons/bullet_creme.gif" align="absmiddle" border="0" height="8" width="8">
+					<b><a id="view_hudson_servers" href="ViewHudsonServers.jspa">$i18n.getText("hudson.config.server.return-to-server-list")</a></b>
+				</p>
+				<p>
+					<img src="/images/icons/bullet_creme.gif" align="absmiddle" border="0" height="8" width="8">
+					<b><a id="view_hudson_servers" href="UpdateHudsonServer!default.jspa?hudsonServerId=${hudsonServerId}">$i18n.getText("hudson.config.server.edit.hudson-server", ${name})</a></b>
+				</p>
+			</td>
+		</tr>
+	<tbody>
+</table>
+
+<script language="javascript">
+function unselectList(list) {
+	document.forms['jiraform'].elements[list].selectedIndex=-1;
+}
+</script>
+<p>
+<form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="UpdateHudsonServerProjectAssociations.jspa">
+    <input type="hidden" name="hudsonServerId" value="${hudsonServerId}" />
+<table class="jiraform maxWidth">
+    <tbody>
+		<tr>
+			<td class="jiraformheader" align="center"><b>$i18n.getText("hudson.config.associated-projects")</b></td>
+			<td class="jiraformheader" width="10%">&nbsp;</td>
+			<td class="jiraformheader" align="center"><b>$i18n.getText("hudson.config.available-projects")</b></td>
+		</tr>
+		<tr>
+			<td bgcolor="#ffffff" class="fieldValueArea" valign="middle" align="center">
+				<select multiple name="associatedProjectKeys" style="width: 100%;" size="10">
+					#foreach ($project in $associatedProjects)
+					<option value="${project.key}">${project.name}</option>
+					#end
+				</select>
+			</td>
+			<td bgcolor="#ffffff" class="fieldValueArea" valign="middle" align="center">
+				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/add-one.png"
+					name="addButton" value=" < " title="Add Project" style="margin: 5px; padding: 5px;"><br />
+				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/add-all.png"
+					name="addAllButton" value=" << " title="Add All Projects" style="margin: 5px; padding: 5px;"><br />
+				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/remove-all.png" 
+					name="removeAllButton" value=" >> " title="Remove All Projects" style="margin: 5px; padding: 5px;"><br />
+				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/remove-one.png" 
+					name="removeButton" value=" > " title="Remove Project" style="margin: 5px; padding: 5px;"><br />
+			</td>
+			<td bgcolor="#ffffff" class="fieldValueArea" valign="middle" align="center">
+				<select multiple name="availableProjectKeys" style="width: 100%;" size="10">
+					#foreach ($project in $availableProjects)
+					<option value="${project.key}">${project.name}</option>
+					#end
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td bgcolor="#ffffff" class="fieldValueArea" align="center"><a href="javascript:unselectList('associatedProjectKeys')">unselect</a></td>
+			<td bgcolor="#ffffff" class="fieldValueArea">&nbsp;</td>
+			<td bgcolor="#ffffff" class="fieldValueArea" align="center"><a href="javascript:unselectList('availableProjectKeys')">unselect</a></td>
+		</tr>
+    </tbody>
+</table>
+</form>
+</p>

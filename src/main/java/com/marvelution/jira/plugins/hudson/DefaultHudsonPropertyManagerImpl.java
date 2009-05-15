@@ -19,39 +19,40 @@
 
 package com.marvelution.jira.plugins.hudson;
 
+import com.marvelution.jira.plugins.hudson.service.HudsonPropertyManager;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.module.propertyset.PropertySetManager;
 
 import java.util.HashMap;
 
 /**
- * The Property Manager for the Hudson Server configuration
+ * Default implementation of the {@link HudsonPropertyManager} interface
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public final class HudsonPropertyManager {
+public final class DefaultHudsonPropertyManagerImpl implements HudsonPropertyManager {
 
-	private static final long ID = 2;
+	private static final long PROPERTIES_ID = 2;
 
-	private static HudsonPropertyManager propertiesManager;
+	private static DefaultHudsonPropertyManagerImpl propertiesManager;
 
 	private PropertySet propertySet;
 
 	/**
 	 * Hidden constructor which loads the property set
 	 */
-	public HudsonPropertyManager() {
+	public DefaultHudsonPropertyManagerImpl() {
 		loadPropertySet();
 	}
 
 	/**
 	 * Singleton retriever
 	 * 
-	 * @return the singleton {@link HudsonPropertyManager}
+	 * @return the singleton {@link DefaultHudsonPropertyManagerImpl}
 	 */
-	public static HudsonPropertyManager getInstance() {
+	public static DefaultHudsonPropertyManagerImpl getInstance() {
 		if (propertiesManager == null) {
-			propertiesManager = new HudsonPropertyManager();
+			propertiesManager = new DefaultHudsonPropertyManagerImpl();
 		}
 		return propertiesManager;
 	}
@@ -59,16 +60,14 @@ public final class HudsonPropertyManager {
 	/**
 	 * Only useful for mocking out the PropertiesManager
 	 * 
-	 * @param propertiesManager the {@link HudsonPropertyManager}
+	 * @param propertiesManager the {@link DefaultHudsonPropertyManagerImpl}
 	 */
-	public static void setPropertiesManager(HudsonPropertyManager propertiesManager) {
-		HudsonPropertyManager.propertiesManager = propertiesManager;
+	public static void setPropertiesManager(DefaultHudsonPropertyManagerImpl propertiesManager) {
+		DefaultHudsonPropertyManagerImpl.propertiesManager = propertiesManager;
 	}
 
 	/**
-	 * Get the property set
-	 * 
-	 * @return the Property Set
+	 * {@inheritDoc}
 	 */
 	public PropertySet getPropertySet() {
 		return propertySet;
@@ -88,8 +87,8 @@ public final class HudsonPropertyManager {
 	protected void loadPropertySet() {
 		final HashMap psArgs = new HashMap();
 		psArgs.put("delegator.name", "default");
-		psArgs.put("entityName", "BambooServerProperties");
-		psArgs.put("entityId", new Long(ID));
+		psArgs.put("entityName", "HudsonServerProperties");
+		psArgs.put("entityId", new Long(PROPERTIES_ID));
 
 		propertySet = PropertySetManager.getInstance("ofbiz", psArgs);
 	}
