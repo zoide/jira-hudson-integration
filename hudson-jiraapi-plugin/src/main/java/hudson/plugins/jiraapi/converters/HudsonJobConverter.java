@@ -54,32 +54,32 @@ public class HudsonJobConverter {
 			final hudson.model.AbstractBuild<?, ?> hudsonBuild = (hudson.model.AbstractBuild<?, ?>) hudsonRun;
 			final Build build = HudsonBuildConverter.convertHudsonBuild(hudsonBuild);
 			builds.getBuilds().add(build);
-			if (hudsonJob.getFirstBuild() != null && build.getBuildNumber() == hudsonJob.getFirstBuild().getNumber()) {
+			if (hudsonJob.getFirstBuild() != null && build.getNumber() == hudsonJob.getFirstBuild().getNumber()) {
 				job.setFirstBuild(build);
 			}
-			if (hudsonJob.getLastBuild() != null && build.getBuildNumber() == hudsonJob.getFirstBuild().getNumber()) {
+			if (hudsonJob.getLastBuild() != null && build.getNumber() == hudsonJob.getLastBuild().getNumber()) {
 				job.setLastBuild(build);
 			}
 			if (hudsonJob.getLastCompletedBuild() != null
-				&& build.getBuildNumber() == hudsonJob.getLastCompletedBuild().getNumber()) {
+				&& build.getNumber() == hudsonJob.getLastCompletedBuild().getNumber()) {
 				job.setLastCompletedBuild(build);
 			}
 			if (hudsonJob.getLastSuccessfulBuild() != null
-				&& build.getBuildNumber() == hudsonJob.getLastSuccessfulBuild().getNumber()) {
+				&& build.getNumber() == hudsonJob.getLastSuccessfulBuild().getNumber()) {
 				job.setLastSuccessfulBuild(build);
 			}
 			if (hudsonJob.getLastStableBuild() != null
-				&& build.getBuildNumber() == hudsonJob.getLastStableBuild().getNumber()) {
+				&& build.getNumber() == hudsonJob.getLastStableBuild().getNumber()) {
 				job.setLastStableBuild(build);
 			}
 			if (hudsonJob.getLastFailedBuild() != null
-				&& build.getBuildNumber() == hudsonJob.getLastFailedBuild().getNumber()) {
+				&& build.getNumber() == hudsonJob.getLastFailedBuild().getNumber()) {
 				job.setLastFailedBuild(build);
 			}
 			if (build.getResult() == Result.UNSTABLE) {
 				if (job.getLastUnstableBuild() == null) {
 					job.setLastUnstableBuild(build);
-				} else if (job.getLastUnstableBuild().getBuildNumber() < build.getBuildNumber()) {
+				} else if (job.getLastUnstableBuild().getNumber() < build.getNumber()) {
 					job.setLastUnstableBuild(build);
 				}
 			}
