@@ -32,7 +32,7 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
 @XStreamAlias("build")
 public class Build {
 
-	private int buildNumber;
+	private int number;
 
 	private String url;
 	
@@ -51,11 +51,11 @@ public class Build {
 	/**
 	 * Constructor
 	 * 
-	 * @param buidNumber the build number
+	 * @param number the build number
 	 * @param url the base url of the build
 	 */
-	public Build(int buidNumber, String url) {
-		setBuildNumber(buildNumber);
+	public Build(int number, String url) {
+		setNumber(number);
 		setUrl(url);
 	}
 
@@ -64,17 +64,17 @@ public class Build {
 	 * 
 	 * @return the build number
 	 */
-	public int getBuildNumber() {
-		return buildNumber;
+	public int getNumber() {
+		return number;
 	}
 
 	/**
 	 * Sets the build number
 	 * 
-	 * @param buildNumber the build number
+	 * @param number the build number
 	 */
-	public void setBuildNumber(int buildNumber) {
-		this.buildNumber = buildNumber;
+	public void setNumber(int number) {
+		this.number = number;
 	}
 
 	/**

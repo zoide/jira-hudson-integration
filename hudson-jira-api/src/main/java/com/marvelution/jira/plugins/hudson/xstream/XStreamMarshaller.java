@@ -49,6 +49,9 @@ public class XStreamMarshaller {
 	 * @return the marshaled source object as {@link String}
 	 */
 	public static <T> String marshal(T source) {
+		if (source == null) {
+			return "";
+		}
 		Method method;
 		try {
 			method = XStream.class.getMethod("autodetectAnnotations", boolean.class);
@@ -74,6 +77,13 @@ public class XStreamMarshaller {
 	 * @return the Unmarshaled Object
 	 */
 	public static <T> T unmarshal(String xml, Class<T> clazz) {
+		if ("".equals(xml)) {
+			try {
+				return clazz.newInstance();
+			} catch (Exception e) {
+				return null;
+			}
+		}
 		Method method;
 		try {
 			method = XStream.class.getMethod("autodetectAnnotations", boolean.class);
@@ -117,17 +127,14 @@ public class XStreamMarshaller {
 		xstream.autodetectAnnotations(false);
 		xstream.alias("jobs", Jobs.class);
 		xstream.addImplicitCollection(Jobs.class, "jobs");
-		//xstream.aliasField("job", Jobs.class, "jobs");
 		// Map all Job class element
 		xstream.alias("job", Job.class);
 		xstream.aliasField("jira-key", Job.class, "jiraKey");
 		xstream.aliasField("result", Job.class, "result");
 		xstream.addImplicitCollection(Job.class, "healthReports");
-		//xstream.aliasField("healthReport", Jobs.class, "healthReports");
 		// Map all Builds class element
 		xstream.alias("builds", Builds.class);
 		xstream.addImplicitCollection(Builds.class, "builds");
-		//xstream.aliasField("build", Builds.class, "builds");
 		// Map all Build class element
 		xstream.alias("build", Build.class);
 		xstream.aliasField("result", Build.class, "result");
