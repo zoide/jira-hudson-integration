@@ -36,7 +36,7 @@
 		<module>jira-hudson-plugin</module>
 	</modules>
 	
-	<name>JIRA Hudson Integration</name>
+	<name>Marvelution JIRA Hudson Integration</name>
 	<description>JIRA Plugin to integrate Hudson CI like with Bamboo</description>
 	<url>http://www.marvelution.com/marvelution-jira-hudson-integration/</url>
 	<inceptionYear>2009</inceptionYear>
