@@ -19,42 +19,25 @@
 
 package com.marvelution.jira.plugins.hudson.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
 /**
- * Model class for a list of {@link Job}
+ * Hudson Server aware interface for the Hudson Jira API model
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-@XStreamAlias("jobs")
-public class Jobs {
-
-	@XStreamImplicit(itemFieldName = "job")
-	private Collection<Job> jobs;
+public interface HudsonServerAware {
 
 	/**
-	 * Gets the {@link Collection} of {@link Job} object
+	 * Gets the Hudson Server Id
 	 * 
-	 * @return the {@link Collection} of {@link Job} object
+	 * @return the server id
 	 */
-	public Collection<Job> getJobs() {
-		if (jobs == null) {
-			jobs = new ArrayList<Job>();
-		}
-		return jobs;
-	}
+	int getHudsonServerId();
 
 	/**
-	 * Sets the {@link Collection} of {@link Job} object
+	 * Sets the Hudson Server Id
 	 * 
-	 * @param jobs the {@link Collection} of {@link Job} object
+	 * @param hudsonServerId the server id
 	 */
-	public void setJobs(Collection<Job> jobs) {
-		this.jobs = jobs;
-	}
+	void setHudsonServerId(int hudsonServerId);
 
 }

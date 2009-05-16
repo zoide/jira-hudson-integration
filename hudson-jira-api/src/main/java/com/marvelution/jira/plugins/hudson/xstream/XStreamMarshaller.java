@@ -28,6 +28,7 @@ import com.marvelution.jira.plugins.hudson.model.Builds;
 import com.marvelution.jira.plugins.hudson.model.HealthReport;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.Jobs;
+import com.marvelution.jira.plugins.hudson.model.TestResult;
 import com.marvelution.jira.plugins.hudson.xstream.converters.ResultConverter;
 import com.marvelution.jira.plugins.hudson.xstream.converters.StateConverter;
 import com.thoughtworks.xstream.XStream;
@@ -113,6 +114,7 @@ public class XStreamMarshaller {
 		xstream.processAnnotations(Builds.class);
 		xstream.processAnnotations(Build.class);
 		xstream.processAnnotations(HealthReport.class);
+		xstream.processAnnotations(TestResult.class);
 		return xstream;
 	}
 
@@ -129,18 +131,23 @@ public class XStreamMarshaller {
 		xstream.addImplicitCollection(Jobs.class, "jobs");
 		// Map all Job class element
 		xstream.alias("job", Job.class);
-		xstream.aliasField("jira-key", Job.class, "jiraKey");
+		xstream.omitField(Job.class, "hudsonServerId");
 		xstream.aliasField("result", Job.class, "result");
-		xstream.addImplicitCollection(Job.class, "healthReports");
+		xstream.addImplicitCollection(Job.class, "healthReport");
 		// Map all Builds class element
 		xstream.alias("builds", Builds.class);
 		xstream.addImplicitCollection(Builds.class, "builds");
 		// Map all Build class element
 		xstream.alias("build", Build.class);
+		xstream.omitField(Build.class, "hudsonServerId");
 		xstream.aliasField("result", Build.class, "result");
 		xstream.aliasField("state", Build.class, "state");
+		xstream.addImplicitCollection(Build.class, "relatedIssueKeys");
+		xstream.addImplicitCollection(Build.class, "relatedIssueKey");
 		// Map all HealthReport class element
 		xstream.alias("healthReport", HealthReport.class);
+		// Map all TestResult class element
+		xstream.alias("testResult", TestResult.class);
 		// Register Converters
 		xstream.registerConverter(new ResultConverter());
 		xstream.registerConverter(new StateConverter());

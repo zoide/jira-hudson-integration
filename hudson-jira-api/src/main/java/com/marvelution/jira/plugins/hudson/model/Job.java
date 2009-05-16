@@ -25,6 +25,7 @@ import com.marvelution.jira.plugins.hudson.xstream.converters.ResultConverter;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * Model class for Hudson Jobs
@@ -32,9 +33,11 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @XStreamAlias("job")
-public class Job {
+public class Job implements HudsonServerAware, Comparable<Job> {
 
-	@XStreamAlias("jira-key")
+	@XStreamOmitField
+	private int hudsonServerId;
+
 	private String jiraKey;
 
 	private String name;
@@ -81,6 +84,24 @@ public class Job {
 		setName(name);
 		setDescription(description);
 		setUrl(url);
+	}
+
+	/**
+	 * Gets the Hudson Server Id
+	 * 
+	 * @return the Hudson Server Id
+	 */
+	public int getHudsonServerId() {
+		return hudsonServerId;
+	}
+
+	/**
+	 * Sets the Hudson Server Id
+	 * 
+	 * @param hudsonServerId the Hudson Server Id
+	 */
+	public void setHudsonServerId(int hudsonServerId) {
+		this.hudsonServerId = hudsonServerId;
 	}
 
 	/**
@@ -375,6 +396,13 @@ public class Job {
 	 */
 	public void setResult(Result result) {
 		this.result = result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int compareTo(Job other) {
+		return getName().compareTo(other.getName());
 	}
 
 }

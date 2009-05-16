@@ -20,7 +20,7 @@
 package com.marvelution.jira.plugins.hudson.model;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
@@ -34,14 +34,14 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 public class Builds {
 
 	@XStreamImplicit(itemFieldName = "build")
-	private List<Build> builds;
+	private Collection<Build> builds;
 
 	/**
-	 * Gets the {@link List} of {@link Build} object
+	 * Gets the {@link Collection} of {@link Build} object
 	 * 
-	 * @return the {@link List} of {@link Build} object
+	 * @return the {@link Collection} of {@link Build} object
 	 */
-	public List<Build> getBuilds() {
+	public Collection<Build> getBuilds() {
 		if (builds == null) {
 			builds = new ArrayList<Build>();
 		}
@@ -49,11 +49,11 @@ public class Builds {
 	}
 
 	/**
-	 * Sets the {@link List} of {@link Build} object
+	 * Sets the {@link Collection} of {@link Build} object
 	 * 
-	 * @param builds the {@link List} of {@link Build} object
+	 * @param builds the {@link Collection} of {@link Build} object
 	 */
-	public void setBuilds(List<Build> builds) {
+	public void setBuilds(Collection<Build> builds) {
 		this.builds = builds;
 	}
 

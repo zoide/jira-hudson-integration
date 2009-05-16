@@ -19,10 +19,14 @@
 
 package com.marvelution.jira.plugins.hudson.model;
 
+import java.util.Collection;
+
 import com.marvelution.jira.plugins.hudson.xstream.converters.ResultConverter;
 import com.marvelution.jira.plugins.hudson.xstream.converters.StateConverter;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * Model class for Hudson Builds
@@ -30,11 +34,28 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @XStreamAlias("build")
-public class Build {
+public class Build implements HudsonServerAware, Comparable<Build> {
+
+	@XStreamOmitField
+	private int hudsonServerId;
 
 	private int number;
 
 	private String url;
+
+	private String trigger;
+
+	@XStreamImplicit(itemFieldName = "relatedIssueKey")
+	private Collection<String> relatedIssueKeys;
+
+	@XStreamImplicit(itemFieldName = "artifact")
+	private Collection<String> artifacts;
+
+	@XStreamAlias("testResult")
+	private TestResult testResult;
+
+	@XStreamAlias("healthReport")
+	private HealthReport healthReport;
 	
 	private long duration = 0L;
 	
@@ -57,6 +78,24 @@ public class Build {
 	public Build(int number, String url) {
 		setNumber(number);
 		setUrl(url);
+	}
+
+	/**
+	 * Gets the Hudson Server Id
+	 * 
+	 * @return the Hudson Server Id
+	 */
+	public int getHudsonServerId() {
+		return hudsonServerId;
+	}
+
+	/**
+	 * Sets the Hudson Server Id
+	 * 
+	 * @param hudsonServerId the Hudson Server Id
+	 */
+	public void setHudsonServerId(int hudsonServerId) {
+		this.hudsonServerId = hudsonServerId;
 	}
 
 	/**
@@ -99,6 +138,24 @@ public class Build {
 			url = "/" + url;
 		}
 		this.url = url;
+	}
+
+	/**
+	 * Gets the trigger message of this build
+	 * 
+	 * @return the trigger message
+	 */
+	public String getTrigger() {
+		return trigger;
+	}
+
+	/**
+	 * Sets the trigger message
+	 * 
+	 * @param trigger the trigger message
+	 */
+	public void setTrigger(String trigger) {
+		this.trigger = trigger;
 	}
 
 	/**
@@ -171,6 +228,85 @@ public class Build {
 	 */
 	public void setState(State state) {
 		this.state = state;
+	}
+
+	/**
+	 * Gets the related Jira issue keys
+	 * 
+	 * @return the related Jira issue keys
+	 */
+	public Collection<String> getRelatedIssueKeys() {
+		return relatedIssueKeys;
+	}
+
+	/**
+	 * Sets the related Jira issue keys
+	 * 
+	 * @param relatedIssueKeys the related Jira issue keys
+	 */
+	public void setRelatedIssueKeys(Collection<String> relatedIssueKeys) {
+		this.relatedIssueKeys = relatedIssueKeys;
+	}
+
+	/**
+	 * Gets the artifacts resulting from the build
+	 * 
+	 * @return the artifacts
+	 */
+	public Collection<String> getArtifacts() {
+		return artifacts;
+	}
+
+	/**
+	 * Sets the artifacts resulting from the build
+	 * 
+	 * @param artifacts the artifacts
+	 */
+	public void setArtifacts(Collection<String> artifacts) {
+		this.artifacts = artifacts;
+	}
+
+	/**
+	 * Gets the {@link TestResult} of the build
+	 * 
+	 * @return the {@link TestResult}
+	 */
+	public TestResult getTestResult() {
+		return testResult;
+	}
+
+	/**
+	 * Sets the {@link TestResult} of the build
+	 * 
+	 * @param testResult {@link TestResult}
+	 */
+	public void setTestResult(TestResult testResult) {
+		this.testResult = testResult;
+	}
+
+	/**
+	 * Gets the {@link HealthReport} of the build
+	 * 
+	 * @return the {@link HealthReport}
+	 */
+	public HealthReport getHealthReport() {
+		return healthReport;
+	}
+
+	/**
+	 * Sets the {@link HealthReport} of the build
+	 * 
+	 * @param healthReport {@link HealthReport}
+	 */
+	public void setHealthReport(HealthReport healthReport) {
+		this.healthReport = healthReport;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int compareTo(Build other) {
+		return Long.valueOf(getTimestamp()).compareTo(Long.valueOf(other.getTimestamp()));
 	}
 
 }
