@@ -43,7 +43,8 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 
 	private String url;
 
-	private String trigger;
+	@XStreamImplicit(itemFieldName = "trigger")
+	private Collection<String> triggers;
 
 	@XStreamImplicit(itemFieldName = "relatedIssueKey")
 	private Collection<String> relatedIssueKeys;
@@ -141,21 +142,21 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	}
 
 	/**
-	 * Gets the trigger message of this build
+	 * Gets the trigger messages of this build
 	 * 
-	 * @return the trigger message
+	 * @return the trigger messages
 	 */
-	public String getTrigger() {
-		return trigger;
+	public Collection<String> getTriggers() {
+		return triggers;
 	}
 
 	/**
-	 * Sets the trigger message
+	 * Sets the trigger messages
 	 * 
-	 * @param trigger the trigger message
+	 * @param triggers the trigger messages
 	 */
-	public void setTrigger(String trigger) {
-		this.trigger = trigger;
+	public void setTriggers(Collection<String> triggers) {
+		this.triggers = triggers;
 	}
 
 	/**
