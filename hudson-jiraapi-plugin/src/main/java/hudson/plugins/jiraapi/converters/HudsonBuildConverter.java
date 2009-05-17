@@ -19,8 +19,19 @@
 
 package hudson.plugins.jiraapi.converters;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import hudson.model.Cause;
+import hudson.model.CauseAction;
+import hudson.model.Run.Artifact;
+import hudson.scm.ChangeLogSet.Entry;
+import hudson.tasks.test.AbstractTestResultAction;
+
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.State;
+import com.marvelution.jira.plugins.hudson.model.TestResult;
+import com.marvelution.jira.plugins.hudson.utils.JiraKeyUtils;
 
 /**
  * Converter class to convert a Hudson Build into a Jira Integration Model Build
@@ -35,8 +46,9 @@ public class HudsonBuildConverter {
 	 * @param hudsonBuild the Hudson Build to convert
 	 * @return the Jira Integration Model Build
 	 */
+	@SuppressWarnings("unchecked")
 	public static Build convertHudsonBuild(final hudson.model.AbstractBuild<?, ?> hudsonBuild) {
-		final Build build = new Build(hudsonBuild.getNumber(), createBuildUrl(hudsonBuild));
+		final Build build = new Build(hudsonBuild.getNumber(), hudsonBuild.getProject().getName());
 		build.setDuration(hudsonBuild.getDuration());
 		build.setTimestamp(hudsonBuild.getTimestamp().getTimeInMillis());
 		build.setResult(HudsonResultConverter.convertHudsonResult(hudsonBuild.getResult()));
@@ -47,21 +59,33 @@ public class HudsonBuildConverter {
 		} else if (hudsonBuild.isLogUpdated()) {
 			build.setState(State.COMPLETED);
 		}
-		return build;
-	}
-
-	/**
-	 * Creates a URL for the Hudson Build
-	 * 
-	 * @param hudsonBuild the Hudson Build to cretae the URL for
-	 * @return the URL
-	 */
-	private static String createBuildUrl(final hudson.model.AbstractBuild<?, ?> hudsonBuild) {
-		String url = hudsonBuild.getProject().getUrl();
-		if (!url.endsWith("/")) {
-			url += "/";
+		final AbstractTestResultAction<?> testAction = hudsonBuild.getTestResultAction();
+		if (testAction != null) {
+			final TestResult testResult = new TestResult();
+			testResult.setFailed(testAction.getFailCount());
+			testResult.setSkipped(testAction.getSkipCount());
+			testResult.setTotal(testAction.getTotalCount());
+			build.setTestResult(testResult);
+			build.setHealthReport(HudsonHealthReportConverter.convertHudsonHealthReport(testAction.getBuildHealth()));
 		}
-		return url + hudsonBuild.getNumber();
+		final List<String> artifacts = new ArrayList<String>();
+		for (Artifact artifact : hudsonBuild.getArtifacts()) {
+			artifacts.add(artifact.getFileName());
+		}
+		build.setArtifacts(artifacts);
+		final List<String> triggers = new ArrayList<String>();
+		for (CauseAction causeAction : hudsonBuild.getActions(CauseAction.class)) {
+			for (Cause cause : causeAction.getCauses()) {
+				triggers.add(cause.getShortDescription());
+			}
+		}
+		build.setTriggers(triggers);
+		final List<String> relatedIssueKeys = new ArrayList<String>();
+		for (Entry entry : hudsonBuild.getChangeSet()) {
+			relatedIssueKeys.addAll(JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg()));
+		}
+		build.setRelatedIssueKeys(relatedIssueKeys);
+		return build;
 	}
 
 }

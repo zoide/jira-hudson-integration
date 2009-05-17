@@ -60,9 +60,11 @@ public class JiraApi {
 	public Builds getBuildsByJiraProject(final String projectKey) {
 		final Builds builds = new Builds();
 		final hudson.model.Job<?, ?> hudsonJob = JobUtils.getJobByJiraProjectKey(projectKey);
-		for (hudson.model.Run<?, ?> hudsonRun : hudsonJob.getBuilds()) {
-			final hudson.model.AbstractBuild<?, ?> hudsonBuild = (hudson.model.AbstractBuild<?, ?>) hudsonRun;
-			builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(hudsonBuild));
+		if (hudsonJob != null) {
+			for (hudson.model.Run<?, ?> hudsonRun : hudsonJob.getBuilds()) {
+				final hudson.model.AbstractBuild<?, ?> hudsonBuild = (hudson.model.AbstractBuild<?, ?>) hudsonRun;
+				builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(hudsonBuild));
+			}
 		}
 		return builds;
 	}

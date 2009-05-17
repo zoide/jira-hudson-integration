@@ -44,7 +44,7 @@ public class HudsonJobConverter {
 	 * @return the converted {@link Job}
 	 */
 	public static Job convertHudsonJob(hudson.model.Job<?, ?> hudsonJob) {
-		final Job job = new Job(hudsonJob.getName(), hudsonJob.getDescription(), hudsonJob.getUrl());
+		final Job job = new Job(hudsonJob.getName(), hudsonJob.getDescription());
 		if (hudsonJob.getProperty(JiraProjectKeyJobProperty.class) != null) {
 			job.setJiraKey(hudsonJob.getProperty(JiraProjectKeyJobProperty.class).getKey());
 		}
