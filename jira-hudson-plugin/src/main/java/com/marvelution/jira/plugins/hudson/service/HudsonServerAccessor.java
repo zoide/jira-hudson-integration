@@ -19,7 +19,6 @@
 
 package com.marvelution.jira.plugins.hudson.service;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.atlassian.jira.project.Project;
@@ -41,18 +40,28 @@ public interface HudsonServerAccessor {
 	String GET_BUILDS_ACTION = BASE_ACTION_URL + "/getBuilds";
 
 	/**
-	 * Get all Jobs that are configured in Hudson
+	 * Get all Jobs that are configured in a specific Hudson Server
 	 * 
-	 * @param hudsonServer the {@link HudsonServer} to get the Jobs from
-	 * @return {@link Set} of {@link Job}s
+	 * @param hudsonServer the {@link HudsonServer} to get the jobs from
+	 * @return {@link List} of {@link Job}s
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
 	 */
 	List<Job> getJobs(HudsonServer hudsonServer) throws HudsonServerAccessorException;
 
 	/**
-	 * Gets all Builds of a Jira {@link Project}
+	 * Gets all Builds of a Jira {@link Project}. If the project is associated with a specific {@link HudsonServer}
+	 * only that server will be checked for builds, otherwise all the configured servers will be called.
 	 * 
-	 * @param hudsonServer the {@link HudsonServer} to get the Builds from
+	 * @param project the Jira {@link Project}
+	 * @return {@link List} of {@link Build}s of the project
+	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
+	 */
+	List<Build> getBuilds(Project project)throws HudsonServerAccessorException;
+
+	/**
+	 * Gets all Builds of a Jira {@link Project} that are configured in a specific Hudson Server
+	 * 
+	 * @param hudsonServer the {@link HudsonServer} to get the builds from
 	 * @param project the Jira {@link Project}
 	 * @return {@link List} of {@link Build}s of the project
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
@@ -60,9 +69,20 @@ public interface HudsonServerAccessor {
 	List<Build> getBuilds(HudsonServer hudsonServer, Project project)throws HudsonServerAccessorException;
 
 	/**
-	 * Gets all Builds of a Jira {@link Version}
+	 * Gets all Builds of a Jira {@link Version}. If the project version is associated with a specific
+	 * {@link HudsonServer} only that server will be checked for builds, otherwise all the configured servers will be
+	 * called.
 	 * 
-	 * @param hudsonServer the {@link HudsonServer} to get the Builds from
+	 * @param version the Jira {@link Version}
+	 * @return {@link List} of {@link Build}s of the project
+	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
+	 */
+	List<Build> getBuilds(Version version)throws HudsonServerAccessorException;
+
+	/**
+	 * Gets all Builds of a Jira {@link Version} that are configured in a specific Hudson Server
+	 * 
+	 * @param hudsonServer the {@link HudsonServer} to get the builds from
 	 * @param version the Jira {@link Version}
 	 * @return {@link List} of {@link Build}s of the project
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
@@ -70,14 +90,23 @@ public interface HudsonServerAccessor {
 	List<Build> getBuilds(HudsonServer hudsonServer, Version version)throws HudsonServerAccessorException;
 
 	/**
-	 * Gets all the Builds related to a Set of Jira issue keys
+	 * Gets all the Builds related to a Set of Jira issue keys that are configured in all known Hudson Servers
 	 * 
-	 * @param hudsonServer the {@link HudsonServer} to get the Builds from
-	 * @param issueKeys the {@link Collection} of issue keys
+	 * @param issueKeys the {@link List} of issue keys
 	 * @return {@link List} issue related {@link Build} objects
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
 	 */
-	List<Build> getBuilds(HudsonServer hudsonServer, Collection<String> issueKeys)
-			throws HudsonServerAccessorException;
+	List<Build> getBuilds(List<String> issueKeys) throws HudsonServerAccessorException;
+
+	/**
+	 * Gets all the Builds related to a Set of Jira issue keys that are configured in all known Hudson Servers
+	 * 
+	 * @param hudsonServer the {@link HudsonServer} to get the builds from
+	 * @param issueKeys the {@link List} of issue keys
+	 * @return {@link List} issue related {@link Build} objects
+	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
+	 */
+	List<Build> getBuilds(HudsonServer hudsonServer, List<String> issueKeys)
+					throws HudsonServerAccessorException;
 
 }

@@ -77,10 +77,12 @@ public interface HudsonServerManager {
 	HudsonServer getServer(String serverName);
 
 	/**
-	 * Get {@link HudsonServer} by {@link Project}
+	 * Get {@link HudsonServer} by {@link Project}. If the project is not associated with a specific server it will
+	 * return the default {@link HudsonServer}
 	 * 
 	 * @param project the project
-	 * @return the {@link HudsonServer}, may be <code>null</code> if no server is configured for the project
+	 * @return the {@link HudsonServer}, may be <code>null</code> if no server is configured for the project and the
+	 *         default server is <code>null</code>
 	 */
 	HudsonServer getServerByJiraProject(Project project);
 
