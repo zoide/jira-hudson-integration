@@ -19,9 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson.model;
 
-import java.util.Collection;
-
-import org.apache.commons.lang.StringUtils;
+import java.util.List;
 
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 
@@ -30,13 +28,7 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServer;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class HudsonStatusPortletResult {
-
-	private HudsonServer server;
-
-	private Collection<Job> jobs;
-
-	private String error;
+public class HudsonStatusPortletResult extends HudsonServerResult<List<Job>> {
 
 	/**
 	 * Constructor
@@ -44,90 +36,35 @@ public class HudsonStatusPortletResult {
 	 * @param server the {@link HudsonServer}
 	 */
 	public HudsonStatusPortletResult(HudsonServer server) {
-		this.server = server;
+		super(server);
 	}
 
 	/**
 	 * Constructor
 	 * 
 	 * @param server the {@link HudsonServer}
-	 * @param jobs the {@link Collection} of {@link Job} objects
+	 * @param jobs the {@link List} of {@link Job} objects
 	 */
-	public HudsonStatusPortletResult(HudsonServer server, Collection<Job> jobs) {
-		this.server = server;
-		this.jobs = jobs;
+	public HudsonStatusPortletResult(HudsonServer server, List<Job> jobs) {
+		super(server, jobs);
 	}
 
 	/**
-	 * Check if this result has an error
+	 * Gets the {@link List} of Jobs that run on the {@link HudsonServer}
 	 * 
-	 * @return <code>true</code> if {@link #error} is <code>null</code> or <code>empty</code>, <code>false</code>
-	 *         otherwise
+	 * @return {@link List} of {@link Job} objects
 	 */
-	public boolean hasError() {
-		return !StringUtils.isEmpty(error);
+	public List<Job> getJobs() {
+		return getResults();
 	}
 
 	/**
-	 * Gets the error message
+	 * Sets the {@link List} of {@link Job} object that are associated this Result
 	 * 
-	 * @return the error message
+	 * @param jobs the {@link List} of {@link Job} objects
 	 */
-	public String getError() {
-		return error;
+	public void setJobs(List<Job> jobs) {
+		setResults(jobs);
 	}
 
-	/**
-	 * Sets the error message
-	 * 
-	 * @param error the error message
-	 */
-	public void setError(String error) {
-		this.error = error;
-	}
-
-	/**
-	 * Gets the {@link HudsonServer} Name
-	 * 
-	 * @return the name
-	 */
-	public String getServerName() {
-		return server.getName();
-	}
-
-	/**
-	 * Gets the {@link HudsonServer} URL
-	 * 
-	 * @return the URL
-	 */
-	public String getServerUrl() {
-		return server.getHost();
-	}
-
-	/**
-	 * Gets the {@link HudsonServer} Image URL
-	 * 
-	 * @return the Image URL
-	 */
-	public String getServerImageUrl() {
-		return server.getHost() + HudsonServer.MEDIUM_IMAGE_LOCATION;
-	}
-
-	/**
-	 * Gets the {@link Collection} of Jobs that run on the {@link HudsonServer}
-	 * 
-	 * @return {@link Collection} of {@link Job} objects
-	 */
-	public Collection<Job> getJobs() {
-		return jobs;
-	}
-
-	/**
-	 * Sets the {@link Collection} of {@link Job} object that are associated this Result
-	 * 
-	 * @param jobs the {@link Collection} of {@link Job} objects
-	 */
-	public void setJobs(Collection<Job> jobs) {
-		this.jobs = jobs;
-	}
 }

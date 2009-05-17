@@ -22,9 +22,9 @@ package com.marvelution.jira.plugins.hudson;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -40,11 +40,13 @@ import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.Builds;
+import com.marvelution.jira.plugins.hudson.model.HudsonServerAware;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.Jobs;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
 
 /**
@@ -60,12 +62,17 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 
 	private static final int MAX_HOST_CONNECTIONS = 4;
 
+	private HudsonServerManager serverManager;
+
 	private final HttpClient httpClient;
 
 	/**
 	 * Constructor
+	 * 
+	 * @param serverManager the {@link HudsonServerManager} implementation
 	 */
-	public DefaultHudsonServerAccessorImpl() {
+	public DefaultHudsonServerAccessorImpl(HudsonServerManager serverManager) {
+		this.serverManager = serverManager;
 		final HttpConnectionManagerParams connectionManagerParams = new HttpConnectionManagerParams();
 		connectionManagerParams.setConnectionTimeout(TIMEOUT_MS);
 		connectionManagerParams.setDefaultMaxConnectionsPerHost(MAX_HOST_CONNECTIONS);
@@ -87,13 +94,46 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	public List<Build> getBuilds(Project project) throws HudsonServerAccessorException {
+		final List<Build> builds = new ArrayList<Build>();
+		final HudsonServer defaultServer = serverManager.getServerByJiraProject(project);
+		if (defaultServer != null) {
+			builds.addAll(getBuilds(defaultServer, project));
+		} else {
+			for (HudsonServer server : serverManager.getServers()) {
+				builds.addAll(getBuilds(server, project));
+			}
+		}
+		return builds;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public List<Build> getBuilds(HudsonServer hudsonServer, Project project)
 			throws HudsonServerAccessorException {
 		final Map<String, String> params = new HashMap<String, String>();
 		params.put("projectKey", project.getKey());
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_BUILDS_ACTION, params);
 		final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
+		associateHudsonServer(builds.getBuilds(), hudsonServer);
 		return builds.getBuilds();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Build> getBuilds(Version version) throws HudsonServerAccessorException {
+		final List<Build> builds = new ArrayList<Build>();
+		final HudsonServer defaultServer = serverManager.getServerByJiraProject(version.getProjectObject());
+		if (defaultServer != null) {
+			builds.addAll(getBuilds(defaultServer, version));
+		} else {
+			for (HudsonServer server : serverManager.getServers()) {
+				builds.addAll(getBuilds(server, version));
+			}
+		}
+		return builds;
 	}
 
 	/**
@@ -119,13 +159,25 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 		}
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_BUILDS_ACTION, params);
 		final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
+		associateHudsonServer(builds.getBuilds(), hudsonServer);
 		return builds.getBuilds();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Build> getBuilds(HudsonServer hudsonServer, Collection<String> issueKeys)
+	public List<Build> getBuilds(List<String> issueKeys) throws HudsonServerAccessorException {
+		final List<Build> builds = new ArrayList<Build>();
+		for (HudsonServer server : serverManager.getServers()) {
+			builds.addAll(getBuilds(server, issueKeys));
+		}
+		return builds;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Build> getBuilds(HudsonServer hudsonServer, List<String> issueKeys)
 			throws HudsonServerAccessorException {
 		final Map<String, String> params = new HashMap<String, String>();
 		String issueKeysString = "";
@@ -135,6 +187,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 		params.put("issueKeys", issueKeysString);
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_BUILDS_ACTION, params);
 		final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
+		associateHudsonServer(builds.getBuilds(), hudsonServer);
 		return builds.getBuilds();
 	}
 
@@ -238,6 +291,20 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 */
 	private URL constructHudsonActionURL(HudsonServer hudsonServer, String action) throws MalformedURLException {
 		return new URL(hudsonServer.getHost() + action);
+	}
+
+	/**
+	 * Associate a {@link HudsonServer} with the given {@link List} of {@link HudsonServerAware} objects
+	 * 
+	 * @param objects the {@link List} of {@link HudsonServerAware} objects
+	 * @param server the {@link HudsonServer}
+	 */
+	private void associateHudsonServer(List<?> objects, HudsonServer server) {
+		for (Object object : objects) {
+			if (object instanceof HudsonServerAware) {
+				((HudsonServerAware) object).setHudsonServerId(server.getServerId());
+			}
+		}
 	}
 
 }

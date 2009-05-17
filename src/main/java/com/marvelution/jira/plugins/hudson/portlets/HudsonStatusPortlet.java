@@ -19,16 +19,18 @@
 
 package com.marvelution.jira.plugins.hudson.portlets;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.jfree.util.Log;
 
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.portal.PortletConfiguration;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.marvelution.jira.plugins.hudson.model.HudsonStatusPortletResult;
+import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
@@ -64,20 +66,18 @@ public class HudsonStatusPortlet extends AbstractHudsonPorlet {
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
 		if (!hudsonServerManager.isHudsonConfigured()) {
 			params.put("isHudsonConfigured", Boolean.FALSE);
-			params.put("errorMessage", getErrorText("hudson.error.hudsonnotconfigured"));
+			params.put("errorMessage", getErrorText("hudson.error.not.configured"));
 		} else {
 			params.put("isHudsonConfigured", Boolean.TRUE);
 			final List<HudsonStatusPortletResult> results = new ArrayList<HudsonStatusPortletResult>();
 			for (HudsonServer server : hudsonServerManager.getServers()) {
 				final HudsonStatusPortletResult result = new HudsonStatusPortletResult(server);
 				try {
-					result.setJobs(hudsonServerAccessor.getJobs(server));
+					final List<Job> jobs = hudsonServerAccessor.getJobs(server);
+					Log.debug("Found " + jobs.size() + " on Hudson Server " + server.getName());
+					result.setJobs(jobs);
 				} catch (HudsonServerAccessorException e) {
-					if (e.getCause() instanceof MalformedURLException) {
-						result.setError(getErrorText("hudson.error.invalidhudsonurl"));
-					} else {
-						result.setError(getErrorText("hudson.error.cannotconnecthudson"));
-					}
+					result.setError(getErrorText("hudson.error.cannot.connect"));
 				}
 				results.add(result);
 			}

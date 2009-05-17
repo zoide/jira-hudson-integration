@@ -22,6 +22,7 @@ package com.marvelution.jira.plugins.hudson.web.action;
 import org.apache.log4j.Logger;
 import org.apache.velocity.tools.generic.SortTool;
 
+import com.atlassian.jira.security.Permissions;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
@@ -56,8 +57,7 @@ public class AbstractHudsonWebActionSupport extends JiraWebActionSupport {
 	 * @return <code>true</code> if so, <code>false</code> otherwise
 	 */
 	public boolean hasPermissions() {
-		// TODO Check permission ids
-		return isHasPermission(0);
+		return isHasPermission(Permissions.ADMINISTER);
 	}
 
 	/**

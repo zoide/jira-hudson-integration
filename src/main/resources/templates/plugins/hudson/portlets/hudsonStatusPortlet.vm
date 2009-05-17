@@ -1,3 +1,20 @@
+## Licensed to Marvelution under one or more contributor license 
+## agreements.  See the NOTICE file distributed with this work 
+## for additional information regarding copyright ownership.
+## Marvelution licenses this file to you under the Apache License,
+## Version 2.0 (the "License"); you may not use this file except
+## in compliance with the License.
+## You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied. See the License for the
+## specific language governing permissions and limitations
+## under the License.
+
 <style type="text/css">
 a {
 	text-decoration: none;
@@ -29,8 +46,8 @@ a:hover {
             <tr class="rowHeader">
                 <td class="colHeaderLink">
                 	<span class="switch actionLinks subText" id="${domId}-switch" onclick="CookieUtil.toggleVisibility('${domId}', '[${i18n.getText("hudson.portlet.show")} >>]', '[${i18n.getText("hudson.portlet.hide")}]')">[${i18n.getText("hudson.portlet.hide")}]</span>
-                    ${i18n.getText("hudson.portlet.jobsStatusSummary")}:
-                    <strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($i18n.getText("hudson.portlet.allJobs"))
+                    ${i18n.getText("hudson.portlet.jobs.status.summary")}:
+                    <strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($i18n.getText("hudson.portlet.all.jobs"))
                 </td>
             </tr>
         </thead>
@@ -40,62 +57,62 @@ a:hover {
             		#if ($result.hasError())
                     <div align="center"><strong><em>${i18n.getText("hudson.portlet.error")}:</em></strong> $textutils.htmlEncode($result.error)</div>
 		            #elseif ($result.jobs.isEmpty())
-            		<div align="center"><strong>${i18n.getText("hudson.portlet.noJobs")}</strong></div>
+            		<div align="center"><strong>${i18n.getText("hudson.portlet.no.jobs")}</strong></div>
             		#else
                     <table class="hudsonJobsTable" width="100%">
                     	<thead>
                     		<tr>
                     			<th>${i18n.getText("hudson.portlet.status")}</th>
                     			<th>${i18n.getText("hudson.portlet.job")}</th>
-                    			<th>${i18n.getText("hudson.portlet.lastBuild")}</th>
-                    			<th>${i18n.getText("hudson.portlet.lastSuccessfulBuild")}</th>
-                    			<th>${i18n.getText("hudson.portlet.lastFailedBuild")}</th>
-                    			<th>${i18n.getText("hudson.portlet.lastUnstableBuild")}</th>
-                    			<th>${i18n.getText("hudson.portlet.lastDuration")}</th>
+                    			<th>${i18n.getText("hudson.portlet.last.build")}</th>
+                    			<th>${i18n.getText("hudson.portlet.last.successful.build")}</th>
+                    			<th>${i18n.getText("hudson.portlet.last.failed.build")}</th>
+                    			<th>${i18n.getText("hudson.portlet.last.unstable.build")}</th>
+                    			<th>${i18n.getText("hudson.portlet.last.duration")}</th>
                     		</tr>
                     	</thead>
                     	<tbody>
 		    				#foreach ($job in $result.jobs)
 	                    	<tr>
 	                    		<td><img src=${result.serverImageUrl}/${job.result.icon} tooltip=${job.result.name()} alt=${job.result.name()} /></td>
-	                    		<td><a href=${result.serverUrl}${job.url}>${job.name}</a></td>
+	                    		<td><a href=${result.serverUrl}/job/${job.name}>${job.name}</a></td>
 	                    		<td>
 	                    			#if (${jobUtils.hasValidLastBuild($job)})
 	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastBuild.timestamp})})}
-	                    			(<a href=${result.serverUrl}${job.lastBuild.url}>${i18n.getText("hudson.build.number", ${job.lastBuild.number})}</a>)
+	                    			(<a href=${result.serverUrl}/job/${job.name}/${job.lastBuild.number}>${i18n.getText("hudson.build.number", ${job.lastBuild.number})}</a>)
 	                    			#else
-	                    			${i18n.getText("hudson.portlet.notApplicable")}
+	                    			${i18n.getText("hudson.not.applicable")}
 	                    			#end
 	                    		</td>
 	                    		<td>
 	                    			#if (${jobUtils.hasValidLastSuccessfulBuild($job)})
 	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastSuccessfulBuild.timestamp})})}
-	                    			(<a href=${result.serverUrl}${job.lastSuccessfulBuild.url}>${i18n.getText("hudson.build.number", ${job.lastSuccessfulBuild.number})}</a>)
+	                    			(<a href=${result.serverUrl}/job/${job.name}/${job.lastSuccessfulBuild.number}>${i18n.getText("hudson.build.number", ${job.lastSuccessfulBuild.number})}</a>)
 	                    			#else
-	                    			${i18n.getText("hudson.portlet.notApplicable")}
+	                    			${i18n.getText("hudson.not.applicable")}
 	                    			#end
 	                    		</td>
 	                    		<td>
 	                    			#if (${jobUtils.hasValidLastFailedBuild($job)})
 	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastFailedBuild.timestamp})})}
-	                    			(<a href=${result.serverUrl}${job.lastFailedBuild.url}>${i18n.getText("hudson.build.number", ${job.lastFailedBuild.number})}</a>)
+	                    			(<a href=${result.serverUrl}/job/${job.name}/${job.lastFailedBuild.number}>${i18n.getText("hudson.build.number", ${job.lastFailedBuild.number})}</a>)
 	                    			#else
-	                    			${i18n.getText("hudson.portlet.notApplicable")}
+	                    			${i18n.getText("hudson.not.applicable")}
 	                    			#end
 	                    		</td>
 	                    		<td>
 	                    			#if (${jobUtils.hasValidLastUnstableBuild($job)})
 	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastUnstableBuild.timestamp})})}
-	                    			(<a href=${result.serverUrl}${job.lastUnstableBuild.url}>${i18n.getText("hudson.build.number", ${job.lastUnstableBuild.number})}</a>)
+	                    			(<a href=${result.serverUrl}/job/${job.name}/${job.lastUnstableBuild.number}>${i18n.getText("hudson.build.number", ${job.lastUnstableBuild.number})}</a>)
 	                    			#else
-	                    			${i18n.getText("hudson.portlet.notApplicable")}
+	                    			${i18n.getText("hudson.not.applicable")}
 	                    			#end
 	                    		</td>
 	                    		<td>
 	                    			#if (${jobUtils.hasValidLastBuild($job)})
 	                    			${dateTimeUtils.getTimeSpanString(${job.lastBuild.duration})}
 	                    			#else
-	                    			${i18n.getText("hudson.portlet.notApplicable")}
+	                    			${i18n.getText("hudson.not.applicable")}
 	                    			#end
 	                    		</td>
 	                    	</tr>

@@ -26,6 +26,9 @@
 
 	<!-- R E S O U R C E S -->
 	<resource type="download" name="images/" location="templates/plugins/hudson/images/" />
+	<web-resource key="css" name="Plugin Tab Panel CSS">
+		<resource type="download" name="hudsonTabPanels.css" location="templates/plugins/hudson/panels/hudsonTabPanel.css" />
+	</web-resource>
 
 	<!-- P O R T L E T S -->
 	<portlet key="hudsonStatus" name="Hudson Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonStatusPortlet">
@@ -37,9 +40,36 @@
 		<properties />
 	</portlet>
 
+	<!-- T A B   P A N E L S -->
+	<issue-tabpanel key="hudson-issue-tabpanel" name="Hudson Builds Issue Panel"
+		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForIssueTabPanel">
+		<description key="hudson.panel.issue.description" />
+		<label key="hudson.panel.label" />
+		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+	</issue-tabpanel>
+
+	<version-tabpanel key="hudson-version-tabpanel" name="Hudson Builds Version Panel"
+		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForVersionTabPanel">
+		<description key="hudson.panel.version.description" />
+		<label key="hudson.panel.label" />
+		<order>101</order>
+		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+	</version-tabpanel>
+
+	<project-tabpanel key="hudson-project-tabpanel" name="Hudson Builds Project Panel"
+		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForProjectTabPanel">
+		<description key="hudson.panel.project.description" />
+		<label key="hudson.panel.label" />
+		<order>101</order>
+		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+	</project-tabpanel>
+
 	<!-- H U D S O N   S E R V E R S   C O N F I G U R A T I O N -->
 	<webwork1 key="hudsonServerConfig" name="Configure Your Hudson Server">
-		<resource type="i18n" name="i18n" location="com.marvelution.jira.plugins.hudson.web.action.HudsonWebActionSupport" />
+		<resource type="i18n" name="i18n" location="com.marvelution.jira.plugins.hudson.web.action.AbstractHudsonWebActionSupport" />
 		<actions>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServers" alias="ViewHudsonServers">
 				<view name="success">/templates/plugins/hudson/viewHudsonServers.vm</view>
@@ -57,6 +87,16 @@
 			</action>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.UpdateHudsonServerProjectAssociations" alias="UpdateHudsonServerProjectAssociations">
 				<view name="input">/templates/plugins/hudson/updateHudsonServerProjectAssociations.vm</view>
+			</action>
+		</actions>
+	</webwork1>
+
+	<webwork1 key="hudsonPanelActions" name="Hudson Server TabPanel Actions">
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+		<actions>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServerPanelContent" alias="ViewHudsonServerPanelContent">
+				<view name="success">/templates/plugins/hudson/action/buildList.vm</view>
+				<view name="error">/templates/plugins/hudson/action/panelError.vm</view>
 			</action>
 		</actions>
 	</webwork1>
@@ -88,5 +128,8 @@
 			class="com.marvelution.jira.plugins.hudson.DefaultHudsonServerAccessorImpl">
 		<interface>com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor</interface>
 	</component>
-
+	<component key="hudsonBuildsTabPanelHelper" name="Default Hudson Builds Tabpanel Helper"
+			class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper">
+		<interface>com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper</interface>
+	</component>
 </atlassian-plugin>

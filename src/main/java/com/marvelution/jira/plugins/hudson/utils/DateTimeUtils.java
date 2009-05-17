@@ -61,20 +61,20 @@ public class DateTimeUtils {
 	 * @param duration the timestamp in milliseconds
 	 * @return the formatted time {@link String}
 	 */
-	public String getTimeSpanString(long duration) {
+	public String getTimeSpanString(final long duration) {
 		final long years = duration / YEAR;
-		duration %= YEAR;
-		final long months = duration / MONTH;
-		duration %= MONTH;
-		final long days = duration / DAY;
-		duration %= DAY;
-		final long hours = duration / HOUR;
-		duration %= HOUR;
-		final long minutes = duration / MINUTE;
-		duration %= MINUTE;
-		final long seconds = duration / SECOND;
-		duration %= SECOND;
-		final long millisecs = duration;
+		long remDuration = duration % YEAR;
+		final long months = remDuration / MONTH;
+		remDuration %= MONTH;
+		final long days = remDuration / DAY;
+		remDuration %= DAY;
+		final long hours = remDuration / HOUR;
+		remDuration %= HOUR;
+		final long minutes = remDuration / MINUTE;
+		remDuration %= MINUTE;
+		final long seconds = remDuration / SECOND;
+		remDuration %= SECOND;
+		final long millisecs = remDuration;
 
 		if (years > 0L) {
 			return makeTimeSpanString(years, i18nBean.getText("hudson.time.year", Long.valueOf(years)), months,
