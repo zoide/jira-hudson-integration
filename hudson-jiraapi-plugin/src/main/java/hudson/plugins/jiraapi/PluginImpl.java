@@ -28,9 +28,9 @@ import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
+import com.marvelution.jira.plugins.hudson.ApiVersion;
 import com.marvelution.jira.plugins.hudson.model.Jobs;
 import com.marvelution.jira.plugins.hudson.model.Version;
-import com.marvelution.jira.plugins.hudson.utils.ApiVersion;
 import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
 
 import hudson.Plugin;

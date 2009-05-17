@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.marvelution.jira.plugins.hudson.utils;
+package com.marvelution.jira.plugins.hudson;
 
 import java.net.URL;
 import java.util.jar.Attributes;
