@@ -29,6 +29,8 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
 import com.marvelution.jira.plugins.hudson.model.Jobs;
+import com.marvelution.jira.plugins.hudson.model.Version;
+import com.marvelution.jira.plugins.hudson.utils.ApiVersion;
 import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
 
 import hudson.Plugin;
@@ -51,6 +53,22 @@ public class PluginImpl extends Plugin {
 	public void start() throws Exception {
 		JobPropertyDescriptor.all().add(JiraProjectKeyJobProperty.DESCRIPTOR);
 		jiraApi = new JiraApi();
+	}
+
+	/**
+	 * Handler for getApiVersion requests
+	 * 
+	 * @param request the {@link StaplerRequest}
+	 * @param response the {@link StaplerResponse}
+	 * @throws IOException in case of IO Exceptions
+	 * @throws ServletException in case of Servlet Exceptions
+	 */
+	public void doGetApiVersion(final StaplerRequest request, final StaplerResponse response) throws IOException,
+			ServletException {
+		Hudson.getInstance().checkPermission(Hudson.READ);
+		final Version version = new Version();
+		version.setVersion(ApiVersion.getVersion());
+		writeXmlToResponse(request, response, XStreamMarshaller.marshal(version));
 	}
 
 	/**
