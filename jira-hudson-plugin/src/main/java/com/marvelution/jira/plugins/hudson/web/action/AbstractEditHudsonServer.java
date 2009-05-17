@@ -21,7 +21,11 @@ package com.marvelution.jira.plugins.hudson.web.action;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.marvelution.jira.plugins.hudson.ApiVersion;
+import com.marvelution.jira.plugins.hudson.model.Version;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerFactory;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
@@ -36,6 +40,8 @@ public abstract class AbstractEditHudsonServer extends AbstractHudsonWebActionSu
 
 	protected final HudsonServerFactory hudsonServerFactory;
 
+	protected final HudsonServerAccessor hudsonServerAccessor;
+
 	protected HudsonServer hudsonServer;
 
 	/**
@@ -43,10 +49,13 @@ public abstract class AbstractEditHudsonServer extends AbstractHudsonWebActionSu
 	 * 
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 * @param hudsonServerFactory the {@link HudsonServerFactory} implementation
+	 * @param hudsonServerAccessor the {@link HudsonServerAccessor} implementation
 	 */
-	public AbstractEditHudsonServer(HudsonServerManager hudsonServerManager, HudsonServerFactory hudsonServerFactory) {
+	public AbstractEditHudsonServer(HudsonServerManager hudsonServerManager, HudsonServerFactory hudsonServerFactory,
+									HudsonServerAccessor hudsonServerAccessor) {
 		super(hudsonServerManager);
 		this.hudsonServerFactory = hudsonServerFactory;
+		this.hudsonServerAccessor = hudsonServerAccessor;
 		hudsonServer = hudsonServerFactory.createHudsonServer();
 	}
 
@@ -61,6 +70,15 @@ public abstract class AbstractEditHudsonServer extends AbstractHudsonWebActionSu
 			addError("host", getText("hudson.config.host.required"));
 		} else if ((!(getHost().startsWith("http://"))) && (!(getHost().startsWith("https://")))) {
 			addError("host", getText("hudson.config.host.invalid"));
+		} else {
+			try {
+				final Version version = hudsonServerAccessor.getApiVersion(hudsonServer);
+				if (!ApiVersion.getVersion().equals(version)) {
+					addError("host", getText("hudson.config.host.incompatible.api.version", ApiVersion.getVersion()));
+				}
+			} catch (HudsonServerAccessorException e) {
+				addError("host", getText("hudson.config.host.connection.error", ApiVersion.getVersion()));
+			}
 		}
 	}
 

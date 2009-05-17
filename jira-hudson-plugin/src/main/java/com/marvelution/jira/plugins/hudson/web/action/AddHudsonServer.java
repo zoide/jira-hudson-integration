@@ -19,6 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson.web.action;
 
+import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerFactory;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
@@ -36,9 +37,11 @@ public class AddHudsonServer extends AbstractEditHudsonServer {
 	 * 
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 * @param hudsonServerFactory the {@link HudsonServerFactory} implementation
+	 * @param hudsonServerAccessor the {@link HudsonServerAccessor} implementation
 	 */
-	public AddHudsonServer(HudsonServerManager hudsonServerManager, HudsonServerFactory hudsonServerFactory) {
-		super(hudsonServerManager, hudsonServerFactory);
+	public AddHudsonServer(HudsonServerManager hudsonServerManager, HudsonServerFactory hudsonServerFactory,
+					HudsonServerAccessor hudsonServerAccessor) {
+		super(hudsonServerManager, hudsonServerFactory, hudsonServerAccessor);
 	}
 
 	/**

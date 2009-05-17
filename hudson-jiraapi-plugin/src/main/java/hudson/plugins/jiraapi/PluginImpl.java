@@ -30,7 +30,6 @@ import org.kohsuke.stapler.StaplerResponse;
 
 import com.marvelution.jira.plugins.hudson.ApiVersion;
 import com.marvelution.jira.plugins.hudson.model.Jobs;
-import com.marvelution.jira.plugins.hudson.model.Version;
 import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
 
 import hudson.Plugin;
@@ -66,9 +65,7 @@ public class PluginImpl extends Plugin {
 	public void doGetApiVersion(final StaplerRequest request, final StaplerResponse response) throws IOException,
 			ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
-		final Version version = new Version();
-		version.setVersion(ApiVersion.getVersion());
-		writeXmlToResponse(request, response, XStreamMarshaller.marshal(version));
+		writeXmlToResponse(request, response, XStreamMarshaller.marshal(ApiVersion.getVersion()));
 	}
 
 	/**

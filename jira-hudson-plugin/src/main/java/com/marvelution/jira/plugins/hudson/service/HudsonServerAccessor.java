@@ -39,6 +39,18 @@ public interface HudsonServerAccessor {
 
 	String GET_BUILDS_ACTION = BASE_ACTION_URL + "/getBuilds";
 
+	String GET_API_VERSION_ACTION = BASE_ACTION_URL + "/getApiVersion";
+
+	/**
+	 * Gets the API Version of the {@link HudsonServer} given
+	 * 
+	 * @param hudsonServer the {@link HudsonServer} to get the API version from
+	 * @return the {@link com.marvelution.jira.plugins.hudson.model.Version}
+	 * @throws HudsonServerAccessorException in case  of communication exceptions with the Hudson server
+	 */
+	com.marvelution.jira.plugins.hudson.model.Version getApiVersion(HudsonServer hudsonServer)
+					throws HudsonServerAccessorException;
+
 	/**
 	 * Get all Jobs that are configured in a specific Hudson Server
 	 * 
