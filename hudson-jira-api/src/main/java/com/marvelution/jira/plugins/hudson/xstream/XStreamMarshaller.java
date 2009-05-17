@@ -27,6 +27,7 @@ import com.marvelution.jira.plugins.hudson.model.HealthReport;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.Jobs;
 import com.marvelution.jira.plugins.hudson.model.TestResult;
+import com.marvelution.jira.plugins.hudson.model.Version;
 import com.marvelution.jira.plugins.hudson.xstream.converters.ResultConverter;
 import com.marvelution.jira.plugins.hudson.xstream.converters.StateConverter;
 import com.thoughtworks.xstream.XStream;
@@ -109,6 +110,7 @@ public class XStreamMarshaller {
 	public static XStream getAnnotationDetectingXStream() {
 		final XStream xstream = new XStream();
 		xstream.autodetectAnnotations(true);
+		xstream.processAnnotations(Version.class);
 		xstream.processAnnotations(Jobs.class);
 		xstream.processAnnotations(Job.class);
 		xstream.processAnnotations(Builds.class);
@@ -127,6 +129,7 @@ public class XStreamMarshaller {
 		final XStream xstream = new XStream();
 		// Map all Jobs class element
 		xstream.autodetectAnnotations(false);
+		xstream.alias("apiVersion", Version.class);
 		xstream.alias("jobs", Jobs.class);
 		xstream.addImplicitCollection(Jobs.class, "jobs");
 		// Map all Job class element
