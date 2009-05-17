@@ -44,8 +44,6 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 
 	private String description;
 
-	private String url;
-
 	private boolean buildable;
 
 	private Builds builds;
@@ -78,12 +76,10 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	 * 
 	 * @param name the job name
 	 * @param description the job description
-	 * @param url the job base url
 	 */
-	public Job(String name, String description, String url) {
+	public Job(String name, String description) {
 		setName(name);
 		setDescription(description);
-		setUrl(url);
 	}
 
 	/**
@@ -156,30 +152,6 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	/**
-	 * Gets the base url
-	 * 
-	 * @return the base url
-	 */
-	public String getUrl() {
-		return url;
-	}
-
-	/**
-	 * Sets the base url
-	 * 
-	 * @param url the base url
-	 */
-	public void setUrl(String url) {
-		if (url.endsWith("/")) {
-			url = url.substring(0, url.length() - 1);
-		}
-		if (!url.startsWith("http") && !url.startsWith("/")) {
-			url = "/" + url;
-		}
-		this.url = url;
 	}
 
 	/**

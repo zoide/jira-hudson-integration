@@ -19,7 +19,8 @@
 
 package com.marvelution.jira.plugins.hudson.model;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.marvelution.jira.plugins.hudson.xstream.converters.ResultConverter;
 import com.marvelution.jira.plugins.hudson.xstream.converters.StateConverter;
@@ -41,22 +42,22 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 
 	private int number;
 
-	private String url;
+	private String jobName;
 
 	@XStreamImplicit(itemFieldName = "trigger")
-	private Collection<String> triggers;
+	private List<String> triggers;
 
 	@XStreamImplicit(itemFieldName = "relatedIssueKey")
-	private Collection<String> relatedIssueKeys;
+	private List<String> relatedIssueKeys;
 
 	@XStreamImplicit(itemFieldName = "artifact")
-	private Collection<String> artifacts;
+	private List<String> artifacts;
 
 	@XStreamAlias("testResult")
 	private TestResult testResult;
 
 	@XStreamAlias("healthReport")
-	private HealthReport healthReport;
+	private HealthReport healthReport = HealthReport.NO_RECENT_BUILDS;
 	
 	private long duration = 0L;
 	
@@ -74,11 +75,11 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * Constructor
 	 * 
 	 * @param number the build number
-	 * @param url the base url of the build
+	 * @param jobName the Job name of this build
 	 */
-	public Build(int number, String url) {
+	public Build(int number, String jobName) {
 		setNumber(number);
-		setUrl(url);
+		setJobName(jobName);
 	}
 
 	/**
@@ -118,27 +119,21 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	}
 
 	/**
-	 * Gets the base url for this build
+	 * Gets the job name of this build
 	 * 
-	 * @return the base url
+	 * @return the job name of this build
 	 */
-	public String getUrl() {
-		return url;
+	public String getJobName() {
+		return jobName;
 	}
 
 	/**
-	 * Sets the base url for this build
+	 * Sets the job name of this build
 	 * 
-	 * @param url the base url
+	 * @param jobName the job name of this build
 	 */
-	public void setUrl(String url) {
-		if (url.endsWith("/")) {
-			url = url.substring(0, url.length() - 1);
-		}
-		if (!url.startsWith("http") && !url.startsWith("/")) {
-			url = "/" + url;
-		}
-		this.url = url;
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
 	}
 
 	/**
@@ -146,7 +141,10 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * 
 	 * @return the trigger messages
 	 */
-	public Collection<String> getTriggers() {
+	public List<String> getTriggers() {
+		if (triggers == null) {
+			triggers = new ArrayList<String>();
+		}
 		return triggers;
 	}
 
@@ -155,7 +153,7 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * 
 	 * @param triggers the trigger messages
 	 */
-	public void setTriggers(Collection<String> triggers) {
+	public void setTriggers(List<String> triggers) {
 		this.triggers = triggers;
 	}
 
@@ -236,7 +234,10 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * 
 	 * @return the related Jira issue keys
 	 */
-	public Collection<String> getRelatedIssueKeys() {
+	public List<String> getRelatedIssueKeys() {
+		if (relatedIssueKeys == null) {
+			relatedIssueKeys = new ArrayList<String>();
+		}
 		return relatedIssueKeys;
 	}
 
@@ -245,7 +246,7 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * 
 	 * @param relatedIssueKeys the related Jira issue keys
 	 */
-	public void setRelatedIssueKeys(Collection<String> relatedIssueKeys) {
+	public void setRelatedIssueKeys(List<String> relatedIssueKeys) {
 		this.relatedIssueKeys = relatedIssueKeys;
 	}
 
@@ -254,7 +255,10 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * 
 	 * @return the artifacts
 	 */
-	public Collection<String> getArtifacts() {
+	public List<String> getArtifacts() {
+		if (artifacts == null) {
+			artifacts = new ArrayList<String>();
+		}
 		return artifacts;
 	}
 
@@ -263,7 +267,7 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * 
 	 * @param artifacts the artifacts
 	 */
-	public void setArtifacts(Collection<String> artifacts) {
+	public void setArtifacts(List<String> artifacts) {
 		this.artifacts = artifacts;
 	}
 

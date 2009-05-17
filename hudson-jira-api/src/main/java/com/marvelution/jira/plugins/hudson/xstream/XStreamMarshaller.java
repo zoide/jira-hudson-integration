@@ -19,8 +19,6 @@
 
 package com.marvelution.jira.plugins.hudson.xstream;
 
-import java.lang.reflect.Method;
-
 import org.apache.log4j.Logger;
 
 import com.marvelution.jira.plugins.hudson.model.Build;
@@ -53,15 +51,16 @@ public class XStreamMarshaller {
 		if (source == null) {
 			return "";
 		}
-		Method method;
+		boolean autoDetect = false;
 		try {
-			method = XStream.class.getMethod("autodetectAnnotations", boolean.class);
+			XStream.class.getMethod("autodetectAnnotations", boolean.class);
+			autoDetect = true;
 		} catch (Exception e) {
 			LOGGER.debug("Cannot use Automatic Annotation Detecting XStream. Reason: " + e.getMessage(), e);
-			method = null;
+			autoDetect = false;
 		}
 		XStream xstream;
-		if (method != null) {
+		if (autoDetect) {
 			xstream = getAnnotationDetectingXStream();
 		} else {
 			xstream = getDefaultXStream();
@@ -85,15 +84,16 @@ public class XStreamMarshaller {
 				return null;
 			}
 		}
-		Method method;
+		boolean autoDetect = false;
 		try {
-			method = XStream.class.getMethod("autodetectAnnotations", boolean.class);
+			XStream.class.getMethod("autodetectAnnotations", boolean.class);
+			autoDetect = true;
 		} catch (Exception e) {
 			LOGGER.debug("Cannot use Automatic Annotation Detecting XStream. Reason: " + e.getMessage(), e);
-			method = null;
+			autoDetect = false;
 		}
 		XStream xstream;
-		if (method != null) {
+		if (autoDetect) {
 			xstream = getAnnotationDetectingXStream();
 		} else {
 			xstream = getDefaultXStream();
@@ -139,11 +139,11 @@ public class XStreamMarshaller {
 		xstream.addImplicitCollection(Builds.class, "builds");
 		// Map all Build class element
 		xstream.alias("build", Build.class);
+		xstream.addImplicitCollection(Build.class, "trigger");
+		xstream.addImplicitCollection(Build.class, "relatedIssueKey");
 		xstream.omitField(Build.class, "hudsonServerId");
 		xstream.aliasField("result", Build.class, "result");
 		xstream.aliasField("state", Build.class, "state");
-		xstream.addImplicitCollection(Build.class, "relatedIssueKeys");
-		xstream.addImplicitCollection(Build.class, "relatedIssueKey");
 		// Map all HealthReport class element
 		xstream.alias("healthReport", HealthReport.class);
 		// Map all TestResult class element

@@ -20,7 +20,7 @@
 package com.marvelution.jira.plugins.hudson.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
@@ -34,14 +34,14 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 public class Jobs {
 
 	@XStreamImplicit(itemFieldName = "job")
-	private Collection<Job> jobs;
+	private List<Job> jobs;
 
 	/**
-	 * Gets the {@link Collection} of {@link Job} object
+	 * Gets the {@link List} of {@link Job} object
 	 * 
-	 * @return the {@link Collection} of {@link Job} object
+	 * @return the {@link List} of {@link Job} object
 	 */
-	public Collection<Job> getJobs() {
+	public List<Job> getJobs() {
 		if (jobs == null) {
 			jobs = new ArrayList<Job>();
 		}
@@ -49,11 +49,11 @@ public class Jobs {
 	}
 
 	/**
-	 * Sets the {@link Collection} of {@link Job} object
+	 * Sets the {@link List} of {@link Job} object
 	 * 
-	 * @param jobs the {@link Collection} of {@link Job} object
+	 * @param jobs the {@link List} of {@link Job} object
 	 */
-	public void setJobs(Collection<Job> jobs) {
+	public void setJobs(List<Job> jobs) {
 		this.jobs = jobs;
 	}
 

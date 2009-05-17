@@ -31,6 +31,9 @@ public class HealthReport {
 
 	public static final HealthReport EMPTY = new HealthReport("", "empty.gif", 100);
 
+	public static final HealthReport NO_RECENT_BUILDS =
+		new HealthReport("No recent build failures", "health-80plus.gif", 100);
+
 	private String description;
 
 	private String icon;

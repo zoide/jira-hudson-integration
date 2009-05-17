@@ -19,6 +19,9 @@
 
 package com.marvelution.jira.plugins.hudson.utils;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -43,6 +46,21 @@ public final class JiraKeyUtils {
 	}
 
 	/**
+	 * Find all the Jira Project keys in the given text and return them in a {@link Set}
+	 * 
+	 * @param text the text to search for Jira Project keys
+	 * @return the {@link Set} of found project keys
+	 */
+	public static Set<String> getJiraProjectKeysFromText(String text) {
+		final Set<String> keys = new HashSet<String>();
+		final Matcher matcher = JIRA_PROJECT_KEY_PATTERN.matcher(text);
+		while (matcher.find()) {
+			keys.add(matcher.group());
+		}
+		return keys;
+	}
+
+	/**
 	 * Validates if the given key {@link String} is a valid JIRA Issue Key
 	 * 
 	 * @param key the issue key to validate
@@ -50,6 +68,21 @@ public final class JiraKeyUtils {
 	 */
 	public static boolean isValidIssueKey(String key) {
 		return JIRA_ISSUE_KEY_PATTERN.matcher(key).find();
+	}
+
+	/**
+	 * Find all the Jira Issue keys in the given text and return them in a {@link Set}
+	 * 
+	 * @param text the text to search for Jira Issue keys
+	 * @return the {@link Set} of found issue keys
+	 */
+	public static Set<String> getJiraIssueKeysFromText(String text) {
+		final Set<String> keys = new HashSet<String>();
+		final Matcher matcher = JIRA_ISSUE_KEY_PATTERN.matcher(text);
+		while (matcher.find()) {
+			keys.add(matcher.group());
+		}
+		return keys;
 	}
 	
 }
