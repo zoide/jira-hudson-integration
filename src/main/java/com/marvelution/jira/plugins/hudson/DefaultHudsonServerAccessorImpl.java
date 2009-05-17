@@ -85,6 +85,17 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	public com.marvelution.jira.plugins.hudson.model.Version getApiVersion(HudsonServer hudsonServer)
+					throws HudsonServerAccessorException {
+		final String response = getHudsonServerActionResponse(hudsonServer, GET_API_VERSION_ACTION, null);
+		final com.marvelution.jira.plugins.hudson.model.Version version =
+			XStreamMarshaller.unmarshal(response, com.marvelution.jira.plugins.hudson.model.Version.class);
+		return version;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public List<Job> getJobs(HudsonServer hudsonServer) throws HudsonServerAccessorException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_JOBS_ACTION, null);
 		final Jobs jobs = XStreamMarshaller.unmarshal(response, Jobs.class);

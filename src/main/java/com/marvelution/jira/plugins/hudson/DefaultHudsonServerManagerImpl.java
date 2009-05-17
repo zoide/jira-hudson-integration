@@ -326,7 +326,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 		final String encryptedPassword = ENCRYPTER.encrypt(hudsonServer.getPassword());
 		propertySet.setString(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_PASSWORD_KEY_SUFFIX,
 			encryptedPassword);
-		final String projects = StringUtils.join(hudsonServer.getAssociatedProjectKeys(), ' ');
+		final String projects = StringUtils.join(hudsonServer.getAssociatedProjectKeys(), ',');
 		propertySet.setString(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_PROJECTS_KEY_SUFFIX, projects);
 	}
 
