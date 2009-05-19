@@ -17,41 +17,39 @@
  * under the License.
  */
 
-package hudson.plugins.jiraapi;
+package hudson.plugins.jiraapi.utils;
+
+import java.util.List;
 
 import hudson.model.AbstractProject;
-import hudson.model.Job;
-import hudson.model.JobPropertyDescriptor;
+import hudson.model.Hudson;
+import hudson.plugins.jiraapi.JiraProjectKeyJobProperty;
 
 /**
- * {@link JobPropertyDescriptor} for {@link JiraProjectKeyJobProperty}
+ * Helper class for Hudson Jobs
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class JiraProjectKeyJobPropertyDescriptor extends JobPropertyDescriptor {
+public class ProjectUtils {
 
 	/**
-	 * Constructor
-	 */
-	public JiraProjectKeyJobPropertyDescriptor() {
-		super(JiraProjectKeyJobProperty.class);
-		load();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getDisplayName() {
-		return Messages.getJiraKeyPropertyDisplayName();
-	}
-
-	/**
-	 * {@inheritDoc}
+	 * Get the Hudson {@link Project} by Jira Project Key
+	 * 
+	 * @param key the Jira project key
+	 * @return the {@link AbstractProject}, may be <code>null</code> if no {@link AbstractProject} can be found
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public boolean isApplicable(Class<? extends Job> jobType) {
-		return AbstractProject.class.isAssignableFrom(jobType);
+	public static AbstractProject<?, ?> getProjectByJiraProjectKey(final String key) {
+		final List<AbstractProject> projects = Hudson.getInstance().getAllItems(AbstractProject.class);
+		for (AbstractProject<?, ?> project : projects) {
+			if (project.getProperty(JiraProjectKeyJobProperty.class) != null) {
+				final JiraProjectKeyJobProperty jiraProperty =
+					(JiraProjectKeyJobProperty) project.getProperty(JiraProjectKeyJobProperty.class);
+				if (key.equals(jiraProperty.getKey())) {
+					return project;
+				}
+			}
+		}
+		return null;
 	}
-
 }

@@ -23,6 +23,7 @@ import hudson.model.AbstractProject;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
@@ -67,6 +68,9 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 	 * @param key the JIRA Project Key
 	 */
 	public void setKey(String key) {
+		if (StringUtils.isEmpty(key)) {
+			return;
+		}
 		if (JiraKeyUtils.isValidProjectKey(key)) {
 			this.key = key;
 		} else {

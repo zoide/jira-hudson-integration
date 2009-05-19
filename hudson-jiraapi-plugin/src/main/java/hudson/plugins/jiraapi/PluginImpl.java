@@ -19,8 +19,10 @@
 
 package hudson.plugins.jiraapi;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 
@@ -36,6 +38,9 @@ import hudson.Plugin;
 import hudson.model.Hudson;
 import hudson.model.JobPropertyDescriptor;
 import hudson.plugins.jiraapi.api.JiraApi;
+import hudson.plugins.jiraapi.index.IssueIndexer;
+import hudson.tasks.BuildStep;
+import hudson.triggers.Trigger;
 
 /**
  * Main {@link Plugin} implementation for the Jira Project Key plugin
@@ -44,14 +49,56 @@ import hudson.plugins.jiraapi.api.JiraApi;
  */
 public class PluginImpl extends Plugin {
 
-	private JiraApi jiraApi;
+	private static final Logger LOGGER = Logger.getLogger(PluginImpl.class.getName());
+
+	private static final String DEFAULT_CACHE_FILENAME = "jira-issue-index.xml";
+
+	private static final long DEFAULT_THREAD_DELAY = 3600000L;
+
+	private static final long START_THREAD_DELAY = 10000L;
+
+	private final transient JiraApi jiraApi = new JiraApi();
+
+	private transient IssueIndexer indexer;
+
+	private String indexFilename;
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void start() throws Exception {
+		load();
+		indexer.validateIssueIndex();
+		Trigger.timer.schedule(new IssueIndexerThread(), START_THREAD_DELAY, DEFAULT_THREAD_DELAY);
+		// Adding the JiraIssueIndexerRecorder here is needed so that the Hudson Web UI can check/uncheck the
+		// configuration of the recorder in the Job Configuration page. Using the @Extension annotation disables this
+		// functionality
+		BuildStep.PUBLISHERS.add(JiraIssueIndexerRecorderDescriptor.DESCRIPTOR);
 		JobPropertyDescriptor.all().add(JiraProjectKeyJobProperty.DESCRIPTOR);
-		jiraApi = new JiraApi();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void load() throws IOException {
+		super.load();
+		indexer = IssueIndexer.getInstance();
+		indexer.setIndexFile(getIndexFile());
+		if (getIndexFile().exists()) {
+			indexer.load();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void stop() throws Exception {
+		indexer.save();
+		save();
+		super.stop();
 	}
 
 	/**
@@ -138,4 +185,35 @@ public class PluginImpl extends Plugin {
 			}
 		}
 	}
+
+	/**
+	 * Get the index filename
+	 * 
+	 * @return the index filename
+	 */
+	public String getIndexFilename() {
+		if (indexFilename == null) {
+			indexFilename = DEFAULT_CACHE_FILENAME;
+		}
+		return indexFilename;
+	}
+
+	/**
+	 * Sets the index filename
+	 * 
+	 * @param indexFilename the index filename
+	 */
+	public void setIndexFilename(String indexFilename) {
+		this.indexFilename = indexFilename;
+	}
+
+	/**
+	 * Gets the index {@link File}
+	 * 
+	 * @return the index {@link File}
+	 */
+	public File getIndexFile() {
+		return new File(getConfigXml().getFile().getParent(), getIndexFilename());
+	}
+
 }

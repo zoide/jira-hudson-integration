@@ -42,6 +42,8 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 
 	private int number;
 
+	private String url;
+
 	private String jobName;
 
 	@XStreamImplicit(itemFieldName = "trigger")
@@ -116,6 +118,24 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 */
 	public void setNumber(int number) {
 		this.number = number;
+	}
+
+	/**
+	 * Gets the Build URL
+	 * 
+	 * @return the URL
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * Sets the Build URL
+	 * 
+	 * @param url the URL
+	 */
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	/**

@@ -19,33 +19,49 @@
 
 package hudson.plugins.jiraapi;
 
-import org.jvnet.localizer.ResourceBundleHolder;
+import hudson.model.AbstractProject;
+import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.Publisher;
 
 /**
- * Internationalisation implementation for messages within the Jira Project Key plugin
- *  
+ * {@link Descriptor} for {@link JiraIssueIndexerRecorder}
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class Messages {
+public final class JiraIssueIndexerRecorderDescriptor extends BuildStepDescriptor<Publisher> {
 
-	private static final ResourceBundleHolder HOLDER = ResourceBundleHolder.get(Messages.class);
+	public static final BuildStepDescriptor<Publisher> DESCRIPTOR = new JiraIssueIndexerRecorderDescriptor();
 
 	/**
-	 * Gets the {@link JiraProjectKeyJobProperty} display name
-	 * 
-	 * @return the display name
+	 * Constructor
 	 */
-	public static String getJiraKeyPropertyDisplayName() {
-		return HOLDER.format("JiraKeyProperty.DisplayName", new Object[0]);
+	public JiraIssueIndexerRecorderDescriptor() {
+		super(JiraIssueIndexerRecorder.class);
 	}
 
 	/**
-	 * Gets the {@link JiraIssueIndexerRecorder} display name
-	 * 
-	 * @return the display name
+	 * {@inheritDoc}
 	 */
-	public static String getJiraIssueIndexerDisplayName() {
-		return HOLDER.format("JiraIssueIndexer.DisplayName", new Object[0]);
+	@Override
+	public String getDisplayName() {
+		return Messages.getJiraIssueIndexerDisplayName();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getHelpFile() {
+		return "/plugin/hudson-jiraapi-plugin/help-indexer.html";
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean isApplicable(Class<? extends AbstractProject> jobType) {
+		return AbstractProject.class.isAssignableFrom(jobType);
 	}
 
 }

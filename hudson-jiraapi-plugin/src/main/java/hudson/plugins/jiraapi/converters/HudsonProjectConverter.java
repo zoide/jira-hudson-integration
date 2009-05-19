@@ -22,6 +22,8 @@ package hudson.plugins.jiraapi.converters;
 import java.util.ArrayList;
 import java.util.List;
 
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
 import hudson.plugins.jiraapi.JiraProjectKeyJobProperty;
 
 import com.marvelution.jira.plugins.hudson.model.Build;
@@ -35,45 +37,45 @@ import com.marvelution.jira.plugins.hudson.model.Result;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class HudsonJobConverter {
+public class HudsonProjectConverter {
 
 	/**
 	 * Convert a Hudson Job into a Jira Integration Job
 	 * 
-	 * @param hudsonJob the Hudson Job to convert
+	 * @param project the Hudson {@link AbstractProject} to convert
 	 * @return the converted {@link Job}
 	 */
-	public static Job convertHudsonJob(hudson.model.Job<?, ?> hudsonJob) {
-		final Job job = new Job(hudsonJob.getName(), hudsonJob.getDescription());
-		if (hudsonJob.getProperty(JiraProjectKeyJobProperty.class) != null) {
-			job.setJiraKey(hudsonJob.getProperty(JiraProjectKeyJobProperty.class).getKey());
+	public static Job convertHudsonProject(AbstractProject<?, ?> project) {
+		final Job job = new Job(project.getName(), project.getDescription());
+		job.setUrl(project.getUrl());
+		if (project.getProperty(JiraProjectKeyJobProperty.class) != null) {
+			job.setJiraKey(project.getProperty(JiraProjectKeyJobProperty.class).getKey());
 		}
-		job.setBuildable(hudsonJob.isBuildable());
+		job.setBuildable(project.isBuildable());
 		final Builds builds = new Builds();
-		for (hudson.model.Run<?, ?> hudsonRun : hudsonJob.getBuilds()) {
-			final hudson.model.AbstractBuild<?, ?> hudsonBuild = (hudson.model.AbstractBuild<?, ?>) hudsonRun;
+		for (AbstractBuild<?, ?> hudsonBuild : project.getBuilds()) {
 			final Build build = HudsonBuildConverter.convertHudsonBuild(hudsonBuild);
 			builds.getBuilds().add(build);
-			if (hudsonJob.getFirstBuild() != null && build.getNumber() == hudsonJob.getFirstBuild().getNumber()) {
+			if (project.getFirstBuild() != null && build.getNumber() == project.getFirstBuild().getNumber()) {
 				job.setFirstBuild(build);
 			}
-			if (hudsonJob.getLastBuild() != null && build.getNumber() == hudsonJob.getLastBuild().getNumber()) {
+			if (project.getLastBuild() != null && build.getNumber() == project.getLastBuild().getNumber()) {
 				job.setLastBuild(build);
 			}
-			if (hudsonJob.getLastCompletedBuild() != null
-				&& build.getNumber() == hudsonJob.getLastCompletedBuild().getNumber()) {
+			if (project.getLastCompletedBuild() != null
+				&& build.getNumber() == project.getLastCompletedBuild().getNumber()) {
 				job.setLastCompletedBuild(build);
 			}
-			if (hudsonJob.getLastSuccessfulBuild() != null
-				&& build.getNumber() == hudsonJob.getLastSuccessfulBuild().getNumber()) {
+			if (project.getLastSuccessfulBuild() != null
+				&& build.getNumber() == project.getLastSuccessfulBuild().getNumber()) {
 				job.setLastSuccessfulBuild(build);
 			}
-			if (hudsonJob.getLastStableBuild() != null
-				&& build.getNumber() == hudsonJob.getLastStableBuild().getNumber()) {
+			if (project.getLastStableBuild() != null
+				&& build.getNumber() == project.getLastStableBuild().getNumber()) {
 				job.setLastStableBuild(build);
 			}
-			if (hudsonJob.getLastFailedBuild() != null
-				&& build.getNumber() == hudsonJob.getLastFailedBuild().getNumber()) {
+			if (project.getLastFailedBuild() != null
+				&& build.getNumber() == project.getLastFailedBuild().getNumber()) {
 				job.setLastFailedBuild(build);
 			}
 			if (build.getResult() == Result.UNSTABLE) {
@@ -85,15 +87,15 @@ public class HudsonJobConverter {
 			}
 		}
 		job.setBuilds(builds);
-		job.setNextBuildNumber(hudsonJob.getNextBuildNumber());
+		job.setNextBuildNumber(project.getNextBuildNumber());
 		if (job.getLastBuild() != null) {
 			job.setResult(job.getLastBuild().getResult());
 		} else {
 			job.setResult(Result.NOT_BUILT);
 		}
 		final List<HealthReport> healthReports = new ArrayList<HealthReport>();
-		if (hudsonJob.getBuildHealthReports() != null && hudsonJob.getBuildHealthReports().size() > 0) {
-			for (hudson.model.HealthReport hudsonHealthReport : hudsonJob.getBuildHealthReports()) {
+		if (project.getBuildHealthReports() != null && project.getBuildHealthReports().size() > 0) {
+			for (hudson.model.HealthReport hudsonHealthReport : project.getBuildHealthReports()) {
 				healthReports.add(HudsonHealthReportConverter.convertHudsonHealthReport(hudsonHealthReport));
 			}
 		} else {

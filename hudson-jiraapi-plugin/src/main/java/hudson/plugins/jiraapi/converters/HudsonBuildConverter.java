@@ -49,6 +49,7 @@ public class HudsonBuildConverter {
 	@SuppressWarnings("unchecked")
 	public static Build convertHudsonBuild(final hudson.model.AbstractBuild<?, ?> hudsonBuild) {
 		final Build build = new Build(hudsonBuild.getNumber(), hudsonBuild.getProject().getName());
+		build.setUrl(hudsonBuild.getUrl());
 		build.setDuration(hudsonBuild.getDuration());
 		build.setTimestamp(hudsonBuild.getTimestamp().getTimeInMillis());
 		build.setResult(HudsonResultConverter.convertHudsonResult(hudsonBuild.getResult()));

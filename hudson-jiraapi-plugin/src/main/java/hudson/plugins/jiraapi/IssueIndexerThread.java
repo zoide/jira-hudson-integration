@@ -17,39 +17,44 @@
  * under the License.
  */
 
-package hudson.plugins.jiraapi.utils;
+package hudson.plugins.jiraapi;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import hudson.model.Hudson;
-import hudson.model.Job;
-import hudson.plugins.jiraapi.JiraProjectKeyJobProperty;
+import hudson.model.PeriodicWork;
+import hudson.plugins.jiraapi.index.IssueIndexer;
 
 /**
- * Helper class for Hudson Jobs
+ * {@link PeriodicWork} implementation to update the Jira issue index
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class JobUtils {
+public class IssueIndexerThread extends PeriodicWork {
+
+	private static final Logger LOGGER = Logger.getLogger(IssueIndexerThread.class.getName());
 
 	/**
-	 * Get the Hudson {@link Job} by Jira Project Key
-	 * 
-	 * @param key the Jira project key
-	 * @return the {@link Job}, may be <code>null</code> if no {@link Job} can be found
+	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	public static Job<?, ?> getJobByJiraProjectKey(final String key) {
-		final List<Job> jobs = Hudson.getInstance().getAllItems(Job.class);
-		for (Job job : jobs) {
-			if (job.getProperty(JiraProjectKeyJobProperty.class) != null) {
-				final JiraProjectKeyJobProperty jiraProperty =
-					(JiraProjectKeyJobProperty) job.getProperty(JiraProjectKeyJobProperty.class);
-				if (key.equals(jiraProperty.getKey())) {
-					return job;
-				}
-			}
-		}
-		return null;
+	@Override
+	public long getRecurrencePeriod() {
+		return 1000L;
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void doRun() {
+		LOGGER.log(Level.INFO, "Starting periodical Full Jira issue indexing task");
+		final IssueIndexer indexer = IssueIndexer.getInstance();
+		try {
+			indexer.fullIndex();
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "Failed to update the issue index. Reason: " + e.getMessage());
+		}
+	}
+
 }
