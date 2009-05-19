@@ -20,7 +20,7 @@
 <table class="hudsonBuildTable maxWidth">
 	<tr>
 		<td rowspan="6" width="30px" valign="top"><img src="$server.host/images/24x24/${build.result.icon}" alt="${build.result.name()}" tooltip="${build.result.name()}" /></td>
-		<td><a href="${server.host}/job/${build.jobName}/">${build.jobName}</a> &raquo; <a href="${server.host}/job/${build.jobName}/${build.number}">${i18n.getText("hudson.panel.build.number", ${build.number})}</a></td>
+		<td><a href="${server.host}/${build.url}">${build.jobName}</a> &raquo; <a href="${server.host}/${build.url}">${i18n.getText("hudson.panel.build.number", ${build.number})}</a></td>
 		<td>
 			<strong>${i18n.getText("hudson.panel.build.duration")}</strong>: ${dateTimeUtils.getTimeSpanString(${build.duration})} | 
 			<strong>${i18n.getText("hudson.panel.build.health")}</strong>: <img src="${server.host}/images/16x16/${build.healthReport.icon}" align="absmiddle" tooltip="${build.healthReport.score}%" alt="${build.healthReport.score}%" /> $!{build.healthReport.description}
@@ -62,8 +62,8 @@
 	</tr>
 	<tr>
 		<td>
-			<a href="${server.host}/job/${build.jobName}/${build.number}/console">${i18n.getText("hudson.panel.build.log.console")}</a> | 
-			<a href="${server.host}/job/${build.jobName}/${build.number}/changes">${i18n.getText("hudson.panel.build.log.changes")}</a>
+			<a href="${server.host}/${build.url}console">${i18n.getText("hudson.panel.build.log.console")}</a> | 
+			<a href="${server.host}/${build.url}changes">${i18n.getText("hudson.panel.build.log.changes")}</a>
 		</td>
 	</tr>
 </table>
