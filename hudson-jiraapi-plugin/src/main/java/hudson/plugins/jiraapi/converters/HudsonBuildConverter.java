@@ -20,7 +20,9 @@
 package hudson.plugins.jiraapi.converters;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import hudson.model.Cause;
 import hudson.model.CauseAction;
@@ -81,7 +83,7 @@ public class HudsonBuildConverter {
 			}
 		}
 		build.setTriggers(triggers);
-		final List<String> relatedIssueKeys = new ArrayList<String>();
+		final Set<String> relatedIssueKeys = new HashSet<String>();
 		for (Entry entry : hudsonBuild.getChangeSet()) {
 			relatedIssueKeys.addAll(JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg()));
 		}

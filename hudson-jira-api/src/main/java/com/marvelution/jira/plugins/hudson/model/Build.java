@@ -20,7 +20,9 @@
 package com.marvelution.jira.plugins.hudson.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.marvelution.jira.plugins.hudson.xstream.converters.ResultConverter;
 import com.marvelution.jira.plugins.hudson.xstream.converters.StateConverter;
@@ -50,7 +52,7 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	private List<String> triggers;
 
 	@XStreamImplicit(itemFieldName = "relatedIssueKey")
-	private List<String> relatedIssueKeys;
+	private Set<String> relatedIssueKeys;
 
 	@XStreamImplicit(itemFieldName = "artifact")
 	private List<String> artifacts;
@@ -254,9 +256,9 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * 
 	 * @return the related Jira issue keys
 	 */
-	public List<String> getRelatedIssueKeys() {
+	public Set<String> getRelatedIssueKeys() {
 		if (relatedIssueKeys == null) {
-			relatedIssueKeys = new ArrayList<String>();
+			relatedIssueKeys = new HashSet<String>();
 		}
 		return relatedIssueKeys;
 	}
@@ -266,7 +268,7 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * 
 	 * @param relatedIssueKeys the related Jira issue keys
 	 */
-	public void setRelatedIssueKeys(List<String> relatedIssueKeys) {
+	public void setRelatedIssueKeys(Set<String> relatedIssueKeys) {
 		this.relatedIssueKeys = relatedIssueKeys;
 	}
 

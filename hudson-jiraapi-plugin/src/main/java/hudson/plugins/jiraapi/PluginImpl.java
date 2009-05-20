@@ -22,11 +22,13 @@ package hudson.plugins.jiraapi;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 
-import org.apache.commons.lang.StringUtils;
+import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
@@ -53,10 +55,6 @@ public class PluginImpl extends Plugin {
 
 	private static final String DEFAULT_CACHE_FILENAME = "jira-issue-index.xml";
 
-	private static final long DEFAULT_THREAD_DELAY = 3600000L;
-
-	private static final long START_THREAD_DELAY = 10000L;
-
 	private final transient JiraApi jiraApi = new JiraApi();
 
 	private transient IssueIndexer indexer;
@@ -70,7 +68,8 @@ public class PluginImpl extends Plugin {
 	public void start() throws Exception {
 		load();
 		indexer.validateIssueIndex();
-		Trigger.timer.schedule(new IssueIndexerThread(), START_THREAD_DELAY, DEFAULT_THREAD_DELAY);
+		Trigger.timer.schedule(new IssueIndexerThread(), IssueIndexerThread.START_THREAD_DELAY,
+			IssueIndexerThread.DEFAULT_THREAD_DELAY);
 		// Adding the JiraIssueIndexerRecorder here is needed so that the Hudson Web UI can check/uncheck the
 		// configuration of the recorder in the Job Configuration page. Using the @Extension annotation disables this
 		// functionality
@@ -123,9 +122,10 @@ public class PluginImpl extends Plugin {
 	 * @throws IOException in case of IO Exceptions
 	 * @throws ServletException in case of Servlet Exceptions
 	 */
-	public void doGetJobs(final StaplerRequest request, final StaplerResponse response) throws IOException,
+	public void doGetAllProjects(final StaplerRequest request, final StaplerResponse response) throws IOException,
 			ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
+		LOGGER.log(Level.FINE, "Getting all builds of all projects");
 		final Jobs jobs = jiraApi.getAllJiraProjects();
 		writeXmlToResponse(request, response, XStreamMarshaller.marshal(jobs));
 	}
@@ -135,25 +135,58 @@ public class PluginImpl extends Plugin {
 	 * 
 	 * @param request the {@link StaplerRequest}
 	 * @param response the {@link StaplerResponse}
+	 * @param projectKey the Jira project key to get the builds for
 	 * @throws IOException in case of IO Exceptions
 	 * @throws ServletException in case of Servlet Exceptions
 	 */
-	public void doGetBuilds(final StaplerRequest request, final StaplerResponse response) throws IOException,
-			ServletException {
+	public void doGetProjectBuilds(final StaplerRequest request, final StaplerResponse response,
+					@QueryParameter(value = "projectKey", required = true) String projectKey) throws IOException,
+					ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
-		String xml = "";
-		if (StringUtils.isNotEmpty(request.getParameter("projectKey"))
-			&& StringUtils.isNotEmpty(request.getParameter("projectVersion"))) {
-			xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraVersion(request.getParameter("projectKey"), Long
-					.valueOf(request.getParameter("startDate")), Long.valueOf(request.getParameter("releaseDate"))));
-		} else if (StringUtils.isNotEmpty(request.getParameter("projectKey"))) {
-			xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraProject(request.getParameter("projectKey")));
-		} else if (StringUtils.isNotEmpty(request.getParameter("issueKeys"))) {
-			final String[] issueKeys = request.getParameter("issueKeys").split(",");
-			xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraIssueKeys(issueKeys));
-		} else {
-			throw new ServletException("Invalid request");
-		}
+		LOGGER.log(Level.FINE, "Getting all builds related to project: " + projectKey);
+		final String xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraProject(projectKey));
+		writeXmlToResponse(request, response, xml);
+	}
+
+	/**
+	 * Handler for getBuilds requests
+	 * 
+	 * @param request the {@link StaplerRequest}
+	 * @param response the {@link StaplerResponse}
+	 * @param projectKey the Jira project key to get the builds for
+	 * @param versionKey the Jira Version Id to get the builds for
+	 * @param startDate the start date of the version
+	 * @param releaseDate the release date of the version
+	 * @throws IOException in case of IO Exceptions
+	 * @throws ServletException in case of Servlet Exceptions
+	 */
+	public void doGetVersionBuilds(final StaplerRequest request, final StaplerResponse response,
+					@QueryParameter(value = "projectKey", required = true) String projectKey,
+					@QueryParameter(value = "versionKey", required = true) String versionKey,
+					@QueryParameter("startDate") long startDate,
+					@QueryParameter("releaseDate") long releaseDate) throws IOException, ServletException {
+		Hudson.getInstance().checkPermission(Hudson.READ);
+		LOGGER.log(Level.FINE, "Getting all builds related to project [" + projectKey + "] version: " + versionKey);
+		final String xml =
+			XStreamMarshaller.marshal(jiraApi.getBuildsByJiraVersion(projectKey, startDate, releaseDate));
+		writeXmlToResponse(request, response, xml);
+	}
+
+	/**
+	 * Handler for getBuilds requests
+	 * 
+	 * @param request the {@link StaplerRequest}
+	 * @param response the {@link StaplerResponse}
+	 * @param issueKeys array of Jira issue keys
+	 * @throws IOException in case of IO Exceptions
+	 * @throws ServletException in case of Servlet Exceptions
+	 */
+	public void doGetIssueBuilds(final StaplerRequest request, final StaplerResponse response,
+					@QueryParameter(value = "issueKeys", required = true) String[] issueKeys) throws IOException,
+					ServletException {
+		Hudson.getInstance().checkPermission(Hudson.READ);
+		LOGGER.log(Level.FINE, "Getting all builds related to issue keys: " + Arrays.asList(issueKeys));
+		final String xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraIssueKeys(issueKeys));
 		writeXmlToResponse(request, response, xml);
 	}
 

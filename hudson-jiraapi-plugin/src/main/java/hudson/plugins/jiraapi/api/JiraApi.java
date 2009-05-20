@@ -64,8 +64,8 @@ public class JiraApi {
 		final Builds builds = new Builds();
 		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
 		if (project != null) {
-			for (AbstractBuild<?, ?> hudsonBuild : project.getBuilds()) {
-				builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(hudsonBuild));
+			for (AbstractBuild<?, ?> build : project.getBuilds()) {
+				builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
 			}
 		}
 		return builds;
@@ -82,10 +82,16 @@ public class JiraApi {
 	public Builds getBuildsByJiraVersion(final String projectKey, final long startDate, final long releaseDate) {
 		final Builds builds = new Builds();
 		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
-		for (AbstractBuild<?, ?> hudsonBuild : project.getBuilds()) {
-			if (hudsonBuild.getTimestamp().getTimeInMillis() >= startDate
-				&& hudsonBuild.getTimestamp().getTimeInMillis() <= releaseDate) {
-				builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(hudsonBuild));
+		for (AbstractBuild<?, ?> build : project.getBuilds()) {
+			if (releaseDate > 0L) {
+				if (build.getTimestamp().getTimeInMillis() >= startDate
+					&& build.getTimestamp().getTimeInMillis() <= releaseDate) {
+					builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+				}
+			} else {
+				if (build.getTimestamp().getTimeInMillis() >= startDate) {
+					builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+				}
 			}
 		}
 		return builds;
@@ -101,13 +107,15 @@ public class JiraApi {
 		final Builds builds = new Builds();
 		for (String issueKey : issueKeys) {
 			final Issue indexedIssue = IssueIndexer.getInstance().getIssueIndex(issueKey);
-			for (Project indexedJob : indexedIssue.getProjects()) {
-				final hudson.model.TopLevelItem item = Hudson.getInstance().getItem(indexedJob.getName());
-				if (item != null && item instanceof AbstractProject) {
-					final SortedMap<Integer, ?> jobBuilds = ((AbstractProject<?, ?>) item).getBuildsAsMap();
-					for (Integer buildNumber : indexedJob.getBuildNumbers()) {
-						final AbstractBuild<?, ?> build = (AbstractBuild<?, ?>) jobBuilds.get(buildNumber);
-						builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+			if (indexedIssue != null && !indexedIssue.getProjects().isEmpty()) {
+				for (Project indexedJob : indexedIssue.getProjects()) {
+					final hudson.model.TopLevelItem item = Hudson.getInstance().getItem(indexedJob.getName());
+					if (item != null && item instanceof AbstractProject) {
+						final SortedMap<Integer, ?> jobBuilds = ((AbstractProject<?, ?>) item).getBuildsAsMap();
+						for (Integer buildNumber : indexedJob.getBuildNumbers()) {
+							final AbstractBuild<?, ?> build = (AbstractBuild<?, ?>) jobBuilds.get(buildNumber);
+							builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+						}
 					}
 				}
 			}

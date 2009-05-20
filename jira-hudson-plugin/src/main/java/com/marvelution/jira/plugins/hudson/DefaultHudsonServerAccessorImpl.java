@@ -97,7 +97,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 * {@inheritDoc}
 	 */
 	public List<Job> getJobs(HudsonServer hudsonServer) throws HudsonServerAccessorException {
-		final String response = getHudsonServerActionResponse(hudsonServer, GET_JOBS_ACTION, null);
+		final String response = getHudsonServerActionResponse(hudsonServer, GET_ALL_PROJECTS_ACTION, null);
 		final Jobs jobs = XStreamMarshaller.unmarshal(response, Jobs.class);
 		return jobs.getJobs();
 	}
@@ -125,7 +125,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			throws HudsonServerAccessorException {
 		final Map<String, String> params = new HashMap<String, String>();
 		params.put("projectKey", project.getKey());
-		final String response = getHudsonServerActionResponse(hudsonServer, GET_BUILDS_ACTION, params);
+		final String response = getHudsonServerActionResponse(hudsonServer, GET_PROJECT_BUILDS_ACTION, params);
 		final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
 		associateHudsonServer(builds.getBuilds(), hudsonServer);
 		return builds.getBuilds();
@@ -168,7 +168,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			}
 			params.put("startDate", String.valueOf(startDate));
 		}
-		final String response = getHudsonServerActionResponse(hudsonServer, GET_BUILDS_ACTION, params);
+		final String response = getHudsonServerActionResponse(hudsonServer, GET_VERSION_BUILDS_ACTION, params);
 		final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
 		associateHudsonServer(builds.getBuilds(), hudsonServer);
 		return builds.getBuilds();
@@ -196,7 +196,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			issueKeysString += issueKey + ",";
 		}
 		params.put("issueKeys", issueKeysString);
-		final String response = getHudsonServerActionResponse(hudsonServer, GET_BUILDS_ACTION, params);
+		final String response = getHudsonServerActionResponse(hudsonServer, GET_ISSUE_BUILDS_ACTION, params);
 		final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
 		associateHudsonServer(builds.getBuilds(), hudsonServer);
 		return builds.getBuilds();

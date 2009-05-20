@@ -35,9 +35,13 @@ public interface HudsonServerAccessor {
 
 	String BASE_ACTION_URL = "/plugin/hudson-jiraapi-plugin";
 
-	String GET_JOBS_ACTION = BASE_ACTION_URL + "/getJobs";
+	String GET_ALL_PROJECTS_ACTION = BASE_ACTION_URL + "/getAllProjects";
 
-	String GET_BUILDS_ACTION = BASE_ACTION_URL + "/getBuilds";
+	String GET_PROJECT_BUILDS_ACTION = BASE_ACTION_URL + "/getProjectBuilds";
+
+	String GET_VERSION_BUILDS_ACTION = BASE_ACTION_URL + "/getVersionBuilds";
+
+	String GET_ISSUE_BUILDS_ACTION = BASE_ACTION_URL + "/getIssueBuilds";
 
 	String GET_API_VERSION_ACTION = BASE_ACTION_URL + "/getApiVersion";
 

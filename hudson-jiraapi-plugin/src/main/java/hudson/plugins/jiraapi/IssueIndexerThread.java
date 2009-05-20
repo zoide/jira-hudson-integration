@@ -33,6 +33,10 @@ import hudson.plugins.jiraapi.index.IssueIndexer;
  */
 public class IssueIndexerThread extends PeriodicWork {
 
+	public static final long DEFAULT_THREAD_DELAY = 3600000L;
+
+	public static final long START_THREAD_DELAY = 10000L;
+
 	private static final Logger LOGGER = Logger.getLogger(IssueIndexerThread.class.getName());
 
 	/**
@@ -40,7 +44,7 @@ public class IssueIndexerThread extends PeriodicWork {
 	 */
 	@Override
 	public long getRecurrencePeriod() {
-		return 1000L;
+		return DEFAULT_THREAD_DELAY;
 	}
 
 	/**
@@ -55,6 +59,7 @@ public class IssueIndexerThread extends PeriodicWork {
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Failed to update the issue index. Reason: " + e.getMessage());
 		}
+		LOGGER.log(Level.INFO, "Finished periodical Full Jira issue indexing task");
 	}
 
 }
