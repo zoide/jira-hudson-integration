@@ -20,14 +20,27 @@
 package com.marvelution.jira.plugins.hudson.web.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import webwork.action.ActionContext;
 
+import com.atlassian.core.util.collection.EasyList;
+import com.atlassian.jira.bc.project.component.ProjectComponent;
+import com.atlassian.jira.bc.project.component.ProjectComponentManager;
+import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.issue.MutableIssue;
+import com.atlassian.jira.issue.search.SearchException;
+import com.atlassian.jira.issue.search.SearchProvider;
+import com.atlassian.jira.issue.search.SearchResults;
+import com.atlassian.jira.issue.search.parameters.lucene.ComponentParameter;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.project.version.Version;
@@ -35,16 +48,19 @@ import com.atlassian.jira.project.version.VersionManager;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
+import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
 import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.jira.web.bean.PagerFilter;
+import com.atlassian.jira.web.bean.StatisticAccessorBean;
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
+import com.marvelution.jira.plugins.hudson.utils.BuildUtils;
 import com.marvelution.jira.plugins.hudson.utils.DateTimeUtils;
-
-import edu.emory.mathcs.backport.java.util.Collections;
+import com.marvelution.jira.plugins.hudson.utils.HudsonBuildTriggerParser;
 
 /**
  * {@link JiraWebActionSupport} implementation for {@link HudsonServer} TabPanel actions
@@ -55,29 +71,37 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
 
-	private JiraAuthenticationContext authenticationContext;
+	private final JiraAuthenticationContext authenticationContext;
 
-	private PermissionManager permissionManager;
+	private final PermissionManager permissionManager;
 
-	private ProjectManager projectManager;
+	private final ProjectManager projectManager;
 
-	private IssueManager issueManager;
+	private final ProjectComponentManager componentManager;
 
-	private VersionManager versionManager;
+	private final IssueManager issueManager;
 
-	private HudsonServerAccessor serverAccessor;
+	private final VersionManager versionManager;
 
-	private HudsonServerManager serverManager;
+	private final HudsonServerAccessor serverAccessor;
 
-	private I18nBean i18n;
+	private final HudsonServerManager serverManager;
+
+	private final SearchProvider searchProvider;
+
+	private final I18nBean i18n;
+
+	private final UserUtil userUtil;
 
 	private HudsonServer server;
 
 	private String projectKey;
 
-	private String issueKey;
+	private Long componentId;
 
 	private Long versionId;
+
+	private String issueKey;
 
 	private List<Build> builds;
 
@@ -87,24 +111,31 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 * @param authenticationContext the {@link JiraAuthenticationContext} implementation
 	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param projectManager the {@link ProjectManager} implementation
+	 * @param componentManager the {@link ProjectComponentManager} implementation
 	 * @param issueManager the {@link IssueManager} implementation
 	 * @param versionManager the {@link VersionManager} implementation
+	 * @param userUtil the {@link UserUtil} implementation
 	 * @param serverAccessor the {@link HudsonServerAccessor} implementation
 	 * @param serverManager the {@link HudsonServerManager} implementation
+	 * @param searchProvider the {@link SearchProvider} implementation
 	 */
 	public ViewHudsonServerPanelContent(JiraAuthenticationContext authenticationContext,
 										PermissionManager permissionManager, ProjectManager projectManager,
-										IssueManager issueManager, VersionManager versionManager,
-										HudsonServerAccessor serverAccessor, HudsonServerManager serverManager) {
+										ProjectComponentManager componentManager, IssueManager issueManager,
+										VersionManager versionManager, UserUtil userUtil,
+										HudsonServerAccessor serverAccessor, HudsonServerManager serverManager,
+										SearchProvider searchProvider) {
 		this.authenticationContext = authenticationContext;
 		this.permissionManager = permissionManager;
 		this.projectManager = projectManager;
+		this.componentManager = componentManager;
 		this.issueManager = issueManager;
 		this.versionManager = versionManager;
+		this.userUtil = userUtil;
 		this.serverAccessor = serverAccessor;
 		this.serverManager = serverManager;
-		i18n =
-			authenticationContext
+		this.searchProvider = searchProvider;
+		i18n = authenticationContext
 				.getI18nBean("com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServerPanelContent");
 	}
 
@@ -119,19 +150,16 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 			return "error";
 		}
 		try {
-			if (!StringUtils.isEmpty(issueKey)) {
-				final MutableIssue issue = issueManager.getIssueObject(issueKey);
-				if (issue != null
-					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, issue, authenticationContext
+			if (!StringUtils.isEmpty(projectKey)) {
+				final Project project = projectManager.getProjectObjByKey(projectKey);
+				if (project != null
+					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, project, authenticationContext
 						.getUser())) {
-					server = serverManager.getServerByJiraProject(issue.getProjectObject());
+					server = serverManager.getServerByJiraProject(project);
 					log.debug("Request for project " + projectKey + " builds from server " + server.getName());
 					if (server != null) {
-						final List<String> issueKeys = new ArrayList<String>();
-						issueKeys.add(issue.getKey());
-						builds = serverAccessor.getBuilds(server, issueKeys);
-						Collections.sort(builds);
-						Collections.reverse(builds);
+						builds = serverAccessor.getBuilds(server, project);
+						processBuilds();
 					}
 				}
 			} else if (versionId != null && versionId > 0L) {
@@ -143,31 +171,101 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 					log.debug("Request for project version " + versionId + " builds from server " + server.getName());
 					if (server != null) {
 						builds = serverAccessor.getBuilds(server, version);
-						Collections.sort(builds);
-						Collections.reverse(builds);
+						processBuilds();
 					}
 				}
-			} else if (!StringUtils.isEmpty(projectKey)) {
-				final Project project = projectManager.getProjectObjByKey(projectKey);
-				if (project != null
+			} else if (componentId != null && componentId > 0L) {
+				final ProjectComponent component = componentManager.find(componentId);
+				final Project project = projectManager.getProjectObj(component.getProjectId());
+				if (component != null && project != null
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, project, authenticationContext
 						.getUser())) {
 					server = serverManager.getServerByJiraProject(project);
+					log.debug("Request for project component " + component.getName() + " builds from server "
+						+ server.getName());
+					if (server != null) {
+						final List<String> issueKeys = getIssueKeys(component);
+						builds = serverAccessor.getBuilds(server, issueKeys);
+						processBuilds();
+					}
+				}
+			} else if (!StringUtils.isEmpty(issueKey)) {
+				final MutableIssue issue = issueManager.getIssueObject(issueKey);
+				if (issue != null
+					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, issue, authenticationContext
+						.getUser())) {
+					server = serverManager.getServerByJiraProject(issue.getProjectObject());
 					log.debug("Request for project " + projectKey + " builds from server " + server.getName());
 					if (server != null) {
-						builds = serverAccessor.getBuilds(server, project);
-						Collections.sort(builds);
-						Collections.reverse(builds);
+						final List<String> issueKeys = new ArrayList<String>();
+						issueKeys.add(issue.getKey());
+						builds = serverAccessor.getBuilds(server, issueKeys);
+						processBuilds();
 					}
 				}
 			}
 		} catch (HudsonServerAccessorException e) {
 			log.warn("Failed to connect to Hudson Server. Reason: " + e.getMessage(), e);
-			addErrorMessage(getText("hudson.panel.error.cannot.connect"));
+			String serverName = "";
+			if (server != null) {
+				serverName = server.getName();
+			}
+			addErrorMessage(getText("hudson.panel.error.cannot.connect", serverName));
 			return "error";
 		}
 		return super.doExecute();
 	}
+
+	/**
+	 * Get the issue keys that relate to the given component
+	 * 
+	 * @param component the {@link ProjectComponent} to get the related issues for
+	 * @return {@link Collection} of issue keys
+	 */
+	@SuppressWarnings("unchecked")
+	private List<String> getIssueKeys(final ProjectComponent component) {
+		try {
+			final Set searchParams = new HashSet();
+			searchParams.add(new ComponentParameter(EasyList.build(component.getId())));
+			final StatisticAccessorBean statisticAccessorBean =
+				new StatisticAccessorBean(this.authenticationContext.getUser(), component.getProjectId(),
+					searchParams, false);
+			final SearchResults results =
+				this.searchProvider.search(statisticAccessorBean.getFilter(), this.authenticationContext.getUser(),
+					PagerFilter.getUnlimitedFilter());
+			final Collection<?> issues = results.getIssues();
+			final List<String> issueKeys = new ArrayList<String>();
+			for (Object obj : issues) {
+				if (obj instanceof Issue) {
+					issueKeys.add(((Issue) obj).getKey());
+				}
+			}
+			return issueKeys;
+		} catch (SearchException e) {
+			log.warn(
+				"Unable to get all issues from component " + component.getName() + ". Reason: " + e.getMessage(), e);
+		}
+		return null;
+	}
+
+	/**
+	 * Process all the builds to validate them
+	 */
+	private void processBuilds() {
+		Collections.sort(builds);
+		Collections.reverse(builds);
+		for (Build build : builds) {
+			// Process all the related issue keys to make sure they exist
+			for (final Iterator<String> iter = build.getRelatedIssueKeys().iterator(); iter.hasNext();) {
+				final String key = iter.next();
+				final MutableIssue issue = issueManager.getIssueObject(key);
+				if (issue == null) {
+					iter.remove();
+				}
+			}
+		}
+	}
+
 
 	/**
 	 * Gets the project key
@@ -221,6 +319,24 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 */
 	public void setVersionId(Long versionId) {
 		this.versionId = versionId;
+	}
+
+	/**
+	 * Gets the component id
+	 * 
+	 * @return the component id
+	 */
+	public Long getComponentId() {
+		return componentId;
+	}
+
+	/**
+	 * Sets the component id
+	 * 
+	 * @param componentId the component id
+	 */
+	public void setComponentId(Long componentId) {
+		this.componentId = componentId;
 	}
 
 	/**
@@ -281,6 +397,15 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	}
 
 	/**
+	 * Gets the {@link BuildUtils} helper class
+	 * 
+	 * @return the {@link BuildUtils} helper object
+	 */
+	public BuildUtils getBuildUtils() {
+		return new BuildUtils();
+	}
+
+	/**
 	 * Gets the internationalisation bean
 	 * 
 	 * @return the {@link I18nBean}
@@ -290,11 +415,18 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	}
 
 	/**
-	 * Gets Internationalisation text for a key
+	 * Gets the {@link HudsonBuildTriggerParser} helper class
 	 * 
-	 * @param key the key to get the text for
-	 * @return the text
+	 * @return the {@link HudsonBuildTriggerParser} instance
 	 */
+	public HudsonBuildTriggerParser getBuildTriggerParser() {
+		return new HudsonBuildTriggerParser(authenticationContext, userUtil, server);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public String getText(String key) {
 		return i18n.getText(key);
 	}

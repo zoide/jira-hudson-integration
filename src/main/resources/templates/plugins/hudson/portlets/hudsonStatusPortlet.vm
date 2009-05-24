@@ -16,6 +16,9 @@
 ## under the License.
 
 <style type="text/css">
+.noStyleList {
+	 list-style-type: none;
+}
 a {
 	text-decoration: none;
 }
@@ -25,8 +28,9 @@ a:hover {
 .hudsonStatusTable, .hudsonStatusTable td, .hudsonJobsTable, .hudsonJobsTable td, .hudsonJobsTable th {
     border-collapse: collapse;
     border: 1px solid #bbbbbb;
+    vertical-align: absmiddle;
 }
-.hudsonJobsTable, .hudsonJobsTable td, .hudsonJobsTable th {
+.hudsonJobsTable th {
 	text-align: center;
 }
 .portletBody th {
@@ -65,56 +69,37 @@ a:hover {
                     			<th>${i18n.getText("hudson.portlet.status")}</th>
                     			<th>${i18n.getText("hudson.portlet.job")}</th>
                     			<th>${i18n.getText("hudson.portlet.last.build")}</th>
-                    			<th>${i18n.getText("hudson.portlet.last.successful.build")}</th>
-                    			<th>${i18n.getText("hudson.portlet.last.failed.build")}</th>
-                    			<th>${i18n.getText("hudson.portlet.last.unstable.build")}</th>
                     			<th>${i18n.getText("hudson.portlet.last.duration")}</th>
+                    			<th>${i18n.getText("hudson.portlet.build.trigger")}</th>
                     		</tr>
                     	</thead>
                     	<tbody>
-		    				#foreach ($job in $result.jobs)
+		    				#foreach ($job in $sorter.sort($result.jobs, "name"))
 	                    	<tr>
-	                    		<td><img src=${result.serverImageUrl}/${job.result.icon} tooltip=${job.result.name()} alt=${job.result.name()} /></td>
-	                    		<td><a href=${result.serverUrl}/${job.url}>${job.name}</a></td>
-	                    		<td>
-	                    			#if (${jobUtils.hasValidLastBuild($job)})
+	                    		<td align="center"><img src=${result.serverImageUrl}/${job.result.icon} tooltip=${job.result.name()} alt=${job.result.name()} /></td>
+	                    		<td align="left"><a href=${result.serverUrl}/${job.url}>${job.name}</a></td>
+                    			#if (${jobUtils.hasValidLastBuild($job)})
+	                    		<td align="center">
 	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastBuild.timestamp})})}
 	                    			(<a href=${result.serverUrl}/${job.lastBuild.url}>${i18n.getText("hudson.build.number", ${job.lastBuild.number})}</a>)
-	                    			#else
-	                    			${i18n.getText("hudson.not.applicable")}
-	                    			#end
 	                    		</td>
-	                    		<td>
-	                    			#if (${jobUtils.hasValidLastSuccessfulBuild($job)})
-	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastSuccessfulBuild.timestamp})})}
-	                    			(<a href=${result.serverUrl}/${job.lastSuccessfulBuild.url}>${i18n.getText("hudson.build.number", ${job.lastSuccessfulBuild.number})}</a>)
-	                    			#else
-	                    			${i18n.getText("hudson.not.applicable")}
-	                    			#end
-	                    		</td>
-	                    		<td>
-	                    			#if (${jobUtils.hasValidLastFailedBuild($job)})
-	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastFailedBuild.timestamp})})}
-	                    			(<a href=${result.serverUrl}/${job.lastFailedBuild.url}>${i18n.getText("hudson.build.number", ${job.lastFailedBuild.number})}</a>)
-	                    			#else
-	                    			${i18n.getText("hudson.not.applicable")}
-	                    			#end
-	                    		</td>
-	                    		<td>
-	                    			#if (${jobUtils.hasValidLastUnstableBuild($job)})
-	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastUnstableBuild.timestamp})})}
-	                    			(<a href=${result.serverUrl}/${job.lastUnstableBuild.url}>${i18n.getText("hudson.build.number", ${job.lastUnstableBuild.number})}</a>)
-	                    			#else
-	                    			${i18n.getText("hudson.not.applicable")}
-	                    			#end
-	                    		</td>
-	                    		<td>
-	                    			#if (${jobUtils.hasValidLastBuild($job)})
+	                    		<td align="center">
 	                    			${dateTimeUtils.getTimeSpanString(${job.lastBuild.duration})}
-	                    			#else
-	                    			${i18n.getText("hudson.not.applicable")}
-	                    			#end
 	                    		</td>
+                    			#if ($job.lastBuild.triggers.isEmpty())
+	                    		<td align="center">${i18n.getText("hudson.not.applicable")}</td>
+                    			#else
+                    			<td align="left">
+                    			#foreach ($trigger in $job.lastBuild.triggers)
+                    				#if ($velocityCount > 1) <br> #end ${trigger}
+                    			#end
+	                    		</td>
+                    			#end
+		                    	#else
+	                    		<td align="center">${i18n.getText("hudson.not.applicable")}</td>
+	                    		<td align="center">${i18n.getText("hudson.not.applicable")}</td>
+	                    		<td align="center">${i18n.getText("hudson.not.applicable")}</td>
+	                			#end
 	                    	</tr>
 				    		#end
                     	</tbody>

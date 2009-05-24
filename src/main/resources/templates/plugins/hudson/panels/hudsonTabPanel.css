@@ -27,25 +27,57 @@ img.waitingImage {
 }
 
 #hudsonTabPanel .formtitle a, #hudsonTabPanel .formtitle a:hover img {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 #hudsonTabPanel .formtitle a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 #hudsonTabPanel h3.formtitle img {
-	margin-top: -3px;
+    margin-top: -3px;
 }
-
 #hudsonTabPanel h3.formtitle * {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 #hudsonBuildTable {
-	background-color: #f0f0f0;
+	background-color: #F0F0F0;
 }
 
-#hudsonBuildTable a, #hudsonBuildTable a:hover, #hudsonBuildTable td a, #hudsonBuildTable td a:hover {
+.hudsonBuildTable a, .hudsonBuildTable a:hover,
+.hudsonBuildTable td a, .hudsonBuildTable td a:hover {
 	text-decoration: none;
+}
+
+.successfulBuild, .successfulBuild a,
+.failedBuild, .failedBuild a,
+.unstableBuild, .unstableBuild a,
+.abortedOrNotBuild, .abortedOrNotBuild a {
+	font-weight: bold;
+	font-size: medium;
+}
+
+.successfulBuild a {
+	color: #4E9700;
+}
+
+.failedBuild a {
+	color: #EF2929;
+}
+
+.unstableBuild a {
+	color: #FEB738;
+}
+
+.abortedOrNotBuild a {
+	color: #9E9E9E;
+}
+
+.listSeperator {
+	color: #F0F0F0;
+	background-color: #F0F0F0;
+	border: 0px solid #F0F0F0;
+	height: 2px;
+	width: 100%;
 }

@@ -18,6 +18,7 @@
 <div class="projectPanel" id="hudsonTabPanel">
 	<div class="header">
 		<h3 class="formtitle">
+			<a href="${hudsonServer.host}" class="actionLinks">${i18n.getText("hudson.panel.title.view.dashboard")}</a>
 			<img src="${req.contextPath}${baseResourceUrl}/images/hudson-icon-24.png" />
 			${i18n.getText("hudson.panel.title")}
 		</h3>

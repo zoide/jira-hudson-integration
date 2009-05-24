@@ -35,6 +35,10 @@ public interface HudsonServerAccessor {
 
 	String BASE_ACTION_URL = "/plugin/hudson-jiraapi-plugin";
 
+	String GET_API_VERSION_ACTION = BASE_ACTION_URL + "/getApiVersion";
+
+	String LIST_ALL_PROJECTS_ACTION = BASE_ACTION_URL + "/listAllProjects";
+
 	String GET_ALL_PROJECTS_ACTION = BASE_ACTION_URL + "/getAllProjects";
 
 	String GET_PROJECT_BUILDS_ACTION = BASE_ACTION_URL + "/getProjectBuilds";
@@ -42,8 +46,6 @@ public interface HudsonServerAccessor {
 	String GET_VERSION_BUILDS_ACTION = BASE_ACTION_URL + "/getVersionBuilds";
 
 	String GET_ISSUE_BUILDS_ACTION = BASE_ACTION_URL + "/getIssueBuilds";
-
-	String GET_API_VERSION_ACTION = BASE_ACTION_URL + "/getApiVersion";
 
 	/**
 	 * Gets the API Version of the {@link HudsonServer} given
@@ -56,13 +58,22 @@ public interface HudsonServerAccessor {
 					throws HudsonServerAccessorException;
 
 	/**
-	 * Get all Jobs that are configured in a specific Hudson Server
+	 * Get all Projects that are configured in a specific Hudson Server
 	 * 
-	 * @param hudsonServer the {@link HudsonServer} to get the jobs from
+	 * @param hudsonServer the {@link HudsonServer} to get the projects from
 	 * @return {@link List} of {@link Job}s
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
 	 */
-	List<Job> getJobs(HudsonServer hudsonServer) throws HudsonServerAccessorException;
+	List<Job> getProjectsList(HudsonServer hudsonServer) throws HudsonServerAccessorException;
+
+	/**
+	 * Get all Projects that are configured in a specific Hudson Server
+	 * 
+	 * @param hudsonServer the {@link HudsonServer} to get the projects from
+	 * @return {@link List} of {@link Job}s
+	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
+	 */
+	List<Job> getProjects(HudsonServer hudsonServer) throws HudsonServerAccessorException;
 
 	/**
 	 * Gets all Builds of a Jira {@link Project}. If the project is associated with a specific {@link HudsonServer}

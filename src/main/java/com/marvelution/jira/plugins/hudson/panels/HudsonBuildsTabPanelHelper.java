@@ -21,8 +21,10 @@ package com.marvelution.jira.plugins.hudson.panels;
 
 import java.util.Map;
 
+import com.atlassian.jira.bc.project.component.ProjectComponent;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.project.Project;
+import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.project.version.Version;
 import com.atlassian.plugin.webresource.WebResourceManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
@@ -38,15 +40,20 @@ public class HudsonBuildsTabPanelHelper {
 
 	private final HudsonServerManager serverManager;
 
+	private final ProjectManager projectManager;
+
 	private final WebResourceManager webResourceManager;
 
 	/**
 	 * Constructor
 	 * 
+	 * @param projectManager the {@link ProjectManager} implementation
 	 * @param serverManager the {@link HudsonServerManager} implementation
 	 * @param webResourceManager the {@link WebResourceManager} implementation
 	 */
-	public HudsonBuildsTabPanelHelper(HudsonServerManager serverManager, WebResourceManager webResourceManager) {
+	public HudsonBuildsTabPanelHelper(ProjectManager projectManager, HudsonServerManager serverManager,
+										WebResourceManager webResourceManager) {
+		this.projectManager = projectManager;
 		this.serverManager = serverManager;
 		this.webResourceManager = webResourceManager;
 	}
@@ -59,6 +66,7 @@ public class HudsonBuildsTabPanelHelper {
 	 */
 	public void prepareVelocityParameters(Map<String, Object> velocityParams, Project project) {
 		velocityParams.put("projectKey", project.getKey());
+		velocityParams.put("hudsonServer", serverManager.getServerByJiraProject(project));
 		prepareVelocityParameters(velocityParams, "projectKey=" + project.getKey(), "project");
 	}
 
@@ -70,6 +78,7 @@ public class HudsonBuildsTabPanelHelper {
 	 */
 	public void prepareVelocityParameters(Map<String, Object> velocityParams, Version version) {
 		velocityParams.put("versionId", version.getId());
+		velocityParams.put("hudsonServer", serverManager.getServerByJiraProject(version.getProjectObject()));
 		prepareVelocityParameters(velocityParams, "versionId=" + version.getId(), "version");
 	}
 
@@ -81,7 +90,21 @@ public class HudsonBuildsTabPanelHelper {
 	 */
 	public void prepareVelocityParameters(Map<String, Object> velocityParams, Issue issue) {
 		velocityParams.put("issueKey", issue.getKey());
+		velocityParams.put("hudsonServer", serverManager.getServerByJiraProject(issue.getProjectObject()));
 		prepareVelocityParameters(velocityParams, "issueKey=" + issue.getKey(), "issue");
+	}
+
+	/**
+	 * Prepare the velocity parameters for the Tab Panel
+	 * 
+	 * @param velocityParams {@link Map} of existing velocity parameters to extend
+	 * @param component the {@link ProjectComponent} to prepare the velocity parameters for
+	 */
+	public void prepareVelocityParameters(Map<String, Object> velocityParams, ProjectComponent component) {
+		velocityParams.put("componentId", component.getId());
+		final Project project = projectManager.getProjectObj(component.getProjectId());
+		velocityParams.put("hudsonServer", serverManager.getServerByJiraProject(project));
+		prepareVelocityParameters(velocityParams, "componentId=" + component.getId(), "component");
 	}
 
 	/**
