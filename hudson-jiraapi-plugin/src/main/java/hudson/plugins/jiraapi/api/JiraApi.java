@@ -19,14 +19,17 @@
 
 package hudson.plugins.jiraapi.api;
 
+import java.util.Set;
 import java.util.SortedMap;
 
 import com.marvelution.jira.plugins.hudson.model.Builds;
+import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.Jobs;
 
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.Hudson;
+import hudson.model.ItemGroup;
+import hudson.plugins.jiraapi.JiraProjectKeyJobProperty;
 import hudson.plugins.jiraapi.converters.HudsonBuildConverter;
 import hudson.plugins.jiraapi.converters.HudsonProjectConverter;
 import hudson.plugins.jiraapi.index.IssueIndexer;
@@ -42,13 +45,45 @@ import hudson.plugins.jiraapi.utils.ProjectUtils;
 public class JiraApi {
 
 	/**
-	 * Gets all Jira related projects from Hudson
+	 * Gets the list of all known Hudson projects
 	 * 
 	 * @return {@link Jobs}
 	 */
-	public Jobs getAllJiraProjects() {
+	@SuppressWarnings("unchecked")
+	public Jobs listAllProjects() {
 		final Jobs jobs = new Jobs();
-		for (AbstractProject<?, ?> project : Hudson.getInstance().getAllItems(AbstractProject.class)) {
+		for (AbstractProject<?, ?> project : ProjectUtils.getAllProjects()) {
+			final Job job = new Job(project.getName(), project.getDescription());
+			job.setUrl(project.getUrl());
+			if (project.getProperty(JiraProjectKeyJobProperty.class) != null) {
+				job.setJiraKey(project.getProperty(JiraProjectKeyJobProperty.class).getKey());
+			}
+			if (project instanceof ItemGroup) {
+				final Jobs modules = new Jobs();
+				final ItemGroup<AbstractProject<?, ?>> itemGroup = (ItemGroup<AbstractProject<?, ?>>) project;
+				for (final AbstractProject<?, ?> item : itemGroup.getItems()) {
+					final Job module = new Job(item.getName(), item.getDescription());
+					module.setUrl(item.getUrl());
+					if (item.getProperty(JiraProjectKeyJobProperty.class) != null) {
+						module.setJiraKey(item.getProperty(JiraProjectKeyJobProperty.class).getKey());
+					}
+					modules.getJobs().add(module);
+				}
+				job.setModules(modules);
+			}
+			jobs.getJobs().add(job);
+		}
+		return jobs;
+	}
+
+	/**
+	 * Gets all Projects from Hudson
+	 * 
+	 * @return {@link Jobs}
+	 */
+	public Jobs getAllProjects() {
+		final Jobs jobs = new Jobs();
+		for (AbstractProject<?, ?> project : ProjectUtils.getAllProjects()) {
 			jobs.getJobs().add(HudsonProjectConverter.convertHudsonProject(project));
 		}
 		return jobs;
@@ -62,8 +97,8 @@ public class JiraApi {
 	 */
 	public Builds getBuildsByJiraProject(final String projectKey) {
 		final Builds builds = new Builds();
-		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
-		if (project != null) {
+		final Set<AbstractProject<?, ?>> projects = ProjectUtils.getProjectByJiraProjectKey(projectKey);
+		for (AbstractProject<?, ?> project : projects) {
 			for (AbstractBuild<?, ?> build : project.getBuilds()) {
 				builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
 			}
@@ -81,16 +116,18 @@ public class JiraApi {
 	 */
 	public Builds getBuildsByJiraVersion(final String projectKey, final long startDate, final long releaseDate) {
 		final Builds builds = new Builds();
-		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
-		for (AbstractBuild<?, ?> build : project.getBuilds()) {
-			if (releaseDate > 0L) {
-				if (build.getTimestamp().getTimeInMillis() >= startDate
-					&& build.getTimestamp().getTimeInMillis() <= releaseDate) {
-					builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
-				}
-			} else {
-				if (build.getTimestamp().getTimeInMillis() >= startDate) {
-					builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+		final Set<AbstractProject<?, ?>> projects = ProjectUtils.getProjectByJiraProjectKey(projectKey);
+		for (AbstractProject<?, ?> project : projects) {
+			for (AbstractBuild<?, ?> build : project.getBuilds()) {
+				if (releaseDate > 0L) {
+					if (build.getTimestamp().getTimeInMillis() >= startDate
+						&& build.getTimestamp().getTimeInMillis() <= releaseDate) {
+						builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+					}
+				} else {
+					if (build.getTimestamp().getTimeInMillis() >= startDate) {
+						builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+					}
 				}
 			}
 		}
@@ -109,7 +146,8 @@ public class JiraApi {
 			final Issue indexedIssue = IssueIndexer.getInstance().getIssueIndex(issueKey);
 			if (indexedIssue != null && !indexedIssue.getProjects().isEmpty()) {
 				for (Project indexedJob : indexedIssue.getProjects()) {
-					final hudson.model.TopLevelItem item = Hudson.getInstance().getItem(indexedJob.getName());
+					final AbstractProject<?, ?> item =
+						ProjectUtils.getProjectByName(indexedJob.getName(), indexedJob.getParentName());
 					if (item != null && item instanceof AbstractProject) {
 						final SortedMap<Integer, ?> jobBuilds = ((AbstractProject<?, ?>) item).getBuildsAsMap();
 						for (Integer buildNumber : indexedJob.getBuildNumbers()) {

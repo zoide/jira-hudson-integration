@@ -24,12 +24,14 @@ import java.util.List;
 
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.ItemGroup;
 import hudson.plugins.jiraapi.JiraProjectKeyJobProperty;
 
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.Builds;
 import com.marvelution.jira.plugins.hudson.model.HealthReport;
 import com.marvelution.jira.plugins.hudson.model.Job;
+import com.marvelution.jira.plugins.hudson.model.Jobs;
 import com.marvelution.jira.plugins.hudson.model.Result;
 
 /**
@@ -42,10 +44,12 @@ public class HudsonProjectConverter {
 	/**
 	 * Convert a Hudson Job into a Jira Integration Job
 	 * 
+	 * @param <PROJECT> the type of the project to be converted
 	 * @param project the Hudson {@link AbstractProject} to convert
 	 * @return the converted {@link Job}
 	 */
-	public static Job convertHudsonProject(AbstractProject<?, ?> project) {
+	@SuppressWarnings("unchecked")
+	public static <PROJECT extends AbstractProject<?, ?>> Job convertHudsonProject(PROJECT project) {
 		final Job job = new Job(project.getName(), project.getDescription());
 		job.setUrl(project.getUrl());
 		if (project.getProperty(JiraProjectKeyJobProperty.class) != null) {
@@ -102,6 +106,14 @@ public class HudsonProjectConverter {
 			healthReports.add(HealthReport.EMPTY);
 		}
 		job.setHealthReports(healthReports);
+		if (project instanceof ItemGroup) {
+			final Jobs modules = new Jobs();
+			final ItemGroup<PROJECT> itemGroup = (ItemGroup<PROJECT>) project;
+			for (final PROJECT module : itemGroup.getItems()) {
+				modules.getJobs().add(convertHudsonProject(module));
+			}
+			job.setModules(modules);
+		}
 		return job;
 	}
 }

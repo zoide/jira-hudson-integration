@@ -35,6 +35,8 @@ public final class Project {
 
 	private String name;
 
+	private String parentName;
+
 	@XStreamImplicit(itemFieldName = "build-number")
 	private Set<Integer> buildNumbers = new HashSet<Integer>();
 
@@ -44,7 +46,18 @@ public final class Project {
 	 * @param name the name of the job
 	 */
 	public Project(String name) {
+		this(name, null);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param name the name of the job
+	 * @param parentName the name of the job parent
+	 */
+	public Project(String name, String parentName) {
 		setName(name);
+		setParentName(parentName);
 	}
 
 	/**
@@ -63,6 +76,24 @@ public final class Project {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * Gets the job parent name
+	 * 
+	 * @return the job parent name
+	 */
+	public String getParentName() {
+		return parentName;
+	}
+
+	/**
+	 * Sets the job parent name
+	 * 
+	 * @param parentName the job parent name
+	 */
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 
 	/**

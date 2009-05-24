@@ -73,6 +73,9 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	@XStreamAlias("result")
 	private Result result;
 
+	@XStreamAlias("modules")
+	private Jobs modules;
+
 	/**
 	 * Constructor
 	 * 
@@ -388,6 +391,27 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	 */
 	public void setResult(Result result) {
 		this.result = result;
+	}
+
+	/**
+	 * Gets the Modules
+	 * 
+	 * @return the Modules
+	 */
+	public Jobs getModules() {
+		if (modules == null) {
+			modules = new Jobs();
+		}
+		return modules;
+	}
+
+	/**
+	 * Sets the Modules
+	 * 
+	 * @param modules the Modules
+	 */
+	public void setModules(Jobs modules) {
+		this.modules = modules;
 	}
 
 	/**

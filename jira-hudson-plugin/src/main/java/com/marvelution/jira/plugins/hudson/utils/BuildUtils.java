@@ -20,6 +20,7 @@
 package com.marvelution.jira.plugins.hudson.utils;
 
 import com.marvelution.jira.plugins.hudson.model.Build;
+import com.marvelution.jira.plugins.hudson.model.Result;
 
 /**
  * {@link Build} Model helper class
@@ -34,8 +35,58 @@ public class BuildUtils {
 	 * @param build the {@link Build} to check
 	 * @return {@link Boolean#TRUE} if valid, {@link Boolean#FALSE} otherwise
 	 */
-	public Boolean isValidBuild(Build build) {
-		return Boolean.valueOf(build != null && build.getTimestamp() > 0L && build.getDuration() > 0L);
+	public boolean isValidBuild(Build build) {
+		return (build != null && build.getTimestamp() > 0L && build.getDuration() > 0L);
+	}
+
+	/**
+	 * Check if the given {@link Build} is successful
+	 * 
+	 * @param build the {@link Build} to check
+	 * @return <code>true</code> if successful, <code>false</code> otherwise
+	 */
+	public boolean isSuccessfulBuild(Build build) {
+		return Result.SUCCESS == build.getResult();
+	}
+
+	/**
+	 * Check if the given {@link Build} is failed
+	 * 
+	 * @param build the {@link Build} to check
+	 * @return <code>true</code> if failed, <code>false</code> otherwise
+	 */
+	public boolean isFailedBuild(Build build) {
+		return Result.FAILURE == build.getResult();
+	}
+
+	/**
+	 * Check if the given {@link Build} is unstable
+	 * 
+	 * @param build the {@link Build} to check
+	 * @return <code>true</code> if unstable, <code>false</code> otherwise
+	 */
+	public boolean isUnstableBuild(Build build) {
+		return Result.UNSTABLE == build.getResult();
+	}
+
+	/**
+	 * Check if the given {@link Build} is aborted
+	 * 
+	 * @param build the {@link Build} to check
+	 * @return <code>true</code> if aborted, <code>false</code> otherwise
+	 */
+	public boolean isAbortedBuild(Build build) {
+		return Result.ABORTED == build.getResult();
+	}
+
+	/**
+	 * Check if the given {@link Build} is not build
+	 * 
+	 * @param build the {@link Build} to check
+	 * @return <code>true</code> if not build, <code>false</code> otherwise
+	 */
+	public boolean isNotBuild(Build build) {
+		return Result.NOT_BUILT == build.getResult();
 	}
 
 }

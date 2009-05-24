@@ -120,4 +120,13 @@ public class TestResult {
 		this.total = total;
 	}
 
+	/**
+	 * Gets the total passed count
+	 * 
+	 * @return the passed count
+	 */
+	public int getPassed() {
+		return total - skipped - failed;
+	}
+
 }

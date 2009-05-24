@@ -17,52 +17,45 @@
  * under the License.
  */
 
-package hudson.plugins.jiraapi;
+package com.marvelution.jira.plugins.hudson.model.triggers;
 
-import hudson.model.AbstractProject;
-import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.Publisher;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * {@link Descriptor} for {@link JiraIssueIndexerRecorder}
+ * User {@link Trigger}. {@link Trigger} that indicates that a User started a build
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-//@Extension
-public final class JiraIssueIndexerRecorderDescriptor extends BuildStepDescriptor<Publisher> {
+@XStreamAlias("userTrigger")
+public class UserTrigger implements Trigger {
 
-	public static final BuildStepDescriptor<Publisher> DESCRIPTOR = new JiraIssueIndexerRecorderDescriptor();
+	private String userName;
 
 	/**
 	 * Constructor
+	 * 
+	 * @param userName the username that triggered the build
 	 */
-	public JiraIssueIndexerRecorderDescriptor() {
-		super(JiraIssueIndexerRecorder.class);
+	public UserTrigger(String userName) {
+		setUserName(userName);
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gets the username that triggered the build
+	 * 
+	 * @return the username
 	 */
-	@Override
-	public String getDisplayName() {
-		return Messages.getJiraIssueIndexerDisplayName();
+	public String getUserName() {
+		return userName;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Sets the username that triggered the build
+	 * 
+	 * @param userName the username
 	 */
-	@Override
-	public String getHelpFile() {
-		return "/plugin/hudson-jiraapi-plugin/help-indexer.html";
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean isApplicable(Class<? extends AbstractProject> jobType) {
-		return AbstractProject.class.isAssignableFrom(jobType);
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }

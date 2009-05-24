@@ -35,6 +35,7 @@ import org.kohsuke.stapler.StaplerResponse;
 import com.marvelution.jira.plugins.hudson.ApiVersion;
 import com.marvelution.jira.plugins.hudson.model.Jobs;
 import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
+import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshallerException;
 
 import hudson.Plugin;
 import hudson.model.Hudson;
@@ -111,11 +112,35 @@ public class PluginImpl extends Plugin {
 	public void doGetApiVersion(final StaplerRequest request, final StaplerResponse response) throws IOException,
 			ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
-		writeXmlToResponse(request, response, XStreamMarshaller.marshal(ApiVersion.getVersion()));
+		try {
+			writeXmlToResponse(request, response, XStreamMarshaller.marshal(ApiVersion.getVersion()));
+		} catch (XStreamMarshallerException e) {
+			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
+		}
 	}
 
 	/**
-	 * Handler for getJobs requests
+	 * Handler for listAllProjects requests
+	 * 
+	 * @param request the {@link StaplerRequest}
+	 * @param response the {@link StaplerResponse}
+	 * @throws IOException in case of IO Exceptions
+	 * @throws ServletException in case of Servlet Exceptions
+	 */
+	public void doListAllProjects(final StaplerRequest request, final StaplerResponse response) throws IOException,
+			ServletException {
+		Hudson.getInstance().checkPermission(Hudson.READ);
+		LOGGER.log(Level.FINE, "Getting list of all projects");
+		final Jobs jobs = jiraApi.listAllProjects();
+		try {
+			writeXmlToResponse(request, response, XStreamMarshaller.marshal(jobs));
+		} catch (XStreamMarshallerException e) {
+			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Handler for getAllProjects requests
 	 * 
 	 * @param request the {@link StaplerRequest}
 	 * @param response the {@link StaplerResponse}
@@ -126,8 +151,12 @@ public class PluginImpl extends Plugin {
 			ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
 		LOGGER.log(Level.FINE, "Getting all builds of all projects");
-		final Jobs jobs = jiraApi.getAllJiraProjects();
-		writeXmlToResponse(request, response, XStreamMarshaller.marshal(jobs));
+		final Jobs jobs = jiraApi.getAllProjects();
+		try {
+			writeXmlToResponse(request, response, XStreamMarshaller.marshal(jobs));
+		} catch (XStreamMarshallerException e) {
+			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
+		}
 	}
 
 	/**
@@ -144,8 +173,13 @@ public class PluginImpl extends Plugin {
 					ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
 		LOGGER.log(Level.FINE, "Getting all builds related to project: " + projectKey);
-		final String xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraProject(projectKey));
-		writeXmlToResponse(request, response, xml);
+		String xml;
+		try {
+			xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraProject(projectKey));
+			writeXmlToResponse(request, response, xml);
+		} catch (XStreamMarshallerException e) {
+			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
+		}
 	}
 
 	/**
@@ -167,9 +201,13 @@ public class PluginImpl extends Plugin {
 					@QueryParameter("releaseDate") long releaseDate) throws IOException, ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
 		LOGGER.log(Level.FINE, "Getting all builds related to project [" + projectKey + "] version: " + versionKey);
-		final String xml =
-			XStreamMarshaller.marshal(jiraApi.getBuildsByJiraVersion(projectKey, startDate, releaseDate));
-		writeXmlToResponse(request, response, xml);
+		try {
+			final String xml =
+				XStreamMarshaller.marshal(jiraApi.getBuildsByJiraVersion(projectKey, startDate, releaseDate));
+			writeXmlToResponse(request, response, xml);
+		} catch (XStreamMarshallerException e) {
+			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
+		}
 	}
 
 	/**
@@ -186,8 +224,12 @@ public class PluginImpl extends Plugin {
 					ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
 		LOGGER.log(Level.FINE, "Getting all builds related to issue keys: " + Arrays.asList(issueKeys));
-		final String xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraIssueKeys(issueKeys));
-		writeXmlToResponse(request, response, xml);
+		try {
+			final String xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraIssueKeys(issueKeys));
+			writeXmlToResponse(request, response, xml);
+		} catch (XStreamMarshallerException e) {
+			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
+		}
 	}
 
 	/**

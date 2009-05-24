@@ -41,23 +41,6 @@
 	</portlet>
 
 	<!-- T A B   P A N E L S -->
-	<issue-tabpanel key="hudson-issue-tabpanel" name="Hudson Builds Issue Panel"
-		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForIssueTabPanel">
-		<description key="hudson.panel.issue.description" />
-		<label key="hudson.panel.label" />
-		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
-		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
-	</issue-tabpanel>
-
-	<version-tabpanel key="hudson-version-tabpanel" name="Hudson Builds Version Panel"
-		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForVersionTabPanel">
-		<description key="hudson.panel.version.description" />
-		<label key="hudson.panel.label" />
-		<order>101</order>
-		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
-		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
-	</version-tabpanel>
-
 	<project-tabpanel key="hudson-project-tabpanel" name="Hudson Builds Project Panel"
 		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForProjectTabPanel">
 		<description key="hudson.panel.project.description" />
@@ -66,6 +49,33 @@
 		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
 		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
 	</project-tabpanel>
+
+	<version-tabpanel key="hudson-version-tabpanel" name="Hudson Builds Project Version Panel"
+		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForVersionTabPanel">
+		<description key="hudson.panel.version.description" />
+		<label key="hudson.panel.label" />
+		<order>101</order>
+		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+	</version-tabpanel>
+
+	<component-tabpanel key="hudson-component-tabpanel" name="Hudson Builds Project Component Panel"
+		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForComponentTabPanel">
+		<description key="hudson.panel.component.description" />
+		<label key="hudson.panel.label" />
+		<order>101</order>
+		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+	</component-tabpanel>
+
+	<issue-tabpanel key="hudson-issue-tabpanel" name="Hudson Builds Issue Panel"
+		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForIssueTabPanel">
+		<description key="hudson.panel.issue.description" />
+		<label key="hudson.panel.label" />
+		<order>101</order>
+		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+	</issue-tabpanel>
 
 	<!-- H U D S O N   S E R V E R S   C O N F I G U R A T I O N -->
 	<webwork1 key="hudsonServerConfig" name="Configure Your Hudson Server">
@@ -88,6 +98,10 @@
 			<action name="com.marvelution.jira.plugins.hudson.web.action.UpdateHudsonServerProjectAssociations" alias="UpdateHudsonServerProjectAssociations">
 				<view name="input">/templates/plugins/hudson/updateHudsonServerProjectAssociations.vm</view>
 			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.AssociateSpecificHudsonServer" alias="AssociateSpecificHudsonServer">
+				<view name="input">/templates/plugins/hudson/associateSpecificHudsonServer.vm</view>
+				<view name="error">/templates/plugins/hudson/associateSpecificHudsonServer.vm</view>
+			</action>
 		</actions>
 	</webwork1>
 
@@ -108,6 +122,17 @@
 		</condition>
 		<label key="hudson.servers" />
 		<link linkId="hudson_servers">/secure/admin/jira/ViewHudsonServers.jspa</link>
+	</web-item>
+
+	<web-item key="project-hudson-server" name="Project Hudson Server" section="system.browse.project.operations" weight="50">
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+			<param name="permission">admin</param>
+		</condition>
+		<label key="hudson.project.associate.with.server">
+			<param name="param0">$textutils.htmlEncode($helper.project.get('name'))</param>
+		</label>
+		<link linkId="project_hudson_server">/secure/admin/jira/AssociateSpecificHudsonServer!default.jspa?projectKey=$helper.project.get('key')</link>
 	</web-item>
 
 	<!-- C O M P O N E N T S -->

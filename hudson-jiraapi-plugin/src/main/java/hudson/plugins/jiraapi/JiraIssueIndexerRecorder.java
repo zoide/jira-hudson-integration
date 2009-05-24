@@ -37,7 +37,6 @@ import hudson.tasks.Recorder;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-//@Extension
 public class JiraIssueIndexerRecorder extends Recorder {
 
 	private final transient IssueIndexer indexer;

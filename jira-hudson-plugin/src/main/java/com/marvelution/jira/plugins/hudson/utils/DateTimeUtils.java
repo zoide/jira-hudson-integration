@@ -31,17 +31,17 @@ import com.atlassian.jira.web.bean.I18nBean;
  */
 public class DateTimeUtils {
 
-	public static final long YEAR = 1471228928L;
-
-	public static final long MONTH = -1702967296L;
-
-	public static final long DAY = 86400000L;
-
-	public static final long HOUR = 3600000L;
-
-	public static final long MINUTE = 60000L;
-
 	public static final long SECOND = 1000L;
+
+	public static final long MINUTE = 60 * SECOND;
+
+	public static final long HOUR = 60 * MINUTE;
+
+	public static final long DAY = 24 * HOUR;
+
+	public static final long MONTH = 30 * DAY;
+
+	public static final long YEAR = 365 * DAY;
 
 	private I18nBean i18nBean;
 

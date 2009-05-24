@@ -19,6 +19,10 @@
 
 package com.marvelution.jira.plugins.hudson.web.action;
 
+import java.util.Arrays;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerFactory;
@@ -111,6 +115,24 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 	 */
 	public void setHudsonServerId(int hudsonServerId) {
 		this.hudsonServerId = hudsonServerId;
+	}
+
+	/**
+	 * Gets the associated project keys
+	 * 
+	 * @return the associated project keys
+	 */
+	public String getAssociatedProjectKeys() {
+		return StringUtils.join(hudsonServer.getAssociatedProjectKeys(), ',');
+	}
+
+	/**
+	 * Sets the associated project keys
+	 * 
+	 * @param projectKeys the associated project keys
+	 */
+	public void setAssociatedProjectKeys(String projectKeys) {
+		hudsonServer.setAssociatedProjectKeys(Arrays.asList(projectKeys.split(",")));
 	}
 
 }

@@ -73,7 +73,7 @@ public class HudsonStatusPortlet extends AbstractHudsonPorlet {
 			for (HudsonServer server : hudsonServerManager.getServers()) {
 				final HudsonStatusPortletResult result = new HudsonStatusPortletResult(server);
 				try {
-					final List<Job> jobs = hudsonServerAccessor.getJobs(server);
+					final List<Job> jobs = hudsonServerAccessor.getProjects(server);
 					Log.debug("Found " + jobs.size() + " on Hudson Server " + server.getName());
 					result.setJobs(jobs);
 				} catch (HudsonServerAccessorException e) {

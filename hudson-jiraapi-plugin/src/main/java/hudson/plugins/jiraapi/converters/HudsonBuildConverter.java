@@ -19,20 +19,38 @@
 
 package hudson.plugins.jiraapi.converters;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
 import hudson.model.Cause;
 import hudson.model.CauseAction;
+import hudson.model.Item;
+import hudson.model.ItemGroup;
+import hudson.model.Cause.LegacyCodeCause;
+import hudson.model.Cause.RemoteCause;
+import hudson.model.Cause.UpstreamCause;
+import hudson.model.Cause.UserCause;
 import hudson.model.Run.Artifact;
 import hudson.scm.ChangeLogSet.Entry;
 import hudson.tasks.test.AbstractTestResultAction;
+import hudson.triggers.SCMTrigger.SCMTriggerCause;
+import hudson.triggers.TimerTrigger.TimerTriggerCause;
 
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.State;
 import com.marvelution.jira.plugins.hudson.model.TestResult;
+import com.marvelution.jira.plugins.hudson.model.triggers.LegacyCodeTrigger;
+import com.marvelution.jira.plugins.hudson.model.triggers.ProjectTrigger;
+import com.marvelution.jira.plugins.hudson.model.triggers.RemoteTrigger;
+import com.marvelution.jira.plugins.hudson.model.triggers.SCMTrigger;
+import com.marvelution.jira.plugins.hudson.model.triggers.TimeTrigger;
+import com.marvelution.jira.plugins.hudson.model.triggers.Trigger;
+import com.marvelution.jira.plugins.hudson.model.triggers.UserTrigger;
 import com.marvelution.jira.plugins.hudson.utils.JiraKeyUtils;
 
 /**
@@ -49,9 +67,10 @@ public class HudsonBuildConverter {
 	 * @return the Jira Integration Model Build
 	 */
 	@SuppressWarnings("unchecked")
-	public static Build convertHudsonBuild(final hudson.model.AbstractBuild<?, ?> hudsonBuild) {
+	public static Build convertHudsonBuild(final AbstractBuild<?, ?> hudsonBuild) {
 		final Build build = new Build(hudsonBuild.getNumber(), hudsonBuild.getProject().getName());
 		build.setUrl(hudsonBuild.getUrl());
+		build.setJobUrl(hudsonBuild.getProject().getUrl());
 		build.setDuration(hudsonBuild.getDuration());
 		build.setTimestamp(hudsonBuild.getTimestamp().getTimeInMillis());
 		build.setResult(HudsonResultConverter.convertHudsonResult(hudsonBuild.getResult()));
@@ -69,17 +88,41 @@ public class HudsonBuildConverter {
 			testResult.setSkipped(testAction.getSkipCount());
 			testResult.setTotal(testAction.getTotalCount());
 			build.setTestResult(testResult);
-			build.setHealthReport(HudsonHealthReportConverter.convertHudsonHealthReport(testAction.getBuildHealth()));
 		}
 		final List<String> artifacts = new ArrayList<String>();
 		for (Artifact artifact : hudsonBuild.getArtifacts()) {
 			artifacts.add(artifact.getFileName());
 		}
+		artifacts.addAll(getArtifactsFromModuleBuilds(hudsonBuild));
 		build.setArtifacts(artifacts);
-		final List<String> triggers = new ArrayList<String>();
+		final List<Trigger> triggers = new ArrayList<Trigger>();
 		for (CauseAction causeAction : hudsonBuild.getActions(CauseAction.class)) {
 			for (Cause cause : causeAction.getCauses()) {
-				triggers.add(cause.getShortDescription());
+				if (cause instanceof UserCause) {
+					triggers.add(new UserTrigger(((UserCause) cause).getUserName()));
+				} else if (cause instanceof UpstreamCause) {
+					final UpstreamCause upCause = (UpstreamCause) cause;
+					triggers.add(new ProjectTrigger(upCause.getUpstreamProject(), upCause.getUpstreamUrl(), upCause
+							.getUpstreamBuild()));
+				} else if (cause instanceof RemoteCause) {
+					try {
+						final RemoteCause remoteCause = (RemoteCause) cause;
+						final Field hostField = remoteCause.getClass().getDeclaredField("addr");
+						hostField.setAccessible(true);
+						final Field noteField = remoteCause.getClass().getDeclaredField("note");
+						noteField.setAccessible(true);
+						triggers.add(new RemoteTrigger((String) hostField.get(remoteCause), (String) noteField
+							.get(remoteCause)));
+					} catch (Exception e) {
+						triggers.add(new RemoteTrigger());
+					}
+				} else if (cause instanceof LegacyCodeCause) {
+					triggers.add(new LegacyCodeTrigger());
+				} else if (cause instanceof TimerTriggerCause) {
+					triggers.add(new TimeTrigger());
+				} else if (cause instanceof SCMTriggerCause) {
+					triggers.add(new SCMTrigger());
+				}
 			}
 		}
 		build.setTriggers(triggers);
@@ -89,6 +132,31 @@ public class HudsonBuildConverter {
 		}
 		build.setRelatedIssueKeys(relatedIssueKeys);
 		return build;
+	}
+
+	/**
+	 * Get the artifacts from the given build including module builds with the same build number
+	 * 
+	 * @param build the Build to get all the artifacts from, including modules
+	 * @return {@link List} of artifact names
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<String> getArtifactsFromModuleBuilds(AbstractBuild<?, ?> build) {
+		final List<String> artifacts = new ArrayList<String>();
+		final AbstractProject<?, ?> project = (AbstractProject<?, ?>) build.getProject();
+		if (project instanceof ItemGroup) {
+			final ItemGroup<?> parent = (ItemGroup<?>) project;
+			for (Item item : parent.getItems()) {
+				final AbstractProject<?, ?> module = (AbstractProject<?, ?>) item;
+				final AbstractBuild<?, ?> moduleBuild = module.getBuildByNumber(build.getNumber());
+				if (moduleBuild != null) {
+					for (Artifact artifact : moduleBuild.getArtifacts()) {
+						artifacts.add(artifact.getFileName());
+					}
+				}
+			}
+		}
+		return artifacts;
 	}
 
 }

@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.marvelution.jira.plugins.hudson.model.triggers.Trigger;
 import com.marvelution.jira.plugins.hudson.xstream.converters.ResultConverter;
 import com.marvelution.jira.plugins.hudson.xstream.converters.StateConverter;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -48,8 +49,10 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 
 	private String jobName;
 
+	private String jobUrl;
+
 	@XStreamImplicit(itemFieldName = "trigger")
-	private List<String> triggers;
+	private List<Trigger> triggers;
 
 	@XStreamImplicit(itemFieldName = "relatedIssueKey")
 	private Set<String> relatedIssueKeys;
@@ -60,9 +63,6 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	@XStreamAlias("testResult")
 	private TestResult testResult;
 
-	@XStreamAlias("healthReport")
-	private HealthReport healthReport = HealthReport.NO_RECENT_BUILDS;
-	
 	private long duration = 0L;
 	
 	private long timestamp = 0L;
@@ -159,23 +159,41 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	}
 
 	/**
-	 * Gets the trigger messages of this build
+	 * Gets the Job URL
 	 * 
-	 * @return the trigger messages
+	 * @return the URL
 	 */
-	public List<String> getTriggers() {
+	public String getJobUrl() {
+		return jobUrl;
+	}
+
+	/**
+	 * Sets the Job URL
+	 * 
+	 * @param jobUrl the URL
+	 */
+	public void setJobUrl(String jobUrl) {
+		this.jobUrl = jobUrl;
+	}
+
+	/**
+	 * Gets the triggers of this build
+	 * 
+	 * @return {@link List} of {@link Trigger} objects
+	 */
+	public List<Trigger> getTriggers() {
 		if (triggers == null) {
-			triggers = new ArrayList<String>();
+			triggers = new ArrayList<Trigger>();
 		}
 		return triggers;
 	}
 
 	/**
-	 * Sets the trigger messages
+	 * Sets the triggers
 	 * 
-	 * @param triggers the trigger messages
+	 * @param triggers {@link List} of {@link Trigger} objects
 	 */
-	public void setTriggers(List<String> triggers) {
+	public void setTriggers(List<Trigger> triggers) {
 		this.triggers = triggers;
 	}
 
@@ -309,24 +327,6 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 */
 	public void setTestResult(TestResult testResult) {
 		this.testResult = testResult;
-	}
-
-	/**
-	 * Gets the {@link HealthReport} of the build
-	 * 
-	 * @return the {@link HealthReport}
-	 */
-	public HealthReport getHealthReport() {
-		return healthReport;
-	}
-
-	/**
-	 * Sets the {@link HealthReport} of the build
-	 * 
-	 * @param healthReport {@link HealthReport}
-	 */
-	public void setHealthReport(HealthReport healthReport) {
-		this.healthReport = healthReport;
 	}
 
 	/**

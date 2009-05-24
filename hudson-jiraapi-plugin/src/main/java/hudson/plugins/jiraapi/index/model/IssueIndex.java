@@ -104,7 +104,19 @@ public class IssueIndex {
 	 * @param buildNumbers the {@link Set} of {@link Integer} build numbers
 	 */
 	public void addIssue(String key, String jobName, Set<Integer> buildNumbers) {
-		final Project project = new Project(jobName);
+		addIssue(key, jobName, null, buildNumbers);
+	}
+
+	/**
+	 * Add an {@link Issue} to the index
+	 * 
+	 * @param key the Issue key
+	 * @param jobName the Job name
+	 * @param parentName the Job parent name
+	 * @param buildNumbers the {@link Set} of {@link Integer} build numbers
+	 */
+	public void addIssue(String key, String jobName, String parentName, Set<Integer> buildNumbers) {
+		final Project project = new Project(jobName, parentName);
 		project.setBuildNumbers(buildNumbers);
 		final Issue issue = new Issue(key);
 		issue.getProjects().add(project);
@@ -119,7 +131,19 @@ public class IssueIndex {
 	 * @param buildNumber the {@link Integer} build number
 	 */
 	public void addIssue(String key, String jobName, Integer buildNumber) {
-		final Project project = new Project(jobName);
+		addIssue(key, jobName, null, buildNumber);
+	}
+
+	/**
+	 * Add an {@link Issue} to the index
+	 * 
+	 * @param key the Issue key
+	 * @param jobName the Job name
+	 * @param parentName the Job parent name
+	 * @param buildNumber the {@link Integer} build number
+	 */
+	public void addIssue(String key, String jobName, String parentName, Integer buildNumber) {
+		final Project project = new Project(jobName, parentName);
 		final Set<Integer> buildNumbers = new HashSet<Integer>();
 		buildNumbers.add(buildNumber);
 		project.setBuildNumbers(buildNumbers);

@@ -25,6 +25,7 @@ import hudson.model.Hudson;
 import hudson.plugins.jiraapi.index.model.IssueIndex;
 import hudson.plugins.jiraapi.index.model.Issue;
 import hudson.plugins.jiraapi.index.model.Project;
+import hudson.plugins.jiraapi.utils.ProjectUtils;
 import hudson.scm.ChangeLogSet.Entry;
 
 import java.io.File;
@@ -161,7 +162,7 @@ public final class IssueIndexer {
 	public synchronized void fullIndex() throws IOException {
 		final IssueIndex newIndex = new IssueIndex();
 		LOGGER.log(Level.FINE, "Starting full scan");
-		for (AbstractProject<?, ?> project : Hudson.getInstance().getAllItems(AbstractProject.class)) {
+		for (AbstractProject<?, ?> project : ProjectUtils.getAllProjects()) {
 			final String jobName = project.getName();
 			LOGGER.log(Level.FINE, " - Processing job: " + jobName);
 			for (AbstractBuild<?, ?> build : project.getBuilds()) {

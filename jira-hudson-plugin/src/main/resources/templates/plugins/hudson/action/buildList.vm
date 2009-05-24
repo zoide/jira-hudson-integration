@@ -17,28 +17,42 @@
 
 #if ($foundBuilds)
 #foreach ($build in $builds)
+#if ($buildUtils.isSuccessfulBuild($build))
+#set($buildStyle = "successfulBuild")
+#elseif ($buildUtils.isFailedBuild($build))
+#set($buildStyle = "failedBuild")
+#elseif ($buildUtils.isUnstableBuild($build))
+#set($buildStyle = "unstableBuild")
+#else
+#set($buildStyle = "abortedOrNotBuild")
+#end
+#if ($velocityCount > 1)
+<hr class="listSeperator">
+<br>
+#else
+<br>
+#end
 <table class="hudsonBuildTable maxWidth">
 	<tr>
 		<td rowspan="6" width="30px" valign="top"><img src="$server.host/images/24x24/${build.result.icon}" alt="${build.result.name()}" tooltip="${build.result.name()}" /></td>
-		<td><a href="${server.host}/${build.url}">${build.jobName}</a> &raquo; <a href="${server.host}/${build.url}">${i18n.getText("hudson.panel.build.number", ${build.number})}</a></td>
+		<td width="40%" class="${buildStyle}"><a href="${server.host}/${build.jobUrl}">${build.jobName}</a> &raquo; <a href="${server.host}/${build.url}">${i18n.getText("hudson.panel.build.number", ${build.number})}</a></td>
 		<td>
-			<strong>${i18n.getText("hudson.panel.build.duration")}</strong>: ${dateTimeUtils.getTimeSpanString(${build.duration})} | 
-			<strong>${i18n.getText("hudson.panel.build.health")}</strong>: <img src="${server.host}/images/16x16/${build.healthReport.icon}" align="absmiddle" tooltip="${build.healthReport.score}%" alt="${build.healthReport.score}%" /> $!{build.healthReport.description}
+			<strong>${i18n.getText("hudson.panel.build.duration")}</strong>: ${dateTimeUtils.getTimeSpanString(${build.duration})} 
 		</td>
 		<td rowspan="6" valign="top" align="right">${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${build.timestamp})})}</td>
 	</tr>
 	<tr>
 		<td>
 			<strong>${i18n.getText("hudson.panel.related.issues")}</strong>: #if ($build.relatedIssueKeys.isEmpty()) ${i18n.getText("hudson.panel.no.related.issues")} #end
-			#foreach ($issueKey in $build.relatedIssueKeys) #if ($velocityCount > 0) | #end <a href="/browse/${issueKey}">${issueKey}</a>#end
+			#foreach ($issueKey in $build.relatedIssueKeys) #if ($velocityCount > 1) | #end <a href="/browse/${issueKey}">${issueKey}</a>#end
 		</td>
 		<td rowspan="4" valign="top">
 			<strong>${i18n.getText("hudson.panel.build.tests")}</strong>: 
 			#if (${build.testResult})
-			${i18n.getText("hudson.panel.build.tests.total")} ${build.testResult.total}
-			${i18n.getText("hudson.panel.build.tests.passed")} ${build.testResult.passed}
-			${i18n.getText("hudson.panel.build.tests.failed")} ${build.testResult.failed}
-			${i18n.getText("hudson.panel.build.tests.skipped")} ${build.testResult.skipped}
+			${i18n.getText("hudson.panel.build.tests.total")}: ${build.testResult.total}, 
+			${i18n.getText("hudson.panel.build.tests.passed")}: ${build.testResult.passed}, 
+			${i18n.getText("hudson.panel.build.tests.failed")}: ${build.testResult.failed}, 
+			${i18n.getText("hudson.panel.build.tests.skipped")}: ${build.testResult.skipped}
 			#else
 			${i18n.getText("hudson.panel.build.no.test.results")}
 			#end
@@ -47,7 +61,7 @@
 	<tr>
 		<td>
 			<strong>${i18n.getText("hudson.panel.build.artifacts")}</strong>: #if ($build.artifacts.isEmpty()) ${i18n.getText("hudson.panel.no.build.artifacts")} #end
-			#foreach ($artifact in $build.arifacts) #if ($velocityCount > 0) | #end <a href="/browse/${issueKey}">${artifact}</a>#end
+			#foreach ($artifact in $build.artifacts) #if ($velocityCount > 1) | #end ${artifact}#end
 		</td>
 	</tr>
 	<tr>
@@ -55,7 +69,7 @@
 			<strong>${i18n.getText("hudson.panel.build.triggers")}</strong>:
 			<ul class="square">
 				#foreach ($trigger in $build.triggers)
-				<li>${trigger}</li>
+				<li>${buildTriggerParser.parse(${trigger})}</li>
 				#end
 			</ul>
 		</td>
