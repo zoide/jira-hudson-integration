@@ -29,10 +29,12 @@ import com.atlassian.jira.portal.PortletConfiguration;
 import com.atlassian.jira.portal.PortletImpl;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
+import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.jira.web.bean.I18nBean;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.utils.DateTimeUtils;
+import com.marvelution.jira.plugins.hudson.utils.HudsonBuildTriggerParser;
 import com.marvelution.jira.plugins.hudson.utils.JobUtils;
 
 /**
@@ -47,6 +49,8 @@ public class AbstractHudsonPorlet extends PortletImpl {
 	protected HudsonServerManager hudsonServerManager;
 	
 	protected HudsonServerAccessor hudsonServerAccessor;
+
+	protected UserUtil userUtil;
 	
 	private I18nBean i18nBean = null;
 	
@@ -54,15 +58,17 @@ public class AbstractHudsonPorlet extends PortletImpl {
 	 * Constructor
 	 * 
 	 * @param authenticationContext the {@link JiraAuthenticationContext}
+	 * @param userUtil the {@link UserUtil} implementation
 	 * @param permissionManager the {@link PermissionManager}
 	 * @param applicationProperties the {@link ApplicationProperties}
 	 * @param hudsonServerAccessor the {@link HudsonServerAccessor}
 	 * @param hudsonServerManager the {@link HudsonServer}
 	 */
-	public AbstractHudsonPorlet(JiraAuthenticationContext authenticationContext, PermissionManager permissionManager,
-			ApplicationProperties applicationProperties, HudsonServerAccessor hudsonServerAccessor,
-			HudsonServerManager hudsonServerManager) {
+	public AbstractHudsonPorlet(JiraAuthenticationContext authenticationContext, UserUtil userUtil,
+								PermissionManager permissionManager, ApplicationProperties applicationProperties,
+								HudsonServerAccessor hudsonServerAccessor, HudsonServerManager hudsonServerManager) {
 		super(authenticationContext, permissionManager, applicationProperties);
+		this.userUtil = userUtil;
 		this.hudsonServerManager = hudsonServerManager;
 		this.hudsonServerAccessor = hudsonServerAccessor;
 	}
@@ -117,6 +123,7 @@ public class AbstractHudsonPorlet extends PortletImpl {
 		params.put("dateTimeUtils", new DateTimeUtils(authenticationContext));
 		params.put("jobUtils", new JobUtils());
 		params.put("sorter", new SortTool());
+		params.put("buildTriggerParser", new HudsonBuildTriggerParser(authenticationContext, userUtil));
 		return params;
 	}
 

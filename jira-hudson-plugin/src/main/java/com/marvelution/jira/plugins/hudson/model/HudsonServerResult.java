@@ -58,6 +58,24 @@ public class HudsonServerResult<T> {
 	}
 
 	/**
+	 * Gets the {@link HudsonServer}
+	 * 
+	 * @return the {@link HudsonServer}
+	 */
+	public HudsonServer getServer() {
+		return server;
+	}
+
+	/**
+	 * Sets the {@link HudsonServer}
+	 * 
+	 * @param server the {@link HudsonServer}
+	 */
+	public void setServer(HudsonServer server) {
+		this.server = server;
+	}
+
+	/**
 	 * Gets the results
 	 * 
 	 * @return the results

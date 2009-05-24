@@ -43,9 +43,21 @@ public final class HudsonBuildTriggerParser {
 
 	private final I18nBean i18n;
 
-	private final HudsonServer server;
-
 	private final UserUtil userUtil;
+
+	private HudsonServer server;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param authenticationContext the {@link JiraAuthenticationContext} implementation to get the {@link I18nBean}
+	 *            from for the current user
+	 * @param userUtil the {@link UserUtil} implementation
+	 */
+	public HudsonBuildTriggerParser(JiraAuthenticationContext authenticationContext, UserUtil userUtil) {
+		i18n = authenticationContext.getI18nBean("com.marvelution.jira.plugins.hudson.hudson-trigger");
+		this.userUtil = userUtil;
+	}
 
 	/**
 	 * Constructor
@@ -57,9 +69,17 @@ public final class HudsonBuildTriggerParser {
 	 */
 	public HudsonBuildTriggerParser(JiraAuthenticationContext authenticationContext, UserUtil userUtil,
 									HudsonServer server) {
-		i18n = authenticationContext.getI18nBean("com.marvelution.jira.plugins.hudson.hudson-trigger");
+		this(authenticationContext, userUtil);
 		this.server = server;
-		this.userUtil = userUtil;
+	}
+
+	/**
+	 * Sets the {@link HudsonServer} to use during parsing of the triggers
+	 * 
+	 * @param server the {@link HudsonServer}
+	 */
+	public void setServer(HudsonServer server) {
+		this.server = server;
 	}
 
 	/**

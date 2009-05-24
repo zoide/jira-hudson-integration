@@ -44,6 +44,7 @@ a:hover {
 
 #if ($isHudsonConfigured)
 	#foreach ($result in $sorter.sort($results, "serverName"))
+	#set ($buildTriggerParser.server = $result.server)
 	#set ($domId = "hudosn_status_${result.serverName}")
     <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
         <thead>
@@ -91,7 +92,7 @@ a:hover {
                     			#else
                     			<td align="left">
                     			#foreach ($trigger in $job.lastBuild.triggers)
-                    				#if ($velocityCount > 1) <br> #end ${trigger}
+                    				#if ($velocityCount > 1) <br> #end ${buildTriggerParser.parse(${trigger})}
                     			#end
 	                    		</td>
                     			#end

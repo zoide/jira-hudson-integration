@@ -29,6 +29,7 @@ import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.portal.PortletConfiguration;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
+import com.atlassian.jira.user.util.UserUtil;
 import com.marvelution.jira.plugins.hudson.model.HudsonStatusPortletResult;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
@@ -47,15 +48,16 @@ public class HudsonStatusPortlet extends AbstractHudsonPorlet {
 	 * Constructor
 	 * 
 	 * @param authenticationContext the {@link JiraAuthenticationContext}
+	 * @param userUtil the {@link UserUtil} implementation
 	 * @param permissionManager the {@link PermissionManager}
 	 * @param applicationProperties the {@link ApplicationProperties}
 	 * @param hudsonServerAccessor the {@link HudsonServerAccessor}
 	 * @param hudsonServerManager the {@link HudsonServerManager}
 	 */
-	public HudsonStatusPortlet(JiraAuthenticationContext authenticationContext, PermissionManager permissionManager,
-			ApplicationProperties applicationProperties, HudsonServerAccessor hudsonServerAccessor,
-			HudsonServerManager hudsonServerManager) {
-		super(authenticationContext, permissionManager, applicationProperties, hudsonServerAccessor,
+	public HudsonStatusPortlet(JiraAuthenticationContext authenticationContext, UserUtil userUtil,
+								PermissionManager permissionManager, ApplicationProperties applicationProperties,
+								HudsonServerAccessor hudsonServerAccessor, HudsonServerManager hudsonServerManager) {
+		super(authenticationContext, userUtil, permissionManager, applicationProperties, hudsonServerAccessor,
 			hudsonServerManager);
 	}
 
