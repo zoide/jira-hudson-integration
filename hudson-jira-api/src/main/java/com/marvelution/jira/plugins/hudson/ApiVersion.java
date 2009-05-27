@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
-import com.marvelution.jira.plugins.hudson.model.Version;
+import com.marvelution.jira.plugins.hudson.model.JiraApi;
 
 /**
  * Helper class to get the Api Version
@@ -33,22 +33,22 @@ import com.marvelution.jira.plugins.hudson.model.Version;
 public final class ApiVersion {
 
 	/**
-	 * Get the {@link Version} of the API
+	 * Get the {@link JiraApi} of the API
 	 * 
-	 * @return the {@link Version}
+	 * @return the {@link JiraApi}
 	 */
-	public static Version getVersion() {
+	public static JiraApi getVersion() {
 		try {
 			final String classContainer =
 				ApiVersion.class.getProtectionDomain().getCodeSource().getLocation().toString();
 			final URL manifestUrl = new URL("jar:" + classContainer + "!/META-INF/MANIFEST.MF");
 			final Manifest manifest = new Manifest(manifestUrl.openStream());
 			final Attributes attributes = manifest.getMainAttributes();
-			final Version version = new Version();
+			final JiraApi version = new JiraApi();
 			version.setVersion(attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION));
 			return version;
 		} catch (Exception e) {
-			return new Version();
+			return new JiraApi();
 		}
 	}
 

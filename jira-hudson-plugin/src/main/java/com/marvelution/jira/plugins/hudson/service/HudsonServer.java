@@ -28,13 +28,11 @@ import java.util.Collection;
  */
 public interface HudsonServer {
 
-	String IMAGE_LOCATION = "/images";
-	
-	String SMALL_IMAGE_LOCATION = IMAGE_LOCATION + "/16x16";
-	
-	String MEDIUM_IMAGE_LOCATION = IMAGE_LOCATION + "/24x24";
-	
-	String LARGE_IMAGE_LOCATION = IMAGE_LOCATION + "/32x32";
+	int SMALL_IMAGE_SIZE = 16;
+
+	int MEDIUM_IMAGE_SIZE = 24;
+
+	int LARGE_IMAGE_SIZE = 32;
 
 	/**
 	 * Gets the Id of the Hudson Server
@@ -156,5 +154,26 @@ public interface HudsonServer {
 	 * @return <code>true</code> if secured, <code>false</code> otherwise
 	 */
 	boolean isSecuredHudsonServer();
+
+	/**
+	 * Gets the image url for small images
+	 * 
+	 * @return the url
+	 */
+	String getSmallImageUrl();
+
+	/**
+	 * Gets the image url for small images
+	 * 
+	 * @return the url
+	 */
+	String getMediumImageUrl();
+
+	/**
+	 * Gets the image url for small images
+	 * 
+	 * @return the url
+	 */
+	String getLargeImageUrl();
 
 }

@@ -46,7 +46,7 @@ public class BuildUtils {
 	 * @return <code>true</code> if successful, <code>false</code> otherwise
 	 */
 	public boolean isSuccessfulBuild(Build build) {
-		return Result.SUCCESS == build.getResult();
+		return isValidBuild(build) && Result.SUCCESS == build.getResult();
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class BuildUtils {
 	 * @return <code>true</code> if failed, <code>false</code> otherwise
 	 */
 	public boolean isFailedBuild(Build build) {
-		return Result.FAILURE == build.getResult();
+		return isValidBuild(build) && Result.FAILURE == build.getResult();
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class BuildUtils {
 	 * @return <code>true</code> if unstable, <code>false</code> otherwise
 	 */
 	public boolean isUnstableBuild(Build build) {
-		return Result.UNSTABLE == build.getResult();
+		return isValidBuild(build) && Result.UNSTABLE == build.getResult();
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class BuildUtils {
 	 * @return <code>true</code> if aborted, <code>false</code> otherwise
 	 */
 	public boolean isAbortedBuild(Build build) {
-		return Result.ABORTED == build.getResult();
+		return isValidBuild(build) && Result.ABORTED == build.getResult();
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class BuildUtils {
 	 * @return <code>true</code> if not build, <code>false</code> otherwise
 	 */
 	public boolean isNotBuild(Build build) {
-		return Result.NOT_BUILT == build.getResult();
+		return isValidBuild(build) && Result.NOT_BUILT == build.getResult();
 	}
 
 }

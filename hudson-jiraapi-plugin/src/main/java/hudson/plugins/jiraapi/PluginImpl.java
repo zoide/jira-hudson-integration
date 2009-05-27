@@ -33,7 +33,7 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
 import com.marvelution.jira.plugins.hudson.ApiVersion;
-import com.marvelution.jira.plugins.hudson.model.Jobs;
+import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
 import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshallerException;
 
@@ -131,7 +131,7 @@ public class PluginImpl extends Plugin {
 			ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
 		LOGGER.log(Level.FINE, "Getting list of all projects");
-		final Jobs jobs = jiraApi.listAllProjects();
+		final JobsList jobs = jiraApi.listAllProjects();
 		try {
 			writeXmlToResponse(request, response, XStreamMarshaller.marshal(jobs));
 		} catch (XStreamMarshallerException e) {
@@ -151,7 +151,7 @@ public class PluginImpl extends Plugin {
 			ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
 		LOGGER.log(Level.FINE, "Getting all builds of all projects");
-		final Jobs jobs = jiraApi.getAllProjects();
+		final JobsList jobs = jiraApi.getAllProjects();
 		try {
 			writeXmlToResponse(request, response, XStreamMarshaller.marshal(jobs));
 		} catch (XStreamMarshallerException e) {
@@ -160,7 +160,29 @@ public class PluginImpl extends Plugin {
 	}
 
 	/**
-	 * Handler for getBuilds requests
+	 * Handler for getProject requests
+	 * 
+	 * @param request the {@link StaplerRequest}
+	 * @param response the {@link StaplerResponse}
+	 * @param projectKey the Jira project key of the project to get
+	 * @throws IOException in case of IO Exceptions
+	 * @throws ServletException in case of Servlet Exceptions
+	 */
+	public void doGetProject(final StaplerRequest request, final StaplerResponse response,
+					@QueryParameter(value = "projectKey", required = true) String projectKey) throws IOException,
+					ServletException {
+		Hudson.getInstance().checkPermission(Hudson.READ);
+		LOGGER.log(Level.FINE, "Getting project: " + projectKey);
+		try {
+			final String xml = XStreamMarshaller.marshal(jiraApi.getProjectByJiraKey(projectKey));
+			writeXmlToResponse(request, response, xml);
+		} catch (XStreamMarshallerException e) {
+			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Handler for getProjectBuilds requests
 	 * 
 	 * @param request the {@link StaplerRequest}
 	 * @param response the {@link StaplerResponse}
@@ -173,9 +195,8 @@ public class PluginImpl extends Plugin {
 					ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
 		LOGGER.log(Level.FINE, "Getting all builds related to project: " + projectKey);
-		String xml;
 		try {
-			xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraProject(projectKey));
+			final String xml = XStreamMarshaller.marshal(jiraApi.getBuildsByJiraProject(projectKey));
 			writeXmlToResponse(request, response, xml);
 		} catch (XStreamMarshallerException e) {
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
@@ -183,7 +204,7 @@ public class PluginImpl extends Plugin {
 	}
 
 	/**
-	 * Handler for getBuilds requests
+	 * Handler for getVersionBuilds requests
 	 * 
 	 * @param request the {@link StaplerRequest}
 	 * @param response the {@link StaplerResponse}
@@ -211,7 +232,7 @@ public class PluginImpl extends Plugin {
 	}
 
 	/**
-	 * Handler for getBuilds requests
+	 * Handler for getIssueBuilds requests
 	 * 
 	 * @param request the {@link StaplerRequest}
 	 * @param response the {@link StaplerResponse}

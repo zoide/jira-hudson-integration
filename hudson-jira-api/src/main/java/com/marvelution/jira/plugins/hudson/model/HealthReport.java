@@ -27,9 +27,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @XStreamAlias("healthReport")
-public class HealthReport {
-
-	public static final HealthReport EMPTY = new HealthReport("", "empty.gif", 100);
+public class HealthReport implements Comparable<HealthReport> {
 
 	public static final HealthReport NO_RECENT_BUILDS =
 		new HealthReport("No recent build failures", "health-80plus.gif", 100);
@@ -108,6 +106,13 @@ public class HealthReport {
 			throw new IllegalArgumentException("score must be between 0 and 100 percent");
 		}
 		this.score = score;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int compareTo(HealthReport o) {
+		return new Integer(getScore()).compareTo(new Integer(o.getScore()));
 	}
 
 }

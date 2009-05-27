@@ -80,8 +80,7 @@ public class ProjectUtils {
 	 * @param key the Jira project key
 	 * @return the {@link AbstractProject}, may be <code>null</code> if no {@link AbstractProject} can be found
 	 */
-	public static Set<AbstractProject<?, ?>> getProjectByJiraProjectKey(final String key) {
-		final Set<AbstractProject<?, ?>> jiraProjects = new HashSet<AbstractProject<?, ?>>();
+	public static AbstractProject<?, ?> getProjectByJiraProjectKey(final String key) {
 		final Set<AbstractProject<?, ?>> projects = getAllProjectsIncludingModules();
 		for (AbstractProject<?, ?> project : projects) {
 			if (project.getProperty(JiraProjectKeyJobProperty.class) != null) {
@@ -89,14 +88,14 @@ public class ProjectUtils {
 					(JiraProjectKeyJobProperty) project.getProperty(JiraProjectKeyJobProperty.class);
 				if (key.equals(jiraProperty.getKey())) {
 					if (isSupportedProjectType(project)) {
-						jiraProjects.add(project);
+						return project;
 					} else {
-						jiraProjects.add((AbstractProject<?, ?>) project.getParent());
+						return (AbstractProject<?, ?>) project.getParent();
 					}
 				}
 			}
 		}
-		return jiraProjects;
+		return null;
 	}
 
 	/**

@@ -31,8 +31,10 @@ import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.plugin.webresource.WebResourceManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
+import com.marvelution.jira.plugins.hudson.utils.BuildUtils;
 import com.marvelution.jira.plugins.hudson.utils.DateTimeUtils;
 import com.marvelution.jira.plugins.hudson.utils.HudsonBuildTriggerParser;
 import com.marvelution.jira.plugins.hudson.utils.JobUtils;
@@ -44,7 +46,11 @@ import com.marvelution.jira.plugins.hudson.utils.JobUtils;
  */
 public class AbstractHudsonPorlet extends PortletImpl {
 
+	private static final String HUDSON_BUILD_PLUGIN = "com.marvelution.jira.plugins.hudson";
+
 	protected static final Logger LOGGER = Logger.getLogger(HudsonStatusPortlet.class);
+
+	private final WebResourceManager webResourceManager;
 
 	protected HudsonServerManager hudsonServerManager;
 	
@@ -57,17 +63,20 @@ public class AbstractHudsonPorlet extends PortletImpl {
 	/**
 	 * Constructor
 	 * 
-	 * @param authenticationContext the {@link JiraAuthenticationContext}
+	 * @param authenticationContext the {@link JiraAuthenticationContext} implementation
 	 * @param userUtil the {@link UserUtil} implementation
-	 * @param permissionManager the {@link PermissionManager}
-	 * @param applicationProperties the {@link ApplicationProperties}
-	 * @param hudsonServerAccessor the {@link HudsonServerAccessor}
-	 * @param hudsonServerManager the {@link HudsonServer}
+	 * @param webResourceManager the {@link WebResourceManager} implementation
+	 * @param permissionManager the {@link PermissionManager} implementation
+	 * @param applicationProperties the {@link ApplicationProperties} implementation
+	 * @param hudsonServerAccessor the {@link HudsonServerAccessor} implementation
+	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 */
 	public AbstractHudsonPorlet(JiraAuthenticationContext authenticationContext, UserUtil userUtil,
-								PermissionManager permissionManager, ApplicationProperties applicationProperties,
+								WebResourceManager webResourceManager, PermissionManager permissionManager,
+								ApplicationProperties applicationProperties,
 								HudsonServerAccessor hudsonServerAccessor, HudsonServerManager hudsonServerManager) {
 		super(authenticationContext, permissionManager, applicationProperties);
+		this.webResourceManager = webResourceManager;
 		this.userUtil = userUtil;
 		this.hudsonServerManager = hudsonServerManager;
 		this.hudsonServerAccessor = hudsonServerAccessor;
@@ -118,12 +127,21 @@ public class AbstractHudsonPorlet extends PortletImpl {
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	protected Map<String, Object> getVelocityParams(PortletConfiguration portletConfiguration) {
+		webResourceManager.requireResource(HUDSON_BUILD_PLUGIN + ":portlet-css");
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
 		params.put("dateTimeUtils", new DateTimeUtils(authenticationContext));
+		params.put("buildUtils", new BuildUtils());
 		params.put("jobUtils", new JobUtils());
 		params.put("sorter", new SortTool());
 		params.put("buildTriggerParser", new HudsonBuildTriggerParser(authenticationContext, userUtil));
+		if (!hudsonServerManager.isHudsonConfigured()) {
+			params.put("isHudsonConfigured", Boolean.FALSE);
+			params.put("errorMessage", getErrorText("hudson.error.not.configured"));
+		} else {
+			params.put("isHudsonConfigured", Boolean.TRUE);
+		}
 		return params;
 	}
 

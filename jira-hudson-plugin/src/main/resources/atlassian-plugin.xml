@@ -26,8 +26,11 @@
 
 	<!-- R E S O U R C E S -->
 	<resource type="download" name="images/" location="templates/plugins/hudson/images/" />
-	<web-resource key="css" name="Plugin Tab Panel CSS">
+	<web-resource key="tabpanel-css" name="Plugin Tab Panel CSS">
 		<resource type="download" name="hudsonTabPanels.css" location="templates/plugins/hudson/panels/hudsonTabPanel.css" />
+	</web-resource>
+	<web-resource key="portlet-css" name="Plugin Portlet CSS">
+		<resource type="download" name="hudsonPortlets.css" location="templates/plugins/hudson/portlets/hudsonPortlet.css" />
 	</web-resource>
 
 	<!-- P O R T L E T S -->
@@ -37,7 +40,35 @@
 		<description key="hudson.portlet.status.description" />
 		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonStatusPortlet.vm" />
 		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+		<permission>viewversioncontrol</permission>
+		<thumbnail>templates/plugins/hudson/portlets/thumbnails/hudsonstatus.png</thumbnail>
 		<properties />
+	</portlet>
+
+	<portlet key="hudsonProjectStatus" name="Hudson Project Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet">
+		<objectdescriptor key="hudson.jira.portlet.project.status.name" />
+		<label key="hudson.jira.portlet.project.status.name" />
+		<description key="hudson.portlet.project.status.description" />
+		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonProjectStatusPortlet.vm" />
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+		<permission>viewversioncontrol</permission>
+		<thumbnail>templates/plugins/hudson/portlets/thumbnails/hudsonprojectstatus.png</thumbnail>
+		<properties>
+			<property>
+				<key>projectId</key>
+				<name>hudson.portlet.configuration.project.status.project.name</name>
+				<description>hudson.portlet.configuration.project.status.project.description</description>
+				<type>select</type>
+				<values class="com.atlassian.jira.portal.ProjectValuesGenerator" />
+			</property>
+			<property>
+				<key>showBuilds</key>
+				<name>hudson.portlet.configuration.project.status.show.builds.name</name>
+				<description>hudson.portlet.configuration.project.status.show.builds.description</description>
+				<type>select</type>
+				<values class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusShowBuildsValuesGenerator" />
+			</property>
+		</properties>
 	</portlet>
 
 	<!-- T A B   P A N E L S -->

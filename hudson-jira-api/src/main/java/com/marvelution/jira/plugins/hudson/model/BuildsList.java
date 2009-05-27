@@ -31,7 +31,7 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @XStreamAlias("builds")
-public class Builds {
+public class BuildsList {
 
 	@XStreamImplicit(itemFieldName = "build")
 	private List<Build> builds;

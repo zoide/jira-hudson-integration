@@ -39,10 +39,11 @@ import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
 import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.Builds;
+import com.marvelution.jira.plugins.hudson.model.BuildsList;
 import com.marvelution.jira.plugins.hudson.model.HudsonServerAware;
+import com.marvelution.jira.plugins.hudson.model.JiraApi;
 import com.marvelution.jira.plugins.hudson.model.Job;
-import com.marvelution.jira.plugins.hudson.model.Jobs;
+import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
@@ -86,12 +87,12 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public com.marvelution.jira.plugins.hudson.model.Version getApiVersion(HudsonServer hudsonServer)
+	public JiraApi getApiVersion(HudsonServer hudsonServer)
 					throws HudsonServerAccessorException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_API_VERSION_ACTION, null);
 		try {
-			final com.marvelution.jira.plugins.hudson.model.Version version =
-				XStreamMarshaller.unmarshal(response, com.marvelution.jira.plugins.hudson.model.Version.class);
+			final com.marvelution.jira.plugins.hudson.model.JiraApi version =
+				XStreamMarshaller.unmarshal(response, com.marvelution.jira.plugins.hudson.model.JiraApi.class);
 			return version;
 		} catch (XStreamMarshallerException e) {
 			throw new HudsonServerAccessorException(
@@ -105,7 +106,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	public List<Job> getProjectsList(HudsonServer hudsonServer) throws HudsonServerAccessorException {
 		final String response = getHudsonServerActionResponse(hudsonServer, LIST_ALL_PROJECTS_ACTION, null);
 		try {
-			final Jobs jobs = XStreamMarshaller.unmarshal(response, Jobs.class);
+			final JobsList jobs = XStreamMarshaller.unmarshal(response, JobsList.class);
 			return jobs.getJobs();
 		} catch (XStreamMarshallerException e) {
 			throw new HudsonServerAccessorException(
@@ -119,7 +120,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	public List<Job> getProjects(HudsonServer hudsonServer) throws HudsonServerAccessorException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_ALL_PROJECTS_ACTION, null);
 		try {
-			final Jobs jobs = XStreamMarshaller.unmarshal(response, Jobs.class);
+			final JobsList jobs = XStreamMarshaller.unmarshal(response, JobsList.class);
 			return jobs.getJobs();
 		} catch (XStreamMarshallerException e) {
 			throw new HudsonServerAccessorException(
@@ -130,17 +131,30 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Build> getBuilds(Project project) throws HudsonServerAccessorException {
-		final List<Build> builds = new ArrayList<Build>();
-		final HudsonServer defaultServer = serverManager.getServerByJiraProject(project);
-		if (defaultServer != null) {
-			builds.addAll(getBuilds(defaultServer, project));
-		} else {
-			for (HudsonServer server : serverManager.getServers()) {
-				builds.addAll(getBuilds(server, project));
-			}
+	public Job getProject(Project project) throws HudsonServerAccessorException {
+		return getProject(serverManager.getServerByJiraProject(project), project);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Job getProject(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException {
+		final Map<String, String> params = new HashMap<String, String>();
+		params.put("projectKey", project.getKey());
+		final String response = getHudsonServerActionResponse(hudsonServer, GET_PROJECT_ACTION, params);
+		try {
+			return XStreamMarshaller.unmarshal(response, Job.class);
+		} catch (XStreamMarshallerException e) {
+			throw new HudsonServerAccessorException(
+				"Failed to unmarshal the Hudson server response to a Jobs object. Reason: " + e.getMessage(), e);
 		}
-		return builds;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Build> getBuilds(Project project) throws HudsonServerAccessorException {
+		return getBuilds(serverManager.getServerByJiraProject(project), project);
 	}
 
 	/**
@@ -152,7 +166,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 		params.put("projectKey", project.getKey());
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_PROJECT_BUILDS_ACTION, params);
 		try {
-			final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
+			final BuildsList builds = XStreamMarshaller.unmarshal(response, BuildsList.class);
 			associateHudsonServer(builds.getBuilds(), hudsonServer);
 			return builds.getBuilds();
 		} catch (XStreamMarshallerException e) {
@@ -165,16 +179,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 * {@inheritDoc}
 	 */
 	public List<Build> getBuilds(Version version) throws HudsonServerAccessorException {
-		final List<Build> builds = new ArrayList<Build>();
-		final HudsonServer defaultServer = serverManager.getServerByJiraProject(version.getProjectObject());
-		if (defaultServer != null) {
-			builds.addAll(getBuilds(defaultServer, version));
-		} else {
-			for (HudsonServer server : serverManager.getServers()) {
-				builds.addAll(getBuilds(server, version));
-			}
-		}
-		return builds;
+		return getBuilds(serverManager.getServerByJiraProject(version.getProjectObject()), version);
 	}
 
 	/**
@@ -201,7 +206,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 		}
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_VERSION_BUILDS_ACTION, params);
 		try {
-			final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
+			final BuildsList builds = XStreamMarshaller.unmarshal(response, BuildsList.class);
 			associateHudsonServer(builds.getBuilds(), hudsonServer);
 			return builds.getBuilds();
 		} catch (XStreamMarshallerException e) {
@@ -234,7 +239,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 		params.put("issueKeys", issueKeysString);
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_ISSUE_BUILDS_ACTION, params);
 		try {
-			final Builds builds = XStreamMarshaller.unmarshal(response, Builds.class);
+			final BuildsList builds = XStreamMarshaller.unmarshal(response, BuildsList.class);
 			associateHudsonServer(builds.getBuilds(), hudsonServer);
 			return builds.getBuilds();
 		} catch (XStreamMarshallerException e) {

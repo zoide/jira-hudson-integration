@@ -19,12 +19,11 @@
 
 package hudson.plugins.jiraapi.api;
 
-import java.util.Set;
 import java.util.SortedMap;
 
-import com.marvelution.jira.plugins.hudson.model.Builds;
+import com.marvelution.jira.plugins.hudson.model.BuildsList;
 import com.marvelution.jira.plugins.hudson.model.Job;
-import com.marvelution.jira.plugins.hudson.model.Jobs;
+import com.marvelution.jira.plugins.hudson.model.JobsList;
 
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
@@ -47,11 +46,11 @@ public class JiraApi {
 	/**
 	 * Gets the list of all known Hudson projects
 	 * 
-	 * @return {@link Jobs}
+	 * @return {@link JobsList}
 	 */
 	@SuppressWarnings("unchecked")
-	public Jobs listAllProjects() {
-		final Jobs jobs = new Jobs();
+	public JobsList listAllProjects() {
+		final JobsList jobs = new JobsList();
 		for (AbstractProject<?, ?> project : ProjectUtils.getAllProjects()) {
 			final Job job = new Job(project.getName(), project.getDescription());
 			job.setUrl(project.getUrl());
@@ -59,7 +58,7 @@ public class JiraApi {
 				job.setJiraKey(project.getProperty(JiraProjectKeyJobProperty.class).getKey());
 			}
 			if (project instanceof ItemGroup) {
-				final Jobs modules = new Jobs();
+				final JobsList modules = new JobsList();
 				final ItemGroup<AbstractProject<?, ?>> itemGroup = (ItemGroup<AbstractProject<?, ?>>) project;
 				for (final AbstractProject<?, ?> item : itemGroup.getItems()) {
 					final Job module = new Job(item.getName(), item.getDescription());
@@ -79,10 +78,10 @@ public class JiraApi {
 	/**
 	 * Gets all Projects from Hudson
 	 * 
-	 * @return {@link Jobs}
+	 * @return {@link JobsList}
 	 */
-	public Jobs getAllProjects() {
-		final Jobs jobs = new Jobs();
+	public JobsList getAllProjects() {
+		final JobsList jobs = new JobsList();
 		for (AbstractProject<?, ?> project : ProjectUtils.getAllProjects()) {
 			jobs.getJobs().add(HudsonProjectConverter.convertHudsonProject(project));
 		}
@@ -90,18 +89,31 @@ public class JiraApi {
 	}
 
 	/**
+	 * Gets the Hudson project by Jira key
+	 * 
+	 * @param projectKey the Jira key of the project to get
+	 * @return the {@link Job}, may be <code>null</code> if no Hudson project is found with the Jira Key configured
+	 */
+	public Job getProjectByJiraKey(String projectKey) {
+		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
+		if (project != null) {
+			return HudsonProjectConverter.convertHudsonProject(project);
+		} else {
+			return null;
+		}
+	}
+
+	/**
 	 * Gets all Builds of a Jira Project by Jira project key
 	 * 
 	 * @param projectKey the Jira project key
-	 * @return {@link Builds}
+	 * @return {@link BuildsList}
 	 */
-	public Builds getBuildsByJiraProject(final String projectKey) {
-		final Builds builds = new Builds();
-		final Set<AbstractProject<?, ?>> projects = ProjectUtils.getProjectByJiraProjectKey(projectKey);
-		for (AbstractProject<?, ?> project : projects) {
-			for (AbstractBuild<?, ?> build : project.getBuilds()) {
-				builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
-			}
+	public BuildsList getBuildsByJiraProject(final String projectKey) {
+		final BuildsList builds = new BuildsList();
+		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
+		for (AbstractBuild<?, ?> build : project.getBuilds()) {
+			builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
 		}
 		return builds;
 	}
@@ -112,22 +124,20 @@ public class JiraApi {
 	 * @param projectKey the Jira project key
 	 * @param startDate the start date in milliseconds of the version, <code>null</code> to start from the first Build
 	 * @param releaseDate the release date in milliseconds of the version, <code>null</code> to end at the last Build
-	 * @return {@link Builds}
+	 * @return {@link BuildsList}
 	 */
-	public Builds getBuildsByJiraVersion(final String projectKey, final long startDate, final long releaseDate) {
-		final Builds builds = new Builds();
-		final Set<AbstractProject<?, ?>> projects = ProjectUtils.getProjectByJiraProjectKey(projectKey);
-		for (AbstractProject<?, ?> project : projects) {
-			for (AbstractBuild<?, ?> build : project.getBuilds()) {
-				if (releaseDate > 0L) {
-					if (build.getTimestamp().getTimeInMillis() >= startDate
-						&& build.getTimestamp().getTimeInMillis() <= releaseDate) {
-						builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
-					}
-				} else {
-					if (build.getTimestamp().getTimeInMillis() >= startDate) {
-						builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
-					}
+	public BuildsList getBuildsByJiraVersion(final String projectKey, final long startDate, final long releaseDate) {
+		final BuildsList builds = new BuildsList();
+		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
+		for (AbstractBuild<?, ?> build : project.getBuilds()) {
+			if (releaseDate > 0L) {
+				if (build.getTimestamp().getTimeInMillis() >= startDate
+					&& build.getTimestamp().getTimeInMillis() <= releaseDate) {
+					builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+				}
+			} else {
+				if (build.getTimestamp().getTimeInMillis() >= startDate) {
+					builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
 				}
 			}
 		}
@@ -138,10 +148,10 @@ public class JiraApi {
 	 * Gets all the Builds related to the given Jira Issue Keys
 	 * 
 	 * @param issueKeys {@link String} array of Jira issue keys
-	 * @return {@link Builds}
+	 * @return {@link BuildsList}
 	 */
-	public Builds getBuildsByJiraIssueKeys(final String[] issueKeys) {
-		final Builds builds = new Builds();
+	public BuildsList getBuildsByJiraIssueKeys(final String[] issueKeys) {
+		final BuildsList builds = new BuildsList();
 		for (String issueKey : issueKeys) {
 			final Issue indexedIssue = IssueIndexer.getInstance().getIssueIndex(issueKey);
 			if (indexedIssue != null && !indexedIssue.getProjects().isEmpty()) {

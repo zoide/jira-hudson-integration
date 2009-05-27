@@ -115,7 +115,7 @@ public class DateTimeUtils {
 	 * @return the formatted time {@link String}
 	 */
 	public String getPastTimeString(long duration) {
-		return i18nBean.getText("hudson.past.time", getTimeSpanString(duration));
+		return i18nBean.getText("hudson.past.time", getTimeSpanString(getTimePastSince(duration)));
 	}
 
 	/**

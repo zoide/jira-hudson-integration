@@ -19,6 +19,10 @@
 
 package hudson.plugins.jiraapi;
 
+import net.sf.json.JSONObject;
+
+import org.kohsuke.stapler.StaplerRequest;
+
 import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
@@ -28,7 +32,6 @@ import hudson.tasks.Publisher;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-//@Extension
 public final class JiraIssueIndexerRecorderDescriptor extends BuildStepDescriptor<Publisher> {
 
 	public static final BuildStepDescriptor<Publisher> DESCRIPTOR = new JiraIssueIndexerRecorderDescriptor();
@@ -38,6 +41,7 @@ public final class JiraIssueIndexerRecorderDescriptor extends BuildStepDescripto
 	 */
 	public JiraIssueIndexerRecorderDescriptor() {
 		super(JiraIssueIndexerRecorder.class);
+		load();
 	}
 
 	/**
@@ -63,6 +67,15 @@ public final class JiraIssueIndexerRecorderDescriptor extends BuildStepDescripto
 	@Override
 	public boolean isApplicable(Class<? extends AbstractProject> jobType) {
 		return AbstractProject.class.isAssignableFrom(jobType);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Publisher newInstance(StaplerRequest req, JSONObject formData)
+					throws hudson.model.Descriptor.FormException {
+		return req.bindJSON(JiraIssueIndexerRecorder.class, formData);
 	}
 
 }

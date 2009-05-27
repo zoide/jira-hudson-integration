@@ -19,63 +19,42 @@
 
 package com.marvelution.jira.plugins.hudson.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
- * Model for exposing the version of the API through the API
+ * Model class for a list of {@link Job}
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-@XStreamAlias("hudson-jira-api")
-public class Version {
+@XStreamAlias("jobs")
+public class JobsList {
 
-	private String version;
+	@XStreamImplicit(itemFieldName = "job")
+	private List<Job> jobs;
 
 	/**
-	 * Gets the version
+	 * Gets the {@link List} of {@link Job} object
 	 * 
-	 * @return the version
+	 * @return the {@link List} of {@link Job} object
 	 */
-	public String getVersion() {
-		return version;
-	}
-
-	/**
-	 * Sets the version
-	 * 
-	 * @param version the version
-	 */
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		} else if (other instanceof Version) {
-			return getVersion().equals(((Version) other).getVersion());
+	public List<Job> getJobs() {
+		if (jobs == null) {
+			jobs = new ArrayList<Job>();
 		}
-		return false;
+		return jobs;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Sets the {@link List} of {@link Job} object
+	 * 
+	 * @param jobs the {@link List} of {@link Job} object
 	 */
-	@Override
-	public int hashCode() {
-		return version.hashCode();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return version;
+	public void setJobs(List<Job> jobs) {
+		this.jobs = jobs;
 	}
 
 }

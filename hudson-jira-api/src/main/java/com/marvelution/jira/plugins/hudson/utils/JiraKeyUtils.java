@@ -31,9 +31,9 @@ import java.util.regex.Pattern;
  */
 public final class JiraKeyUtils {
 	
-	private static final Pattern JIRA_PROJECT_KEY_PATTERN = Pattern.compile("\\b[A-Z]([A-Z0-9]+)\\b");
+	private static final Pattern JIRA_PROJECT_KEY_PATTERN = Pattern.compile("\\b[A-Z]([A-Z]+)\\b");
 	
-	private static final Pattern JIRA_ISSUE_KEY_PATTERN = Pattern.compile("\\b[A-Z]([A-Z0-9]+)-([0-9]+)\\b");
+	private static final Pattern JIRA_ISSUE_KEY_PATTERN = Pattern.compile("\\b[A-Z]([A-Z]+)-([0-9]+)\\b");
 
 	/**
 	 * Validates if the given key {@link String} is a valid JIRA Project Key
@@ -42,7 +42,8 @@ public final class JiraKeyUtils {
 	 * @return <code>true</code> if valid, <code>false</code> otherwise
 	 */
 	public static boolean isValidProjectKey(String key) {
-		return JIRA_PROJECT_KEY_PATTERN.matcher(key).find();
+		final Matcher matcher = JIRA_PROJECT_KEY_PATTERN.matcher(key);
+		return matcher.find() && matcher.start() == 0 && matcher.end() == key.length();
 	}
 
 	/**
@@ -67,7 +68,8 @@ public final class JiraKeyUtils {
 	 * @return <code>true</code> if valid, <code>false</code> otherwise
 	 */
 	public static boolean isValidIssueKey(String key) {
-		return JIRA_ISSUE_KEY_PATTERN.matcher(key).find();
+		final Matcher matcher = JIRA_ISSUE_KEY_PATTERN.matcher(key);
+		return matcher.find() && matcher.start() == 0 && matcher.end() == key.length();
 	}
 
 	/**

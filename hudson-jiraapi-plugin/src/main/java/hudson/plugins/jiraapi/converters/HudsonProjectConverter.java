@@ -28,10 +28,10 @@ import hudson.model.ItemGroup;
 import hudson.plugins.jiraapi.JiraProjectKeyJobProperty;
 
 import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.Builds;
+import com.marvelution.jira.plugins.hudson.model.BuildsList;
 import com.marvelution.jira.plugins.hudson.model.HealthReport;
 import com.marvelution.jira.plugins.hudson.model.Job;
-import com.marvelution.jira.plugins.hudson.model.Jobs;
+import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.model.Result;
 
 /**
@@ -56,7 +56,7 @@ public class HudsonProjectConverter {
 			job.setJiraKey(project.getProperty(JiraProjectKeyJobProperty.class).getKey());
 		}
 		job.setBuildable(project.isBuildable());
-		final Builds builds = new Builds();
+		final BuildsList builds = new BuildsList();
 		for (AbstractBuild<?, ?> hudsonBuild : project.getBuilds()) {
 			final Build build = HudsonBuildConverter.convertHudsonBuild(hudsonBuild);
 			builds.getBuilds().add(build);
@@ -103,11 +103,11 @@ public class HudsonProjectConverter {
 				healthReports.add(HudsonHealthReportConverter.convertHudsonHealthReport(hudsonHealthReport));
 			}
 		} else {
-			healthReports.add(HealthReport.EMPTY);
+			healthReports.add(HealthReport.NO_RECENT_BUILDS);
 		}
 		job.setHealthReports(healthReports);
 		if (project instanceof ItemGroup) {
-			final Jobs modules = new Jobs();
+			final JobsList modules = new JobsList();
 			final ItemGroup<PROJECT> itemGroup = (ItemGroup<PROJECT>) project;
 			for (final PROJECT module : itemGroup.getItems()) {
 				modules.getJobs().add(convertHudsonProject(module));

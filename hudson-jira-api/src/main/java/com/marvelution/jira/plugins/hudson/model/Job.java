@@ -19,6 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson.model;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.marvelution.jira.plugins.hudson.xstream.converters.ResultConverter;
@@ -48,7 +49,7 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 
 	private boolean buildable;
 
-	private Builds builds;
+	private BuildsList builds;
 
 	private Build firstBuild;
 
@@ -74,7 +75,7 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	private Result result;
 
 	@XStreamAlias("modules")
-	private Jobs modules;
+	private JobsList modules;
 
 	/**
 	 * Constructor
@@ -196,20 +197,20 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	}
 
 	/**
-	 * Gets the {@link Builds}
+	 * Gets the {@link BuildsList}
 	 * 
-	 * @return the {@link Builds}
+	 * @return the {@link BuildsList}
 	 */
-	public Builds getBuilds() {
+	public BuildsList getBuilds() {
 		return builds;
 	}
 
 	/**
-	 * Sets the {@link Builds}
+	 * Sets the {@link BuildsList}
 	 * 
-	 * @param builds the {@link Builds}
+	 * @param builds the {@link BuildsList}
 	 */
-	public void setBuilds(Builds builds) {
+	public void setBuilds(BuildsList builds) {
 		this.builds = builds;
 	}
 
@@ -358,7 +359,7 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	}
 
 	/**
-	 * Gets the {@link List} of {@link HealthReport}
+	 * Gets the {@link List} of {@link HealthReport} sorted by the health score ASC
 	 * 
 	 * @return the {@link List} of {@link HealthReport}
 	 */
@@ -373,6 +374,7 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	 */
 	public void setHealthReports(List<HealthReport> healthReports) {
 		this.healthReports = healthReports;
+		Collections.sort(this.healthReports);
 	}
 
 	/**
@@ -398,9 +400,9 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	 * 
 	 * @return the Modules
 	 */
-	public Jobs getModules() {
+	public JobsList getModules() {
 		if (modules == null) {
-			modules = new Jobs();
+			modules = new JobsList();
 		}
 		return modules;
 	}
@@ -410,7 +412,7 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	 * 
 	 * @param modules the Modules
 	 */
-	public void setModules(Jobs modules) {
+	public void setModules(JobsList modules) {
 		this.modules = modules;
 	}
 

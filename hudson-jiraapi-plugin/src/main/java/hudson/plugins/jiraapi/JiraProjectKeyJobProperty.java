@@ -19,7 +19,10 @@
 
 package hudson.plugins.jiraapi;
 
+import java.util.List;
+
 import hudson.model.AbstractProject;
+import hudson.model.Hudson;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
 
@@ -36,7 +39,8 @@ import com.marvelution.jira.plugins.hudson.utils.JiraKeyUtils;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @ExportedBean
-public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>> {
+public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>> implements
+		Comparable<JiraProjectKeyJobProperty> {
 
 	public static final JiraProjectKeyJobPropertyDescriptor DESCRIPTOR = new JiraProjectKeyJobPropertyDescriptor();
 
@@ -67,6 +71,7 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 	 * 
 	 * @param key the JIRA Project Key
 	 */
+	@SuppressWarnings("unchecked")
 	public void setKey(String key) {
 		if (StringUtils.isEmpty(key)) {
 			return;
@@ -75,6 +80,14 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 			this.key = key;
 		} else {
 			throw new IllegalArgumentException(key + " is not a valid JIRA Project Key");
+		}
+		final List<AbstractProject> projects = Hudson.getInstance().getAllItems(AbstractProject.class);
+		for (AbstractProject<?, ?> project : projects) {
+			if (project.getProperty(JiraProjectKeyJobProperty.class) != null
+				&& project.getProperty(JiraProjectKeyJobProperty.class).equals(this)) {
+				throw new IllegalArgumentException("No key duplicates allowed. Key " + key
+					+ " is already used by project: " + project.getName());
+			}
 		}
 	}
 
@@ -92,6 +105,40 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 	 */
 	public String getDisplayName() {
 		return DESCRIPTOR.getDisplayName();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int compareTo(JiraProjectKeyJobProperty o) {
+		return getKey().compareTo(o.getKey());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof JiraProjectKeyJobProperty) {
+			return getKey().equals(((JiraProjectKeyJobProperty) obj).getKey());
+		}
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return getKey().hashCode();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return getKey();
 	}
 
 }

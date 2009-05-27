@@ -17,38 +17,75 @@
  * under the License.
 */
 
-.errorList {
+.noStyleList {
 	 list-style-type: none;
 }
 
-img.waitingImage {
-    display: block;
-    margin: 10px auto;
-}
-
-#hudsonTabPanel .formtitle a,
-#hudsonTabPanel .formtitle a:hover img {
-    text-decoration: none;
-}
-
-#hudsonTabPanel .formtitle a:hover {
-    text-decoration: underline;
-}
-
-#hudsonTabPanel h3.formtitle img {
-    margin-top: -3px;
-}
-#hudsonTabPanel h3.formtitle * {
-    vertical-align: middle;
-}
-
-.hudsonBuildTable a,
-.hudsonBuildTable td a {
+a {
 	text-decoration: none;
 }
 
-.hudsonBuildTable a:hover,
-.hudsonBuildTable td a:hover {
+a:hover {
+	text-decoration: underline;
+}
+
+.hudsonStatusTable,
+.hudsonStatusTable td,
+.hudsonJobStatusTable,
+.hudsonJobStatusTable td,
+.hudsonJobsTable,
+.hudsonJobsTable td,
+.hudsonJobsTable th {
+    border-collapse: collapse;
+    border: 1px solid #BBB;
+    vertical-align: middle;
+}
+
+.hudsonJobStatusTable,
+.hudsonJobStatusTable td {
+	vertical-align: top;
+}
+
+.hudsonBuildStatusTable,
+.hudsonBuildStatusTable td,
+.hudsonBuildStatusTable th {
+    border-collapse: collapse;
+    border-left: 1px solid #BBB;
+    border-right: 1px solid #BBB;
+    border-bottom: 1px solid #BBB;
+    vertical-align: top;
+}
+
+.hudsonJobsTable th {
+	text-align: center;
+}
+
+.portletBody th {
+    background-color: #FFFFF0;
+}
+
+.portletBody table {
+    width: "100%";
+    height: "100%";
+}
+
+.portletBody td {
+    background-color: #FFF;
+}
+
+.hudsonJobBuildTable,
+.hudsonJobBuildTable td,
+.hudsonJobBuildTable th {
+	border: 0px;
+}
+
+.hudsonJobBuildTable a,
+.hudsonJobBuildTable td a {
+	text-decoration: none;
+}
+
+.hudsonJobBuildTable a:hover,
+.hudsonJobBuildTable td a:hover {
 	text-decoration: underline;
 }
 
@@ -62,6 +99,13 @@ img.waitingImage {
 .abortedOrNotBuild a {
 	font-weight: bold;
 	font-size: medium;
+}
+
+.successfulBuild a:hover,
+.failedBuild a:hover,
+.unstableBuild a:hover,
+.abortedOrNotBuild a:hover {
+	text-decoration: underline;
 }
 
 .successfulBuild a {
@@ -80,10 +124,6 @@ img.waitingImage {
 	color: #9E9E9E;
 }
 
-.listSeperator {
-	color: #F0F0F0;
-	background-color: #F0F0F0;
-	border: 0px solid #F0F0F0;
-	height: 2px;
-	width: 100%;
+.smallText {
+	font-size: xx-small;
 }

@@ -22,7 +22,7 @@ package com.marvelution.jira.plugins.hudson.web.action;
 import org.apache.commons.lang.StringUtils;
 
 import com.marvelution.jira.plugins.hudson.ApiVersion;
-import com.marvelution.jira.plugins.hudson.model.Version;
+import com.marvelution.jira.plugins.hudson.model.JiraApi;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
@@ -72,7 +72,7 @@ public abstract class AbstractEditHudsonServer extends AbstractHudsonWebActionSu
 			addError("host", getText("hudson.config.host.invalid"));
 		} else {
 			try {
-				final Version version = hudsonServerAccessor.getApiVersion(hudsonServer);
+				final JiraApi version = hudsonServerAccessor.getApiVersion(hudsonServer);
 				if (!ApiVersion.getVersion().equals(version)) {
 					addError("host", getText("hudson.config.host.incompatible.api.version", ApiVersion.getVersion()));
 				}

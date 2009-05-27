@@ -199,4 +199,35 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 		return (StringUtils.isNotEmpty(getUsername()) && StringUtils.isNotEmpty(getPassword()));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getLargeImageUrl() {
+		return getImageUrl(HudsonServer.LARGE_IMAGE_SIZE);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getMediumImageUrl() {
+		return getImageUrl(HudsonServer.MEDIUM_IMAGE_SIZE);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getSmallImageUrl() {
+		return getImageUrl(HudsonServer.SMALL_IMAGE_SIZE);
+	}
+
+	/**
+	 * Gets the image url for a specific size
+	 * 
+	 * @param size the size of the image
+	 * @return the image url (ends with '/')
+	 */
+	public String getImageUrl(int size) {
+		return getHost() + "/images/" + size + 'x' + size + '/';
+	}
+
 }

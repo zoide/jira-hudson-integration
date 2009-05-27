@@ -140,12 +140,39 @@ public class HudsonServerResult<T> {
 	}
 
 	/**
+	 * Gets the {@link HudsonServer} Small Image URL
+	 * 
+	 * @return the Image URL
+	 */
+	public String getServerSmallImageUrl() {
+		return server.getSmallImageUrl();
+	}
+
+	/**
+	 * Gets the {@link HudsonServer} Medium Image URL
+	 * 
+	 * @return the Image URL
+	 */
+	public String getServerMediumImageUrl() {
+		return server.getMediumImageUrl();
+	}
+
+	/**
+	 * Gets the {@link HudsonServer} Large Image URL
+	 * 
+	 * @return the Image URL
+	 */
+	public String getServerLargeImageUrl() {
+		return server.getLargeImageUrl();
+	}
+
+	/**
 	 * Gets the {@link HudsonServer} Image URL
 	 * 
 	 * @return the Image URL
 	 */
 	public String getServerImageUrl() {
-		return server.getHost() + HudsonServer.MEDIUM_IMAGE_LOCATION;
+		return getServerMediumImageUrl();
 	}
 
 }

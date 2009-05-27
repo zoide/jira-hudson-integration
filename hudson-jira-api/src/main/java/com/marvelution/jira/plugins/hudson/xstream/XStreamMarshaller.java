@@ -22,12 +22,12 @@ package com.marvelution.jira.plugins.hudson.xstream;
 import org.apache.log4j.Logger;
 
 import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.Builds;
+import com.marvelution.jira.plugins.hudson.model.BuildsList;
 import com.marvelution.jira.plugins.hudson.model.HealthReport;
 import com.marvelution.jira.plugins.hudson.model.Job;
-import com.marvelution.jira.plugins.hudson.model.Jobs;
+import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.model.TestResult;
-import com.marvelution.jira.plugins.hudson.model.Version;
+import com.marvelution.jira.plugins.hudson.model.JiraApi;
 import com.marvelution.jira.plugins.hudson.model.triggers.LegacyCodeTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.ProjectTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.RemoteTrigger;
@@ -73,16 +73,12 @@ public class XStreamMarshaller {
 	 * @param <T> the Class Type of the unmarshaled XML Source
 	 * @param xml the XML {@link String} source to unmarshal
 	 * @param clazz the Class of the expected return Object
-	 * @return the Unmarshaled Object
+	 * @return the Unmarshaled Object, may be <code>null</code>
 	 * @throws XStreamMarshallerException in case the {@link XStream} object cannot be initialised
 	 */
 	public static <T> T unmarshal(String xml, Class<T> clazz) throws XStreamMarshallerException {
 		if ("".equals(xml)) {
-			try {
-				return clazz.newInstance();
-			} catch (Exception e) {
-				return null;
-			}
+			return null;
 		}
 		try {
 			XStream.class.getMethod("autodetectAnnotations", boolean.class);
@@ -102,10 +98,10 @@ public class XStreamMarshaller {
 	public static XStream getAnnotationDetectingXStream() {
 		final XStream xstream = new XStream();
 		xstream.autodetectAnnotations(true);
-		xstream.processAnnotations(Version.class);
-		xstream.processAnnotations(Jobs.class);
+		xstream.processAnnotations(JiraApi.class);
+		xstream.processAnnotations(JobsList.class);
 		xstream.processAnnotations(Job.class);
-		xstream.processAnnotations(Builds.class);
+		xstream.processAnnotations(BuildsList.class);
 		xstream.processAnnotations(Build.class);
 		xstream.processAnnotations(HealthReport.class);
 		xstream.processAnnotations(TestResult.class);
