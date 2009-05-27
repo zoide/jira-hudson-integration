@@ -23,13 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.jfree.util.Log;
-
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.portal.PortletConfiguration;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.user.util.UserUtil;
+import com.atlassian.plugin.webresource.WebResourceManager;
 import com.marvelution.jira.plugins.hudson.model.HudsonStatusPortletResult;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
@@ -49,37 +48,36 @@ public class HudsonStatusPortlet extends AbstractHudsonPorlet {
 	 * 
 	 * @param authenticationContext the {@link JiraAuthenticationContext}
 	 * @param userUtil the {@link UserUtil} implementation
+	 * @param webResourceManager the {@link WebResourceManager} implementation
 	 * @param permissionManager the {@link PermissionManager}
 	 * @param applicationProperties the {@link ApplicationProperties}
 	 * @param hudsonServerAccessor the {@link HudsonServerAccessor}
 	 * @param hudsonServerManager the {@link HudsonServerManager}
 	 */
 	public HudsonStatusPortlet(JiraAuthenticationContext authenticationContext, UserUtil userUtil,
-								PermissionManager permissionManager, ApplicationProperties applicationProperties,
+								WebResourceManager webResourceManager, PermissionManager permissionManager,
+								ApplicationProperties applicationProperties,
 								HudsonServerAccessor hudsonServerAccessor, HudsonServerManager hudsonServerManager) {
-		super(authenticationContext, userUtil, permissionManager, applicationProperties, hudsonServerAccessor,
-			hudsonServerManager);
+		super(authenticationContext, userUtil, webResourceManager, permissionManager, applicationProperties,
+			hudsonServerAccessor, hudsonServerManager);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected Map<String, Object> getVelocityParams(PortletConfiguration portletConfiguration) {
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
-		if (!hudsonServerManager.isHudsonConfigured()) {
-			params.put("isHudsonConfigured", Boolean.FALSE);
-			params.put("errorMessage", getErrorText("hudson.error.not.configured"));
-		} else {
-			params.put("isHudsonConfigured", Boolean.TRUE);
+		if (hudsonServerManager.isHudsonConfigured()) {
 			final List<HudsonStatusPortletResult> results = new ArrayList<HudsonStatusPortletResult>();
 			for (HudsonServer server : hudsonServerManager.getServers()) {
 				final HudsonStatusPortletResult result = new HudsonStatusPortletResult(server);
 				try {
 					final List<Job> jobs = hudsonServerAccessor.getProjects(server);
-					Log.debug("Found " + jobs.size() + " on Hudson Server " + server.getName());
 					result.setJobs(jobs);
 				} catch (HudsonServerAccessorException e) {
 					result.setError(getErrorText("hudson.error.cannot.connect"));
+					LOGGER.error("Failed to connect to the Hudson server.", e);
 				}
 				results.add(result);
 			}

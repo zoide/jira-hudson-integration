@@ -16,36 +16,15 @@
 ## under the License.
 
 <style type="text/css">
-.noStyleList {
-	 list-style-type: none;
-}
-a {
-	text-decoration: none;
-}
-a:hover {
-	text-decoration: underline;
-}
-.hudsonStatusTable, .hudsonStatusTable td, .hudsonJobsTable, .hudsonJobsTable td, .hudsonJobsTable th {
-    border-collapse: collapse;
-    border: 1px solid #bbbbbb;
-    vertical-align: absmiddle;
-}
-.hudsonJobsTable th {
-	text-align: center;
-}
-.portletBody th {
-    background-color: #fffff0;
-}
-.portletBody table{
-    width: "100%";
-    height: "100%";
+.hudsonStatusTable, .hudsonStatusTable td {
+    vertical-align: middle;
 }
 </style>
 
 #if ($isHudsonConfigured)
 	#foreach ($result in $sorter.sort($results, "serverName"))
 	#set ($buildTriggerParser.server = $result.server)
-	#set ($domId = "hudosn_status_${result.serverName}")
+	#set ($domId = "hudson_status_${result.serverName}")
     <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
         <thead>
             <tr class="rowHeader">
@@ -64,12 +43,12 @@ a:hover {
 		            #elseif ($result.jobs.isEmpty())
             		<div align="center"><strong>${i18n.getText("hudson.portlet.no.jobs")}</strong></div>
             		#else
-                    <table class="hudsonJobsTable" width="100%">
+                    <table class="hudsonJobsTable" cellpadding="3" cellspacing="0" width="100%">
                     	<thead>
                     		<tr>
                     			<th>${i18n.getText("hudson.portlet.status")}</th>
                     			<th>${i18n.getText("hudson.portlet.job")}</th>
-                    			<th>${i18n.getText("hudson.portlet.last.build")}</th>
+                    			<th>${i18n.getText("hudson.portlet.last_build")}</th>
                     			<th>${i18n.getText("hudson.portlet.last.duration")}</th>
                     			<th>${i18n.getText("hudson.portlet.build.trigger")}</th>
                     		</tr>
@@ -77,11 +56,11 @@ a:hover {
                     	<tbody>
 		    				#foreach ($job in $sorter.sort($result.jobs, "name"))
 	                    	<tr>
-	                    		<td align="center"><img src=${result.serverImageUrl}/${job.result.icon} tooltip=${job.result.name()} alt=${job.result.name()} /></td>
+	                    		<td align="center"><img src=${result.serverImageUrl}${job.result.icon} tooltip=${job.result.name()} alt=${job.result.name()} /></td>
 	                    		<td align="left"><a href=${result.serverUrl}/${job.url}>${job.name}</a></td>
                     			#if (${jobUtils.hasValidLastBuild($job)})
 	                    		<td align="center">
-	                    			${dateTimeUtils.getTimeSpanString(${dateTimeUtils.getTimePastSince(${job.lastBuild.timestamp})})}
+	                    			${dateTimeUtils.getPastTimeString(${job.lastBuild.timestamp})}
 	                    			(<a href=${result.serverUrl}/${job.lastBuild.url}>${i18n.getText("hudson.build.number", ${job.lastBuild.number})}</a>)
 	                    		</td>
 	                    		<td align="center">
@@ -119,7 +98,10 @@ a:hover {
     <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
         <thead>
             <tr class="rowHeader">
-                <td class="colHeaderLink">${i18n.getText("hudson.portlet.jobsStatusSummary")}:</td>
+                <td class="colHeaderLink">
+                	${i18n.getText("hudson.portlet.jobs.status.summary")}: 
+                	<strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($i18n.getText("hudson.portlet.all.jobs"))
+                </td>
             </tr>
         </thead>
         <tbody>

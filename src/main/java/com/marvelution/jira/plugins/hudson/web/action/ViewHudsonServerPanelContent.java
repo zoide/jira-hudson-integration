@@ -54,6 +54,7 @@ import com.atlassian.jira.web.bean.I18nBean;
 import com.atlassian.jira.web.bean.PagerFilter;
 import com.atlassian.jira.web.bean.StatisticAccessorBean;
 import com.marvelution.jira.plugins.hudson.model.Build;
+import com.marvelution.jira.plugins.hudson.model.HudsonBuildTabPanelResult;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
@@ -93,8 +94,6 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 
 	private final UserUtil userUtil;
 
-	private HudsonServer server;
-
 	private String projectKey;
 
 	private Long componentId;
@@ -103,7 +102,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 
 	private String issueKey;
 
-	private List<Build> builds;
+	private HudsonBuildTabPanelResult results;
 
 	/**
 	 * Constructor
@@ -149,17 +148,19 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 			addErrorMessage(getText("hudson.panel.error.not.configured"));
 			return "error";
 		}
+		HudsonServer server = serverManager.getDefaultServer();
+		results = new HudsonBuildTabPanelResult(server);
 		try {
+			List<Build> builds = null;
 			if (!StringUtils.isEmpty(projectKey)) {
 				final Project project = projectManager.getProjectObjByKey(projectKey);
 				if (project != null
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, project, authenticationContext
 						.getUser())) {
 					server = serverManager.getServerByJiraProject(project);
-					log.debug("Request for project " + projectKey + " builds from server " + server.getName());
 					if (server != null) {
 						builds = serverAccessor.getBuilds(server, project);
-						processBuilds();
+						processBuilds(builds);
 					}
 				}
 			} else if (versionId != null && versionId > 0L) {
@@ -168,10 +169,9 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, version.getProjectObject(),
 						authenticationContext.getUser())) {
 					server = serverManager.getServerByJiraProject(version.getProjectObject());
-					log.debug("Request for project version " + versionId + " builds from server " + server.getName());
 					if (server != null) {
 						builds = serverAccessor.getBuilds(server, version);
-						processBuilds();
+						processBuilds(builds);
 					}
 				}
 			} else if (componentId != null && componentId > 0L) {
@@ -181,12 +181,10 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, project, authenticationContext
 						.getUser())) {
 					server = serverManager.getServerByJiraProject(project);
-					log.debug("Request for project component " + component.getName() + " builds from server "
-						+ server.getName());
 					if (server != null) {
 						final List<String> issueKeys = getIssueKeys(component);
 						builds = serverAccessor.getBuilds(server, issueKeys);
-						processBuilds();
+						processBuilds(builds);
 					}
 				}
 			} else if (!StringUtils.isEmpty(issueKey)) {
@@ -195,15 +193,16 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, issue, authenticationContext
 						.getUser())) {
 					server = serverManager.getServerByJiraProject(issue.getProjectObject());
-					log.debug("Request for project " + projectKey + " builds from server " + server.getName());
 					if (server != null) {
 						final List<String> issueKeys = new ArrayList<String>();
 						issueKeys.add(issue.getKey());
 						builds = serverAccessor.getBuilds(server, issueKeys);
-						processBuilds();
+						processBuilds(builds);
 					}
 				}
 			}
+			results.setServer(server);
+			results.setBuilds(builds);
 		} catch (HudsonServerAccessorException e) {
 			log.warn("Failed to connect to Hudson Server. Reason: " + e.getMessage(), e);
 			String serverName = "";
@@ -230,10 +229,10 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 			final StatisticAccessorBean statisticAccessorBean =
 				new StatisticAccessorBean(this.authenticationContext.getUser(), component.getProjectId(),
 					searchParams, false);
-			final SearchResults results =
+			final SearchResults searchResults =
 				this.searchProvider.search(statisticAccessorBean.getFilter(), this.authenticationContext.getUser(),
 					PagerFilter.getUnlimitedFilter());
-			final Collection<?> issues = results.getIssues();
+			final Collection<?> issues = searchResults.getIssues();
 			final List<String> issueKeys = new ArrayList<String>();
 			for (Object obj : issues) {
 				if (obj instanceof Issue) {
@@ -250,8 +249,10 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 
 	/**
 	 * Process all the builds to validate them
+	 * 
+	 * @param builds the {@link List} of {@link Build} objects to process
 	 */
-	private void processBuilds() {
+	private void processBuilds(List<Build> builds) {
 		Collections.sort(builds);
 		Collections.reverse(builds);
 		for (Build build : builds) {
@@ -340,51 +341,21 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	}
 
 	/**
-	 * Gets the {@link HudsonServer}
+	 * Gets the results
 	 * 
-	 * @return the {@link HudsonServer}
+	 * @return the {@link HudsonBuildTabPanelResult} results
 	 */
-	public HudsonServer getServer() {
-		return server;
+	public HudsonBuildTabPanelResult getResults() {
+		return results;
 	}
 
 	/**
-	 * Sets the {@link HudsonServer}
+	 * Sets the results
 	 * 
-	 * @param server the {@link HudsonServer}
+	 * @param results the {@link HudsonBuildTabPanelResult} results
 	 */
-	public void setServer(HudsonServer server) {
-		this.server = server;
-	}
-
-	/**
-	 * Gets the builds
-	 * 
-	 * @return the {@link List} of {@link Build} objects
-	 */
-	public List<Build> getBuilds() {
-		return builds;
-	}
-
-	/**
-	 * Gets the builds
-	 * 
-	 * @param builds the {@link List} of {@link Build} objects
-	 */
-	public void setBuilds(List<Build> builds) {
-		this.builds = builds;
-	}
-
-	/**
-	 * Get if any builds are found
-	 * 
-	 * @return <code>true</code> if any builds are found, <code>false</code> otherwise
-	 */
-	public boolean getFoundBuilds() {
-		if (builds != null && !builds.isEmpty()) {
-			return true;
-		}
-		return false;
+	public void setResults(HudsonBuildTabPanelResult results) {
+		this.results = results;
 	}
 
 	/**
@@ -420,7 +391,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 * @return the {@link HudsonBuildTriggerParser} instance
 	 */
 	public HudsonBuildTriggerParser getBuildTriggerParser() {
-		return new HudsonBuildTriggerParser(authenticationContext, userUtil, server);
+		return new HudsonBuildTriggerParser(authenticationContext, userUtil, results.getServer());
 	}
 
 	/**

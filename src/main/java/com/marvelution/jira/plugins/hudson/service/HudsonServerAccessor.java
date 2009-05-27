@@ -24,6 +24,7 @@ import java.util.List;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
 import com.marvelution.jira.plugins.hudson.model.Build;
+import com.marvelution.jira.plugins.hudson.model.JiraApi;
 import com.marvelution.jira.plugins.hudson.model.Job;
 
 /**
@@ -41,6 +42,8 @@ public interface HudsonServerAccessor {
 
 	String GET_ALL_PROJECTS_ACTION = BASE_ACTION_URL + "/getAllProjects";
 
+	String GET_PROJECT_ACTION = BASE_ACTION_URL + "/getProject";
+
 	String GET_PROJECT_BUILDS_ACTION = BASE_ACTION_URL + "/getProjectBuilds";
 
 	String GET_VERSION_BUILDS_ACTION = BASE_ACTION_URL + "/getVersionBuilds";
@@ -51,11 +54,10 @@ public interface HudsonServerAccessor {
 	 * Gets the API Version of the {@link HudsonServer} given
 	 * 
 	 * @param hudsonServer the {@link HudsonServer} to get the API version from
-	 * @return the {@link com.marvelution.jira.plugins.hudson.model.Version}
+	 * @return the {@link JiraApi}
 	 * @throws HudsonServerAccessorException in case  of communication exceptions with the Hudson server
 	 */
-	com.marvelution.jira.plugins.hudson.model.Version getApiVersion(HudsonServer hudsonServer)
-					throws HudsonServerAccessorException;
+	JiraApi getApiVersion(HudsonServer hudsonServer) throws HudsonServerAccessorException;
 
 	/**
 	 * Get all Projects that are configured in a specific Hudson Server
@@ -74,6 +76,25 @@ public interface HudsonServerAccessor {
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
 	 */
 	List<Job> getProjects(HudsonServer hudsonServer) throws HudsonServerAccessorException;
+
+	/**
+	 * Get a Project that are configured in a specific Hudson Server
+	 * 
+	 * @param project the Jira {@link Project} to get from the {@link HudsonServer}
+	 * @return {@link Job}
+	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
+	 */
+	Job getProject(Project project) throws HudsonServerAccessorException;
+
+	/**
+	 * Get a Project that are configured in a specific Hudson Server
+	 * 
+	 * @param hudsonServer the {@link HudsonServer} to get the projects from
+	 * @param project the Jira {@link Project} to get from the {@link HudsonServer}
+	 * @return {@link Job}
+	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
+	 */
+	Job getProject(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException;
 
 	/**
 	 * Gets all Builds of a Jira {@link Project}. If the project is associated with a specific {@link HudsonServer}

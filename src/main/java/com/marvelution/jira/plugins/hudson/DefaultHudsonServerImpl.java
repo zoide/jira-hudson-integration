@@ -54,4 +54,5 @@ public class DefaultHudsonServerImpl extends AbstractHudsonServer {
 		}
 		return getName().compareTo(otherServer.getName());
 	}
+
 }

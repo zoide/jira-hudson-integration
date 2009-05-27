@@ -115,7 +115,7 @@ public class HudsonBuildsTabPanelHelper {
 	 * @param moduleKey the module key of the panel
 	 */
 	private void prepareVelocityParameters(Map<String, Object> velocityParams, String querySection, String moduleKey) {
-		webResourceManager.requireResource(HUDSON_BUILD_PLUGIN + ":css");
+		webResourceManager.requireResource(HUDSON_BUILD_PLUGIN + ":tabpanel-css");
 		webResourceManager.requireResource("jira.webresources:prototype");
 		velocityParams.put("querySection", querySection);
 		velocityParams.put("moduleKey", moduleKey);
