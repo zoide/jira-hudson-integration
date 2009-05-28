@@ -24,8 +24,10 @@ import java.io.PrintStream;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.plugins.jiraapi.index.IssueIndexer;
 import hudson.tasks.BuildStepDescriptor;
@@ -37,6 +39,7 @@ import hudson.tasks.Recorder;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
+@SuppressWarnings("unchecked")
 public class JiraIssueIndexerRecorder extends Recorder {
 
 	private final transient IssueIndexer indexer;
@@ -63,15 +66,41 @@ public class JiraIssueIndexerRecorder extends Recorder {
 		} catch (IOException e) {
 			logger.println("Failed to index Jira issues related to this build");
 		}
-		logger.println("Finished indexing related Jira issue keys");
 		return true;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * {@link Descriptor} for {@link JiraIssueIndexerRecorder}
+	 * 
+	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
 	 */
-	public BuildStepDescriptor<Publisher> getDescriptor() {
-		return JiraIssueIndexerRecorderDescriptor.DESCRIPTOR;
+	@Extension
+	public static final class JiraIssueIndexerRecorderDescriptor extends BuildStepDescriptor<Publisher> {
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public String getDisplayName() {
+			return Messages.getJiraIssueIndexerDisplayName();
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public String getHelpFile() {
+			return "/plugin/hudson-jiraapi-plugin/help-indexer.html";
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public boolean isApplicable(Class<? extends AbstractProject> jobType) {
+			return AbstractProject.class.isAssignableFrom(jobType);
+		}
+
 	}
 
 }

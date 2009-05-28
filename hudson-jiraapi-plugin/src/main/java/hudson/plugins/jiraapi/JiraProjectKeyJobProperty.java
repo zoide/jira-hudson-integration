@@ -21,8 +21,10 @@ package hudson.plugins.jiraapi;
 
 import java.util.List;
 
+import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Hudson;
+import hudson.model.Job;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
 
@@ -41,8 +43,6 @@ import com.marvelution.jira.plugins.hudson.utils.JiraKeyUtils;
 @ExportedBean
 public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>> implements
 		Comparable<JiraProjectKeyJobProperty> {
-
-	public static final JiraProjectKeyJobPropertyDescriptor DESCRIPTOR = new JiraProjectKeyJobPropertyDescriptor();
 
 	private String key = "";
 
@@ -94,24 +94,8 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 	/**
 	 * {@inheritDoc}
 	 */
-	public JobPropertyDescriptor getDescriptor() {
-		return DESCRIPTOR;
-	}
-	
-	/**
-	 * Gets the JIRA Property display name
-	 * 
-	 * @return the display name
-	 */
-	public String getDisplayName() {
-		return DESCRIPTOR.getDisplayName();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public int compareTo(JiraProjectKeyJobProperty o) {
-		return getKey().compareTo(o.getKey());
+	public int compareTo(JiraProjectKeyJobProperty other) {
+		return getKey().compareTo(other.getKey());
 	}
 
 	/**
@@ -139,6 +123,32 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 	@Override
 	public String toString() {
 		return getKey();
+	}
+
+	/**
+	 * {@link JobPropertyDescriptor} for {@link JiraProjectKeyJobProperty}
+	 * 
+	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
+	 */
+	@Extension
+	public static final class JiraProjectKeyJobPropertyDescriptor extends JobPropertyDescriptor {
+
+		/**
+		 * {@inheritDoc}
+		 */
+		public String getDisplayName() {
+			return Messages.getJiraKeyPropertyDisplayName();
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@SuppressWarnings("unchecked")
+		@Override
+		public boolean isApplicable(Class<? extends Job> jobType) {
+			return AbstractProject.class.isAssignableFrom(jobType);
+		}
+
 	}
 
 }

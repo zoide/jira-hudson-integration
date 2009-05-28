@@ -17,41 +17,65 @@
  * under the License.
  */
 
-package hudson.plugins.jiraapi;
+package com.marvelution.jira.plugins.hudson.model;
 
-import hudson.model.AbstractProject;
-import hudson.model.Job;
-import hudson.model.JobPropertyDescriptor;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * {@link JobPropertyDescriptor} for {@link JiraProjectKeyJobProperty}
+ * Model for exposing the version of the API through the API
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class JiraProjectKeyJobPropertyDescriptor extends JobPropertyDescriptor {
+@XStreamAlias("jiraApi")
+public class ApiImplementation {
+
+	private String version;
 
 	/**
-	 * Constructor
+	 * Gets the version
+	 * 
+	 * @return the version
 	 */
-	public JiraProjectKeyJobPropertyDescriptor() {
-		super(JiraProjectKeyJobProperty.class);
-		load();
+	public String getVersion() {
+		return version;
+	}
+
+	/**
+	 * Sets the version
+	 * 
+	 * @param version the version
+	 */
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getDisplayName() {
-		return Messages.getJiraKeyPropertyDisplayName();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public boolean isApplicable(Class<? extends Job> jobType) {
-		return AbstractProject.class.isAssignableFrom(jobType);
+	public boolean equals(Object other) {
+		if (other == null) {
+			return false;
+		} else if (other instanceof ApiImplementation) {
+			return getVersion().equals(((ApiImplementation) other).getVersion());
+		}
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return version.hashCode();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return version;
 	}
 
 }

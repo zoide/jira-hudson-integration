@@ -24,7 +24,7 @@ import java.util.List;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
 import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.JiraApi;
+import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.model.Job;
 
 /**
@@ -54,10 +54,10 @@ public interface HudsonServerAccessor {
 	 * Gets the API Version of the {@link HudsonServer} given
 	 * 
 	 * @param hudsonServer the {@link HudsonServer} to get the API version from
-	 * @return the {@link JiraApi}
+	 * @return the {@link ApiImplementation}
 	 * @throws HudsonServerAccessorException in case  of communication exceptions with the Hudson server
 	 */
-	JiraApi getApiVersion(HudsonServer hudsonServer) throws HudsonServerAccessorException;
+	ApiImplementation getApiVersion(HudsonServer hudsonServer) throws HudsonServerAccessorException;
 
 	/**
 	 * Get all Projects that are configured in a specific Hudson Server

@@ -41,7 +41,7 @@ import hudson.plugins.jiraapi.utils.ProjectUtils;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class JiraApi {
+public class ApiImpl {
 
 	/**
 	 * Gets the list of all known Hudson projects

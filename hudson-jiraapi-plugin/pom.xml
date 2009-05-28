@@ -70,7 +70,7 @@
 	</ciManagement>
 
 	<properties>
-		<hudson.version>1.300</hudson.version>
+		<hudson.version>1.307</hudson.version>
 	</properties>
 
 	<dependencies>

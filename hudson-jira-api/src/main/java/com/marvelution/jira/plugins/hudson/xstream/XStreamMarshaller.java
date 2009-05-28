@@ -27,7 +27,7 @@ import com.marvelution.jira.plugins.hudson.model.HealthReport;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.model.TestResult;
-import com.marvelution.jira.plugins.hudson.model.JiraApi;
+import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.model.triggers.LegacyCodeTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.ProjectTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.RemoteTrigger;
@@ -98,7 +98,7 @@ public class XStreamMarshaller {
 	public static XStream getAnnotationDetectingXStream() {
 		final XStream xstream = new XStream();
 		xstream.autodetectAnnotations(true);
-		xstream.processAnnotations(JiraApi.class);
+		xstream.processAnnotations(ApiImplementation.class);
 		xstream.processAnnotations(JobsList.class);
 		xstream.processAnnotations(Job.class);
 		xstream.processAnnotations(BuildsList.class);

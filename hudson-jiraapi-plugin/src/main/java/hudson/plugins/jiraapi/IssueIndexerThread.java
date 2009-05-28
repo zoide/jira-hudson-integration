@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import hudson.Extension;
 import hudson.model.PeriodicWork;
 import hudson.plugins.jiraapi.index.IssueIndexer;
 
@@ -31,6 +32,7 @@ import hudson.plugins.jiraapi.index.IssueIndexer;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
+@Extension
 public class IssueIndexerThread extends PeriodicWork {
 
 	public static final long DEFAULT_THREAD_DELAY = 3600000L;
@@ -38,6 +40,14 @@ public class IssueIndexerThread extends PeriodicWork {
 	public static final long START_THREAD_DELAY = 10000L;
 
 	private static final Logger LOGGER = Logger.getLogger(IssueIndexerThread.class.getName());
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public long getInitialDelay() {
+		return START_THREAD_DELAY;
+	}
 
 	/**
 	 * {@inheritDoc}
