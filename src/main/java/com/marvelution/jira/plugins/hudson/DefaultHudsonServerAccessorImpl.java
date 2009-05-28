@@ -41,7 +41,7 @@ import com.atlassian.jira.project.version.Version;
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.BuildsList;
 import com.marvelution.jira.plugins.hudson.model.HudsonServerAware;
-import com.marvelution.jira.plugins.hudson.model.JiraApi;
+import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
@@ -87,12 +87,13 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public JiraApi getApiVersion(HudsonServer hudsonServer)
+	public ApiImplementation getApiVersion(HudsonServer hudsonServer)
 					throws HudsonServerAccessorException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_API_VERSION_ACTION, null);
 		try {
-			final com.marvelution.jira.plugins.hudson.model.JiraApi version =
-				XStreamMarshaller.unmarshal(response, com.marvelution.jira.plugins.hudson.model.JiraApi.class);
+			final com.marvelution.jira.plugins.hudson.model.ApiImplementation version =
+				XStreamMarshaller.unmarshal(response,
+					com.marvelution.jira.plugins.hudson.model.ApiImplementation.class);
 			return version;
 		} catch (XStreamMarshallerException e) {
 			throw new HudsonServerAccessorException(
