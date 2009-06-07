@@ -111,8 +111,8 @@ public class HealthReport implements Comparable<HealthReport> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public int compareTo(HealthReport o) {
-		return new Integer(getScore()).compareTo(new Integer(o.getScore()));
+	public int compareTo(HealthReport other) {
+		return new Integer(getScore()).compareTo(new Integer(other.getScore()));
 	}
 
 	/**

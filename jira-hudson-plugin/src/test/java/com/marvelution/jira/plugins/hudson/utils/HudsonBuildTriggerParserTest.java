@@ -44,9 +44,6 @@ import com.marvelution.jira.plugins.hudson.model.triggers.TimeTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.Trigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.UserTrigger;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
-import com.opensymphony.user.ProviderAccessor;
-import com.opensymphony.user.User;
-import com.opensymphony.user.provider.CredentialsProvider;
 
 /**
  * TestCase for {@link HudsonBuildTriggerParser}
@@ -63,14 +60,6 @@ public class HudsonBuildTriggerParserTest {
 
 	@Mock
 	private UserUtil userUtil;
-
-	@Mock
-	private ProviderAccessor providerAccessor;
-
-	@Mock
-	private CredentialsProvider credentialsProvider;
-
-	private User user;
 
 	@Mock
 	private HudsonServer server;
@@ -112,21 +101,6 @@ public class HudsonBuildTriggerParserTest {
 		triggerParser.setServer(server);
 		final Trigger trigger = new UserTrigger("markrekveld");
 		assertEquals("hudson.trigger.hudson.user", triggerParser.parse(trigger));
-	}
-
-	/**
-	 * Test formatting a {@link UserTrigger} with a Jira user
-	 * 
-	 * TODO Fix the User mock so that the Jira User trigger formatting can be tested
-	 */
-	@Test
-	public void testJiraUserTrigger() {
-		when(providerAccessor.getCredentialsProvider(anyString())).thenReturn(credentialsProvider);
-		user = new User("markrekveld", providerAccessor);
-		//user.setFullName("Mark Rekveld");
-		when(userUtil.getUser(anyString())).thenReturn(user);
-		final Trigger trigger = new UserTrigger("markrekveld");
-		//assertEquals("hudson.trigger.jira.user", triggerParser.parse(trigger));
 	}
 
 	/**
