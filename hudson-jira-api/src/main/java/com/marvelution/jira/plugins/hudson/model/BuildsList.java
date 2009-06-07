@@ -48,13 +48,4 @@ public class BuildsList {
 		return builds;
 	}
 
-	/**
-	 * Sets the {@link List} of {@link Build} object
-	 * 
-	 * @param builds the {@link List} of {@link Build} object
-	 */
-	public void setBuilds(List<Build> builds) {
-		this.builds = builds;
-	}
-
 }

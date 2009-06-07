@@ -90,7 +90,7 @@ public class HudsonProjectConverter {
 				}
 			}
 		}
-		job.setBuilds(builds);
+		job.setBuildsList(builds);
 		job.setNextBuildNumber(project.getNextBuildNumber());
 		if (job.getLastBuild() != null) {
 			job.setResult(job.getLastBuild().getResult());
@@ -112,7 +112,7 @@ public class HudsonProjectConverter {
 			for (final PROJECT module : itemGroup.getItems()) {
 				modules.getJobs().add(convertHudsonProject(module));
 			}
-			job.setModules(modules);
+			job.setModulesList(modules);
 		}
 		return job;
 	}

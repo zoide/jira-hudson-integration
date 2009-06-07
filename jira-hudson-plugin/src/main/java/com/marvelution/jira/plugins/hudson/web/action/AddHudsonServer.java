@@ -49,16 +49,9 @@ public class AddHudsonServer extends AbstractEditHudsonServer {
 	 */
 	public void doValidation() {
 		super.doValidation();
-		if (hudsonServerManager.hasServer(getName())) {
+		if (getHudsonServerManager().hasServer(getName())) {
 			addError("name", getText("hudson.config.serverName.duplicate"));
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String doDefault() throws Exception {
-		return "input";
 	}
 
 	/**
@@ -68,7 +61,7 @@ public class AddHudsonServer extends AbstractEditHudsonServer {
 		if (hasAnyErrors()) {
 			return "input";
 		}
-		hudsonServerManager.put(hudsonServer);
+		getHudsonServerManager().put(hudsonServer);
 		return getRedirect("ViewHudsonServers.jspa");
 	}
 

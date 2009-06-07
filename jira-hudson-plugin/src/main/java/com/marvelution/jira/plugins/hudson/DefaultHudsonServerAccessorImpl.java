@@ -87,7 +87,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public ApiImplementation getApiVersion(HudsonServer hudsonServer)
+	public ApiImplementation getApiImplementation(HudsonServer hudsonServer)
 					throws HudsonServerAccessorException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_API_VERSION_ACTION, null);
 		try {

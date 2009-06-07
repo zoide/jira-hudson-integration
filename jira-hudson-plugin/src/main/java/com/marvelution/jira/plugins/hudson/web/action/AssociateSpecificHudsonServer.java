@@ -70,7 +70,7 @@ public class AssociateSpecificHudsonServer extends AbstractHudsonWebActionSuppor
 		if (project == null) {
 			return getRedirect("/secure/BrowseProject.jspa");
 		}
-		return "input";
+		return super.doDefault();
 	}
 
 	/**

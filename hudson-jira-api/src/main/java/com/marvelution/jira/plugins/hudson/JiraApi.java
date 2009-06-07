@@ -37,7 +37,7 @@ public final class JiraApi {
 	 * 
 	 * @return the {@link ApiImplementation}
 	 */
-	public static ApiImplementation getVersion() {
+	public static ApiImplementation getApiImplementation() {
 		try {
 			final String classContainer =
 				JiraApi.class.getProtectionDomain().getCodeSource().getLocation().toString();

@@ -19,6 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -72,16 +73,10 @@ public class TestResult {
 	 * @return the {@link Collection} of failed tests
 	 */
 	public Collection<String> getFailedTests() {
+		if (failedTests == null) {
+			failedTests = new ArrayList<String>();
+		}
 		return failedTests;
-	}
-
-	/**
-	 * Sets the failed tests
-	 * 
-	 * @param failedTests the {@link Collection} of failed tests
-	 */
-	public void setFailedTests(Collection<String> failedTests) {
-		this.failedTests = failedTests;
 	}
 
 	/**

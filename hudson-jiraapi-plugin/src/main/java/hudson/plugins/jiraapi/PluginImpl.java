@@ -103,7 +103,7 @@ public class PluginImpl extends Plugin {
 			ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
 		try {
-			writeXmlToResponse(request, response, XStreamMarshaller.marshal(JiraApi.getVersion()));
+			writeXmlToResponse(request, response, XStreamMarshaller.marshal(JiraApi.getApiImplementation()));
 		} catch (XStreamMarshallerException e) {
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}

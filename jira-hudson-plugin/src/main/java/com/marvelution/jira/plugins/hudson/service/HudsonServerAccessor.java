@@ -51,13 +51,13 @@ public interface HudsonServerAccessor {
 	String GET_ISSUE_BUILDS_ACTION = BASE_ACTION_URL + "/getIssueBuilds";
 
 	/**
-	 * Gets the API Version of the {@link HudsonServer} given
+	 * Gets the API Implementation information of the {@link HudsonServer} given
 	 * 
 	 * @param hudsonServer the {@link HudsonServer} to get the API version from
 	 * @return the {@link ApiImplementation}
 	 * @throws HudsonServerAccessorException in case  of communication exceptions with the Hudson server
 	 */
-	ApiImplementation getApiVersion(HudsonServer hudsonServer) throws HudsonServerAccessorException;
+	ApiImplementation getApiImplementation(HudsonServer hudsonServer) throws HudsonServerAccessorException;
 
 	/**
 	 * Get all Projects that are configured in a specific Hudson Server

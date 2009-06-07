@@ -336,4 +336,36 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 		return Long.valueOf(getTimestamp()).compareTo(Long.valueOf(other.getTimestamp()));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		} else if (obj instanceof Build) {
+			final Build other = (Build) obj;
+			return Integer.valueOf(getNumber()).equals(Integer.valueOf(other.getNumber()))
+				&& getJobName().equals(other.getJobName());
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return Integer.valueOf(getNumber()).hashCode();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return getJobName() + " #" + getNumber();
+	}
+
 }

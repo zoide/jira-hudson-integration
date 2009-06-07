@@ -58,8 +58,6 @@ public class StateConverter implements Converter, ConverterMatcher {
 			return State.NOT_STARTED;
 		} else if (State.BUILDING.name().equals(reader.getValue())) {
 			return State.BUILDING;
-		} else if (State.COMPLETED.name().equals(reader.getValue())) {
-			return State.COMPLETED;
 		} else {
 			return State.COMPLETED;
 		}

@@ -1,0 +1,16 @@
+<jobs>
+  <job>
+    <name>Marvelution</name>
+    <url>job/Marvelution/</url>
+    <buildable>true</buildable>
+    <nextBuildNumber>1</nextBuildNumber>
+    <result>SUCCESS</result>
+  </job>
+  <job>
+    <name>Marvelution-utils</name>
+    <url>job/Marvelution-utils/</url>
+    <buildable>false</buildable>
+    <nextBuildNumber>1</nextBuildNumber>
+    <result>SUCCESS</result>
+  </job>
+</jobs>

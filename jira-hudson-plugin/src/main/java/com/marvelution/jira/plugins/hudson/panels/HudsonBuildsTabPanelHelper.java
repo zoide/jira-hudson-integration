@@ -36,7 +36,7 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
  */
 public class HudsonBuildsTabPanelHelper {
 
-	private static final String HUDSON_BUILD_PLUGIN = "com.marvelution.jira.plugins.hudson";
+	public static final String HUDSON_BUILD_PLUGIN = "com.marvelution.jira.plugins.hudson";
 
 	private final HudsonServerManager serverManager;
 

@@ -32,6 +32,7 @@ import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.jira.web.bean.I18nBean;
 import com.atlassian.plugin.webresource.WebResourceManager;
+import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.utils.BuildUtils;
@@ -45,8 +46,6 @@ import com.marvelution.jira.plugins.hudson.utils.JobUtils;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class AbstractHudsonPorlet extends PortletImpl {
-
-	private static final String HUDSON_BUILD_PLUGIN = "com.marvelution.jira.plugins.hudson";
 
 	protected static final Logger LOGGER = Logger.getLogger(HudsonStatusPortlet.class);
 
@@ -129,7 +128,7 @@ public class AbstractHudsonPorlet extends PortletImpl {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Map<String, Object> getVelocityParams(PortletConfiguration portletConfiguration) {
-		webResourceManager.requireResource(HUDSON_BUILD_PLUGIN + ":portlet-css");
+		webResourceManager.requireResource(HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
 		params.put("dateTimeUtils", new DateTimeUtils(authenticationContext));
 		params.put("buildUtils", new BuildUtils());

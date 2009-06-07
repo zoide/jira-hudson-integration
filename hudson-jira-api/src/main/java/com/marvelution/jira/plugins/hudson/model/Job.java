@@ -197,21 +197,36 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	}
 
 	/**
-	 * Gets the {@link BuildsList}
+	 * Gets the Job Builds
 	 * 
-	 * @return the {@link BuildsList}
+	 * @return the {@link List} of {@link Build} objects
 	 */
-	public BuildsList getBuilds() {
-		return builds;
+	public List<Build> getBuilds() {
+		if (builds == null) {
+			builds = new BuildsList();
+		}
+		return builds.getBuilds();
+	}
+
+	/**
+	 * Sets the Jobs builds
+	 * 
+	 * @param builds the {@link List} of {@link Build} objects
+	 */
+	public void setBuilds(List<Build> builds) {
+		if (this.builds == null) {
+			this.builds = new BuildsList();
+		}
+		this.builds.getBuilds().addAll(builds);
 	}
 
 	/**
 	 * Sets the {@link BuildsList}
 	 * 
-	 * @param builds the {@link BuildsList}
+	 * @param buildsList the {@link BuildsList}
 	 */
-	public void setBuilds(BuildsList builds) {
-		this.builds = builds;
+	public void setBuildsList(BuildsList buildsList) {
+		this.builds = buildsList;
 	}
 
 	/**
@@ -396,24 +411,36 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	}
 
 	/**
-	 * Gets the Modules
+	 * Gets the Job Modules
 	 * 
-	 * @return the Modules
+	 * @return the {@link List} of {@link Job} objects
 	 */
-	public JobsList getModules() {
+	public List<Job> getModules() {
 		if (modules == null) {
 			modules = new JobsList();
 		}
-		return modules;
+		return modules.getJobs();
 	}
 
 	/**
-	 * Sets the Modules
+	 * Sets the Job Modules
 	 * 
-	 * @param modules the Modules
+	 * @param modules the {@link List} of {@link Job} objects
 	 */
-	public void setModules(JobsList modules) {
-		this.modules = modules;
+	public void setModules(List<Job> modules) {
+		if (this.modules == null) {
+			this.modules = new JobsList();
+		}
+		this.modules.getJobs().addAll(modules);
+	}
+
+	/**
+	 * Sets the Job Modules
+	 * 
+	 * @param jobsList the {@link JobsList}
+	 */
+	public void setModulesList(JobsList jobsList) {
+		this.modules = jobsList;
 	}
 
 	/**
@@ -421,6 +448,36 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	 */
 	public int compareTo(Job other) {
 		return getName().compareTo(other.getName());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		} else if (obj instanceof Job) {
+			return getName().equals(((Job) obj).getName());
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return getName().hashCode();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return getName();
 	}
 
 }

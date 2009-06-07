@@ -60,8 +60,6 @@ public class ResultConverter implements Converter, ConverterMatcher {
 			return Result.FAILURE;
 		} else if (Result.UNSTABLE.name().equals(reader.getValue())) {
 			return Result.UNSTABLE;
-		} else if (Result.NOT_BUILT.name().equals(reader.getValue())) {
-			return Result.NOT_BUILT;
 		} else if (Result.ABORTED.name().equals(reader.getValue())) {
 			return Result.ABORTED;
 		} else {

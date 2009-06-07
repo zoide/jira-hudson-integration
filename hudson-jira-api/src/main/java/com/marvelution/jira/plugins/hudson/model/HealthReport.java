@@ -115,4 +115,37 @@ public class HealthReport implements Comparable<HealthReport> {
 		return new Integer(getScore()).compareTo(new Integer(o.getScore()));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		} else if (obj instanceof HealthReport) {
+			final HealthReport other = (HealthReport) obj;
+			return getDescription().equals(other.getDescription())
+				&& Integer.valueOf(getScore()).equals(Integer.valueOf(other.getScore()))
+				&& getIcon().equals(other.getIcon());
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return Integer.valueOf(getScore()).hashCode();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return getDescription();
+	}
+
 }

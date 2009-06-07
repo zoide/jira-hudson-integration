@@ -48,13 +48,4 @@ public class JobsList {
 		return jobs;
 	}
 
-	/**
-	 * Sets the {@link List} of {@link Job} object
-	 * 
-	 * @param jobs the {@link List} of {@link Job} object
-	 */
-	public void setJobs(List<Job> jobs) {
-		this.jobs = jobs;
-	}
-
 }

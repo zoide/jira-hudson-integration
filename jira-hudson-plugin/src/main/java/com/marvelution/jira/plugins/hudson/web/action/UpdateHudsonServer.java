@@ -71,7 +71,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 			return getRedirect("ViewHudsonServers.jspa");
 		}
 		hudsonServer = hudsonServerFactory.createHudsonServer(serverToEdit);
-		return "input";
+		return super.doDefault();
 	}
 
 	/**

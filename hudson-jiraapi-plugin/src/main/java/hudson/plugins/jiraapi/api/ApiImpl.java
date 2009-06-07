@@ -68,7 +68,7 @@ public class ApiImpl {
 					}
 					modules.getJobs().add(module);
 				}
-				job.setModules(modules);
+				job.setModulesList(modules);
 			}
 			jobs.getJobs().add(job);
 		}

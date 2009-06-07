@@ -1,0 +1,22 @@
+<build>
+  <number>58</number>
+  <url>job/Marvelution-utils/58/</url>
+  <jobName>Marvelution-utils</jobName>
+  <jobUrl>job/Marvelution-utils/</jobUrl>
+  <trigger class="scmTrigger"/>
+  <relatedIssueKey>ISSUE-1</relatedIssueKey>
+  <relatedIssueKey>ISSUE-2</relatedIssueKey>
+  <artifact>pom.xml</artifact>
+  <testResult>
+    <failed>0</failed>
+    <failedTests class="list">
+      <string>TestCase.java</string>
+    </failedTests>
+    <skipped>0</skipped>
+    <total>30</total>
+  </testResult>
+  <duration>114554</duration>
+  <timestamp>1241906926000</timestamp>
+  <result>SUCCESS</result>
+  <state>COMPLETED</state>
+</build>
