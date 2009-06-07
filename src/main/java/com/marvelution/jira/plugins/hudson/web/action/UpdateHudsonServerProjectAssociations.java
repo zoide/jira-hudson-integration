@@ -64,7 +64,7 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 		if (hudsonServer == null) {
 			return getRedirect("ViewHudsonServers.jspa");
 		}
-		return "input";
+		return super.doDefault();
 	}
 
 	/**

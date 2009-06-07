@@ -49,7 +49,7 @@ public class DeleteHudsonServer extends AbstractHudsonWebActionSupport {
 	 */
 	public String doDefault() throws Exception {
 		hudsonServer = hudsonServerManager.getServer(hudsonServerId);
-		return "input";
+		return super.doDefault();
 	}
 
 	/**

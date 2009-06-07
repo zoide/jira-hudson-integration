@@ -19,6 +19,8 @@
 
 package com.marvelution.jira.plugins.hudson.utils;
 
+import static com.atlassian.core.util.DateUtils.*;
+
 import java.util.Calendar;
 
 import com.atlassian.jira.security.JiraAuthenticationContext;
@@ -30,18 +32,6 @@ import com.atlassian.jira.web.bean.I18nBean;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class DateTimeUtils {
-
-	public static final long SECOND = 1000L;
-
-	public static final long MINUTE = 60 * SECOND;
-
-	public static final long HOUR = 60 * MINUTE;
-
-	public static final long DAY = 24 * HOUR;
-
-	public static final long MONTH = 30 * DAY;
-
-	public static final long YEAR = 365 * DAY;
 
 	private I18nBean i18nBean;
 
@@ -62,18 +52,18 @@ public class DateTimeUtils {
 	 * @return the formatted time {@link String}
 	 */
 	public String getTimeSpanString(final long duration) {
-		final long years = duration / YEAR;
-		long remDuration = duration % YEAR;
-		final long months = remDuration / MONTH;
-		remDuration %= MONTH;
-		final long days = remDuration / DAY;
-		remDuration %= DAY;
-		final long hours = remDuration / HOUR;
-		remDuration %= HOUR;
-		final long minutes = remDuration / MINUTE;
-		remDuration %= MINUTE;
-		final long seconds = remDuration / SECOND;
-		remDuration %= SECOND;
+		final long years = duration / YEAR_MILLIS;
+		long remDuration = duration % YEAR_MILLIS;
+		final long months = remDuration / MONTH_MILLIS;
+		remDuration %= MONTH_MILLIS;
+		final long days = remDuration / DAY_MILLIS;
+		remDuration %= DAY_MILLIS;
+		final long hours = remDuration / HOUR_MILLIS;
+		remDuration %= HOUR_MILLIS;
+		final long minutes = remDuration / MINUTE_MILLIS;
+		remDuration %= MINUTE_MILLIS;
+		final long seconds = remDuration / SECOND_MILLIS;
+		remDuration %= SECOND_MILLIS;
 		final long millisecs = remDuration;
 
 		if (years > 0L) {
