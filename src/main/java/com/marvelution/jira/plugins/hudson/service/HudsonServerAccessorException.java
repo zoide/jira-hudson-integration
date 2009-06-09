@@ -32,6 +32,15 @@ public class HudsonServerAccessorException extends Exception {
 	 * Constructor
 	 * 
 	 * @param message the Exception message
+	 */
+	public HudsonServerAccessorException(String message) {
+		super(message);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param message the Exception message
 	 * @param cause the Exception cause
 	 */
 	public HudsonServerAccessorException(String message, Throwable cause) {

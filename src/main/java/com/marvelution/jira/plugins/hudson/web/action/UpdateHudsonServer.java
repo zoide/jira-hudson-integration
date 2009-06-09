@@ -23,6 +23,7 @@ import java.util.Arrays;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.atlassian.jira.security.PermissionManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerFactory;
@@ -42,13 +43,14 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 	/**
 	 * Constructor
 	 * 
+	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 * @param hudsonServerFactory the {@link HudsonServerFactory} implementation
 	 * @param hudsonServerAccessor the {@link HudsonServerAccessor} implementation
 	 */
-	public UpdateHudsonServer(HudsonServerManager hudsonServerManager, HudsonServerFactory hudsonServerFactory,
-					HudsonServerAccessor hudsonServerAccessor) {
-		super(hudsonServerManager, hudsonServerFactory, hudsonServerAccessor);
+	public UpdateHudsonServer(PermissionManager permissionManager, HudsonServerManager hudsonServerManager,
+								HudsonServerFactory hudsonServerFactory, HudsonServerAccessor hudsonServerAccessor) {
+		super(permissionManager, hudsonServerManager, hudsonServerFactory, hudsonServerAccessor);
 	}
 
 	/**
@@ -66,7 +68,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 	 * {@inheritDoc}
 	 */
 	public String doDefault() throws Exception {
-		final HudsonServer serverToEdit = hudsonServerManager.getServer(hudsonServerId);
+		final HudsonServer serverToEdit = hudsonServerManager.getServer(getHudsonServerId());
 		if (serverToEdit == null) {
 			return getRedirect("ViewHudsonServers.jspa");
 		}
@@ -92,7 +94,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 	 * @throws Exception in case of errors
 	 */
 	public String doSetAsDefault() throws Exception {
-		final HudsonServer defaultServer = hudsonServerManager.getServer(hudsonServerId);
+		final HudsonServer defaultServer = hudsonServerManager.getServer(getHudsonServerId());
 		if (defaultServer != null) {
 			hudsonServerManager.setDefaultServer(defaultServer);
 		}

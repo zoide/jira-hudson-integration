@@ -151,65 +151,62 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 		HudsonServer server = serverManager.getDefaultServer();
 		results = new HudsonBuildTabPanelResult(server);
 		try {
-			List<Build> builds = null;
-			if (!StringUtils.isEmpty(projectKey)) {
-				final Project project = projectManager.getProjectObjByKey(projectKey);
+			List<Build> builds = new ArrayList<Build>();
+			if (!StringUtils.isEmpty(getProjectKey())) {
+				final Project project = projectManager.getProjectObjByKey(getProjectKey());
 				if (project != null
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, project, authenticationContext
 						.getUser())) {
 					server = serverManager.getServerByJiraProject(project);
-					if (server != null) {
-						builds = serverAccessor.getBuilds(server, project);
-						processBuilds(builds);
-					}
+					builds = serverAccessor.getBuilds(server, project);
+				} else {
+					addErrorMessage(getText("hudson.panel.error.no.permission"));
+					return "error";
 				}
-			} else if (versionId != null && versionId > 0L) {
-				final Version version = versionManager.getVersion(versionId);
+			} else if (getVersionId() != null && getVersionId() > 0L) {
+				final Version version = versionManager.getVersion(getVersionId());
 				if (version != null
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, version.getProjectObject(),
 						authenticationContext.getUser())) {
 					server = serverManager.getServerByJiraProject(version.getProjectObject());
-					if (server != null) {
-						builds = serverAccessor.getBuilds(server, version);
-						processBuilds(builds);
-					}
+					builds = serverAccessor.getBuilds(server, version);
+				} else {
+					addErrorMessage(getText("hudson.panel.error.no.permission"));
+					return "error";
 				}
-			} else if (componentId != null && componentId > 0L) {
-				final ProjectComponent component = componentManager.find(componentId);
+			} else if (getComponentId() != null && getComponentId() > 0L) {
+				final ProjectComponent component = componentManager.find(getComponentId());
 				final Project project = projectManager.getProjectObj(component.getProjectId());
 				if (component != null && project != null
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, project, authenticationContext
 						.getUser())) {
 					server = serverManager.getServerByJiraProject(project);
-					if (server != null) {
-						final List<String> issueKeys = getIssueKeys(component);
-						builds = serverAccessor.getBuilds(server, issueKeys);
-						processBuilds(builds);
-					}
+					builds = serverAccessor.getBuilds(server, getIssueKeys(component));
+				} else {
+					addErrorMessage(getText("hudson.panel.error.no.permission"));
+					return "error";
 				}
-			} else if (!StringUtils.isEmpty(issueKey)) {
-				final MutableIssue issue = issueManager.getIssueObject(issueKey);
+			} else if (!StringUtils.isEmpty(getIssueKey())) {
+				final MutableIssue issue = issueManager.getIssueObject(getIssueKey());
 				if (issue != null
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, issue, authenticationContext
 						.getUser())) {
 					server = serverManager.getServerByJiraProject(issue.getProjectObject());
-					if (server != null) {
-						final List<String> issueKeys = new ArrayList<String>();
-						issueKeys.add(issue.getKey());
-						builds = serverAccessor.getBuilds(server, issueKeys);
-						processBuilds(builds);
-					}
+					builds = serverAccessor.getBuilds(server, Collections.singletonList(issue.getKey()));
+				} else {
+					addErrorMessage(getText("hudson.panel.error.no.permission"));
+					return "error";
 				}
+			} else {
+				addErrorMessage(getText("hudson.panel.error.invalid.request"));
+				return "error";
 			}
 			results.setServer(server);
+			processBuilds(builds);
 			results.setBuilds(builds);
 		} catch (HudsonServerAccessorException e) {
 			log.warn("Failed to connect to Hudson Server. Reason: " + e.getMessage(), e);
-			String serverName = "";
-			if (server != null) {
-				serverName = server.getName();
-			}
-			addErrorMessage(getText("hudson.panel.error.cannot.connect", serverName));
+			addErrorMessage(getText("hudson.panel.error.cannot.connect", server.getName()));
 			return "error";
 		}
 		return super.doExecute();
@@ -350,15 +347,6 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	}
 
 	/**
-	 * Sets the results
-	 * 
-	 * @param results the {@link HudsonBuildTabPanelResult} results
-	 */
-	public void setResults(HudsonBuildTabPanelResult results) {
-		this.results = results;
-	}
-
-	/**
 	 * Gets the {@link DateTimeUtils} helper class
 	 * 
 	 * @return the {@link DateTimeUtils} helper object
@@ -399,7 +387,15 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 */
 	@Override
 	public String getText(String key) {
-		return i18n.getText(key);
+		return getI18n().getText(key);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getText(String key, String value1) {
+		return getI18n().getText(key, value1);
 	}
 
 }
