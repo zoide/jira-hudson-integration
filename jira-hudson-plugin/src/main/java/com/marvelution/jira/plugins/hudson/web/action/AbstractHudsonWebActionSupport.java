@@ -22,6 +22,7 @@ package com.marvelution.jira.plugins.hudson.web.action;
 import org.apache.log4j.Logger;
 import org.apache.velocity.tools.generic.SortTool;
 
+import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
@@ -31,11 +32,13 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class AbstractHudsonWebActionSupport extends JiraWebActionSupport {
+public abstract class AbstractHudsonWebActionSupport extends JiraWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
 
 	protected static final Logger LOGGER = Logger.getLogger(AbstractHudsonWebActionSupport.class);
+
+	protected final PermissionManager permissionManager;
 
 	protected final HudsonServerManager hudsonServerManager;
 
@@ -44,9 +47,12 @@ public class AbstractHudsonWebActionSupport extends JiraWebActionSupport {
 	/**
 	 * Constructor
 	 * 
+	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 */
-	public AbstractHudsonWebActionSupport(HudsonServerManager hudsonServerManager) {
+	public AbstractHudsonWebActionSupport(PermissionManager permissionManager,
+											HudsonServerManager hudsonServerManager) {
+		this.permissionManager = permissionManager;
 		this.hudsonServerManager = hudsonServerManager;
 		sorter = new SortTool();
 	}
@@ -57,7 +63,7 @@ public class AbstractHudsonWebActionSupport extends JiraWebActionSupport {
 	 * @return <code>true</code> if so, <code>false</code> otherwise
 	 */
 	public boolean hasPermissions() {
-		return isHasPermission(Permissions.ADMINISTER);
+		return permissionManager.hasPermission(Permissions.ADMINISTER, getRemoteUser());
 	}
 
 	/**

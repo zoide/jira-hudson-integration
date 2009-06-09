@@ -27,6 +27,8 @@ import org.ofbiz.core.entity.GenericValue;
 import webwork.action.ActionContext;
 
 import com.atlassian.jira.project.Project;
+import com.atlassian.jira.project.ProjectManager;
+import com.atlassian.jira.security.PermissionManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
@@ -43,6 +45,8 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 
 	private HudsonServer hudsonServer;
 
+	private ProjectManager projectManager;
+
 	private String[] availableProjectKeys;
 
 	private String[] associatedProjectKeys;
@@ -50,17 +54,21 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 	/**
 	 * Constructor
 	 * 
+	 * @param permissionManager the {@link PermissionManager} implementation
+	 * @param projectManager the {@link ProjectManager} implementation
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 */
-	public UpdateHudsonServerProjectAssociations(HudsonServerManager hudsonServerManager) {
-		super(hudsonServerManager);
+	public UpdateHudsonServerProjectAssociations(PermissionManager permissionManager, ProjectManager projectManager,
+													HudsonServerManager hudsonServerManager) {
+		super(permissionManager, hudsonServerManager);
+		this.projectManager = projectManager;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public String doDefault() throws Exception {
-		hudsonServer = hudsonServerManager.getServer(getHudsonServerId());
+		hudsonServer = getServer();
 		if (hudsonServer == null) {
 			return getRedirect("ViewHudsonServers.jspa");
 		}
@@ -71,15 +79,15 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 	 * {@inheritDoc}
 	 */
 	public String doExecute() throws Exception {
-		hudsonServer = hudsonServerManager.getServer(getHudsonServerId());
+		hudsonServer = getServer();
 		if (buttonClicked("addButton")) {
-			if (availableProjectKeys != null) {
-				for (String key : availableProjectKeys) {
+			if (getAvailableProjectKeys() != null) {
+				for (String key : getAvailableProjectKeys()) {
 					hudsonServer.addAssociatedProjectKey(key);
 					LOGGER.debug("Associated project key " + key + " with HudsonServer [" + getHudsonServerId() + "] "
 						+ hudsonServer.getName());
 				}
-				hudsonServerManager.put(hudsonServer);
+				getHudsonServerManager().put(hudsonServer);
 			}
 		} else if (buttonClicked("addAllButton")) {
 			for (Object entry : getProjectManager().getProjects()) {
@@ -88,21 +96,21 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 			}
 			LOGGER.debug("Associated all projects with HudsonServer [" + getHudsonServerId() + "] "
 				+ hudsonServer.getName());
-			hudsonServerManager.put(hudsonServer);
+			getHudsonServerManager().put(hudsonServer);
 		} else if (buttonClicked("removeButton")) {
-			if (associatedProjectKeys != null) {
-				for (String key : associatedProjectKeys) {
+			if (getAssociatedProjectKeys() != null) {
+				for (String key : getAssociatedProjectKeys()) {
 					hudsonServer.removeAssociatedProjectKey(key);
 					LOGGER.debug("Removed associated project key " + key + " from HudsonServer ["
 						+ getHudsonServerId() + "] " + hudsonServer.getName());
 				}
-				hudsonServerManager.put(hudsonServer);
+				getHudsonServerManager().put(hudsonServer);
 			}
 		} else if (buttonClicked("removeAllButton")) {
 			hudsonServer.setAssociatedProjectKeys(new HashSet<String>());
 			LOGGER.debug("Removed all associated projects from HudsonServer [" + getHudsonServerId() + "] "
 				+ hudsonServer.getName());
-			hudsonServerManager.put(hudsonServer);
+			getHudsonServerManager().put(hudsonServer);
 		}
 		return "input";
 	}
@@ -133,6 +141,15 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 	 */
 	public void setHudsonServerId(int hudsonServerId) {
 		this.hudsonServerId = hudsonServerId;
+	}
+
+	/**
+	 * Get the {@link HudsonServer} for the Id provided
+	 * 
+	 * @return the {@link HudsonServer} instance
+	 */
+	private HudsonServer getServer() {
+		return getHudsonServerManager().getServer(getHudsonServerId());
 	}
 
 	/**
@@ -183,7 +200,7 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 	/**
 	 * Gets the Associated Projects {@link Collection}
 	 * 
-	 * @return the Associated Projects {@link Collection}
+	 * @return the {@link Collection} of {@link Project} objects
 	 */
 	public Collection<Project> getAssociatedProjects() {
 		final Collection<Project> projects = new HashSet<Project>();
@@ -196,7 +213,7 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 	/**
 	 * Gets all the available projects
 	 * 
-	 * @return the {@link Collection} of {@link Project} object
+	 * @return the {@link Collection} of {@link GenericValue} object
 	 */
 	public Collection<GenericValue> getAvailableProjects() {
 		final Collection<GenericValue> projects = new HashSet<GenericValue>();
@@ -207,6 +224,14 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 			}
 		}
 		return projects;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ProjectManager getProjectManager() {
+		return projectManager;
 	}
 
 }

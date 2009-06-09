@@ -127,7 +127,7 @@ public class DateTimeUtilsTest {
 	@Test
 	public void testGetTimePastSince() {
 		final long time = Calendar.getInstance(Locale.ENGLISH).getTimeInMillis();
-		assertEquals(DateUtils.SECOND_MILLIS, utils.getTimePastSince(time - DateUtils.SECOND_MILLIS));
+		assertTrue(utils.getTimePastSince(time - DateUtils.SECOND_MILLIS) >= DateUtils.SECOND_MILLIS);
 	}
 
 }

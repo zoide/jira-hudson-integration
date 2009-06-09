@@ -255,11 +255,14 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 * @param hudsonServer the {@link HudsonServer} to execute the action on
 	 * @param action the action url to execute
 	 * @param params extra parameters to add to the action
-	 * @return something
+	 * @return the response XML from the {@link HudsonServer}
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson Server
 	 */
 	private String getHudsonServerActionResponse(HudsonServer hudsonServer, String action, Map<String, String> params)
 			throws HudsonServerAccessorException {
+		if (hudsonServer == null) {
+			throw new HudsonServerAccessorException("HudsonServer may not be null");
+		}
 		String response = "";
 		URL actionUrl;
 		PostMethod actionMethod = null;

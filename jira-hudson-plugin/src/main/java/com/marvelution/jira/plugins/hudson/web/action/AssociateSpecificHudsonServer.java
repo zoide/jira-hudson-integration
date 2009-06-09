@@ -21,6 +21,7 @@ package com.marvelution.jira.plugins.hudson.web.action;
 
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
+import com.atlassian.jira.security.PermissionManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
@@ -42,11 +43,13 @@ public class AssociateSpecificHudsonServer extends AbstractHudsonWebActionSuppor
 	/**
 	 * Constructor
 	 * 
+	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param projectManager the {@link ProjectManager} implementation
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 */
-	public AssociateSpecificHudsonServer(ProjectManager projectManager, HudsonServerManager hudsonServerManager) {
-		super(hudsonServerManager);
+	public AssociateSpecificHudsonServer(PermissionManager permissionManager, ProjectManager projectManager,
+											HudsonServerManager hudsonServerManager) {
+		super(permissionManager, hudsonServerManager);
 		this.projectManager = projectManager;
 	}
 
@@ -56,7 +59,7 @@ public class AssociateSpecificHudsonServer extends AbstractHudsonWebActionSuppor
 	@Override
 	protected void doValidation() {
 		super.doValidation();
-		if (hudsonServerId != -1 && (hudsonServerId < 1 || hudsonServerManager.getServer(hudsonServerId) == null)) {
+		if (getHudsonServerId() < 1 || getServerManager().getServer(getHudsonServerId()) == null) {
 			addErrorMessage(getText("hudson.config.error.hudson.server.required"));
 		}
 	}
@@ -77,13 +80,13 @@ public class AssociateSpecificHudsonServer extends AbstractHudsonWebActionSuppor
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String doExecute() throws Exception {
+	public String doExecute() throws Exception {
 		if (hasAnyErrors()) {
 			return "input";
 		}
-		final HudsonServer server = hudsonServerManager.getServer(hudsonServerId);
-		server.addAssociatedProjectKey(projectKey);
-		hudsonServerManager.put(server);
+		final HudsonServer server = getServerManager().getServer(getHudsonServerId());
+		server.addAssociatedProjectKey(getProjectKey());
+		getServerManager().put(server);
 		return getRedirect("/secure/BrowseProject.jspa");
 	}
 
@@ -102,7 +105,7 @@ public class AssociateSpecificHudsonServer extends AbstractHudsonWebActionSuppor
 	 * @return the id of the current associated Hudson server
 	 */
 	public int getCurrentAssociatedHudsonServerId() {
-		return hudsonServerManager.getServerByJiraProject(getProject()).getServerId();
+		return getServerManager().getServerByJiraProject(getProject()).getServerId();
 	}
 
 	/**
@@ -111,7 +114,7 @@ public class AssociateSpecificHudsonServer extends AbstractHudsonWebActionSuppor
 	 * @return the {@link Project} selected for association
 	 */
 	public Project getProject() {
-		return projectManager.getProjectObjByKey(projectKey);
+		return projectManager.getProjectObjByKey(getProjectKey());
 	}
 
 	/**

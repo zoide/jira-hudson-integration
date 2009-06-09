@@ -19,6 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson.web.action;
 
+import com.atlassian.jira.security.PermissionManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
@@ -38,17 +39,18 @@ public class DeleteHudsonServer extends AbstractHudsonWebActionSupport {
 	/**
 	 * Constructor
 	 * 
+	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 */
-	public DeleteHudsonServer(HudsonServerManager hudsonServerManager) {
-		super(hudsonServerManager);
+	public DeleteHudsonServer(PermissionManager permissionManager, HudsonServerManager hudsonServerManager) {
+		super(permissionManager, hudsonServerManager);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public String doDefault() throws Exception {
-		hudsonServer = hudsonServerManager.getServer(hudsonServerId);
+		hudsonServer = hudsonServerManager.getServer(getHudsonServerId());
 		return super.doDefault();
 	}
 
@@ -56,7 +58,7 @@ public class DeleteHudsonServer extends AbstractHudsonWebActionSupport {
 	 * {@inheritDoc}
 	 */
 	public String doExecute() throws Exception {
-		hudsonServerManager.remove(hudsonServerId);
+		hudsonServerManager.remove(getHudsonServerId());
 		return getRedirect("ViewHudsonServers.jspa");
 	}
 

@@ -21,6 +21,7 @@ package com.marvelution.jira.plugins.hudson.web.action;
 
 import java.util.Collection;
 
+import com.atlassian.jira.security.PermissionManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
@@ -36,10 +37,11 @@ public class ViewHudsonServers extends AbstractHudsonWebActionSupport {
 	/**
 	 * Constructor
 	 * 
+	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 */
-	public ViewHudsonServers(HudsonServerManager hudsonServerManager) {
-		super(hudsonServerManager);
+	public ViewHudsonServers(PermissionManager permissionManager, HudsonServerManager hudsonServerManager) {
+		super(permissionManager, hudsonServerManager);
 	}
 
 	/**

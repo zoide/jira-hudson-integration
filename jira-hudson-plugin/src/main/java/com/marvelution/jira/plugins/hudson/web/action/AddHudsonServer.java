@@ -19,6 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson.web.action;
 
+import com.atlassian.jira.security.PermissionManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerFactory;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
@@ -35,13 +36,14 @@ public class AddHudsonServer extends AbstractEditHudsonServer {
 	/**
 	 * Constructor
 	 * 
+	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 * @param hudsonServerFactory the {@link HudsonServerFactory} implementation
 	 * @param hudsonServerAccessor the {@link HudsonServerAccessor} implementation
 	 */
-	public AddHudsonServer(HudsonServerManager hudsonServerManager, HudsonServerFactory hudsonServerFactory,
-					HudsonServerAccessor hudsonServerAccessor) {
-		super(hudsonServerManager, hudsonServerFactory, hudsonServerAccessor);
+	public AddHudsonServer(PermissionManager permissionManager, HudsonServerManager hudsonServerManager,
+							HudsonServerFactory hudsonServerFactory, HudsonServerAccessor hudsonServerAccessor) {
+		super(permissionManager, hudsonServerManager, hudsonServerFactory, hudsonServerAccessor);
 	}
 
 	/**
