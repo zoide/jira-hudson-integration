@@ -38,17 +38,18 @@ public final class JiraApi {
 	 * @return the {@link ApiImplementation}
 	 */
 	public static ApiImplementation getApiImplementation() {
+		final ApiImplementation api = new ApiImplementation();
 		try {
 			final String classContainer =
 				JiraApi.class.getProtectionDomain().getCodeSource().getLocation().toString();
 			final URL manifestUrl = new URL("jar:" + classContainer + "!/META-INF/MANIFEST.MF");
 			final Manifest manifest = new Manifest(manifestUrl.openStream());
 			final Attributes attributes = manifest.getMainAttributes();
-			final ApiImplementation version = new ApiImplementation();
-			version.setVersion(attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION));
-			return version;
+			api.setVersion(attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION));
+			return api;
 		} catch (Exception e) {
-			return new ApiImplementation();
+			api.setVersion("UNKNOWN");
+			return api;
 		}
 	}
 

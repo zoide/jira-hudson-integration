@@ -75,8 +75,8 @@ public abstract class AbstractEditHudsonServer extends AbstractHudsonWebActionSu
 			addError("host", getText("hudson.config.host.invalid"));
 		} else {
 			try {
-				final ApiImplementation version = hudsonServerAccessor.getApiImplementation(hudsonServer);
-				if (!JiraApi.getApiImplementation().equals(version)) {
+				final ApiImplementation remoteApi = hudsonServerAccessor.getApiImplementation(hudsonServer);
+				if (!JiraApi.getApiImplementation().equals(remoteApi)) {
 					addError("host", getText("hudson.config.host.incompatible.api.version", JiraApi
 						.getApiImplementation()));
 				}
