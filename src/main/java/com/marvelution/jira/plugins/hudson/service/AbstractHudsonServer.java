@@ -162,9 +162,6 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	 * {@inheritDoc}
 	 */
 	public Collection<String> getAssociatedProjectKeys() {
-		if (associatedProjectKeys == null) {
-			associatedProjectKeys = new HashSet<String>();
-		}
 		return associatedProjectKeys;
 	}
 

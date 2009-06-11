@@ -167,7 +167,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 		if (StringUtils.isEmpty(serverName)) {
 			return null;
 		}
-		return servers.get(nameMapping.get(serverName));
+		return getServer(nameMapping.get(serverName));
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	 */
 	public HudsonServer getServerByJiraProject(Project project) {
 		if (project != null && projectMapping.containsKey(project.getKey())) {
-			return servers.get(projectMapping.get(project.getKey()));
+			return getServer(projectMapping.get(project.getKey()));
 		}
 		return getDefaultServer();
 	}
@@ -187,7 +187,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 		if (defaultServerId == 0) {
 			return null;
 		}
-		return servers.get(defaultServerId);
+		return getServer(defaultServerId);
 	}
 
 	/**
