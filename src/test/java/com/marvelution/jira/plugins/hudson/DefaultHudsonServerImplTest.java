@@ -51,6 +51,19 @@ public class DefaultHudsonServerImplTest {
 	 * Test Compare {@link DefaultHudsonServerImpl} to {@link DefaultHudsonServerImpl} less
 	 */
 	@Test
+	public void testIllegalCompareTo() {
+		try {
+			server.compareTo(null);
+			fail("This test should fail");
+		} catch (IllegalArgumentException e) {
+			assertEquals("otherServer may not be null", e.getMessage());
+		}
+	}
+
+	/**
+	 * Test Compare {@link DefaultHudsonServerImpl} to {@link DefaultHudsonServerImpl} less
+	 */
+	@Test
 	public void testCompareToLess() {
 		other.setName("XYZ");
 		assertEquals("Hudson CI".compareTo("XYZ"), server.compareTo(other));
