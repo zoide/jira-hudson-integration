@@ -19,7 +19,6 @@
 
 package com.marvelution.jira.plugins.hudson;
 
-import static com.marvelution.jira.plugins.hudson.DefaultHudsonServerManagerImpl.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -201,7 +200,8 @@ public class DefaultHudsonServerManagerImplTest {
 	public void testSetDefaultServer() {
 		setUpServerManagerWithServers();
 		serverManager.setDefaultServer(serverManager.getServer(2));
-		verify(propertySet, VerificationModeFactory.times(1)).setInt(CONFIG_DEFAULT_SERVER_ID, 2);
+		verify(propertySet, VerificationModeFactory.times(1)).setInt(
+			DefaultHudsonServerManagerImpl.CONFIG_DEFAULT_SERVER_ID, 2);
 	}
 
 	/**
@@ -216,7 +216,8 @@ public class DefaultHudsonServerManagerImplTest {
 		} catch (IllegalArgumentException e) {
 			assertEquals("hudsonServer may not be null", e.getMessage());
 		}
-		verify(propertySet, VerificationModeFactory.times(0)).setInt(CONFIG_DEFAULT_SERVER_ID, 2);
+		verify(propertySet, VerificationModeFactory.times(0)).setInt(
+			DefaultHudsonServerManagerImpl.CONFIG_DEFAULT_SERVER_ID, 2);
 	}
 
 	/**
@@ -238,8 +239,8 @@ public class DefaultHudsonServerManagerImplTest {
 	 */
 	@Test
 	public void testPutAvailableNextId() {
-		when(propertySet.exists(CONFIG_NEXT_SERVER_ID)).thenReturn(true);
-		when(propertySet.getInt(CONFIG_NEXT_SERVER_ID)).thenReturn(3);
+		when(propertySet.exists(DefaultHudsonServerManagerImpl.CONFIG_NEXT_SERVER_ID)).thenReturn(true);
+		when(propertySet.getInt(DefaultHudsonServerManagerImpl.CONFIG_NEXT_SERVER_ID)).thenReturn(3);
 		when(projectManager.getProjectObjByKey("MARVADMIN")).thenReturn(project);
 		when(project.getKey()).thenReturn("MARVADMIN");
 		setUpServerManagerWithServers();
@@ -248,24 +249,34 @@ public class DefaultHudsonServerManagerImplTest {
 		server.setHost("http://hudson.marvelution.com");
 		server.addAssociatedProjectKey("MARVADMIN");
 		serverManager.put(server);
-		verify(propertySet, VerificationModeFactory.times(1)).exists(CONFIG_NEXT_SERVER_ID);
-		verify(propertySet, VerificationModeFactory.times(1)).getInt(CONFIG_NEXT_SERVER_ID);
-		verify(propertySet, VerificationModeFactory.times(1)).setInt(CONFIG_NEXT_SERVER_ID, 4);
+		verify(propertySet, VerificationModeFactory.times(1)).exists(
+			DefaultHudsonServerManagerImpl.CONFIG_NEXT_SERVER_ID);
+		verify(propertySet, VerificationModeFactory.times(1)).getInt(
+			DefaultHudsonServerManagerImpl.CONFIG_NEXT_SERVER_ID);
 		verify(propertySet, VerificationModeFactory.times(1)).setInt(
-			CONFIG_SERVER_KEY_PREFIX + 3 + CONFIG_SERVER_ID_KEY_SUFFIX, server.getServerId());
+			DefaultHudsonServerManagerImpl.CONFIG_NEXT_SERVER_ID, 4);
+		verify(propertySet, VerificationModeFactory.times(1)).setInt(
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 3
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_ID_KEY_SUFFIX, server.getServerId());
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 3 + CONFIG_SERVER_NAME_KEY_SUFFIX, server.getName());
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 3
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_NAME_KEY_SUFFIX, server.getName());
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 3 + CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX, server.getDescription());
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 3
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX, server.getDescription());
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 3 + CONFIG_SERVER_HOST_KEY_SUFFIX, server.getHost());
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 3
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_HOST_KEY_SUFFIX, server.getHost());
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 3 + CONFIG_SERVER_USERNAME_KEY_SUFFIX, server.getUsername());
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 3
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_USERNAME_KEY_SUFFIX, server.getUsername());
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 3 + CONFIG_SERVER_PASSWORD_KEY_SUFFIX, "");
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 3
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PASSWORD_KEY_SUFFIX, "");
 		final String projects = StringUtils.join(server.getAssociatedProjectKeys(), ',');
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 3 + CONFIG_SERVER_PROJECTS_KEY_SUFFIX, projects);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 3
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PROJECTS_KEY_SUFFIX, projects);
 	}
 
 	/**
@@ -281,23 +292,32 @@ public class DefaultHudsonServerManagerImplTest {
 		server.setHost("http://hudson.marvelution.com");
 		server.addAssociatedProjectKey("MARVADMIN");
 		serverManager.put(server);
-		verify(propertySet, VerificationModeFactory.times(1)).exists(CONFIG_NEXT_SERVER_ID);
-		verify(propertySet, VerificationModeFactory.times(1)).setInt(CONFIG_NEXT_SERVER_ID, 2);
+		verify(propertySet, VerificationModeFactory.times(1)).exists(
+			DefaultHudsonServerManagerImpl.CONFIG_NEXT_SERVER_ID);
 		verify(propertySet, VerificationModeFactory.times(1)).setInt(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_ID_KEY_SUFFIX, server.getServerId());
+			DefaultHudsonServerManagerImpl.CONFIG_NEXT_SERVER_ID, 2);
+		verify(propertySet, VerificationModeFactory.times(1)).setInt(
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_ID_KEY_SUFFIX, server.getServerId());
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_NAME_KEY_SUFFIX, server.getName());
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_NAME_KEY_SUFFIX, server.getName());
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX, server.getDescription());
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX, server.getDescription());
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_HOST_KEY_SUFFIX, server.getHost());
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_HOST_KEY_SUFFIX, server.getHost());
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_USERNAME_KEY_SUFFIX, server.getUsername());
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_USERNAME_KEY_SUFFIX, server.getUsername());
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_PASSWORD_KEY_SUFFIX, "");
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PASSWORD_KEY_SUFFIX, "");
 		final String projects = StringUtils.join(server.getAssociatedProjectKeys(), ',');
 		verify(propertySet, VerificationModeFactory.times(1)).setString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_PROJECTS_KEY_SUFFIX, projects);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PROJECTS_KEY_SUFFIX, projects);
 	}
 
 	/**
@@ -338,19 +358,26 @@ public class DefaultHudsonServerManagerImplTest {
 		assertFalse(serverManager.hasServer("Hudson CI"));
 		assertNull(serverManager.getServer(1));
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_ID_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_ID_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_NAME_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_NAME_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_HOST_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_HOST_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_USERNAME_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_USERNAME_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_PASSWORD_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PASSWORD_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
 	}
 
 	/**
@@ -362,21 +389,29 @@ public class DefaultHudsonServerManagerImplTest {
 		serverManager.remove(2);
 		assertFalse(serverManager.hasServer("Hudson 2"));
 		assertNull(serverManager.getServer(2));
-		verify(propertySet, VerificationModeFactory.times(2)).setInt(CONFIG_DEFAULT_SERVER_ID, 1);
+		verify(propertySet, VerificationModeFactory.times(2)).setInt(
+			DefaultHudsonServerManagerImpl.CONFIG_DEFAULT_SERVER_ID, 1);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_ID_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_ID_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_NAME_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_NAME_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_HOST_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_HOST_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_USERNAME_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_USERNAME_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_PASSWORD_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PASSWORD_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).remove(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
 	}
 
 	/**
@@ -389,95 +424,147 @@ public class DefaultHudsonServerManagerImplTest {
 		serverManager.remove(2);
 		assertFalse(serverManager.hasServer("Hudson 2"));
 		assertNull(serverManager.getServer(2));
-		verify(propertySet, VerificationModeFactory.times(1)).remove(CONFIG_DEFAULT_SERVER_ID);
+		verify(propertySet, VerificationModeFactory.times(1)).remove(
+			DefaultHudsonServerManagerImpl.CONFIG_DEFAULT_SERVER_ID);
 	}
 
 	/**
 	 * Setup the serverManager with servers
 	 */
 	private void setUpServerManagerWithServers() {
-		final String[] propertyKeys = new String [] {
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_ID_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_NAME_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_HOST_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_USERNAME_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_PASSWORD_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_PROJECTS_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_ID_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_NAME_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_HOST_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_USERNAME_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_PASSWORD_KEY_SUFFIX,
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_PROJECTS_KEY_SUFFIX,
+		final String[] propertyKeys =
+			new String[] {
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_ID_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_NAME_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_HOST_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_USERNAME_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PASSWORD_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PROJECTS_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_ID_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_NAME_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_HOST_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_USERNAME_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PASSWORD_KEY_SUFFIX,
+				DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+					+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PROJECTS_KEY_SUFFIX,
 		};
-		when(propertySet.getKeys(CONFIG_SERVER_KEY_PREFIX)).thenReturn(Arrays.asList(propertyKeys));
-		when(propertySet.getInt(CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_ID_KEY_SUFFIX)).thenReturn(1);
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_NAME_KEY_SUFFIX)).thenReturn(
-			"Hudson CI");
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX)).thenReturn(
-			"");
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_HOST_KEY_SUFFIX)).thenReturn(
-			"http://hudson.com");
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_USERNAME_KEY_SUFFIX)).thenReturn("");
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_PASSWORD_KEY_SUFFIX)).thenReturn("");
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_PROJECTS_KEY_SUFFIX)).thenReturn(
-			"MARVADMIN");
-		when(propertySet.getInt(CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_ID_KEY_SUFFIX)).thenReturn(2);
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_NAME_KEY_SUFFIX)).thenReturn(
-			"Hudson 2");
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX)).thenReturn(
-			"Some server");
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_HOST_KEY_SUFFIX)).thenReturn(
-			"http://ci.hudson.com");
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_USERNAME_KEY_SUFFIX)).thenReturn(
-			"admin");
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_PASSWORD_KEY_SUFFIX)).thenReturn(
-			"tH9fJgeL6Rw=");
-		when(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_PROJECTS_KEY_SUFFIX)).thenReturn(
-			"MARV");
+		when(propertySet.getKeys(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX)).thenReturn(
+			Arrays.asList(propertyKeys));
+		when(
+			propertySet.getInt(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_ID_KEY_SUFFIX)).thenReturn(1);
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_NAME_KEY_SUFFIX)).thenReturn("Hudson CI");
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX)).thenReturn("");
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_HOST_KEY_SUFFIX)).thenReturn("http://hudson.com");
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_USERNAME_KEY_SUFFIX)).thenReturn("");
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PASSWORD_KEY_SUFFIX)).thenReturn("");
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PROJECTS_KEY_SUFFIX)).thenReturn("MARVADMIN");
+		when(
+			propertySet.getInt(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_ID_KEY_SUFFIX)).thenReturn(2);
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_NAME_KEY_SUFFIX)).thenReturn("Hudson 2");
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX)).thenReturn("Some server");
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_HOST_KEY_SUFFIX)).thenReturn("http://ci.hudson.com");
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_USERNAME_KEY_SUFFIX)).thenReturn("admin");
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PASSWORD_KEY_SUFFIX)).thenReturn("tH9fJgeL6Rw=");
+		when(
+			propertySet.getString(DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PROJECTS_KEY_SUFFIX)).thenReturn("MARV");
 		serverManager = new DefaultHudsonServerManagerImpl(propertyManager, serverFactory, projectManager);
-		verify(propertySet, VerificationModeFactory.times(1)).getKeys(CONFIG_SERVER_KEY_PREFIX);
+		verify(propertySet, VerificationModeFactory.times(1)).getKeys(
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getInt(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_ID_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_ID_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_NAME_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_NAME_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_HOST_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_HOST_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_USERNAME_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_USERNAME_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_PASSWORD_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PASSWORD_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 1 + CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 1
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getInt(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_ID_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_ID_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_NAME_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_NAME_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_HOST_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_HOST_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_USERNAME_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_USERNAME_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_PASSWORD_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PASSWORD_KEY_SUFFIX);
 		verify(propertySet, VerificationModeFactory.times(1)).getString(
-			CONFIG_SERVER_KEY_PREFIX + 2 + CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
+			DefaultHudsonServerManagerImpl.CONFIG_SERVER_KEY_PREFIX + 2
+				+ DefaultHudsonServerManagerImpl.CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
 	}
 
 	/**
 	 * Setup the serverManager with servers
 	 */
 	private void setUpServerManagerWithServersAndDefaultConfigured() {
-		when(propertySet.exists(CONFIG_DEFAULT_SERVER_ID)).thenReturn(true);
-		when(propertySet.getInt(CONFIG_DEFAULT_SERVER_ID)).thenReturn(2);
+		when(propertySet.exists(DefaultHudsonServerManagerImpl.CONFIG_DEFAULT_SERVER_ID)).thenReturn(true);
+		when(propertySet.getInt(DefaultHudsonServerManagerImpl.CONFIG_DEFAULT_SERVER_ID)).thenReturn(2);
 		setUpServerManagerWithServers();
-		verify(propertySet, VerificationModeFactory.times(1)).exists(CONFIG_DEFAULT_SERVER_ID);
-		verify(propertySet, VerificationModeFactory.times(2)).getInt(CONFIG_DEFAULT_SERVER_ID);
+		verify(propertySet, VerificationModeFactory.times(1)).exists(
+			DefaultHudsonServerManagerImpl.CONFIG_DEFAULT_SERVER_ID);
+		verify(propertySet, VerificationModeFactory.times(2)).getInt(
+			DefaultHudsonServerManagerImpl.CONFIG_DEFAULT_SERVER_ID);
 	}
 
 }
