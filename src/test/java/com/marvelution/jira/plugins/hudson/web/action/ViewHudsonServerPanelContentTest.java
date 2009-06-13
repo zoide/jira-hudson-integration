@@ -439,6 +439,8 @@ public class ViewHudsonServerPanelContentTest {
 		assertTrue(builds.get(1).getRelatedIssueKeys().contains("MARVADMIN-1"));
 		assertTrue(builds.get(1).getRelatedIssueKeys().contains("MARVADMIN-1"));
 		assertFalse(builds.get(0).getRelatedIssueKeys().contains("MARVADMIN-2"));
+		assertEquals(panelContent.getResults().getServerLargeImageUrl(), panelContent.getResults()
+			.getServerImageUrl());
 	}
 
 }

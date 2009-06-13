@@ -47,17 +47,6 @@ public class HudsonServerResult<T> {
 	}
 
 	/**
-	 * Constructor
-	 * 
-	 * @param server the {@link HudsonServer}
-	 * @param results the Results
-	 */
-	public HudsonServerResult(HudsonServer server, T results) {
-		this.server = server;
-		this.results = results;
-	}
-
-	/**
 	 * Gets the {@link HudsonServer}
 	 * 
 	 * @return the {@link HudsonServer}

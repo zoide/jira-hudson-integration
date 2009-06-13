@@ -152,6 +152,7 @@ public class HudsonStatusPortletTest {
 		assertFalse(results.isEmpty());
 		assertEquals(1, results.size());
 		assertFalse(results.get(0).hasError());
+		assertEquals(2, results.get(0).getJobs().size());
 		verify(serverManager, VerificationModeFactory.times(2)).isHudsonConfigured();
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
 			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");

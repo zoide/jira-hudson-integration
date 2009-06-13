@@ -43,18 +43,6 @@ public class HudsonProjectStatusPortletResult extends HudsonServerResult<Job> {
 	}
 
 	/**
-	 * Constructor
-	 * 
-	 * @param server the {@link HudsonServer}
-	 * @param project the Jira {@link Project}
-	 * @param job the {@link Job}
-	 */
-	public HudsonProjectStatusPortletResult(HudsonServer server, Project project, Job job) {
-		this(server, project);
-		setJob(job);
-	}
-
-	/**
 	 * Gets the {@link Job}
 	 * 
 	 * @return {@link Job}

@@ -119,6 +119,8 @@ public class DateTimeUtilsTest {
 		assertEquals("1 day 1 hr ago", utils.getPastTimeString(time - DateUtils.DAY_MILLIS - DateUtils.HOUR_MILLIS));
 		time = Calendar.getInstance(Locale.ENGLISH).getTimeInMillis();
 		assertEquals("2 days 0 hr ago", utils.getPastTimeString(time - (DateUtils.DAY_MILLIS * 2)));
+		time = Calendar.getInstance(Locale.ENGLISH).getTimeInMillis();
+		assertEquals("12 days ago", utils.getPastTimeString(time - (DateUtils.DAY_MILLIS * 12)));
 	}
 
 	/**
