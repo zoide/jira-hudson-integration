@@ -82,7 +82,7 @@ public class HudsonBuildsForVersionTabPanel extends GenericTabPanel {
 	 */
 	@Override
 	public boolean showPanel(VersionContext context) {
-		return (super.showPanel(context) && serverManager.isHudsonConfigured() && permissionManager.hasPermission(
+		return (serverManager.isHudsonConfigured() && permissionManager.hasPermission(
 			Permissions.VIEW_VERSION_CONTROL, context.getProject(), authenticationContext.getUser()));
 	}
 
