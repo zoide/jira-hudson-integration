@@ -32,7 +32,7 @@
 	
 	<name>Hudson JIRA API</name>
 	<description>Library providing the Remote API for Hudson and JIRA integration.</description>
-	<url>http://www.marvelution.com/marvelution-jira-hudson-integration/</url>
+	<url>http://www.marvelution.com/marvelution-jira-hudson-integration/hudson-jira-api/</url>
 	<inceptionYear>2009</inceptionYear>
 	<organization>
 		<name>Marvelution</name>
@@ -67,6 +67,16 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
+	<distributionManagement>
+		<site>
+			<id>marvelution.website</id>
+			<url>scp://marvelution.com/home/markrekveld/marvelution.com/marvelution-jira-hudson-integration/hudson-jira-api/</url>
+		</site>
+	</distributionManagement>
+
+	<properties>
+		<stagingSiteURL>scp://marvelution.com/home/markrekveld/staging.marvelution.com/marvelution-jira-hudson-integration/hudson-jira-api/</stagingSiteURL>
+	</properties>
 	
 	<dependencies>
 		<dependency>
