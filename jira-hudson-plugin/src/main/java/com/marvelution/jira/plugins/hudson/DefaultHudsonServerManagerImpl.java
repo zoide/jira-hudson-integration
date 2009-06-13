@@ -47,27 +47,27 @@ import edu.emory.mathcs.backport.java.util.Arrays;
  */
 public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 
-	private static final String CONFIG_NEXT_SERVER_ID = "hudson.config.servers.nextId";
+	static final String CONFIG_NEXT_SERVER_ID = "hudson.config.servers.nextId";
 
-	private static final String CONFIG_DEFAULT_SERVER_ID = "hudson.config.servers.defaultId";
+	static final String CONFIG_DEFAULT_SERVER_ID = "hudson.config.servers.defaultId";
 
-	private static final String CONFIG_SERVER_KEY_PREFIX = "hudson.config.server.";
+	static final String CONFIG_SERVER_KEY_PREFIX = "hudson.config.server.";
 
-	private static final String CONFIG_SERVER_ID_KEY_SUFFIX = ".id";
+	static final String CONFIG_SERVER_ID_KEY_SUFFIX = ".id";
 
-	private static final String CONFIG_SERVER_NAME_KEY_SUFFIX = ".name";
+	static final String CONFIG_SERVER_NAME_KEY_SUFFIX = ".name";
 
-	private static final String CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX = ".description";
+	static final String CONFIG_SERVER_DESCRIPTION_KEY_SUFFIX = ".description";
 
-	private static final String CONFIG_SERVER_HOST_KEY_SUFFIX = ".host";
+	static final String CONFIG_SERVER_HOST_KEY_SUFFIX = ".host";
 
-	private static final String CONFIG_SERVER_USERNAME_KEY_SUFFIX = ".username";
+	static final String CONFIG_SERVER_USERNAME_KEY_SUFFIX = ".username";
 
-	private static final String CONFIG_SERVER_PASSWORD_KEY_SUFFIX = ".password";
+	static final String CONFIG_SERVER_PASSWORD_KEY_SUFFIX = ".password";
 
-	private static final String CONFIG_SERVER_PROJECTS_KEY_SUFFIX = ".projects";
+	static final String CONFIG_SERVER_PROJECTS_KEY_SUFFIX = ".projects";
 
-	private static final String CONFIG_PROJECT_KEY_SEPARATORS = " ,;:";
+	static final String CONFIG_PROJECT_KEY_SEPARATORS = " ,;:";
 
 	private static final Logger LOGGER = Logger.getLogger(DefaultHudsonServerManagerImpl.class);
 
@@ -154,7 +154,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	 * {@inheritDoc}
 	 */
 	public HudsonServer getServer(int serverId) {
-		if (serverId < 0) {
+		if (serverId <= 0) {
 			return null;
 		}
 		return servers.get(new Integer(serverId));
@@ -164,7 +164,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	 * {@inheritDoc}
 	 */
 	public HudsonServer getServer(String serverName) {
-		if (StringUtils.isEmpty(serverName)) {
+		if (StringUtils.isEmpty(serverName) || !nameMapping.containsKey(serverName)) {
 			return null;
 		}
 		return getServer(nameMapping.get(serverName));
@@ -253,6 +253,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 			}
 		}
 		servers.put(new Integer(hudsonServer.getServerId()), hudsonServer);
+		nameMapping.put(hudsonServer.getName(), hudsonServer.getServerId());
 		if (defaultServerId == 0) {
 			setDefaultServer(hudsonServer);
 		}
@@ -262,8 +263,8 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	 * {@inheritDoc}
 	 */
 	public void remove(int serverId) {
-		if (serverId < 0) {
-			throw new IllegalArgumentException("serverId may not be smaller then 0 (zero)");
+		if (serverId <= 0) {
+			throw new IllegalArgumentException("serverId may not be less then or equal to 0 (zero)");
 		}
 		if (!servers.containsKey(new Integer(serverId))) {
 			throw new IllegalStateException("No Hudson Server configured with Id: " + serverId);
@@ -349,7 +350,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * Generate the next {@link HudsonServer} Id
 	 * 
-	 * @return the Id of the {@link HudsonServer}
+	 * @return the Id for the next {@link HudsonServer}
 	 */
 	private int generateServerId() {
 		int nextId = 1;

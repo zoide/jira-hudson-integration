@@ -54,6 +54,8 @@ public class ApiImpl {
 		for (AbstractProject<?, ?> project : ProjectUtils.getAllProjects()) {
 			final Job job = new Job(project.getName(), project.getDescription());
 			job.setUrl(project.getUrl());
+			job.setBuildable(project.isBuildable());
+			job.setNextBuildNumber(project.getNextBuildNumber());
 			if (project.getProperty(JiraProjectKeyJobProperty.class) != null) {
 				job.setJiraKey(project.getProperty(JiraProjectKeyJobProperty.class).getKey());
 			}
@@ -63,6 +65,8 @@ public class ApiImpl {
 				for (final AbstractProject<?, ?> item : itemGroup.getItems()) {
 					final Job module = new Job(item.getName(), item.getDescription());
 					module.setUrl(item.getUrl());
+					module.setBuildable(project.isBuildable());
+					module.setNextBuildNumber(project.getNextBuildNumber());
 					if (item.getProperty(JiraProjectKeyJobProperty.class) != null) {
 						module.setJiraKey(item.getProperty(JiraProjectKeyJobProperty.class).getKey());
 					}

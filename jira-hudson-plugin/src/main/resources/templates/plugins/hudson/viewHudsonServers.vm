@@ -99,9 +99,7 @@
 										</td>
 										<td align="left" valign="top">
 											<a href="UpdateHudsonServer!default.jspa?hudsonServerId=${server.serverId}">$i18n.getText("common.forms.edit")</a>
-											#if (!${hudsonServerManager.isDefaultServer(${server})})
 											| <a href="DeleteHudsonServer!default.jspa?hudsonServerId=${server.serverId}">$i18n.getText("common.words.delete")</a>
-											#end
 											| <a href="UpdateHudsonServerProjectAssociations!default.jspa?hudsonServerId=${server.serverId}">$i18n.getText("hudson.associate.projects")</a>
 											#if (!${hudsonServerManager.isDefaultServer(${server})})
 											| <a href="UpdateHudsonServer!setAsDefault.jspa?hudsonServerId=${server.serverId}">$i18n.getText("hudson.set-as-default")</a>

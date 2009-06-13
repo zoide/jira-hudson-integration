@@ -1,0 +1,44 @@
+<jobs>
+  <job>
+    <jiraKey>TESTING</jiraKey>
+    <name>Test Project</name>
+    <url>job/Test Project/</url>
+    <description></description>
+    <buildable>true</buildable>
+    <nextBuildNumber>9</nextBuildNumber>
+  </job>
+  <job>
+    <jiraKey></jiraKey>
+    <name>Marvelution-utils</name>
+    <url>job/Marvelution-utils/</url>
+    <description>Marvelution utility Library</description>
+    <buildable>true</buildable>
+    <nextBuildNumber>59</nextBuildNumber>
+    <modules>
+      <job>
+        <jiraKey>MARVUTIL</jiraKey>
+        <name>com.marvelution:marvelution-utils</name>
+        <url>job/Marvelution-utils/com.marvelution$marvelution-utils/</url>
+        <description></description>
+        <buildable>true</buildable>
+        <nextBuildNumber>59</nextBuildNumber>
+      </job>
+    </modules>
+  </job>
+  <job>
+    <jiraKey>MARVADMIN</jiraKey>
+    <name>Marvelution</name>
+    <url>job/Marvelution/</url>
+    <description>Marvelution organization Project Object Model</description>
+    <buildable>true</buildable>
+    <nextBuildNumber>41</nextBuildNumber>
+    <modules>
+      <job>
+        <name>com.marvelution:marvelution</name>
+        <url>job/Marvelution/com.marvelution$marvelution/</url>
+        <buildable>true</buildable>
+        <nextBuildNumber>41</nextBuildNumber>
+      </job>
+    </modules>
+  </job>
+</jobs>
