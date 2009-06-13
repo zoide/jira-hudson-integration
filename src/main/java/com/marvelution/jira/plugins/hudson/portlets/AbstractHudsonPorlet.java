@@ -125,23 +125,33 @@ public class AbstractHudsonPorlet extends PortletImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Map<String, Object> getVelocityParams(PortletConfiguration portletConfiguration) {
 		webResourceManager.requireResource(HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");
-		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
-		params.put("dateTimeUtils", new DateTimeUtils(authenticationContext));
-		params.put("buildUtils", new BuildUtils());
-		params.put("jobUtils", new JobUtils());
-		params.put("sorter", new SortTool());
-		params.put("buildTriggerParser", new HudsonBuildTriggerParser(authenticationContext, userUtil));
-		if (!hudsonServerManager.isHudsonConfigured()) {
+		final Map<String, Object> params = getSuperClassVelocityParams(portletConfiguration);
+		if (!isHudsonConfigured()) {
 			params.put("isHudsonConfigured", Boolean.FALSE);
 			params.put("errorMessage", getErrorText("hudson.error.not.configured"));
 		} else {
 			params.put("isHudsonConfigured", Boolean.TRUE);
+			params.put("dateTimeUtils", new DateTimeUtils(authenticationContext));
+			params.put("buildUtils", new BuildUtils());
+			params.put("jobUtils", new JobUtils());
+			params.put("sorter", new SortTool());
+			params.put("buildTriggerParser", new HudsonBuildTriggerParser(authenticationContext, userUtil));
 		}
 		return params;
+	}
+
+	/**
+	 * Get the velocity parameters from the super class. Done this way so that testing is easier
+	 * 
+	 * @param portletConfiguration the {@link PortletConfiguration} of this portlet instance
+	 * @return the {@link Map} of velocity parameters
+	 */
+	@SuppressWarnings("unchecked")
+	protected Map<String, Object> getSuperClassVelocityParams(PortletConfiguration portletConfiguration) {
+		return super.getVelocityParams(portletConfiguration);
 	}
 
 }

@@ -73,7 +73,7 @@ public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
 	@Override
 	protected Map<String, Object> getVelocityParams(PortletConfiguration portletConfiguration) {
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
-		if (hudsonServerManager.isHudsonConfigured()) {
+		if (isHudsonConfigured()) {
 			final HudsonProjectStatusPortletResult result = new HudsonProjectStatusPortletResult(null, null);
 			try {
 				final long projectId = portletConfiguration.getLongProperty("projectId");
@@ -86,9 +86,6 @@ public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
 				if (!result.hasJob()) {
 					result.setError(getErrorText("hudson.error.portlet.no.job.found"));
 				}
-			} catch (NumberFormatException e) {
-				LOGGER.error("Invalid portlet configuration.", e);
-				result.setError(getErrorText("hudson.error.portlet.invalid.configuration"));
 			} catch (ObjectConfigurationException e) {
 				LOGGER.error("Invalid portlet configuration.", e);
 				result.setError(getErrorText("hudson.error.portlet.invalid.configuration"));
