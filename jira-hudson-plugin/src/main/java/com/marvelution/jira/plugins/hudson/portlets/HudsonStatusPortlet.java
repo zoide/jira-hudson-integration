@@ -68,7 +68,7 @@ public class HudsonStatusPortlet extends AbstractHudsonPorlet {
 	@Override
 	protected Map<String, Object> getVelocityParams(PortletConfiguration portletConfiguration) {
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
-		if (hudsonServerManager.isHudsonConfigured()) {
+		if (isHudsonConfigured()) {
 			final List<HudsonStatusPortletResult> results = new ArrayList<HudsonStatusPortletResult>();
 			for (HudsonServer server : hudsonServerManager.getServers()) {
 				final HudsonStatusPortletResult result = new HudsonStatusPortletResult(server);

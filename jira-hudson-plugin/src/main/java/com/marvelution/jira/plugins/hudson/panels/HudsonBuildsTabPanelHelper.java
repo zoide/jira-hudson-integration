@@ -108,7 +108,7 @@ public class HudsonBuildsTabPanelHelper {
 	}
 
 	/**
-	 * Prepare velocity paremters for Hudson Builds Tab panels
+	 * Prepare velocity parameters for Hudson Builds Tab panels
 	 * 
 	 * @param velocityParams the existing {@link Map} of velocity parameters to extend
 	 * @param querySection the query section for invoking the ViewHudsonServerPanelContent page
