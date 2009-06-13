@@ -155,8 +155,42 @@ public class HudsonProjectStatusPortletTest {
 		assertTrue(params.containsKey("buildTriggerParser"));
 		assertTrue(params.containsKey("result"));
 		final HudsonProjectStatusPortletResult result = (HudsonProjectStatusPortletResult) params.get("result");
-		assertTrue(result.hasJob());
 		assertFalse(result.hasError());
+		assertTrue(result.hasJob());
+		assertEquals("Marvelution", result.getJob().getName());
+		assertEquals(project, result.getProject());
+		assertEquals(result.getServerLargeImageUrl(), result.getServerImageUrl());
+		verify(serverManager, VerificationModeFactory.times(2)).isHudsonConfigured();
+		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
+			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");
+	}
+
+	/**
+	 * Test setting all the velocity parameters
+	 * 
+	 * @throws Exception in case of failures
+	 */
+	@Test
+	public void testGetVelocityParamsWithHudsonConfiguredNoJob() throws Exception {
+		when(serverManager.isHudsonConfigured()).thenReturn(true);
+		when(serverAccessor.getProject(eq(server), eq(project))).thenReturn(null);
+		when(portletConfiguration.getLongProperty("projectId")).thenReturn(1000L);
+		when(projectManager.getProjectObj(1000L)).thenReturn(project);
+		final Map<String, Object> params = portlet.getVelocityParams(portletConfiguration);
+		assertTrue(params.containsKey("isHudsonConfigured"));
+		assertTrue((Boolean) params.get("isHudsonConfigured"));
+		assertTrue(params.containsKey("dateTimeUtils"));
+		assertTrue(params.containsKey("buildUtils"));
+		assertTrue(params.containsKey("jobUtils"));
+		assertTrue(params.containsKey("sorter"));
+		assertTrue(params.containsKey("buildTriggerParser"));
+		assertTrue(params.containsKey("result"));
+		final HudsonProjectStatusPortletResult result = (HudsonProjectStatusPortletResult) params.get("result");
+		assertTrue(result.hasError());
+		assertFalse(result.hasJob());
+		assertEquals("hudson.error.portlet.no.job.found", result.getError());
+		assertEquals(project, result.getProject());
+		assertEquals(result.getServerLargeImageUrl(), result.getServerImageUrl());
 		verify(serverManager, VerificationModeFactory.times(2)).isHudsonConfigured();
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
 			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");

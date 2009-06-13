@@ -40,16 +40,6 @@ public class HudsonStatusPortletResult extends HudsonServerResult<List<Job>> {
 	}
 
 	/**
-	 * Constructor
-	 * 
-	 * @param server the {@link HudsonServer}
-	 * @param jobs the {@link List} of {@link Job} objects
-	 */
-	public HudsonStatusPortletResult(HudsonServer server, List<Job> jobs) {
-		super(server, jobs);
-	}
-
-	/**
 	 * Gets the {@link List} of Jobs that run on the {@link HudsonServer}
 	 * 
 	 * @return {@link List} of {@link Job} objects

@@ -40,16 +40,6 @@ public class HudsonBuildTabPanelResult extends HudsonServerResult<List<Build>> {
 	}
 
 	/**
-	 * Constructor
-	 * 
-	 * @param server the {@link HudsonServer} the result originated from
-	 * @param builds the {@link List} of {@link Build} objects
-	 */
-	public HudsonBuildTabPanelResult(HudsonServer server, List<Build> builds) {
-		super(server, builds);
-	}
-
-	/**
 	 * Wrapper for {@link #getResults()}
 	 * 
 	 * @return the {@link List} of {@link Build} objects
