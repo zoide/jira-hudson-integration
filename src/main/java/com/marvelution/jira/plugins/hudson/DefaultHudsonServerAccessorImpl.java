@@ -19,7 +19,6 @@
 
 package com.marvelution.jira.plugins.hudson;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -91,13 +89,12 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 					throws HudsonServerAccessorException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_API_VERSION_ACTION, null);
 		try {
-			final com.marvelution.jira.plugins.hudson.model.ApiImplementation version =
-				XStreamMarshaller.unmarshal(response,
-					com.marvelution.jira.plugins.hudson.model.ApiImplementation.class);
-			return version;
+			final ApiImplementation api = XStreamMarshaller.unmarshal(response, ApiImplementation.class);
+			return api;
 		} catch (XStreamMarshallerException e) {
 			throw new HudsonServerAccessorException(
-				"Failed to unmarshal the Hudson server response to a Version object. Reason: " + e.getMessage(), e);
+				"Failed to unmarshal the Hudson server response to a API Implementation object. Reason: "
+					+ e.getMessage(), e);
 		}
 	}
 
@@ -147,7 +144,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			return XStreamMarshaller.unmarshal(response, Job.class);
 		} catch (XStreamMarshallerException e) {
 			throw new HudsonServerAccessorException(
-				"Failed to unmarshal the Hudson server response to a Jobs object. Reason: " + e.getMessage(), e);
+				"Failed to unmarshal the Hudson server response to a Job object. Reason: " + e.getMessage(), e);
 		}
 	}
 
@@ -255,20 +252,20 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 * @param hudsonServer the {@link HudsonServer} to execute the action on
 	 * @param action the action url to execute
 	 * @param params extra parameters to add to the action
-	 * @return the response XML from the {@link HudsonServer}
+	 * @return the action response from the {@link HudsonServer}
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson Server
 	 */
-	private String getHudsonServerActionResponse(HudsonServer hudsonServer, String action, Map<String, String> params)
+	public String getHudsonServerActionResponse(HudsonServer hudsonServer, String action, Map<String, String> params)
 			throws HudsonServerAccessorException {
 		if (hudsonServer == null) {
-			throw new HudsonServerAccessorException("HudsonServer may not be null");
+			throw new HudsonServerAccessorException("hudsonServer may not be null");
 		}
 		String response = "";
 		URL actionUrl;
 		PostMethod actionMethod = null;
 		try {
 			actionUrl = constructHudsonActionURL(hudsonServer, action);
-			actionMethod = new PostMethod(actionUrl.toString());
+			actionMethod = createPostMethod(actionUrl.toString());
 			if (params != null) {
 				for (Entry<String, String> entry : params.entrySet()) {
 					actionMethod.addParameter(entry.getKey(), entry.getValue());
@@ -281,26 +278,24 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			try {
 				String loginAction = constructHudsonActionURL(hudsonServer, "/j_security_check").toString();
 				while (true) {
-					final PostMethod loginMethod = new PostMethod(loginAction);
+					final PostMethod loginMethod = createPostMethod(loginAction);
 					loginMethod.addParameter("j_username", hudsonServer.getUsername());
 					loginMethod.addParameter("j_password", hudsonServer.getPassword());
 					loginMethod.addParameter("action", "login");
-					httpClient.executeMethod(loginMethod);
+					getHttpClient().executeMethod(loginMethod);
 					if (loginMethod.getStatusCode() / 100 != 3) {
 						loginMethod.releaseConnection();
 						break;
 					}
 					loginAction = loginMethod.getResponseHeader("Location").getValue();
 				}
-				httpClient.executeMethod(actionMethod);
+				getHttpClient().executeMethod(actionMethod);
 				if (actionMethod.getStatusCode() == HttpStatus.SC_OK) {
 					response = actionMethod.getResponseBodyAsString();
 				}
 			} catch (MalformedURLException e) {
 				throw new HudsonServerAccessorException("Invalid Hduson action URL specified", e);
-			} catch (HttpException e) {
-				throw new HudsonServerAccessorException("Failed to connect to the Hudson Server", e);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				throw new HudsonServerAccessorException("Failed to connect to the Hudson Server", e);
 			} finally {
 				if (actionMethod != null) {
@@ -309,13 +304,9 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 				GetMethod logoutMethod = null;
 				try {
 					final String logoutAction = constructHudsonActionURL(hudsonServer, "/logout").toString();
-					logoutMethod = new GetMethod(logoutAction);
-					httpClient.executeMethod(logoutMethod);
-				} catch (MalformedURLException e) {
-					/* INGORE */
-				} catch (HttpException e) {
-					/* INGORE */
-				} catch (IOException e) {
+					logoutMethod = createGetMethod(logoutAction);
+					getHttpClient().executeMethod(logoutMethod);
+				} catch (Exception e) {
 					/* INGORE */
 				} finally {
 					if (logoutMethod != null) {
@@ -325,13 +316,11 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			}
 		} else {
 			try {
-				httpClient.executeMethod(actionMethod);
+				getHttpClient().executeMethod(actionMethod);
 				if (actionMethod.getStatusCode() == HttpStatus.SC_OK) {
 					response = actionMethod.getResponseBodyAsString();
 				}
-			} catch (HttpException e) {
-				throw new HudsonServerAccessorException("Failed to connect to the Hudson Server", e);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				throw new HudsonServerAccessorException("Failed to connect to the Hudson Server", e);
 			} finally {
 				if (actionMethod != null) {
@@ -352,6 +341,35 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 */
 	private URL constructHudsonActionURL(HudsonServer hudsonServer, String action) throws MalformedURLException {
 		return new URL(hudsonServer.getHost() + action);
+	}
+
+	/**
+	 * Get the {@link HttpClient}
+	 * 
+	 * @return the {@link HttpClient}
+	 */
+	protected HttpClient getHttpClient() {
+		return httpClient;
+	}
+
+	/**
+	 * Create {@link PostMethod}
+	 * 
+	 * @param url the URL of the {@link PostMethod}
+	 * @return the {@link PostMethod}
+	 */
+	protected PostMethod createPostMethod(String url) {
+		return new PostMethod(url);
+	}
+
+	/**
+	 * Create {@link GetMethod}
+	 * 
+	 * @param url the URL of the {@link GetMethod}
+	 * @return the {@link GetMethod}
+	 */
+	protected GetMethod createGetMethod(String url) {
+		return new GetMethod(url);
 	}
 
 	/**
