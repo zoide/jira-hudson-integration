@@ -1,0 +1,54 @@
+ 												------
+ 												Configure Hudson
+ 												------
+ 												Mark Rekveld
+ 												------
+ 												June 13 2009
+ 												------
+
+~~ Licensed to Marvelution under one or more contributor license 
+~~ agreements.  See the NOTICE file distributed with this work 
+~~ for additional information regarding copyright ownership.
+~~ Marvelution licenses this file to you under the Apache License,
+~~ Version 2.0 (the "License"); you may not use this file except
+~~ in compliance with the License.
+~~ You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied. See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+
+Configure Hudson
+~~~~~~~~~~~~~~~~
+
+  To integrate Jira with Hudson, the Hudson plugin has two configuration items for every Job.
+  The {{{Jira Project Key}} job property and the {{Jira issue indexer}} post build action.
+
+
+* {Jira project key}
+~~~~~~~~~~~~~~~~~~~~
+
+  The Jira project key job property is a required property that needs to be configured for every Hudson Job you want
+  to integrate with Jira. And can be configured using the Jira Prject key field on the job configuration page.
+
+[../images/hudson/config-jira-key-property.png] Configure Jira project key Job property
+
+
+* {Jira issue indexer}
+~~~~~~~~~~~~~~~~~~~~~~
+
+  The plugin also provides a Jira issue indexer. This indexer will, if configure, index all the Jira Issue keys related
+  to a build that the indexer is running for after a build.
+
+[../images/hudson/config-jira-issue-key-indexer.png] Configure Jira issue key indexer
+
+  This indexer is not required for the integration to work. The same indexer is also configured to run every hour to
+  index all the Jira Issue keys of all the builds on that Hudson instance. The only extra for the post build action
+  indexer is that all the related Jira Issues to the build will be available for integration with Jira after the build
+  is done. Otherwise the build will not be integrated untill the hourly indexer has run.

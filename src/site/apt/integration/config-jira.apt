@@ -1,0 +1,100 @@
+ 												------
+ 												Configure Jira
+ 												------
+ 												Mark Rekveld
+ 												------
+ 												June 13 2009
+ 												------
+
+~~ Licensed to Marvelution under one or more contributor license 
+~~ agreements.  See the NOTICE file distributed with this work 
+~~ for additional information regarding copyright ownership.
+~~ Marvelution licenses this file to you under the Apache License,
+~~ Version 2.0 (the "License"); you may not use this file except
+~~ in compliance with the License.
+~~ You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied. See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+
+Configure Jira
+~~~~~~~~~~~~~~
+
+  This document describes how to configure Hudson server(s) in Jira.
+
+
+* Add, Edit, Delete a Hudson server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+** Add/Edit a Hudson server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  To add a Hudson server, click the <<Add Hudson server>> link when viewing the Hudson servers list.
+  And to edit a Hudson server click the <<Edit>> link next to the Hudson server you want to edit.
+  
+[../images/jira/hudson-server-list.png] Hudson servers list
+
+  Then fill-in the form...
+  
+[../images/jira/add-hudson-server.png] Add hudson server
+
+  Once you click on the <<Add>> (or <<Update>> for editing) button, the plugin will check if the Hudson
+  server is running and that the required Hudson server plugin is installed and that its version is
+  compatible with the version installed in Jira.
+
+** Delete a Hudson server
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  To delete a Hudson server, click the <<delete>> link of the Hudson server you want to delete, and confirm the
+  deletion in the confirmation page.
+
+
+* Set Default Hudson server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  To set a Hudson server as <<Default>>. Click the <<Set Default>> link when viewing the Hudson server list.
+  
+  <<Note:>> If you only have one Hudson server, it automatically because the default.
+
+
+* Associate a project with a specific Hudson server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  There are two ways you can associate a Jira project to a specific Hudson server. If a project is not associated with
+  a specific Hudson server, the default Hudson server will be used to get build information.
+  
+  <<Note:>> A project can only be associated with a single Hudson server. When associating a project with another
+            Hudson, the association with a possible previous Hudson server will be removed.
+  
+  [[1]] Associate multiple projects to a Hudson server in one step
+  
+        When viewing the Hudson server list in the Administration section of Jira,
+        
+[../images/jira/hudson-server-list.png] Hudson servers list
+
+        Click on the <<Associate Projects>> link to associate project(s) to the selected Hudson server.
+        
+[../images/jira/associate-multiple-projects.png] Associate multiple projects
+
+        Using the four arrow buttons (Add Project, Add All Projects, Remove All Projects, Remove Project) associate a
+        project with a specific Hudson server.
+  
+  [[2]] Associate a single project to a specific Hudson server
+  
+        When browsing specific Jira project, you will get the following options:
+        
+[../images/jira/browse-project-admin-option.png] Browsing a Jira project
+
+        Click on the <<Associate project Marvelution with a specific Hudson Server>> to associate the project to a
+        specific Hudson server.
+        
+[../images/jira/associate-single-project.png] Associate a single project
+  
+  []

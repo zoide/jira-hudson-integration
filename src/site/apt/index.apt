@@ -27,4 +27,56 @@
 Introduction
 ~~~~~~~~~~~~
 
-  TODO
+  This project features two plugins to integrate {{{http://www.atlassian.com/software/jira}Jira}} with
+  {{{https://hudson.dev.java.net}Hudson}}.
+
+
+* {{{./hudson-jiraapi-plugin/index.html}Hudson Plugin}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  The Hudson plugin provides:
+  
+  * a new Remote API to expose Job and Build data.
+  
+  * a Job property to configure the Jira project key for a Hudson job.
+  
+  * a Jira issue key indexer to index all the issue keys and the builds they linked to.
+  
+  []
+
+
+* {{{./jira-hudson-plugin/index.html}Jira Plugin}}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  The Jira plugin provides:
+  
+  * the ability to configure multiple Hudson servers.
+  
+  * associate a Jira project with a specific Hudson server.
+  
+  * view builds related to a project, in a project tab panel.
+  
+  * view builds related to a project version, in a version tab panel.
+  
+  * view builds related to a project component, in a component tab panel.
+  
+  * view builds related to a project issue, in a issue tab panel.
+  
+  * a portlet to view all projects statuses on a Hudson server.
+  
+  * a portlet to view detailed Hudson project build information.
+  
+  []
+
+
+Installation and Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Please refer to the {{{./integration/index.html}Integration documentation}} for installation and configuration
+  documentation.
+
+
+Features
+~~~~~~~~
+
+  Please refer to the {{{./features/index.html}Features}} page for a feature overview.
