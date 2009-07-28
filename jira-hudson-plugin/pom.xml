@@ -30,8 +30,8 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>atlassian-plugin</packaging>
 	
-	<name>JIRA Hudson Integration Plugin</name>
-	<description>JIRA Plugin to integrate Hudson CI like with Bamboo</description>
+	<name>JIRA Hudson Plugin</name>
+	<description>JIRA Plugin to integrate Hudson CI</description>
 	<url>http://www.marvelution.com/marvelution-jira-hudson-integration/jira-hudson-plugin/</url>
 	<inceptionYear>2009</inceptionYear>
 	<organization>
@@ -67,16 +67,10 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
-	<distributionManagement>
-		<site>
-			<id>marvelution.website</id>
-			<url>scp://marvelution.com/home/markrekveld/marvelution.com/marvelution-jira-hudson-integration/jira-hudson-plugin/</url>
-		</site>
-	</distributionManagement>
 
 	<properties>
-		<atlassian.jira.version>3.13.4</atlassian.jira.version>
-		<stagingSiteURL>scp://marvelution.com/home/markrekveld/staging.marvelution.com/marvelution-jira-hudson-integration/jira-hudson-plugin/</stagingSiteURL>
+		<downloadBaseUrl>${jiraDownloadBaseUrl}</downloadBaseUrl>
+		<atlassianJiraVersion>${atlassian.jira.version}</atlassianJiraVersion>
 	</properties>
 	
 	<dependencies>

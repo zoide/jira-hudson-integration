@@ -116,8 +116,10 @@ public class ApiImpl {
 	public BuildsList getBuildsByJiraProject(final String projectKey) {
 		final BuildsList builds = new BuildsList();
 		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
-		for (AbstractBuild<?, ?> build : project.getBuilds()) {
-			builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+		if (project != null) {
+			for (AbstractBuild<?, ?> build : project.getBuilds()) {
+				builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+			}
 		}
 		return builds;
 	}
@@ -133,15 +135,17 @@ public class ApiImpl {
 	public BuildsList getBuildsByJiraVersion(final String projectKey, final long startDate, final long releaseDate) {
 		final BuildsList builds = new BuildsList();
 		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
-		for (AbstractBuild<?, ?> build : project.getBuilds()) {
-			if (releaseDate > 0L) {
-				if (build.getTimestamp().getTimeInMillis() >= startDate
-					&& build.getTimestamp().getTimeInMillis() <= releaseDate) {
-					builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
-				}
-			} else {
-				if (build.getTimestamp().getTimeInMillis() >= startDate) {
-					builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+		if (project != null) {
+			for (AbstractBuild<?, ?> build : project.getBuilds()) {
+				if (releaseDate > 0L) {
+					if (build.getTimestamp().getTimeInMillis() >= startDate
+						&& build.getTimestamp().getTimeInMillis() <= releaseDate) {
+						builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+					}
+				} else {
+					if (build.getTimestamp().getTimeInMillis() >= startDate) {
+						builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
+					}
 				}
 			}
 		}

@@ -67,16 +67,6 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
-	<distributionManagement>
-		<site>
-			<id>marvelution.website</id>
-			<url>scp://marvelution.com/home/markrekveld/marvelution.com/marvelution-jira-hudson-integration/hudson-jira-api/</url>
-		</site>
-	</distributionManagement>
-
-	<properties>
-		<stagingSiteURL>scp://marvelution.com/home/markrekveld/staging.marvelution.com/marvelution-jira-hudson-integration/hudson-jira-api/</stagingSiteURL>
-	</properties>
 	
 	<dependencies>
 		<dependency>

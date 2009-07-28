@@ -31,8 +31,8 @@
 	<packaging>hpi</packaging>
 	<version>1.0-SNAPSHOT</version>
 
-	<name>Hudson JIRA Integration API Plugin</name>
-	<description>Hudson plugin to provide an API for JIRA.</description>
+	<name>Hudson JIRA Plugin</name>
+	<description>Hudson plugin to provide a remote API for JIRA.</description>
 	<url>http://www.marvelution.com/marvelution-jira-hudson-integration/hudson-jiraapi-plugin/</url>
 	<inceptionYear>2009</inceptionYear>
 	<organization>
@@ -68,16 +68,10 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
-	<distributionManagement>
-		<site>
-			<id>marvelution.website</id>
-			<url>scp://marvelution.com/home/markrekveld/marvelution.com/marvelution-jira-hudson-integration/hudson-jiraapi-plugin/</url>
-		</site>
-	</distributionManagement>
 
 	<properties>
-		<hudson.version>1.307</hudson.version>
-		<stagingSiteURL>scp://marvelution.com/home/markrekveld/staging.marvelution.com/marvelution-jira-hudson-integration/hudson-jiraapi-plugin/</stagingSiteURL>
+		<downloadBaseUrl>${hudsonDownloadBaseUrl}</downloadBaseUrl>
+		<hudsonVersion>${hudson.version}</hudsonVersion>
 	</properties>
 
 	<dependencies>

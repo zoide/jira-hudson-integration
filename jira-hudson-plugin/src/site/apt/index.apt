@@ -27,4 +27,22 @@
 Introduction
 ~~~~~~~~~~~~
 
-  TODO
+  The Jira plugin provides:
+  
+  * the ability to configure multiple Hudson servers.
+  
+  * associate a Jira project with a specific Hudson server.
+  
+  * view builds related to a project, in a project tab panel.
+  
+  * view builds related to a project version, in a version tab panel.
+  
+  * view builds related to a project component, in a component tab panel.
+  
+  * view builds related to a project issue, in a issue tab panel.
+  
+  * a portlet to view all projects statuses on a Hudson server.
+  
+  * a portlet to view detailed Hudson project build information.
+  
+  []

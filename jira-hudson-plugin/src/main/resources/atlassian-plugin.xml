@@ -22,6 +22,7 @@
 		<description>Marvelution JIRA Hudson Integration</description>
 		<vendor name="Marvelution" url="http://www.marvelution.com" />
 		<version>1.0</version>
+		<application-version min="3.13" max="4.0"/>
 	</plugin-info>
 
 	<!-- R E S O U R C E S -->
