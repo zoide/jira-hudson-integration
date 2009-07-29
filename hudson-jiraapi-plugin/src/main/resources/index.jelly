@@ -17,5 +17,6 @@
  ~ under the License.
  -->
 <div>
-	This plugin add a property to configure the JIRA project key for a Jobs for JIRA integration.
+	This plugin features a Job property, Issue indexer and a new REST API to integration Hudson with Portlets and Tab
+	Panels of <a href="http://www.atlassian.com/software/jira">Atlassian Jira</a> .
 </div>
