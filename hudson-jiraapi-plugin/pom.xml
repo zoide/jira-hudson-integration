@@ -31,7 +31,7 @@
 	<packaging>hpi</packaging>
 	<version>1.0-SNAPSHOT</version>
 
-	<name>Hudson JIRA Plugin</name>
+	<name>Hudson Jira Plugin</name>
 	<description>Hudson plugin to provide a remote API for JIRA.</description>
 	<url>http://www.marvelution.com/marvelution-jira-hudson-integration/hudson-jiraapi-plugin/</url>
 	<inceptionYear>2009</inceptionYear>
