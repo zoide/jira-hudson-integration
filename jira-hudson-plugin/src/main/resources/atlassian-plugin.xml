@@ -17,9 +17,9 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<atlassian-plugin name="Marvelution JIRA Hudson Integration" key="com.marvelution.jira.plugins.hudson" system="false">
+<atlassian-plugin name="Marvelution Jira Hudson Integration" key="com.marvelution.jira.plugins.hudson" system="false">
 	<plugin-info>
-		<description>Marvelution JIRA Hudson Integration</description>
+		<description>Marvelution Jira Hudson Integration</description>
 		<vendor name="Marvelution" url="http://www.marvelution.com" />
 		<version>1.0</version>
 		<application-version min="3.13" max="4.0"/>
@@ -35,7 +35,7 @@
 	</web-resource>
 
 	<!-- P O R T L E T S -->
-	<portlet key="hudsonStatus" name="Hudson Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonStatusPortlet">
+	<portlet key="hudson-status" name="Hudson Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonStatusPortlet">
 		<objectdescriptor key="hudson.jira.portlet.status.name" />
 		<label key="hudson.jira.portlet.status.name" />
 		<description key="hudson.portlet.status.description" />
@@ -46,7 +46,7 @@
 		<properties />
 	</portlet>
 
-	<portlet key="hudsonProjectStatus" name="Hudson Project Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet">
+	<portlet key="hudson-project-status" name="Hudson Project Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet">
 		<objectdescriptor key="hudson.jira.portlet.project.status.name" />
 		<label key="hudson.jira.portlet.project.status.name" />
 		<description key="hudson.portlet.project.status.description" />
@@ -110,7 +110,7 @@
 	</issue-tabpanel>
 
 	<!-- H U D S O N   S E R V E R S   C O N F I G U R A T I O N -->
-	<webwork1 key="hudsonServerConfig" name="Configure Your Hudson Server">
+	<webwork1 key="hudson-server-config" name="Configure Your Hudson Server">
 		<resource type="i18n" name="i18n" location="com.marvelution.jira.plugins.hudson.web.action.AbstractHudsonWebActionSupport" />
 		<actions>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServers" alias="ViewHudsonServers">
@@ -137,7 +137,7 @@
 		</actions>
 	</webwork1>
 
-	<webwork1 key="hudsonPanelActions" name="Hudson Server TabPanel Actions">
+	<webwork1 key="hudson-panel-actions" name="Hudson Server TabPanel Actions">
 		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
 		<actions>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServerPanelContent" alias="ViewHudsonServerPanelContent">
@@ -170,8 +170,7 @@
 	<!-- C O M P O N E N T S -->
 	<component key="hudsonPropertyManager" name="Default Hudson Property Manager"
 			class="com.marvelution.jira.plugins.hudson.DefaultHudsonPropertyManagerImpl">
-		<interface>com.marvelution.jira.plugins.hudson.service.HudsonPropertyManager
-		</interface>
+		<interface>com.marvelution.jira.plugins.hudson.service.HudsonPropertyManager</interface>
 	</component>
 	<component key="hudsonServerManagerImpl" name="Default Hudson Server Manager" 
 			class="com.marvelution.jira.plugins.hudson.DefaultHudsonServerManagerImpl">
