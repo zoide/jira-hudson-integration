@@ -34,13 +34,13 @@ Introduction
 * {{{./hudson-jiraapi-plugin/index.html}Hudson Plugin}}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  The Hudson plugin provides:
+  The Hudson plugin {{{./features/hudson/index.html}features}}:
   
   * a new Remote API to expose Job and Build data.
   
-  * a Job property to configure the Jira project key for a Hudson job.
+  * a Job property to configure the Jira project key.
   
-  * a Jira issue key indexer to index all the issue keys and the builds they linked to.
+  * a Jira issue key indexer to index all the issue keys and the builds they are linked to.
   
   []
 
@@ -48,7 +48,7 @@ Introduction
 * {{{./jira-hudson-plugin/index.html}Jira Plugin}}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  The Jira plugin provides:
+  The Jira plugin {{{./features/jira/index.html}features}}:
   
   * the ability to configure multiple Hudson servers.
   
@@ -73,10 +73,4 @@ Installation and Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   Please refer to the {{{./integration/index.html}Integration documentation}} for installation and configuration
-  documentation.
-
-
-Features
-~~~~~~~~
-
-  Please refer to the {{{./features/index.html}Features}} page for a feature overview.
+  guides.
