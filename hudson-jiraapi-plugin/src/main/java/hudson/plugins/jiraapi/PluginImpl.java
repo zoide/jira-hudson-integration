@@ -46,6 +46,7 @@ import hudson.plugins.jiraapi.index.IssueIndexer;
  * Main {@link Plugin} implementation for the Jira Project Key plugin
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
+ * @plugin
  */
 public class PluginImpl extends Plugin {
 
