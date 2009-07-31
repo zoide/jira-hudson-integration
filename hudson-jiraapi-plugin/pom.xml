@@ -17,19 +17,18 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>com.marvelution.jira.plugins</groupId>
 		<artifactId>marvelution-jira-hudson-integration</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.0</version>
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>hudson-jiraapi-plugin</artifactId>
 	<packaging>hpi</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 
 	<name>Hudson Jira Plugin</name>
 	<description>This plugin features a Job property, Issue indexer and a new REST API to integration Hudson with Portlets and Tab Atlassian Jira.</description>
@@ -48,9 +47,9 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/hudson-jiraapi-plugin</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/hudson-jiraapi-plugin</developerConnection>
-		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/hudson-jiraapi-plugin</url>
+		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-1.0/hudson-jiraapi-plugin</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-1.0/hudson-jiraapi-plugin</developerConnection>
+		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-1.0/hudson-jiraapi-plugin</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
