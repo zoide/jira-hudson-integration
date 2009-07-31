@@ -28,7 +28,7 @@
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>marvelution-jira-hudson-integration</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
 	
 	<modules>
 		<module>hudson-jira-api</module>
@@ -53,9 +53,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-1.0</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-1.0</developerConnection>
-		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-1.0</url>
+		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk</developerConnection>
+		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
