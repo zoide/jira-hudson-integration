@@ -28,7 +28,7 @@
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>jira-hudson-plugin</artifactId>
 	<version>1.1-SNAPSHOT</version>
-	<packaging>atlassian-plugin</packaging>
+	<packaging>jar</packaging>
 	
 	<name>JIRA Hudson Plugin</name>
 	<description>JIRA Plugin to integrate Hudson CI</description>
@@ -163,6 +163,24 @@
 	</dependencies>
 
 	<build>
+		<!-- This will automatically put POM settings into atlassian-plugin.xml when building.  -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>atlassian-plugin.xml</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>atlassian-plugin.xml</include>
+					<include>**/*.vm</include>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<!-- enables atlassian-plugin packaging type -->
 			<plugin>
@@ -170,6 +188,14 @@
 				<artifactId>atlassian-pdk</artifactId>
 				<version>2.2-beta-1</version>
 				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>bundle-jars</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<extractDependencies>true</extractDependencies>
 				</configuration>
