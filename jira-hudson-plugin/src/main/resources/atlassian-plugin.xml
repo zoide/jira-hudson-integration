@@ -17,11 +17,11 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<atlassian-plugin name="Marvelution Jira Hudson Integration" key="com.marvelution.jira.plugins.hudson" system="false">
+<atlassian-plugin name="${pom.name}" key="com.marvelution.jira.plugins.hudson" system="false">
 	<plugin-info>
-		<description>Marvelution Jira Hudson Integration</description>
-		<vendor name="Marvelution" url="http://www.marvelution.com" />
-		<version>1.0</version>
+		<description>${pom.description}</description>
+		<vendor name="${pom.organization.name}" url="${pom.organization.url}" />
+		<version>${pom.version}</version>
 		<application-version min="3.13" max="4.0"/>
 	</plugin-info>
 
