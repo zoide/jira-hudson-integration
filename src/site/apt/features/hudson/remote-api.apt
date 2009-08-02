@@ -32,33 +32,33 @@ Hudson Features - Remote API
   
     This new API provides an abstract view of the projects, there modules and builds.
     
-    The API is available at: <<</plugins/hudson-jiraapi-plugin>>>, If your Hudson instance was deployed at
+    The API is available at: <<</plugin/hudson-jiraapi-plugin>>>, If your Hudson instance was deployed at
     <<<http://yourserver/hudson>>>, then the remote API will be available at:
-    <<<http://yourserver/hudson/plugins/hudson-jiraapi-plugin>>>
+    <<<http://yourserver/hudson/plugin/hudson-jiraapi-plugin>>>
 
 ** Get API Version
 ~~~~~~~~~~~~~~~~~~
     
   API endpoint to get the installed API version on the Hudson instance. \
-  Endpoint: <<</plugins/hudson-jiraapi-plugin/getApiVersion>>>
+  Endpoint: <<</plugin/hudson-jiraapi-plugin/getApiVersion>>>
     
 ** List All Projects
 ~~~~~~~~~~~~~~~~~~~~
     
   API endpoint to get a list of all projects, subset of data, that are configured on the Hudson instance. \
-  Endpoint: <<</plugins/hudson-jiraapi-plugin/listAllProjects>>>
+  Endpoint: <<</plugin/hudson-jiraapi-plugin/listAllProjects>>>
     
 ** Get All Projects
 ~~~~~~~~~~~~~~~~~~~
     
   API endpoint to get all the data of all the projects that are configured on the Hudson instance. \
-  Endpoint: <<</plugins/hudson-jiraapi-plugin/getAllProjects>>>
+  Endpoint: <<</plugin/hudson-jiraapi-plugin/getAllProjects>>>
     
 ** Get Project
 ~~~~~~~~~~~~~~
     
   API endpoint to get all the data related to a project specified by the <<<projectKey>>> Jira project key. \
-  Endpoint: <<</plugins/hudson-jiraapi-plugin/getProject?projectKey=JIRA_PROJECT_KEY>>>
+  Endpoint: <<</plugin/hudson-jiraapi-plugin/getProject?projectKey=JIRA_PROJECT_KEY>>>
   
   Parameters:
   
@@ -70,7 +70,7 @@ Hudson Features - Remote API
 ~~~~~~~~~~~~~~~~~~~~~
     
   API endpoint to get all the builds related to a project specified by the <<<projectKey>>> Jira project key. \
-  Endpoint: <<</plugins/hudson-jiraapi-plugin/getProjectBuilds?projectKey=JIRA_PROJECT_KEY>>>
+  Endpoint: <<</plugin/hudson-jiraapi-plugin/getProjectBuilds?projectKey=JIRA_PROJECT_KEY>>>
   
   Parameters:
   
@@ -83,7 +83,7 @@ Hudson Features - Remote API
     
   API endpoint to get all the build related to a project version specified by the <<<projectKey>>> Jira project key. \
   The builds are selected by build date that is between the <<<startDate>>> and <<<releaseDate>>> parameters. \
-  Endpoint: <<</plugins/hudson-jiraapi-plugin/getVersionBuilds?projectKey=JIRA_PROJECT_KEY&versionKey=VERSION_NAME&startDateSTART_DATE=&releaseDate=RELEASE_DATE>>>
+  Endpoint: <<</plugin/hudson-jiraapi-plugin/getVersionBuilds?projectKey=JIRA_PROJECT_KEY&versionKey=VERSION_NAME&startDateSTART_DATE=&releaseDate=RELEASE_DATE>>>
   
   Parameters:
   
@@ -101,7 +101,7 @@ Hudson Features - Remote API
 ~~~~~~~~~~~~~~~~~~~
     
   API endpoint to get all the build related to the given Issue key(s). \
-  Endpoint: <<</plugins/hudson-jiraapi-plugin/getIssueBuilds?issueKeys=ISSUE_KEYS>>>
+  Endpoint: <<</plugin/hudson-jiraapi-plugin/getIssueBuilds?issueKeys=ISSUE_KEYS>>>
   
   Parameters:
   
