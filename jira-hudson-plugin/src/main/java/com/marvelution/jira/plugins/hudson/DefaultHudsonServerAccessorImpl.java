@@ -19,6 +19,10 @@
 
 package com.marvelution.jira.plugins.hudson;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -291,7 +296,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 				}
 				getHttpClient().executeMethod(actionMethod);
 				if (actionMethod.getStatusCode() == HttpStatus.SC_OK) {
-					response = actionMethod.getResponseBodyAsString();
+					response = getResponseBodyAsString(actionMethod);
 				}
 			} catch (MalformedURLException e) {
 				throw new HudsonServerAccessorException("Invalid Hduson action URL specified", e);
@@ -318,7 +323,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			try {
 				getHttpClient().executeMethod(actionMethod);
 				if (actionMethod.getStatusCode() == HttpStatus.SC_OK) {
-					response = actionMethod.getResponseBodyAsString();
+					response = getResponseBodyAsString(actionMethod);
 				}
 			} catch (Exception e) {
 				throw new HudsonServerAccessorException("Failed to connect to the Hudson Server", e);
@@ -384,6 +389,30 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 				((HudsonServerAware) object).setHudsonServerId(server.getServerId());
 			}
 		}
+	}
+
+	/**
+	 * Get the {@link HttpMethod} response body as a {@link String}
+	 * 
+	 * Fix for issue: MARVJIRAHUDSON-16
+	 * 
+	 * @param method the {@link HttpMethod} to get the response body from
+	 * @return the response body as a String
+	 * @throws IOException in case of exceptions
+	 */
+	private String getResponseBodyAsString(HttpMethod method) throws IOException {
+		final InputStream inputStream = method.getResponseBodyAsStream();
+		final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+		final StringBuilder stringBuilder = new StringBuilder();
+		String line = null;
+		try {
+			while ((line = bufferedReader.readLine()) != null) {
+				stringBuilder.append(line + "\n");
+			}
+		} finally {
+			inputStream.close();
+		}
+		return stringBuilder.toString();
 	}
 
 }
