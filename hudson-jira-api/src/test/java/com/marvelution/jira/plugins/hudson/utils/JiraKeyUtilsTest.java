@@ -69,6 +69,7 @@ public class JiraKeyUtilsTest {
 	public void testValidIssueKey() {
 		assertTrue(JiraKeyUtils.isValidIssueKey("MARVADMIN-2"));
 		assertTrue(JiraKeyUtils.isValidIssueKey("MARVADMIN-20"));
+		assertFalse(JiraKeyUtils.isValidIssueKey("MARVadmin2"));
 	}
 
 	/**
@@ -77,7 +78,6 @@ public class JiraKeyUtilsTest {
 	@Test
 	public void testInvalidIssueKey() {
 		assertFalse(JiraKeyUtils.isValidIssueKey("MARVADMIN2"));
-		assertFalse(JiraKeyUtils.isValidIssueKey("MARVadmin2"));
 		assertFalse(JiraKeyUtils.isValidIssueKey("2-MARVADMIN"));
 	}
 
@@ -86,11 +86,12 @@ public class JiraKeyUtilsTest {
 	 */
 	@Test
 	public void testGetIssueKeysFromText() {
-		final String text = "This text contains two Issue keys: MARVADMIN-1, MARVSITE-10";
+		final String text = "This text contains two Issue keys: MARVADMIN-1, MARVSITE-10, marvadmin-2";
 		final Set<String> keys = JiraKeyUtils.getJiraIssueKeysFromText(text);
-		assertTrue(keys.size() == 2);
+		assertTrue(keys.size() == 3);
 		assertTrue(keys.contains("MARVADMIN-1"));
 		assertTrue(keys.contains("MARVSITE-10"));
+		assertTrue(keys.contains("marvadmin-2"));
 	}
 
 }

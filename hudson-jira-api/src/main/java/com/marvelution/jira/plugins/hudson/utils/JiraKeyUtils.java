@@ -33,7 +33,7 @@ public final class JiraKeyUtils {
 	
 	private static final Pattern JIRA_PROJECT_KEY_PATTERN = Pattern.compile("\\b[A-Z]([A-Z]+)\\b");
 	
-	private static final Pattern JIRA_ISSUE_KEY_PATTERN = Pattern.compile("\\b[A-Z]([A-Z]+)-([0-9]+)\\b");
+	private static final Pattern JIRA_ISSUE_KEY_PATTERN = Pattern.compile("\\b[a-zA-Z]([a-zA-Z]+)-([0-9]+)\\b");
 
 	/**
 	 * Validates if the given key {@link String} is a valid JIRA Project Key
