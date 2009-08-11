@@ -15,6 +15,15 @@
 ## specific language governing permissions and limitations
 ## under the License.
 
+#macro(showLink $selectedSubTab $thisSubTab)
+#set ($i18nTitle = "hudson.panel.${thisSubTab}.${moduleKey}.title")
+#if ($selectedSubTab == $thisSubTab)
+    ${i18n.getText($i18nTitle)}
+#else
+    <a id="hudson_tab_panel_tab_link" href="${req.contextPath}${baseLinkUrl}&selectedSubTab=${thisSubTab}">${i18n.getText($i18nTitle)}</a>
+#end
+#end
+
 <div class="projectPanel" id="hudsonTabPanel">
 	<div class="header">
 		<h3 class="formtitle">
@@ -22,6 +31,16 @@
 			<img src="${req.contextPath}${baseResourceUrl}/images/hudson-icon-24.png" />
 			${i18n.getText("hudson.panel.title")}
 		</h3>
+		#if ($availableTabs && !$availableTabs.isEmpty())
+        <ul class="square">
+            <li>
+                <strong>${i18n.getText("common.concepts.view")}:</strong>
+                #foreach ($subTab in $availableTabs)
+                    #showLink(${selectedSubTab} ${subTab})  #if($velocityCount < $availableTabs.size()) | #end
+                #end
+            </li>
+        </ul>
+        #end
 		<p class="subText">
 			#set ($i18nDescription = "hudson.panel.${moduleKey}.$!{extraDescriptionKey}description")
 			${i18n.getText($i18nDescription)}

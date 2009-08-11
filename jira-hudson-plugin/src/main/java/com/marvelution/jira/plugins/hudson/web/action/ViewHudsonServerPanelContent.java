@@ -41,6 +41,8 @@ import com.atlassian.jira.issue.search.SearchException;
 import com.atlassian.jira.issue.search.SearchProvider;
 import com.atlassian.jira.issue.search.SearchResults;
 import com.atlassian.jira.issue.search.parameters.lucene.ComponentParameter;
+import com.atlassian.jira.issue.search.parameters.lucene.ProjectParameter;
+import com.atlassian.jira.issue.search.parameters.lucene.VersionParameter;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.project.version.Version;
@@ -55,6 +57,7 @@ import com.atlassian.jira.web.bean.PagerFilter;
 import com.atlassian.jira.web.bean.StatisticAccessorBean;
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.HudsonBuildTabPanelResult;
+import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
@@ -150,6 +153,9 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 		}
 		HudsonServer server = serverManager.getDefaultServer();
 		results = new HudsonBuildTabPanelResult(server);
+		final String selectedSubTab =
+			HudsonBuildsTabPanelHelper.retrieveFromRequestOrSession(HudsonBuildsTabPanelHelper.SELECTED_SUB_TAB_KEY,
+				HudsonBuildsTabPanelHelper.SUB_TAB_BUILD_BY_PLAN);
 		try {
 			List<Build> builds = new ArrayList<Build>();
 			if (!StringUtils.isEmpty(getProjectKey())) {
@@ -158,7 +164,11 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, project, authenticationContext
 						.getUser())) {
 					server = serverManager.getServerByJiraProject(project);
-					builds = serverAccessor.getBuilds(server, project);
+					if (HudsonBuildsTabPanelHelper.SUB_TAB_BUILD_BY_ISSUE.equals(selectedSubTab)) {
+						builds = serverAccessor.getBuilds(server, getIssueKeys(project));
+					} else {
+						builds = serverAccessor.getBuilds(server, project);
+					}
 				} else {
 					addErrorMessage(getText("hudson.panel.error.no.permission"));
 					return "error";
@@ -169,7 +179,11 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, version.getProjectObject(),
 						authenticationContext.getUser())) {
 					server = serverManager.getServerByJiraProject(version.getProjectObject());
-					builds = serverAccessor.getBuilds(server, version);
+					if (HudsonBuildsTabPanelHelper.SUB_TAB_BUILD_BY_ISSUE.equals(selectedSubTab)) {
+						builds = serverAccessor.getBuilds(server, getIssueKeys(version));
+					} else {
+						builds = serverAccessor.getBuilds(server, version);
+					}
 				} else {
 					addErrorMessage(getText("hudson.panel.error.no.permission"));
 					return "error";
@@ -213,6 +227,44 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	}
 
 	/**
+	 * Get the issue keys that relate to the given {@link Project}
+	 * 
+	 * @param project the {@link Project} to get the related issues for
+	 * @return {@link Collection} of issue keys
+	 */
+	@SuppressWarnings("unchecked")
+	private List<String> getIssueKeys(final  Project project) {
+		try {
+			final Set searchParams = new HashSet();
+			searchParams.add(new ProjectParameter(EasyList.build(project.getId())));
+			return getIssueKeys(searchParams, project.getId());
+		} catch (SearchException e) {
+			log.warn(
+				"Unable to get all issues from project " + project.getName() + ". Reason: " + e.getMessage(), e);
+		}
+		return null;
+	}
+
+	/**
+	 * Get the issue keys that relate to the given {@link Version}
+	 * 
+	 * @param version the {@link Version} to get the related issues for
+	 * @return {@link Collection} of issue keys
+	 */
+	@SuppressWarnings("unchecked")
+	private List<String> getIssueKeys(final  Version version) {
+		try {
+			final Set searchParams = new HashSet();
+			searchParams.add(new VersionParameter(EasyList.build(version.getId())));
+			return getIssueKeys(searchParams, version.getProjectObject().getId());
+		} catch (SearchException e) {
+			log.warn(
+				"Unable to get all issues from version " + version.getName() + ". Reason: " + e.getMessage(), e);
+		}
+		return null;
+	}
+
+	/**
 	 * Get the issue keys that relate to the given component
 	 * 
 	 * @param component the {@link ProjectComponent} to get the related issues for
@@ -223,25 +275,38 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 		try {
 			final Set searchParams = new HashSet();
 			searchParams.add(new ComponentParameter(EasyList.build(component.getId())));
-			final StatisticAccessorBean statisticAccessorBean =
-				new StatisticAccessorBean(this.authenticationContext.getUser(), component.getProjectId(),
-					searchParams, false);
-			final SearchResults searchResults =
-				this.searchProvider.search(statisticAccessorBean.getFilter(), this.authenticationContext.getUser(),
-					PagerFilter.getUnlimitedFilter());
-			final Collection<?> issues = searchResults.getIssues();
-			final List<String> issueKeys = new ArrayList<String>();
-			for (Object obj : issues) {
-				if (obj instanceof Issue) {
-					issueKeys.add(((Issue) obj).getKey());
-				}
-			}
-			return issueKeys;
+			return getIssueKeys(searchParams, component.getProjectId());
 		} catch (SearchException e) {
 			log.warn(
 				"Unable to get all issues from component " + component.getName() + ". Reason: " + e.getMessage(), e);
 		}
 		return null;
+	}
+
+	/**
+	 * Get the issue keys that relate to the given component
+	 * 
+	 * @param searchParams the {@link Set} of {@link SearchParameter}
+	 * @param projectId the project id to search within
+	 * @return {@link Collection} of issue keys
+	 * @throws SearchException in case of search exceptions
+	 */
+	@SuppressWarnings("unchecked")
+	private List<String> getIssueKeys(final Set searchParams, final long projectId)
+					throws SearchException {
+		final StatisticAccessorBean statisticAccessorBean =
+			new StatisticAccessorBean(this.authenticationContext.getUser(), projectId, searchParams, false);
+		final SearchResults searchResults =
+			this.searchProvider.search(statisticAccessorBean.getFilter(), this.authenticationContext.getUser(),
+				PagerFilter.getUnlimitedFilter());
+		final Collection<?> issues = searchResults.getIssues();
+		final List<String> issueKeys = new ArrayList<String>();
+		for (Object obj : issues) {
+			if (obj instanceof Issue) {
+				issueKeys.add(((Issue) obj).getKey());
+			}
+		}
+		return issueKeys;
 	}
 
 	/**

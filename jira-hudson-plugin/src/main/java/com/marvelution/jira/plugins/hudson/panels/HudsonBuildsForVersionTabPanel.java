@@ -73,7 +73,8 @@ public class HudsonBuildsForVersionTabPanel extends GenericTabPanel {
 		if (version.isReleased()) {
 			velocityParams.put("extraDescriptionKey", "released.");
 		}
-		tabPanelHelper.prepareVelocityParameters(velocityParams, version);
+		tabPanelHelper.prepareVelocityParameters(velocityParams, version, "/browse/" + context.getProject().getKey()
+			+ "/fixforversion/" + version.getId() + "?selected=", HudsonBuildsTabPanelHelper.SUB_TABS);
 		return velocityParams;
 	}
 
