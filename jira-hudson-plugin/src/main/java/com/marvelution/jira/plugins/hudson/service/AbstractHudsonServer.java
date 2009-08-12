@@ -46,6 +46,10 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 
 	private Set<String> associatedProjectKeys;
 
+	private String crumb;
+
+	private String crumbField;
+
 	/**
 	 * Default Constructor
 	 */
@@ -225,6 +229,34 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	 */
 	public String getImageUrl(int size) {
 		return getHost() + "/images/" + size + 'x' + size + '/';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getCrumb() {
+		return crumb;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setCrumb(String crumb) {
+		this.crumb = crumb;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getCrumbField() {
+		return crumbField;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setCrumbField(String crumbField) {
+		this.crumbField = crumbField;
 	}
 
 }

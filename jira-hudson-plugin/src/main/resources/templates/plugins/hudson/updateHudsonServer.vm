@@ -18,7 +18,6 @@
 #set($i18n=$action)
 <form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="UpdateHudsonServer.jspa">
     <input type="hidden" name="hudsonServerId" value="${hudsonServerId}" />
-    <input type="hidden" name="id" value="${id}" />
     <input type="hidden" name="associatedProjectKeys" value="${associatedProjectKeys}" />
 <table class="jiraform maxWidth">
     <tbody>

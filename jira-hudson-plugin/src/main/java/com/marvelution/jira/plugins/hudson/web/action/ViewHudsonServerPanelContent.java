@@ -59,6 +59,7 @@ import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.HudsonBuildTabPanelResult;
 import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
@@ -221,6 +222,10 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 		} catch (HudsonServerAccessorException e) {
 			log.warn("Failed to connect to Hudson Server. Reason: " + e.getMessage(), e);
 			addErrorMessage(getText("hudson.panel.error.cannot.connect", server.getName()));
+			return "error";
+		} catch (HudsonServerAccessDeniedException e) {
+			log.warn("Failed to connect to Hudson Server. Reason: " + e.getMessage(), e);
+			addErrorMessage(getText("hudson.panel.error.access.denied", server.getName()));
 			return "error";
 		}
 		return super.doExecute();

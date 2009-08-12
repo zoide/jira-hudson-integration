@@ -25,6 +25,7 @@ import com.atlassian.jira.security.PermissionManager;
 import com.marvelution.jira.plugins.hudson.JiraApi;
 import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerFactory;
@@ -75,6 +76,7 @@ public abstract class AbstractEditHudsonServer extends AbstractHudsonWebActionSu
 			addError("host", getText("hudson.config.host.invalid"));
 		} else {
 			try {
+				hudsonServerAccessor.getCrumb(hudsonServer);
 				final ApiImplementation remoteApi = hudsonServerAccessor.getApiImplementation(hudsonServer);
 				if (!JiraApi.getApiImplementation().equals(remoteApi)) {
 					addError("host", getText("hudson.config.host.incompatible.api.version", JiraApi
@@ -82,26 +84,28 @@ public abstract class AbstractEditHudsonServer extends AbstractHudsonWebActionSu
 				}
 			} catch (HudsonServerAccessorException e) {
 				addError("host", getText("hudson.config.host.connection.error", JiraApi.getApiImplementation()));
+			} catch (HudsonServerAccessDeniedException e) {
+				addError("host", getText("hudson.config.host.access.denied.error"));
 			}
 		}
 	}
 
 	/**
-	 * Get the Server Id
+	 * Gets the Server Id
 	 * 
 	 * @return the Server Id
 	 */
-	public int getId() {
+	public int getHudsonServerId() {
 		return hudsonServer.getServerId();
 	}
 
 	/**
-	 * Set the Server Id
+	 * Sets the Server Id
 	 * 
-	 * @param serverId the Server Id
+	 * @param hudsonServerId the Server Id
 	 */
-	public void setId(int serverId) {
-		hudsonServer.setServerId(serverId);
+	public void setHudsonServerId(int hudsonServerId) {
+		hudsonServer.setServerId(hudsonServerId);
 	}
 
 	/**

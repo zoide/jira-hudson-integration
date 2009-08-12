@@ -32,6 +32,7 @@ import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.plugin.webresource.WebResourceManager;
 import com.marvelution.jira.plugins.hudson.model.HudsonProjectStatusPortletResult;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
@@ -92,6 +93,9 @@ public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
 			} catch (HudsonServerAccessorException e) {
 				LOGGER.error("Failed to connect to the Hudson server.", e);
 				result.setError(getErrorText("hudson.error.cannot.connect"));
+			} catch (HudsonServerAccessDeniedException e) {
+				result.setError(getErrorText("hudson.error.access.denied"));
+				LOGGER.error("Failed to connect to the Hudson server. Access Denied", e);
 			}
 			params.put("result", result);
 		}

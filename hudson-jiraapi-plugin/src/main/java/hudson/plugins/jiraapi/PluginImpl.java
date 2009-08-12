@@ -41,6 +41,7 @@ import hudson.Plugin;
 import hudson.model.Hudson;
 import hudson.plugins.jiraapi.api.ApiImpl;
 import hudson.plugins.jiraapi.index.IssueIndexer;
+import hudson.security.csrf.CrumbIssuer;
 
 /**
  * Main {@link Plugin} implementation for the Jira Project Key plugin
@@ -92,6 +93,26 @@ public class PluginImpl extends Plugin {
 		super.stop();
 	}
 
+
+	/**
+	 * Handler for getCrumb requests
+	 * 
+	 * @param request the {@link StaplerRequest}
+	 * @param response the {@link StaplerResponse}
+	 * @throws IOException in case of IO Exceptions
+	 * @throws ServletException in case of Servlet Exceptions
+	 */
+	public void doGetCrumb(final StaplerRequest request, final StaplerResponse response) throws IOException,
+					ServletException {
+		Hudson.getInstance().checkPermission(Hudson.READ);
+		final String userAgent = "Jira Hudson Integration Client/" + JiraApi.getApiImplementation().getVersion();
+		if (userAgent.equals(request.getHeader("User-Agent")) && Hudson.getInstance().isUseCrumbs()) {
+			final CrumbIssuer issuer = Hudson.getInstance().getCrumbIssuer();
+			response.setHeader("Crumb-Field", issuer.getCrumbRequestField());
+			response.setHeader("Crumb", issuer.getCrumb(request));
+		}
+	}
+
 	/**
 	 * Handler for getApiVersion requests
 	 * 
@@ -104,7 +125,8 @@ public class PluginImpl extends Plugin {
 			ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
 		try {
-			writeXmlToResponse(request, response, XStreamMarshaller.marshal(JiraApi.getApiImplementation()));
+			writeToResponse(request, response, "application/xml", XStreamMarshaller.marshal(JiraApi
+				.getApiImplementation()));
 		} catch (XStreamMarshallerException e) {
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
@@ -124,7 +146,7 @@ public class PluginImpl extends Plugin {
 		LOGGER.log(Level.FINE, "Getting list of all projects");
 		final JobsList jobs = apiImpl.listAllProjects();
 		try {
-			writeXmlToResponse(request, response, XStreamMarshaller.marshal(jobs));
+			writeToResponse(request, response, "application/xml", XStreamMarshaller.marshal(jobs));
 		} catch (XStreamMarshallerException e) {
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
@@ -144,7 +166,7 @@ public class PluginImpl extends Plugin {
 		LOGGER.log(Level.FINE, "Getting all builds of all projects");
 		final JobsList jobs = apiImpl.getAllProjects();
 		try {
-			writeXmlToResponse(request, response, XStreamMarshaller.marshal(jobs));
+			writeToResponse(request, response, "application/xml", XStreamMarshaller.marshal(jobs));
 		} catch (XStreamMarshallerException e) {
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
@@ -166,7 +188,7 @@ public class PluginImpl extends Plugin {
 		LOGGER.log(Level.FINE, "Getting project: " + projectKey);
 		try {
 			final String xml = XStreamMarshaller.marshal(apiImpl.getProjectByJiraKey(projectKey));
-			writeXmlToResponse(request, response, xml);
+			writeToResponse(request, response, "application/xml", xml);
 		} catch (XStreamMarshallerException e) {
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
@@ -188,7 +210,7 @@ public class PluginImpl extends Plugin {
 		LOGGER.log(Level.FINE, "Getting all builds related to project: " + projectKey);
 		try {
 			final String xml = XStreamMarshaller.marshal(apiImpl.getBuildsByJiraProject(projectKey));
-			writeXmlToResponse(request, response, xml);
+			writeToResponse(request, response, "application/xml", xml);
 		} catch (XStreamMarshallerException e) {
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
@@ -216,7 +238,7 @@ public class PluginImpl extends Plugin {
 		try {
 			final String xml =
 				XStreamMarshaller.marshal(apiImpl.getBuildsByJiraVersion(projectKey, startDate, releaseDate));
-			writeXmlToResponse(request, response, xml);
+			writeToResponse(request, response, "application/xml", xml);
 		} catch (XStreamMarshallerException e) {
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
@@ -238,30 +260,32 @@ public class PluginImpl extends Plugin {
 		LOGGER.log(Level.FINE, "Getting all builds related to issue keys: " + Arrays.asList(issueKeys));
 		try {
 			final String xml = XStreamMarshaller.marshal(apiImpl.getBuildsByJiraIssueKeys(issueKeys));
-			writeXmlToResponse(request, response, xml);
+			writeToResponse(request, response, "application/xml", xml);
 		} catch (XStreamMarshallerException e) {
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
 	}
 
 	/**
-	 * Write the response XML to {@link StaplerResponse}
+	 * Write content to {@link StaplerResponse}
 	 * 
 	 * @param request the {@link StaplerRequest}
 	 * @param response the {@link StaplerResponse}
-	 * @param xml the XML {@link String} to write
+	 * @param contentType the Content-Type header value
+	 * @param content the Content {@link String} to write
 	 * @throws ServletException in case of failures when writing the XML to the {@link StaplerResponse}
 	 */
-	private void writeXmlToResponse(final StaplerRequest request, final StaplerResponse response, final String xml)
+	private void writeToResponse(final StaplerRequest request, final StaplerResponse response,
+					final String contentType, final String content)
 			throws ServletException {
-		response.setHeader("Content-type", "application/xml");
+		response.setHeader("Content-type", contentType);
 		Writer writer = null;
 		try {
 			writer = response.getCompressedWriter(request);
-			writer.write(xml);
+			writer.write(content);
 			writer.flush();
 		} catch (IOException e) {
-			throw new ServletException("Failed to write XML to response. Reason: " + e.getMessage(), e);
+			throw new ServletException("Failed to write to response. Reason: " + e.getMessage(), e);
 		} finally {
 			try {
 				if (writer != null) {

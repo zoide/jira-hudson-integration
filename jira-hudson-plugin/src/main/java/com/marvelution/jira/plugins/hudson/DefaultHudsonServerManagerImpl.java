@@ -67,6 +67,10 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 
 	static final String CONFIG_SERVER_PROJECTS_KEY_SUFFIX = ".projects";
 
+	static final String CONFIG_SERVER_CRUMB_KEY_SUFFIX = ".crumb";
+
+	static final String CONFIG_SERVER_CRUMB_FIELD_KEY_SUFFIX = ".crumb.field";
+
 	static final String CONFIG_PROJECT_KEY_SEPARATORS = " ,;:";
 
 	private static final Logger LOGGER = Logger.getLogger(DefaultHudsonServerManagerImpl.class);
@@ -114,9 +118,9 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 		if (propertySet.exists(CONFIG_DEFAULT_SERVER_ID)
 			&& servers.containsKey(new Integer(propertySet.getInt(CONFIG_DEFAULT_SERVER_ID)))) {
 			defaultServerId = propertySet.getInt(CONFIG_DEFAULT_SERVER_ID);
-			LOGGER.debug("Default server configure with Id: " + defaultServerId);
+			LOGGER.debug("Default server configured with Id: " + defaultServerId);
 		} else if (!servers.isEmpty()) {
-			LOGGER.debug("No default server configure making the first one in the list default");
+			LOGGER.debug("No default server configured making the first one in the list default");
 			setDefaultServer((HudsonServer) servers.values().toArray()[0]);
 		}
 	}
@@ -304,6 +308,9 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 		final String projects =
 			propertySet.getString(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
 		server.setAssociatedProjectKeys(Arrays.asList(projects.split(CONFIG_PROJECT_KEY_SEPARATORS)));
+		server.setCrumb(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_CRUMB_KEY_SUFFIX));
+		server.setCrumbField(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + serverId
+			+ CONFIG_SERVER_CRUMB_FIELD_KEY_SUFFIX));
 		add(server);
 	}
 
@@ -329,6 +336,10 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 			encryptedPassword);
 		final String projects = StringUtils.join(hudsonServer.getAssociatedProjectKeys(), ',');
 		propertySet.setString(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_PROJECTS_KEY_SUFFIX, projects);
+		propertySet.setString(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_CRUMB_KEY_SUFFIX, hudsonServer
+			.getCrumb());
+		propertySet.setString(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_CRUMB_FIELD_KEY_SUFFIX,
+			hudsonServer.getCrumbField());
 	}
 
 	/**
@@ -345,6 +356,8 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 		propertySet.remove(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_USERNAME_KEY_SUFFIX);
 		propertySet.remove(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_PASSWORD_KEY_SUFFIX);
 		propertySet.remove(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
+		propertySet.remove(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_CRUMB_KEY_SUFFIX);
+		propertySet.remove(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_CRUMB_FIELD_KEY_SUFFIX);
 	}
 
 	/**

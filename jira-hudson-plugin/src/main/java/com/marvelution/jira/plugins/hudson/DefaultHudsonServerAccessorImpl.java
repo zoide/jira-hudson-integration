@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
@@ -38,6 +39,8 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
@@ -48,6 +51,7 @@ import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
@@ -90,8 +94,27 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	public void getCrumb(HudsonServer hudsonServer) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
+		try {
+			final GetMethod method =
+				createGetMethod(hudsonServer, constructHudsonActionURL(hudsonServer, GET_CRUMB_ACTION).toString());
+			getHudsonServerActionResponse(hudsonServer, method);
+			if (method.getResponseHeader("Crumb") != null && method.getResponseHeader("Crumb-Field") != null) {
+				hudsonServer.setCrumb(method.getResponseHeader("Crumb").getValue());
+				hudsonServer.setCrumbField(method.getResponseHeader("Crumb-Field").getValue());
+			}
+		} catch (MalformedURLException e) {
+			throw new HudsonServerAccessorException("Failed to get Crumb information form Hudson Server: "
+				+ hudsonServer.getName(), e);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public ApiImplementation getApiImplementation(HudsonServer hudsonServer)
-					throws HudsonServerAccessorException {
+					throws HudsonServerAccessorException, HudsonServerAccessDeniedException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_API_VERSION_ACTION, null);
 		try {
 			final ApiImplementation api = XStreamMarshaller.unmarshal(response, ApiImplementation.class);
@@ -106,7 +129,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Job> getProjectsList(HudsonServer hudsonServer) throws HudsonServerAccessorException {
+	public List<Job> getProjectsList(HudsonServer hudsonServer) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
 		final String response = getHudsonServerActionResponse(hudsonServer, LIST_ALL_PROJECTS_ACTION, null);
 		try {
 			final JobsList jobs = XStreamMarshaller.unmarshal(response, JobsList.class);
@@ -120,7 +144,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Job> getProjects(HudsonServer hudsonServer) throws HudsonServerAccessorException {
+	public List<Job> getProjects(HudsonServer hudsonServer) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_ALL_PROJECTS_ACTION, null);
 		try {
 			final JobsList jobs = XStreamMarshaller.unmarshal(response, JobsList.class);
@@ -134,14 +159,15 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Job getProject(Project project) throws HudsonServerAccessorException {
+	public Job getProject(Project project) throws HudsonServerAccessorException, HudsonServerAccessDeniedException {
 		return getProject(serverManager.getServerByJiraProject(project), project);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Job getProject(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException {
+	public Job getProject(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();
 		params.put("projectKey", project.getKey());
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_PROJECT_ACTION, params);
@@ -156,15 +182,16 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Build> getBuilds(Project project) throws HudsonServerAccessorException {
+	public List<Build> getBuilds(Project project) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
 		return getBuilds(serverManager.getServerByJiraProject(project), project);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Build> getBuilds(HudsonServer hudsonServer, Project project)
-			throws HudsonServerAccessorException {
+	public List<Build> getBuilds(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();
 		params.put("projectKey", project.getKey());
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_PROJECT_BUILDS_ACTION, params);
@@ -181,15 +208,16 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Build> getBuilds(Version version) throws HudsonServerAccessorException {
+	public List<Build> getBuilds(Version version) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
 		return getBuilds(serverManager.getServerByJiraProject(version.getProjectObject()), version);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Build> getBuilds(HudsonServer hudsonServer, Version version)
-			throws HudsonServerAccessorException {
+	public List<Build> getBuilds(HudsonServer hudsonServer, Version version) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();
 		params.put("projectKey", version.getProjectObject().getKey());
 		params.put("versionKey", version.getName());
@@ -221,7 +249,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Build> getBuilds(List<String> issueKeys) throws HudsonServerAccessorException {
+	public List<Build> getBuilds(List<String> issueKeys) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
 		final List<Build> builds = new ArrayList<Build>();
 		for (HudsonServer server : serverManager.getServers()) {
 			builds.addAll(getBuilds(server, issueKeys));
@@ -233,7 +262,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 * {@inheritDoc}
 	 */
 	public List<Build> getBuilds(HudsonServer hudsonServer, List<String> issueKeys)
-			throws HudsonServerAccessorException {
+					throws HudsonServerAccessorException, HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();
 		String issueKeysString = "";
 		for (String issueKey : issueKeys) {
@@ -259,31 +288,47 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 * @param params extra parameters to add to the action
 	 * @return the action response from the {@link HudsonServer}
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson Server
+	 * @throws HudsonServerAccessDeniedException in case Hudson denies access
 	 */
 	public String getHudsonServerActionResponse(HudsonServer hudsonServer, String action, Map<String, String> params)
-			throws HudsonServerAccessorException {
+					throws HudsonServerAccessorException, HudsonServerAccessDeniedException {
 		if (hudsonServer == null) {
 			throw new HudsonServerAccessorException("hudsonServer may not be null");
 		}
-		String response = "";
-		URL actionUrl;
-		PostMethod actionMethod = null;
 		try {
-			actionUrl = constructHudsonActionURL(hudsonServer, action);
-			actionMethod = createPostMethod(actionUrl.toString());
+			final URL actionUrl = constructHudsonActionURL(hudsonServer, action);
+			final PostMethod actionMethod = createPostMethod(hudsonServer, actionUrl.toString());
 			if (params != null) {
 				for (Entry<String, String> entry : params.entrySet()) {
 					actionMethod.addParameter(entry.getKey(), entry.getValue());
 				}
 			}
+			return getHudsonServerActionResponse(hudsonServer, actionMethod);
 		} catch (MalformedURLException e) {
 			throw new HudsonServerAccessorException("Failed to construct the Hudson Server Action URL", e);
 		}
+	}
+
+	/**
+	 * Gets the Remote API response from the {@link HudsonServer}
+	 * 
+	 * @param hudsonServer the {@link HudsonServer} to execute the action on
+	 * @param actionMethod the {@link HttpMethod} to execute
+	 * @return the action response from the {@link HudsonServer}
+	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson Server
+	 * @throws HudsonServerAccessDeniedException in case Hudson denies access
+	 */
+	public String getHudsonServerActionResponse(HudsonServer hudsonServer, HttpMethod actionMethod)
+					throws HudsonServerAccessorException, HudsonServerAccessDeniedException {
+		if (hudsonServer == null) {
+			throw new HudsonServerAccessorException("hudsonServer may not be null");
+		}
+		String response = "";
 		if (hudsonServer.isSecuredHudsonServer()) {
 			try {
 				String loginAction = constructHudsonActionURL(hudsonServer, "/j_security_check").toString();
 				while (true) {
-					final PostMethod loginMethod = createPostMethod(loginAction);
+					final PostMethod loginMethod = createPostMethod(hudsonServer, loginAction);
 					loginMethod.addParameter("j_username", hudsonServer.getUsername());
 					loginMethod.addParameter("j_password", hudsonServer.getPassword());
 					loginMethod.addParameter("action", "login");
@@ -297,10 +342,12 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 				getHttpClient().executeMethod(actionMethod);
 				if (actionMethod.getStatusCode() == HttpStatus.SC_OK) {
 					response = getResponseBodyAsString(actionMethod);
+				} else {
+					handleNotOKResponse(actionMethod);
 				}
 			} catch (MalformedURLException e) {
 				throw new HudsonServerAccessorException("Invalid Hduson action URL specified", e);
-			} catch (Exception e) {
+			} catch (IOException e) {
 				throw new HudsonServerAccessorException("Failed to connect to the Hudson Server", e);
 			} finally {
 				if (actionMethod != null) {
@@ -309,7 +356,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 				GetMethod logoutMethod = null;
 				try {
 					final String logoutAction = constructHudsonActionURL(hudsonServer, "/logout").toString();
-					logoutMethod = createGetMethod(logoutAction);
+					logoutMethod = createGetMethod(hudsonServer, logoutAction);
 					getHttpClient().executeMethod(logoutMethod);
 				} catch (Exception e) {
 					/* INGORE */
@@ -324,8 +371,10 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 				getHttpClient().executeMethod(actionMethod);
 				if (actionMethod.getStatusCode() == HttpStatus.SC_OK) {
 					response = getResponseBodyAsString(actionMethod);
+				} else {
+					handleNotOKResponse(actionMethod);
 				}
-			} catch (Exception e) {
+			} catch (IOException e) {
 				throw new HudsonServerAccessorException("Failed to connect to the Hudson Server", e);
 			} finally {
 				if (actionMethod != null) {
@@ -359,22 +408,42 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 
 	/**
 	 * Create {@link PostMethod}
-	 * 
+	 *
+	 * @param server the {@link HudsonServer}
 	 * @param url the URL of the {@link PostMethod}
 	 * @return the {@link PostMethod}
 	 */
-	protected PostMethod createPostMethod(String url) {
-		return new PostMethod(url);
+	protected PostMethod createPostMethod(HudsonServer server, String url) {
+		final PostMethod method = new PostMethod(url);
+		addDefaultHeaders(server, method);
+		return method;
 	}
 
 	/**
 	 * Create {@link GetMethod}
-	 * 
+	 *
+	 * @param server the {@link HudsonServer}
 	 * @param url the URL of the {@link GetMethod}
 	 * @return the {@link GetMethod}
 	 */
-	protected GetMethod createGetMethod(String url) {
-		return new GetMethod(url);
+	protected GetMethod createGetMethod(HudsonServer server, String url) {
+		final GetMethod method = new GetMethod(url);
+		addDefaultHeaders(server, method);
+		return method;
+	}
+
+	/**
+	 * Add the default headers of the {@link HttpMethod}
+	 * 
+	 * @param server the {@link HudsonServer} containing the Crumb implementation configuration details
+	 * @param method the {@link HttpMethod} to add the Crumb parameter to
+	 */
+	protected void addDefaultHeaders(HudsonServer server, HttpMethod method) {
+		method.addRequestHeader(new Header(HttpMethodParams.USER_AGENT, "Jira Hudson Integration Client/"
+			+ JiraApi.getApiImplementation().getVersion()));
+		if (StringUtils.isNotEmpty(server.getCrumb()) && StringUtils.isNotEmpty(server.getCrumbField())) {
+			method.addRequestHeader(new Header(server.getCrumbField(), server.getCrumb()));
+		}
 	}
 
 	/**
@@ -392,9 +461,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	}
 
 	/**
-	 * Get the {@link HttpMethod} response body as a {@link String}
-	 * 
-	 * Fix for issue: MARVJIRAHUDSON-16
+	 * Get the {@link HttpMethod} response body as a {@link String} Fix for issue: MARVJIRAHUDSON-16
 	 * 
 	 * @param method the {@link HttpMethod} to get the response body from
 	 * @return the response body as a String
@@ -413,6 +480,22 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			inputStream.close();
 		}
 		return stringBuilder.toString();
+	}
+
+	/**
+	 * Handle responses that don't return a 200 status code
+	 * 
+	 * @param method the {@link HttpMethod} to handle the response for
+	 * @throws HudsonServerAccessDeniedException in case of unrecoverable errors
+	 * @throws IOException in case the response body cannot be read
+	 */
+	private void handleNotOKResponse(HttpMethod method) throws HudsonServerAccessDeniedException, IOException {
+		switch (method.getStatusCode()) {
+			case HttpStatus.SC_FORBIDDEN:
+				throw new HudsonServerAccessDeniedException("Hudson denied access to the plugin API.");
+			default:
+				break;
+		}
 	}
 
 }
