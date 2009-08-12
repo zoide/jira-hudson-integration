@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -60,7 +61,7 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
  */
 public class DefaultHudsonServerAccessorImplTest {
 
-	private DefaultHudsonServerAccessorImpl serverAccessor;
+	private DefaultHudsonServerAccessorImpl hudsonServerAccessor;
 
 	@Mock
 	private Project project;
@@ -75,7 +76,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	private Version firstVersion;
 
 	@Mock
-	private HudsonServerManager serverManager;
+	private HudsonServerManager hudsonServerManager;
 
 	@Mock
 	private HttpClient httpClient;
@@ -86,7 +87,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	@Mock
 	private GetMethod getMethod;
 
-	private HudsonServer server;
+	private HudsonServer hudsonServer;
 
 	private Map<String, String> params = new HashMap<String, String>();
 
@@ -97,9 +98,9 @@ public class DefaultHudsonServerAccessorImplTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		server = new DefaultHudsonServerImpl();
-		server.setName("Hudson CI");
-		server.setHost("http://hudson.marvelution.com");
+		hudsonServer = new DefaultHudsonServerImpl();
+		hudsonServer.setName("Hudson CI");
+		hudsonServer.setHost("http://hudson.marvelution.com");
 		MockitoAnnotations.initMocks(this);
 		when(version.getProjectObject()).thenReturn(project);
 		when(version.getSequence()).thenReturn(3L);
@@ -116,9 +117,53 @@ public class DefaultHudsonServerAccessorImplTest {
 		versions.add(version);
 		when(project.getKey()).thenReturn("MARVADMIN");
 		when(project.getVersions()).thenReturn(versions);
-		when(serverManager.getServerByJiraProject(any(Project.class))).thenReturn(server);
-		when(serverManager.getServers()).thenReturn(Collections.singletonList(server));
-		serverAccessor = new TestDefaultHudsonServerAccessorImpl(serverManager);
+		when(hudsonServerManager.getServerByJiraProject(any(Project.class))).thenReturn(hudsonServer);
+		when(hudsonServerManager.getServers()).thenReturn(Collections.singletonList(hudsonServer));
+		hudsonServerAccessor = new TestDefaultHudsonServerAccessorImpl(hudsonServerManager);
+	}
+
+	/**
+	 * Test get Crumb from Hudson
+	 * 
+	 * @throws Exception in case of test failures
+	 */
+	@Test
+	public void testGetCrumb() throws Exception {
+		when(getMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
+		when(getMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("Fake Response".getBytes()));
+		when(getMethod.getResponseHeader("Crumb")).thenReturn(new Header("Crumb", "crumb-parameter"));
+		when(getMethod.getResponseHeader("Crumb-Field")).thenReturn(new Header("Crumb-Field", ".crumb"));
+		hudsonServerAccessor.getCrumb(hudsonServer);
+		assertEquals("crumb-parameter", hudsonServer.getCrumb());
+		assertEquals(".crumb", hudsonServer.getCrumbField());
+		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(getMethod);
+		verify(getMethod, VerificationModeFactory.times(1)).getStatusCode();
+		verify(getMethod, VerificationModeFactory.times(1)).getResponseBodyAsStream();
+		verify(getMethod, VerificationModeFactory.times(1)).releaseConnection();
+		verify(getMethod, VerificationModeFactory.times(2)).getResponseHeader("Crumb");
+		verify(getMethod, VerificationModeFactory.times(2)).getResponseHeader("Crumb-Field");
+	}
+
+	/**
+	 * Test get Crumb from Hudson
+	 * 
+	 * @throws Exception in case of test failures
+	 */
+	@Test
+	public void testGetCrumbNoHeaders() throws Exception {
+		when(getMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
+		when(getMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("Fake Response".getBytes()));
+		when(getMethod.getResponseHeader("Crumb")).thenReturn(null);
+		when(getMethod.getResponseHeader("Crumb-Field")).thenReturn(null);
+		hudsonServerAccessor.getCrumb(hudsonServer);
+		assertNull(hudsonServer.getCrumb());
+		assertNull(hudsonServer.getCrumbField());
+		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(getMethod);
+		verify(getMethod, VerificationModeFactory.times(1)).getStatusCode();
+		verify(getMethod, VerificationModeFactory.times(1)).getResponseBodyAsStream();
+		verify(getMethod, VerificationModeFactory.times(1)).releaseConnection();
+		verify(getMethod, VerificationModeFactory.times(1)).getResponseHeader("Crumb");
+		verify(getMethod, VerificationModeFactory.times(0)).getResponseHeader("Crumb-Field");
 	}
 
 	/**
@@ -130,7 +175,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	public void testGetApiImplementation() throws Exception {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("JiraApi.xml"));
-		final ApiImplementation api = serverAccessor.getApiImplementation(server);
+		final ApiImplementation api = hudsonServerAccessor.getApiImplementation(hudsonServer);
 		assertEquals("1.0", api.getVersion());
 		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
 		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();
@@ -148,11 +193,11 @@ public class DefaultHudsonServerAccessorImplTest {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("OOPS!".getBytes()));
 		try {
-			serverAccessor.getApiImplementation(server);
+			hudsonServerAccessor.getApiImplementation(hudsonServer);
 			fail("This test should fail");
 		} catch (HudsonServerAccessorException e) {
 			assertTrue(e.getMessage().startsWith(
-				"Failed to unmarshal the Hudson server response to a API Implementation object. Reason: "));
+				"Failed to unmarshal the Hudson server response to a API Implementation object. Reason:"));
 		}
 		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
 		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();
@@ -169,7 +214,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	public void testGetProjectsList() throws Exception {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("ListAllProjects.xml"));
-		final List<Job> jobs = serverAccessor.getProjectsList(server);
+		final List<Job> jobs = hudsonServerAccessor.getProjectsList(hudsonServer);
 		assertNotNull(jobs);
 		assertFalse(jobs.isEmpty());
 		assertEquals(3, jobs.size());
@@ -189,11 +234,11 @@ public class DefaultHudsonServerAccessorImplTest {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("OOPS!".getBytes()));
 		try {
-			serverAccessor.getProjectsList(server);
+			hudsonServerAccessor.getProjectsList(hudsonServer);
 			fail("This test should fail");
 		} catch (HudsonServerAccessorException e) {
 			assertTrue(e.getMessage().startsWith(
-				"Failed to unmarshal the Hudson server response to a Jobs object. Reason: "));
+				"Failed to unmarshal the Hudson server response to a Jobs object. Reason:"));
 		}
 		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
 		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();
@@ -210,7 +255,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	public void testGetProjects() throws Exception {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("GetAllProjects.xml"));
-		final List<Job> jobs = serverAccessor.getProjects(server);
+		final List<Job> jobs = hudsonServerAccessor.getProjects(hudsonServer);
 		assertNotNull(jobs);
 		assertFalse(jobs.isEmpty());
 		assertEquals(3, jobs.size());
@@ -230,11 +275,11 @@ public class DefaultHudsonServerAccessorImplTest {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("OOPS!".getBytes()));
 		try {
-			serverAccessor.getProjects(server);
+			hudsonServerAccessor.getProjects(hudsonServer);
 			fail("This test should fail");
 		} catch (HudsonServerAccessorException e) {
 			assertTrue(e.getMessage().startsWith(
-				"Failed to unmarshal the Hudson server response to a Jobs object. Reason: "));
+				"Failed to unmarshal the Hudson server response to a Jobs object. Reason:"));
 		}
 		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
 		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();
@@ -251,7 +296,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	public void testGetProject() throws Exception {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("GetProject.xml"));
-		final Job job = serverAccessor.getProject(project);
+		final Job job = hudsonServerAccessor.getProject(project);
 		assertNotNull(job);
 		assertEquals("MARVADMIN", job.getJiraKey());
 		assertEquals("Marvelution", job.getName());
@@ -271,7 +316,7 @@ public class DefaultHudsonServerAccessorImplTest {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("OOPS!".getBytes()));
 		try {
-			serverAccessor.getProject(project);
+			hudsonServerAccessor.getProject(project);
 			fail("This test should fail");
 		} catch (HudsonServerAccessorException e) {
 			assertTrue(e.getMessage().startsWith(
@@ -292,7 +337,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	public void testGetBuildsForProject() throws Exception {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("BuildsList.xml"));
-		final List<Build> builds = serverAccessor.getBuilds(project);
+		final List<Build> builds = hudsonServerAccessor.getBuilds(project);
 		assertFalse(builds.isEmpty());
 		assertEquals(1, builds.size());
 		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
@@ -311,7 +356,7 @@ public class DefaultHudsonServerAccessorImplTest {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("OOPS!".getBytes()));
 		try {
-			serverAccessor.getBuilds(project);
+			hudsonServerAccessor.getBuilds(project);
 			fail("This test should fail");
 		} catch (HudsonServerAccessorException e) {
 			assertTrue(e.getMessage().startsWith(
@@ -332,7 +377,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	public void testGetBuildsForVersion() throws Exception {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("BuildsList.xml"));
-		final List<Build> builds = serverAccessor.getBuilds(version);
+		final List<Build> builds = hudsonServerAccessor.getBuilds(version);
 		assertFalse(builds.isEmpty());
 		assertEquals(1, builds.size());
 		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
@@ -351,7 +396,7 @@ public class DefaultHudsonServerAccessorImplTest {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("OOPS!".getBytes()));
 		try {
-			serverAccessor.getBuilds(version);
+			hudsonServerAccessor.getBuilds(version);
 			fail("This test should fail");
 		} catch (HudsonServerAccessorException e) {
 			assertTrue(e.getMessage().startsWith(
@@ -372,7 +417,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	public void testGetBuildsForIssueKeys() throws Exception {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("BuildsList.xml"));
-		final List<Build> builds = serverAccessor.getBuilds(Collections.singletonList("MARVADMIN-1"));
+		final List<Build> builds = hudsonServerAccessor.getBuilds(Collections.singletonList("MARVADMIN-1"));
 		assertFalse(builds.isEmpty());
 		assertEquals(1, builds.size());
 		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
@@ -391,7 +436,7 @@ public class DefaultHudsonServerAccessorImplTest {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("OOPS!".getBytes()));
 		try {
-			serverAccessor.getBuilds(Collections.singletonList("MARVADMIN-1"));
+			hudsonServerAccessor.getBuilds(Collections.singletonList("MARVADMIN-1"));
 			fail("This test should fail");
 		} catch (HudsonServerAccessorException e) {
 			assertTrue(e.getMessage().startsWith(
@@ -404,21 +449,36 @@ public class DefaultHudsonServerAccessorImplTest {
 	}
 
 	/**
-	 * Test response form invalid Hudson server
+	 * Test response form invalid Hudson hudsonServer
 	 * 
 	 * @throws Exception in case of test failures
 	 */
 	@Test
 	public void testGetHudsonServerActionResponseInvalidHudsonServer() throws Exception {
 		try {
-			serverAccessor.getHudsonServerActionResponse(null, HudsonServerAccessor.GET_ALL_PROJECTS_ACTION, params);
+			hudsonServerAccessor.getHudsonServerActionResponse(null, HudsonServerAccessor.GET_ALL_PROJECTS_ACTION,
+				params);
 		} catch (HudsonServerAccessorException e) {
 			assertEquals("hudsonServer may not be null", e.getMessage());
 		}
 	}
 
 	/**
-	 * Test response form unsecured Hudson server action
+	 * Test response form invalid Hudson hudsonServer
+	 * 
+	 * @throws Exception in case of test failures
+	 */
+	@Test
+	public void testGetHudsonServerActionResponseFromHttpMethodInvalidHudsonServer() throws Exception {
+		try {
+			hudsonServerAccessor.getHudsonServerActionResponse(null, new GetMethod("/fake/url"));
+		} catch (HudsonServerAccessorException e) {
+			assertEquals("hudsonServer may not be null", e.getMessage());
+		}
+	}
+
+	/**
+	 * Test response form unsecured Hudson hudsonServer action
 	 * 
 	 * @throws Exception in case of test failures
 	 */
@@ -426,7 +486,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	public void testGetHudsonServerActionResponseUnsecuredHudsonServer() throws Exception {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("Fake response".getBytes()));
-		final String response = serverAccessor.getHudsonServerActionResponse(server, "/fake/url", params);
+		final String response = hudsonServerAccessor.getHudsonServerActionResponse(hudsonServer, "/fake/url", params);
 		assertEquals("Fake response" + '\n', response);
 		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
 		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();
@@ -435,7 +495,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	}
 
 	/**
-	 * Test response form unsecured Hudson server action
+	 * Test response form unsecured Hudson hudsonServer action
 	 * 
 	 * @throws Exception in case of test failures
 	 */
@@ -444,7 +504,7 @@ public class DefaultHudsonServerAccessorImplTest {
 		when(httpClient.executeMethod(postMethod)).thenThrow(new HttpException());
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("Fake response".getBytes()));
 		try {
-			serverAccessor.getHudsonServerActionResponse(server, "/fake/url", params);
+			hudsonServerAccessor.getHudsonServerActionResponse(hudsonServer, "/fake/url", params);
 		} catch (HudsonServerAccessorException e) {
 			assertEquals("Failed to connect to the Hudson Server", e.getMessage());
 		}
@@ -452,21 +512,21 @@ public class DefaultHudsonServerAccessorImplTest {
 	}
 
 	/**
-	 * Test response form secured Hudson server action
+	 * Test response form secured Hudson hudsonServer action
 	 * 
 	 * @throws Exception in case of test failures
 	 */
 	@Test
 	public void testGetHudsonServerActionResponseSecuredHudsonServer() throws Exception {
-		server.setUsername("admin");
-		server.setPassword("admin");
+		hudsonServer.setUsername("admin");
+		hudsonServer.setPassword("admin");
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("Fake response".getBytes()));
-		final String response = serverAccessor.getHudsonServerActionResponse(server, "/fake/url", params);
+		final String response = hudsonServerAccessor.getHudsonServerActionResponse(hudsonServer, "/fake/url", params);
 		assertEquals("Fake response" + '\n', response);
 		verify(httpClient, VerificationModeFactory.times(2)).executeMethod(postMethod);
-		verify(postMethod, VerificationModeFactory.times(1)).addParameter("j_username", server.getUsername());
-		verify(postMethod, VerificationModeFactory.times(1)).addParameter("j_password", server.getPassword());
+		verify(postMethod, VerificationModeFactory.times(1)).addParameter("j_username", hudsonServer.getUsername());
+		verify(postMethod, VerificationModeFactory.times(1)).addParameter("j_password", hudsonServer.getPassword());
 		verify(postMethod, VerificationModeFactory.times(1)).addParameter("action", "login");
 		verify(postMethod, VerificationModeFactory.times(2)).getStatusCode();
 		verify(postMethod, VerificationModeFactory.times(1)).getResponseBodyAsStream();
@@ -483,10 +543,10 @@ public class DefaultHudsonServerAccessorImplTest {
 		/**
 		 * Constructor
 		 * 
-		 * @param serverManager the {@link HudsonServerManager}
+		 * @param hudsonServerManager the {@link HudsonServerManager}
 		 */
-		public TestDefaultHudsonServerAccessorImpl(HudsonServerManager serverManager) {
-			super(serverManager);
+		public TestDefaultHudsonServerAccessorImpl(HudsonServerManager hudsonServerManager) {
+			super(hudsonServerManager);
 		}
 
 		/**
@@ -501,7 +561,7 @@ public class DefaultHudsonServerAccessorImplTest {
 		 * {@inheritDoc}
 		 */
 		@Override
-		protected PostMethod createPostMethod(String url) {
+		protected PostMethod createPostMethod(HudsonServer server, String url) {
 			return postMethod;
 		}
 
@@ -509,7 +569,7 @@ public class DefaultHudsonServerAccessorImplTest {
 		 * {@inheritDoc}
 		 */
 		@Override
-		protected GetMethod createGetMethod(String url) {
+		protected GetMethod createGetMethod(HudsonServer server, String url) {
 			return getMethod;
 		}
 

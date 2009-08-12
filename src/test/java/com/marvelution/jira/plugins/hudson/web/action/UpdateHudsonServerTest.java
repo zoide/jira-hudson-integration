@@ -126,7 +126,7 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 	public void testDoValidationWithErrors() throws Exception {
 		updateHudsonServer.setName("Hudson CI");
 		updateHudsonServer.setHost("http://hudson.marvelution.com");
-		updateHudsonServer.setId(2);
+		updateHudsonServer.setHudsonServerId(2);
 		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
 		when(serverManager.getServer(eq("Hudson CI"))).thenReturn(server);
 		when(server.getServerId()).thenReturn(1);
@@ -143,7 +143,7 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 	public void testDoValidationWithoutErrors() throws Exception {
 		updateHudsonServer.setName("Hudson CI");
 		updateHudsonServer.setHost("http://hudson.marvelution.com");
-		updateHudsonServer.setId(1);
+		updateHudsonServer.setHudsonServerId(1);
 		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
 		when(serverManager.getServer(eq("Hudson CI"))).thenReturn(server);
 		when(server.getServerId()).thenReturn(1);

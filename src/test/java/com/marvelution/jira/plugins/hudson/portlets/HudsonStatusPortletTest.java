@@ -48,6 +48,7 @@ import com.marvelution.jira.plugins.hudson.model.HudsonStatusPortletResult;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
@@ -168,6 +169,34 @@ public class HudsonStatusPortletTest {
 	public void testGetVelocityParamsWithHudsonConfiguredThrowingException() throws Exception {
 		when(serverManager.isHudsonConfigured()).thenReturn(true);
 		when(serverAccessor.getProjects(eq(server))).thenThrow(new HudsonServerAccessorException("Failure"));
+		final Map<String, Object> params = portlet.getVelocityParams(portletConfiguration);
+		assertTrue(params.containsKey("isHudsonConfigured"));
+		assertTrue((Boolean) params.get("isHudsonConfigured"));
+		assertTrue(params.containsKey("dateTimeUtils"));
+		assertTrue(params.containsKey("buildUtils"));
+		assertTrue(params.containsKey("jobUtils"));
+		assertTrue(params.containsKey("sorter"));
+		assertTrue(params.containsKey("buildTriggerParser"));
+		assertTrue(params.containsKey("results"));
+		final List<HudsonStatusPortletResult> results = (List<HudsonStatusPortletResult>) params.get("results");
+		assertFalse(results.isEmpty());
+		assertEquals(1, results.size());
+		assertTrue(results.get(0).hasError());
+		verify(serverManager, VerificationModeFactory.times(2)).isHudsonConfigured();
+		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
+			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");
+	}
+
+	/**
+	 * Test setting all the velocity parameters
+	 * 
+	 * @throws Exception in case of failures
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetVelocityParamsWithHudsonConfiguredThrowingOtherException() throws Exception {
+		when(serverManager.isHudsonConfigured()).thenReturn(true);
+		when(serverAccessor.getProjects(eq(server))).thenThrow(new HudsonServerAccessDeniedException("Failure"));
 		final Map<String, Object> params = portlet.getVelocityParams(portletConfiguration);
 		assertTrue(params.containsKey("isHudsonConfigured"));
 		assertTrue((Boolean) params.get("isHudsonConfigured"));

@@ -176,4 +176,32 @@ public interface HudsonServer {
 	 */
 	String getLargeImageUrl();
 
+	/**
+	 * Gets the crumb
+	 * 
+	 * @return the crumb
+	 */
+	String getCrumb();
+
+	/**
+	 * Sets the crumb
+	 * 
+	 * @param crumb the crumb
+	 */
+	void setCrumb(String crumb);
+
+	/**
+	 * Gets the crumb-fiels
+	 * 
+	 * @return the crumb-fiels
+	 */
+	String getCrumbField();
+
+	/**
+	 * Sets the crumb-fiels
+	 * 
+	 * @param crumbField the crumb-fiels
+	 */
+	void setCrumbField(String crumbField);
+
 }

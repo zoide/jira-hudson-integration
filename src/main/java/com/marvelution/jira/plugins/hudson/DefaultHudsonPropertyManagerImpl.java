@@ -89,7 +89,6 @@ public final class DefaultHudsonPropertyManagerImpl implements HudsonPropertyMan
 		psArgs.put("delegator.name", "default");
 		psArgs.put("entityName", "HudsonServerProperties");
 		psArgs.put("entityId", new Long(PROPERTIES_ID));
-
 		propertySet = PropertySetManager.getInstance("ofbiz", psArgs);
 	}
 }

@@ -31,7 +31,7 @@
             </tr>
             <tr>
                 <td class="jiraformheader">
-                    $i18n.getText("hudson.config.server.delete.confirm", ${name})
+                    ${i18n.getText("hudson.config.server.delete.confirm", $name)}
                 </td>
             <tr>
                 <td class="fullyCentered jiraformfooter" >

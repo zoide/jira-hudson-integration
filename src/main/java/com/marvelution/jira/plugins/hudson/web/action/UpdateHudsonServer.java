@@ -38,8 +38,6 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 
 	private static final long serialVersionUID = 1L;
 
-	private int hudsonServerId;
-
 	/**
 	 * Constructor
 	 * 
@@ -59,7 +57,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 	public void doValidation() {
 		super.doValidation();
 		final HudsonServer server = hudsonServerManager.getServer(getName());
-		if ((server != null) && (server.getServerId() != getId())) {
+		if ((server != null) && (server.getServerId() != getHudsonServerId())) {
 			addError("name", getText("hudson.config.serverName.duplicate"));
 		}
 	}
@@ -99,24 +97,6 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 			hudsonServerManager.setDefaultServer(defaultServer);
 		}
 		return getRedirect("ViewHudsonServers.jspa");
-	}
-
-	/**
-	 * Get the Hudson Server Id
-	 * 
-	 * @return the server Id
-	 */
-	public int getHudsonServerId() {
-		return hudsonServerId;
-	}
-
-	/**
-	 * Set the Hudson Server Id
-	 * 
-	 * @param hudsonServerId the server Id
-	 */
-	public void setHudsonServerId(int hudsonServerId) {
-		this.hudsonServerId = hudsonServerId;
 	}
 
 	/**

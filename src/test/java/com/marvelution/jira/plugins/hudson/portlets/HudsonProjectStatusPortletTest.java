@@ -48,6 +48,7 @@ import com.marvelution.jira.plugins.hudson.model.HudsonProjectStatusPortletResul
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
@@ -220,6 +221,35 @@ public class HudsonProjectStatusPortletTest {
 		final HudsonProjectStatusPortletResult result = (HudsonProjectStatusPortletResult) params.get("result");
 		assertTrue(result.hasError());
 		assertEquals("hudson.error.cannot.connect", result.getError());
+		verify(serverManager, VerificationModeFactory.times(2)).isHudsonConfigured();
+		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
+			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");
+	}
+
+	/**
+	 * Test setting all the velocity parameters
+	 * 
+	 * @throws Exception in case of failures
+	 */
+	@Test
+	public void testGetVelocityParamsWithHudsonConfiguredThrowingHudsonServerAccessDeniedException() throws Exception {
+		when(serverManager.isHudsonConfigured()).thenReturn(true);
+		when(serverAccessor.getProject(eq(server), eq(project))).thenThrow(
+			new HudsonServerAccessDeniedException("Failure"));
+		when(portletConfiguration.getLongProperty("projectId")).thenReturn(1000L);
+		when(projectManager.getProjectObj(1000L)).thenReturn(project);
+		final Map<String, Object> params = portlet.getVelocityParams(portletConfiguration);
+		assertTrue(params.containsKey("isHudsonConfigured"));
+		assertTrue((Boolean) params.get("isHudsonConfigured"));
+		assertTrue(params.containsKey("dateTimeUtils"));
+		assertTrue(params.containsKey("buildUtils"));
+		assertTrue(params.containsKey("jobUtils"));
+		assertTrue(params.containsKey("sorter"));
+		assertTrue(params.containsKey("buildTriggerParser"));
+		assertTrue(params.containsKey("result"));
+		final HudsonProjectStatusPortletResult result = (HudsonProjectStatusPortletResult) params.get("result");
+		assertTrue(result.hasError());
+		assertEquals("hudson.error.access.denied", result.getError());
 		verify(serverManager, VerificationModeFactory.times(2)).isHudsonConfigured();
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
 			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");
