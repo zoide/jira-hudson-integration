@@ -31,6 +31,7 @@ import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.plugins.jiraapi.index.IssueIndexer;
 import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 
@@ -67,6 +68,13 @@ public class JiraIssueIndexerRecorder extends Recorder {
 			logger.println("Failed to index Jira issues related to this build");
 		}
 		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public BuildStepMonitor getRequiredMonitorService() {
+		return BuildStepMonitor.NONE;
 	}
 
 	/**
