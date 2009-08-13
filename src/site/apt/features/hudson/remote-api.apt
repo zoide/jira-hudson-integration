@@ -36,24 +36,35 @@ Hudson Features - Remote API
     <<<http://yourserver/hudson>>>, then the remote API will be available at:
     <<<http://yourserver/hudson/plugin/hudson-jiraapi-plugin>>>
 
+
+** Get Crumb (<<NEW>>)
+~~~~~~~~~~~~~~~~~~~~~~
+
+  API endpoint to get a crumb for the Jira plugin to allow Jira to get data from Hudson even if the 
+  "Prevent Cross Site Request Forgery exploits" feature is enabled.
+
+
 ** Get API Version
 ~~~~~~~~~~~~~~~~~~
     
   API endpoint to get the installed API version on the Hudson instance. \
   Endpoint: <<</plugin/hudson-jiraapi-plugin/getApiVersion>>>
-    
+
+
 ** List All Projects
 ~~~~~~~~~~~~~~~~~~~~
     
   API endpoint to get a list of all projects, subset of data, that are configured on the Hudson instance. \
   Endpoint: <<</plugin/hudson-jiraapi-plugin/listAllProjects>>>
-    
+
+
 ** Get All Projects
 ~~~~~~~~~~~~~~~~~~~
     
   API endpoint to get all the data of all the projects that are configured on the Hudson instance. \
   Endpoint: <<</plugin/hudson-jiraapi-plugin/getAllProjects>>>
-    
+
+
 ** Get Project
 ~~~~~~~~~~~~~~
     
@@ -65,7 +76,8 @@ Hudson Features - Remote API
   * JIRA_PROJECT_KEY: The Jira project key
   
   []
-    
+
+
 ** Get Project Builds
 ~~~~~~~~~~~~~~~~~~~~~
     
@@ -77,7 +89,8 @@ Hudson Features - Remote API
   * JIRA_PROJECT_KEY: The Jira project key
   
   []
-    
+
+
 ** Get Version Builds
 ~~~~~~~~~~~~~~~~~~~~~
     
@@ -96,7 +109,8 @@ Hudson Features - Remote API
   * RELEASE_DATE: The release date of the version in milliseconds
   
   []
-    
+
+
 ** Get Issue Builds
 ~~~~~~~~~~~~~~~~~~~
     

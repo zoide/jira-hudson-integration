@@ -48,8 +48,20 @@ Jira Features
   * {{{./tabpanels.html}Tab Panels}}
   
     * Project Hudson Builds Tab Panel
+    
+      * View build by project (<<NEW>>)
+      
+      * View build by related Issue keys (<<NEW>>)
+      
+      []
 
     * Version Hudson Builds Tab Panel
+    
+      * View build by date (<<NEW>>)
+      
+      * View build by related Issue keys (<<NEW>>)
+      
+      []
 
     * Component Hudson Builds Tab Panel
 

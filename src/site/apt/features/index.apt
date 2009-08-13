@@ -72,6 +72,10 @@ Features
   
   * {{{./hudson/issue-indexer.html}Issue key indexer}}
   
+    * Also supporting lowercase issue keys (<<NEW>>)
+    
+    []
+  
   * {{{./hudson/remote-api.html}New Remote API}}
   
   []

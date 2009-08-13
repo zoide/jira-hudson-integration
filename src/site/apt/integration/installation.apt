@@ -29,8 +29,10 @@ Installation
 
   This document describes the actions you will need to take install the Hudson and Jira plugins to integrate Jira with
   Hudson.
-  
-  
+
+  <<NOTE:>> Make sure you uninstall any previous version of the Hudson and Jira plugins when installing a new version.
+
+
 * Hudson Plugin
 ~~~~~~~~~~~~~~~
 
