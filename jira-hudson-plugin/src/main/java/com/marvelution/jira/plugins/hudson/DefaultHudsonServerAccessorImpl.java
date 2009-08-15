@@ -39,7 +39,6 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.jira.project.Project;
@@ -439,7 +438,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 * @param method the {@link HttpMethod} to add the Crumb parameter to
 	 */
 	protected void addDefaultHeaders(HudsonServer server, HttpMethod method) {
-		method.addRequestHeader(new Header(HttpMethodParams.USER_AGENT, "Jira Hudson Integration Client/"
+		method.addRequestHeader(new Header("User-Agent", "Jira Hudson Integration Client/"
 			+ JiraApi.getApiImplementation().getVersion()));
 		if (StringUtils.isNotEmpty(server.getCrumb()) && StringUtils.isNotEmpty(server.getCrumbField())) {
 			method.addRequestHeader(new Header(server.getCrumbField(), server.getCrumb()));
