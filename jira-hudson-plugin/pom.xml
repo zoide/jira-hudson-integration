@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>jira-hudson-plugin</artifactId>
-	<version>1.1.1-SNAPSHOT</version>
+	<version>1.1.1</version>
 	<packaging>jar</packaging>
 	
 	<name>JIRA Hudson Plugin</name>
@@ -47,9 +47,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/branches/velocity-templates-fix/jira-hudson-plugin</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/branches/velocity-templates-fix/jira-hudson-plugin</developerConnection>
-		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/branches/velocity-templates-fix/jira-hudson-plugin</url>
+		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/jira-hudson-plugin-1.1.1</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/jira-hudson-plugin-1.1.1</developerConnection>
+		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/jira-hudson-plugin-1.1.1</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
