@@ -1,0 +1,116 @@
+## Licensed to Marvelution under one or more contributor license 
+## agreements.  See the NOTICE file distributed with this work 
+## for additional information regarding copyright ownership.
+## Marvelution licenses this file to you under the Apache License,
+## Version 2.0 (the "License"); you may not use this file except
+## in compliance with the License.
+## You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied. See the License for the
+## specific language governing permissions and limitations
+## under the License.
+
+<style type="text/css">
+.hudsonStatusTable, .hudsonStatusTable td {
+    vertical-align: middle;
+}
+</style>
+
+#if ($isHudsonConfigured)
+	#foreach ($result in $sorter.sort($results, "serverName"))
+	#set ($buildTriggerParser.server = $result.server)
+	#set ($domId = "hudson_status_${result.serverName}")
+    <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
+        <thead>
+            <tr class="rowHeader">
+                <td class="colHeaderLink">
+                	<span class="switch actionLinks subText" id="${domId}-switch" onclick="CookieUtil.toggleVisibility('${domId}', '[${i18n.getText("hudson.portlet.show")} >>]', '[${i18n.getText("hudson.portlet.hide")}]')">[${i18n.getText("hudson.portlet.hide")}]</span>
+                    ${i18n.getText("hudson.portlet.jobs.status.summary")}:
+                    <strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($i18n.getText("hudson.portlet.all.jobs"))
+                </td>
+            </tr>
+        </thead>
+        <tbody id="${domId}">
+        	<tr class="portletBody">
+            	<td bgcolor="#ffffff">
+            		#if ($result.hasError())
+                    <div align="center"><strong><em>${i18n.getText("hudson.portlet.error")}:</em></strong> $textutils.htmlEncode($result.error)</div>
+		            #elseif ($result.jobs.isEmpty())
+            		<div align="center"><strong>${i18n.getText("hudson.portlet.no.jobs")}</strong></div>
+            		#else
+                    <table class="hudsonJobsTable" cellpadding="3" cellspacing="0" width="100%">
+                    	<thead>
+                    		<tr>
+                    			<th>${i18n.getText("hudson.portlet.status")}</th>
+                    			<th>${i18n.getText("hudson.portlet.job")}</th>
+                    			<th>${i18n.getText("hudson.portlet.last_build")}</th>
+                    			<th>${i18n.getText("hudson.portlet.last.duration")}</th>
+                    			<th>${i18n.getText("hudson.portlet.build.trigger")}</th>
+                    		</tr>
+                    	</thead>
+                    	<tbody>
+		    				#foreach ($job in $sorter.sort($result.jobs, "name"))
+	                    	<tr>
+	                    		<td align="center"><img src=${result.serverImageUrl}${job.result.icon} tooltip=${job.result.name()} alt=${job.result.name()} /></td>
+	                    		<td align="left"><a href=${result.serverUrl}/${job.url}>${job.name}</a></td>
+                    			#if (${jobUtils.hasValidLastBuild($job)})
+	                    		<td align="center">
+	                    			${dateTimeUtils.getPastTimeString(${job.lastBuild.timestamp})}
+	                    			(<a href=${result.serverUrl}/${job.lastBuild.url}>${i18n.getText("hudson.build.number", ${job.lastBuild.number})}</a>)
+	                    		</td>
+	                    		<td align="center">
+	                    			${dateTimeUtils.getTimeSpanString(${job.lastBuild.duration})}
+	                    		</td>
+                    			#if ($job.lastBuild.triggers.isEmpty())
+	                    		<td align="center">${i18n.getText("hudson.not.applicable")}</td>
+                    			#else
+                    			<td align="left">
+                    			#foreach ($trigger in $job.lastBuild.triggers)
+                    				#if ($velocityCount > 1) <br> #end ${buildTriggerParser.parse(${trigger})}
+                    			#end
+	                    		</td>
+                    			#end
+		                    	#else
+	                    		<td align="center">${i18n.getText("hudson.not.applicable")}</td>
+	                    		<td align="center">${i18n.getText("hudson.not.applicable")}</td>
+	                    		<td align="center">${i18n.getText("hudson.not.applicable")}</td>
+	                			#end
+	                    	</tr>
+				    		#end
+                    	</tbody>
+                    </table>
+		    		#end
+        	    </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <script type="text/javascript" language="JavaScript">
+        cookieHide("${domId}", "[${i18n.getText("hudson.portlet.show")} >>]");
+    </script>
+    #end
+#else
+    <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
+        <thead>
+            <tr class="rowHeader">
+                <td class="colHeaderLink">
+                	${i18n.getText("hudson.portlet.jobs.status.summary")}: 
+                	<strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($i18n.getText("hudson.portlet.all.jobs"))
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="portletBody"><td bgcolor=ffffff>
+                <div align="center">
+                    <strong><em>${i18n.getText("hudson.portlet.error")}:</em></strong> $textutils.htmlEncode($errorMessage)
+                </div>
+            </td></tr>
+        </tbody>
+    </table>
+    <br>
+#end

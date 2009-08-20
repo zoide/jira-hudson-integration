@@ -1,0 +1,86 @@
+## Licensed to Marvelution under one or more contributor license 
+## agreements.  See the NOTICE file distributed with this work 
+## for additional information regarding copyright ownership.
+## Marvelution licenses this file to you under the Apache License,
+## Version 2.0 (the "License"); you may not use this file except
+## in compliance with the License.
+## You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied. See the License for the
+## specific language governing permissions and limitations
+## under the License.
+
+#set($i18n=$action)
+
+<form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="AssociateSpecificHudsonServer.jspa">
+<input type="hidden" name="projectKey" value="${projectKey}" />
+<table class="jiraform maxWidth">
+	<tbody>
+		<tr>
+			<td colspan="2" class="jiraformheader">
+				<h3 class="formtitle">
+					<img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/hudson-icon-24.png" align="absmiddle" border="0" height="24" width="24" />
+					$i18n.getText("hudson.config.server.associate-project.title")
+				</h3>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="jiraformheader">
+				<p>$i18n.getText("hudson.config.server.associate-project.description")</p>
+				<p>
+					<img src="/images/icons/bullet_creme.gif" align="absmiddle" border="0" height="8" width="8">
+					<b><a id="view_hudson_servers" href="ViewHudsonServers.jspa">$i18n.getText("hudson.config.view.hudson.server.list")</a></b>
+				</p>
+			</td>
+		</tr>
+		#if ($action.hasAnyErrors())
+		<tr>
+			<td colspan="2" class="formErrors">
+				<div class="errorArea">
+					<h4>$i18n.getText("hudson.config.error")</h4>
+					<ul>
+						#foreach ($error in $action.getErrorMessages())
+						<li>$error</li>
+						#end
+						#foreach ($error in $action.errors)
+						<li>$error</li>
+						#end
+					</ul>
+				</div>
+			</td>
+		</tr>
+		#end
+		<tr>
+			<td class="fieldLabelArea">$i18n.getText("hudson.config.project-name.label"):</td>
+			<td bgcolor="#ffffff" class="fieldValueArea"><strong>${project.name}</strong></td>
+		</tr>
+		<tr>
+			<td class="fieldLabelArea">$i18n.getText("hudson.config.server"):</td>
+			<td bgcolor="#ffffff" class="fieldValueArea">
+				<select name="hudsonServerId" style="width: 100%;" size="1">
+					<option value="0">${i18n.getText("hudson.config.select.hudson.server", ${project.name})}</option>
+					#foreach ($server in $sorter.sort($serverManager.servers, "name"))
+					<option value="${server.serverId}" #if (${server.serverId} == ${currentAssociatedHudsonServerId}) selected="selected"#end>${server.name} #if (${serverManager.isDefaultServer(${server})}) ($i18n.getText("common.words.default"))#end</option>
+					#end
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<tr>
+				<td colspan="2" class="fullyCentered jiraformfooter">
+					<input type="submit" id=" Associate " name=" $i18n.getText("hudson.associate.project") " value=" $i18n.getText("hudson.associate.project") "
+						accesskey="S" title="Press Alt+S to submit form" class="spaced" />
+					<input type="button" id="cancelButton" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt + `)"
+						name="ViewHudsonServers.jspa" value="$i18n.getText("common.forms.cancel")"
+						onclick="location.href='/secure/BrowseProject.jspa'" />
+				</td>
+			</tr>
+		</tr>
+	</tbody>
+</table>
+</form>

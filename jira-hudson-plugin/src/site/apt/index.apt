@@ -1,0 +1,48 @@
+ 												------
+ 												Introduction
+ 												------
+ 												Mark Rekveld
+ 												------
+ 												June 13 2009
+ 												------
+
+~~ Licensed to Marvelution under one or more contributor license 
+~~ agreements.  See the NOTICE file distributed with this work 
+~~ for additional information regarding copyright ownership.
+~~ Marvelution licenses this file to you under the Apache License,
+~~ Version 2.0 (the "License"); you may not use this file except
+~~ in compliance with the License.
+~~ You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied. See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+
+Introduction
+~~~~~~~~~~~~
+
+  The Jira plugin provides:
+  
+  * the ability to configure multiple Hudson servers.
+  
+  * associate a Jira project with a specific Hudson server.
+  
+  * view builds related to a project, in a project tab panel.
+  
+  * view builds related to a project version, in a version tab panel.
+  
+  * view builds related to a project component, in a component tab panel.
+  
+  * view builds related to a project issue, in a issue tab panel.
+  
+  * a portlet to view all projects statuses on a Hudson server.
+  
+  * a portlet to view detailed Hudson project build information.
+  
+  []
