@@ -176,7 +176,6 @@
 				<filtering>true</filtering>
 				<includes>
 					<include>atlassian-plugin.xml</include>
-					<include>**/*.vm</include>
 					<include>**/*.properties</include>
 				</includes>
 			</resource>
