@@ -438,8 +438,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 * @param method the {@link HttpMethod} to add the Crumb parameter to
 	 */
 	protected void addDefaultHeaders(HudsonServer server, HttpMethod method) {
-		method.addRequestHeader(new Header("User-Agent", "Jira Hudson Integration Client/"
-			+ JiraApi.getApiImplementation().getVersion()));
+		method.addRequestHeader(new Header("User-Agent", "Jira Hudson Integration Client/1.1"));
 		if (StringUtils.isNotEmpty(server.getCrumb()) && StringUtils.isNotEmpty(server.getCrumbField())) {
 			method.addRequestHeader(new Header(server.getCrumbField(), server.getCrumb()));
 		}
