@@ -47,9 +47,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/branches/velocity-templates-fix/jira-hudson-plugin</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/branches/velocity-templates-fix/jira-hudson-plugin</developerConnection>
-		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/branches/velocity-templates-fix/jira-hudson-plugin</url>
+		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/branches/jira-hudson-plugin-1.1.x/jira-hudson-plugin</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/branches/jira-hudson-plugin-1.1.x/jira-hudson-plugin</developerConnection>
+		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/branches/jira-hudson-plugin-1.1.x/jira-hudson-plugin</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
