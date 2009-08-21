@@ -159,7 +159,8 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 		updateHudsonServer.setHudsonServerId(1);
 		when(serverManager.getServer(eq(1))).thenReturn(server);
 		assertEquals("none", updateHudsonServer.doSetAsDefault());
-		verify(serverManager, VerificationModeFactory.atMost(1)).setDefaultServer(server);
+		verify(serverManager, VerificationModeFactory.times(1)).getServer(1);
+		verify(serverManager, VerificationModeFactory.times(1)).setDefaultServer(server);
 	}
 
 	/**
@@ -167,9 +168,32 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 	 */
 	@Test
 	public void testDoSetAsDefaultNoServerId() throws Exception {
-		updateHudsonServer.doSetAsDefault();
 		assertEquals("none", updateHudsonServer.doSetAsDefault());
+		verify(serverManager, VerificationModeFactory.times(0)).getServer(1);
 		verify(serverManager, VerificationModeFactory.times(0)).setDefaultServer(server);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Test
+	public void testDoUpdateCrumb() throws Exception {
+		updateHudsonServer.setHudsonServerId(1);
+		when(serverManager.getServer(eq(1))).thenReturn(server);
+		serverAccessor.getCrumb(eq(server));
+		assertEquals("none", updateHudsonServer.doUpdateCrumb());
+		verify(serverManager, VerificationModeFactory.times(1)).getServer(1);
+		verify(serverAccessor, VerificationModeFactory.times(1)).getCrumb(server);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Test
+	public void testDoUpdateCrumbNoServerId() throws Exception {
+		assertEquals("none", updateHudsonServer.doUpdateCrumb());
+		verify(serverManager, VerificationModeFactory.times(0)).getServer(1);
+		verify(serverAccessor, VerificationModeFactory.times(0)).getCrumb(server);
 	}
 
 	/**
