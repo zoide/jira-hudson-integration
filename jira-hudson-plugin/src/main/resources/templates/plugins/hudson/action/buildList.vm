@@ -42,7 +42,7 @@
 	<tr>
 		<td>
 			<strong>${i18n.getText("hudson.panel.related.issues")}</strong>: #if ($build.relatedIssueKeys.isEmpty()) ${i18n.getText("hudson.panel.no.related.issues")} #end
-			#foreach ($issueKey in $build.relatedIssueKeys) #if ($velocityCount > 1) | #end <a href="/browse/${issueKey}">${issueKey}</a>#end
+			#foreach ($issueKey in $build.relatedIssueKeys) #if ($velocityCount > 1) | #end <a href="${req.contextPath}/browse/${issueKey}">${issueKey}</a>#end
 		</td>
 		<td valign="top">
 			<strong>${i18n.getText("hudson.panel.build.tests")}</strong>: 
