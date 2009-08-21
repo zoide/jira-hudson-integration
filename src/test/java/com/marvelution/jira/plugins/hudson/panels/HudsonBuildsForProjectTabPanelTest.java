@@ -145,10 +145,10 @@ public class HudsonBuildsForProjectTabPanelTest {
 	 * 
 	 * @throws Exception in case of failures
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testShowPanelWithPermission() throws Exception {
-		when(actionSupport.getSelectedProjectObject()).thenReturn(project);
-		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(project), (User) eq(null)))
+		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(genericValue), (User) eq(null)))
 			.thenReturn(true);
 		assertTrue(panel.showPanel(actionSupport, genericValue));
 	}
@@ -158,10 +158,10 @@ public class HudsonBuildsForProjectTabPanelTest {
 	 * 
 	 * @throws Exception in case of failures
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testShowPanelWithoutPermission() throws Exception {
-		when(actionSupport.getSelectedProjectObject()).thenReturn(project);
-		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(project), (User) eq(null)))
+		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(genericValue), (User) eq(null)))
 			.thenReturn(false);
 		assertFalse(panel.showPanel(actionSupport, genericValue));
 	}

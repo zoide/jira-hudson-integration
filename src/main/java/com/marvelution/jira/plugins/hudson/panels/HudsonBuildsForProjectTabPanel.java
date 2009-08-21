@@ -74,14 +74,11 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean showPanel(ProjectActionSupport action, GenericValue project) {
-		try {
-			return (serverManager.isHudsonConfigured() && permissionManager.hasPermission(
-				Permissions.VIEW_VERSION_CONTROL, action.getSelectedProjectObject(), action.getRemoteUser()));
-		} catch (PermissionException e) {
-			return false;
-		}
+		return (serverManager.isHudsonConfigured() && permissionManager.hasPermission(
+			Permissions.VIEW_VERSION_CONTROL, project, action.getRemoteUser()));
 	}
 
 }
