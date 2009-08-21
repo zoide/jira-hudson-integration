@@ -100,6 +100,20 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 	}
 
 	/**
+	 * Execute Update Crumb operation
+	 * 
+	 * @return redirect url
+	 * @throws Exception in case of errors
+	 */
+	public String doUpdateCrumb() throws Exception {
+		final HudsonServer server = hudsonServerManager.getServer(getHudsonServerId());
+		if (server != null) {
+			hudsonServerAccessor.getCrumb(server);
+		}
+		return getRedirect("ViewHudsonServers.jspa");
+	}
+
+	/**
 	 * Gets the associated project keys
 	 * 
 	 * @return the associated project keys

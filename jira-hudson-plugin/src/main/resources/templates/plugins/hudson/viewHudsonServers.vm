@@ -101,6 +101,7 @@
 											<a href="UpdateHudsonServer!default.jspa?hudsonServerId=${server.serverId}">$i18n.getText("common.forms.edit")</a>
 											| <a href="DeleteHudsonServer!default.jspa?hudsonServerId=${server.serverId}">$i18n.getText("common.words.delete")</a>
 											| <a href="UpdateHudsonServerProjectAssociations!default.jspa?hudsonServerId=${server.serverId}">$i18n.getText("hudson.associate.projects")</a>
+											| <a href="UpdateHudsonServer!updateCrumb.jspa?hudsonServerId=${server.serverId}">$i18n.getText("hudson.update-crumb")</a>
 											#if (!${hudsonServerManager.isDefaultServer(${server})})
 											| <a href="UpdateHudsonServer!setAsDefault.jspa?hudsonServerId=${server.serverId}">$i18n.getText("hudson.set-as-default")</a>
 											#end
