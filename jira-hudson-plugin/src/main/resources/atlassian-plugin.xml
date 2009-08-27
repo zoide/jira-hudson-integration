@@ -46,7 +46,8 @@
 		<properties />
 	</portlet>
 
-	<portlet key="hudson-project-status" name="Hudson Project Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet">
+	<portlet key="hudson-project-status" name="Hudson Project Status"
+		class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet">
 		<objectdescriptor key="hudson.jira.portlet.project.status.name" />
 		<label key="hudson.jira.portlet.project.status.name" />
 		<description key="hudson.portlet.project.status.description" />
@@ -68,6 +69,25 @@
 				<description>hudson.portlet.configuration.project.status.show.builds.description</description>
 				<type>select</type>
 				<values class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusShowBuildsValuesGenerator" />
+			</property>
+		</properties>
+	</portlet>
+
+	<portlet key="hudson-view-status" name="Hudson View Status"
+		class="com.marvelution.jira.plugins.hudson.portlets.HudsonViewStatusPortlet">
+		<objectdescriptor key="hudson.jira.portlet.view.status.name" />
+		<label key="hudson.portlet.view.status.name" />
+		<description key="hudson.portlet.view.status.description" />
+		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonViewStatusPortlet.vm" />
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+		<permission>viewversioncontrol</permission>
+		<properties>
+			<property>
+				<key>hudsonView</key>
+				<name>hudson.portlet.configuration.status.view.name</name>
+				<description>hudson.portlet.configuration.status.view.description</description>
+				<type>select</type>
+				<values class="com.marvelution.jira.plugins.hudson.portlets.HudsonViewStatusValuesGenerator" />
 			</property>
 		</properties>
 	</portlet>

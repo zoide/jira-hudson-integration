@@ -267,6 +267,48 @@ public class PluginImpl extends Plugin {
 	}
 
 	/**
+	 * Handler for List All Views request
+	 * 
+	 * @param request the {@link StaplerRequest}
+	 * @param response the {@link StaplerResponse}
+	 * @throws IOException in case of IO Exceptions
+	 * @throws ServletException in case of Servlet Exceptions
+	 */
+	public void doListAllViews(final StaplerRequest request, final StaplerResponse response) throws IOException,
+					ServletException {
+		Hudson.getInstance().checkPermission(Hudson.READ);
+		LOGGER.log(Level.FINE, "Getting all Hudson Views.");
+		try {
+			final String xml = XStreamMarshaller.marshal(apiImpl.getAllViews());
+			writeToResponse(request, response, "application/xml", xml);
+		} catch (XStreamMarshallerException e) {
+			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Handler for Get View request
+	 * 
+	 * @param request the {@link StaplerRequest}
+	 * @param response the {@link StaplerResponse}
+	 * @param viewName the View name to get
+	 * @throws IOException in case of IO Exceptions
+	 * @throws ServletException in case of Servlet Exceptions
+	 */
+	public void doGetView(final StaplerRequest request, final StaplerResponse response,
+					@QueryParameter(value = "viewName", required = true) String viewName) throws IOException,
+					ServletException {
+		Hudson.getInstance().checkPermission(Hudson.READ);
+		LOGGER.log(Level.FINE, "Getting Hudson View " + viewName);
+		try {
+			final String xml = XStreamMarshaller.marshal(apiImpl.getView(viewName));
+			writeToResponse(request, response, "application/xml", xml);
+		} catch (XStreamMarshallerException e) {
+			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
+		}
+	}
+
+	/**
 	 * Write content to {@link StaplerResponse}
 	 * 
 	 * @param request the {@link StaplerRequest}

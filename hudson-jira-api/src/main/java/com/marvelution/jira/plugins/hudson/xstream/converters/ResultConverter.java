@@ -39,7 +39,7 @@ public class ResultConverter implements Converter, ConverterMatcher {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean canConvert(Class clazz) {
-		return (clazz.equals(Result.class));
+		return (Result.class.equals(clazz));
 	}
 
 	/**

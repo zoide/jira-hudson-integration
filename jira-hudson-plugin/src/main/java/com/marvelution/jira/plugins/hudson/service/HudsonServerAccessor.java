@@ -25,6 +25,7 @@ import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
+import com.marvelution.jira.plugins.hudson.model.HudsonView;
 import com.marvelution.jira.plugins.hudson.model.Job;
 
 /**
@@ -51,6 +52,10 @@ public interface HudsonServerAccessor {
 	String GET_VERSION_BUILDS_ACTION = BASE_ACTION_URL + "/getVersionBuilds";
 
 	String GET_ISSUE_BUILDS_ACTION = BASE_ACTION_URL + "/getIssueBuilds";
+
+	String LIST_ALL_VIEWS_ACTION = BASE_ACTION_URL + "/listAllViews";
+
+	String GET_VIEW_ACTION = BASE_ACTION_URL + "/getView";
 
 	/**
 	 * Get the crumb data for a {@link HudsonServer}
@@ -184,6 +189,29 @@ public interface HudsonServerAccessor {
 	 * @throws HudsonServerAccessDeniedException in case Hudson denies access to the Remote API
 	 */
 	List<Build> getBuilds(HudsonServer hudsonServer, List<String> issueKeys) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException;
+
+	/**
+	 * Gets all the available Views on the Hudson Server
+	 * 
+	 * @param hudsonServer the {@link HudsonServer} to get the Views from
+	 * @return {@link List} of {@link HudsonView}
+	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
+	 * @throws HudsonServerAccessDeniedException in case Hudson denies access to the Remote API
+	 */
+	List<HudsonView> getViewsList(HudsonServer hudsonServer) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException;
+
+	/**
+	 * Gets the View by name from the {@link HudsonServer}
+	 * 
+	 * @param hudsonServer the {@link HudsonServer} to get the View from
+	 * @param name the name of the View to get
+	 * @return the {@link HudsonView}
+	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
+	 * @throws HudsonServerAccessDeniedException in case Hudson denies access to the Remote API
+	 */
+	HudsonView getView(HudsonServer hudsonServer, String name) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException;
 
 }

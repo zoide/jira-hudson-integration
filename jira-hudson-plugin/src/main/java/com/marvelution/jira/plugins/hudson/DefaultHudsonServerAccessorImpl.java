@@ -47,6 +47,8 @@ import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.BuildsList;
 import com.marvelution.jira.plugins.hudson.model.HudsonServerAware;
 import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
+import com.marvelution.jira.plugins.hudson.model.HudsonView;
+import com.marvelution.jira.plugins.hudson.model.HudsonViewsList;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
@@ -273,6 +275,37 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			final BuildsList builds = XStreamMarshaller.unmarshal(response, BuildsList.class);
 			associateHudsonServer(builds.getBuilds(), hudsonServer);
 			return builds.getBuilds();
+		} catch (XStreamMarshallerException e) {
+			throw new HudsonServerAccessorException(
+				"Failed to unmarshal the Hudson server response to a Builds object. Reason: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<HudsonView> getViewsList(HudsonServer hudsonServer) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
+		final String response = getHudsonServerActionResponse(hudsonServer, LIST_ALL_VIEWS_ACTION, null);
+		try {
+			final HudsonViewsList viewsList = XStreamMarshaller.unmarshal(response, HudsonViewsList.class);
+			return viewsList.getViews();
+		} catch (XStreamMarshallerException e) {
+			throw new HudsonServerAccessorException(
+				"Failed to unmarshal the Hudson server response to a Builds object. Reason: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public HudsonView getView(HudsonServer hudsonServer, String name) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
+		final Map<String, String> params = new HashMap<String, String>();
+		params.put("viewName", name);
+		final String response = getHudsonServerActionResponse(hudsonServer, GET_VIEW_ACTION, params);
+		try {
+			return XStreamMarshaller.unmarshal(response, HudsonView.class);
 		} catch (XStreamMarshallerException e) {
 			throw new HudsonServerAccessorException(
 				"Failed to unmarshal the Hudson server response to a Builds object. Reason: " + e.getMessage(), e);

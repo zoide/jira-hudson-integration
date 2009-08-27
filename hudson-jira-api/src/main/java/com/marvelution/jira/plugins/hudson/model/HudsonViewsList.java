@@ -17,26 +17,35 @@
  * under the License.
  */
 
-package hudson.plugins.jiraapi.converters;
+package com.marvelution.jira.plugins.hudson.model;
 
-import com.marvelution.jira.plugins.hudson.model.HealthReport;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
- * Converter class to convert a Hudson HealthReport into a Jira Integration Model HealthReport
+ * Model class for a list of {@link HudsonView}
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class HudsonHealthReportConverter {
+@XStreamAlias("views")
+public class HudsonViewsList {
+
+	@XStreamImplicit(itemFieldName = "view")
+	private List<HudsonView> views;
 
 	/**
-	 * Convert a Hudson HealthReport into a Jira Integration Model HealthReport
+	 * Gets the {@link List} of {@link HudsonView}
 	 * 
-	 * @param hudsonHealthReport the Hudson HealthReport to convert
-	 * @return the converted {@link HealthReport}
+	 * @return the {@link List} of {@link HudsonView}
 	 */
-	public static HealthReport convertHudsonHealthReport(hudson.model.HealthReport hudsonHealthReport) {
-		return new HealthReport(hudsonHealthReport.getDescription(), hudsonHealthReport.getIconUrl(),
-			hudsonHealthReport.getScore());
+	public List<HudsonView> getViews() {
+		if (views == null) {
+			views = new ArrayList<HudsonView>();
+		}
+		return views;
 	}
 
 }

@@ -21,18 +21,18 @@ package com.marvelution.jira.plugins.hudson.portlets;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.atlassian.configurable.ObjectConfigurationException;
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.portal.PortletConfiguration;
-import com.atlassian.jira.project.Project;
-import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.plugin.webresource.WebResourceManager;
-import com.marvelution.jira.plugins.hudson.model.HudsonProjectStatusPortletResult;
+import com.marvelution.jira.plugins.hudson.model.HudsonView;
+import com.marvelution.jira.plugins.hudson.model.HudsonViewStatusPortletResult;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
@@ -40,21 +40,16 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
 /**
- * {@link Portlet} implementation to show the status of a specific Hudson project
+ * {@link Portlet} implementation to show the status of projects related to a Hudson view
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
+public class HudsonViewStatusPortlet extends AbstractHudsonPorlet {
 
 	/**
-	 * Log4J logger
+	 * Log4j Logger
 	 */
-	private static final Logger LOGGER = Logger.getLogger(HudsonProjectStatusPortlet.class);
-
-	/**
-	 * {@link ProjectManager} implementation
-	 */
-	private ProjectManager projectManager;
+	private static final Logger LOGGER = Logger.getLogger(HudsonViewStatusPortlet.class);
 
 	/**
 	 * Constructor
@@ -64,18 +59,16 @@ public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
 	 * @param webResourceManager the {@link WebResourceManager} implementation
 	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param applicationProperties the {@link ApplicationProperties} implementation
-	 * @param projectManager the {@link ProjectManager} implementation
 	 * @param hudsonServerAccessor the {@link HudsonServerAccessor} implementation
-	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
+	 * @param hudsonServerManager the {@link HudsonServerManager} implementationr
 	 */
-	public HudsonProjectStatusPortlet(JiraAuthenticationContext authenticationContext, UserUtil userUtil,
-										WebResourceManager webResourceManager, PermissionManager permissionManager,
-										ApplicationProperties applicationProperties, ProjectManager projectManager,
-										HudsonServerAccessor hudsonServerAccessor,
-										HudsonServerManager hudsonServerManager) {
+	public HudsonViewStatusPortlet(JiraAuthenticationContext authenticationContext, UserUtil userUtil,
+									WebResourceManager webResourceManager, PermissionManager permissionManager,
+									ApplicationProperties applicationProperties,
+									HudsonServerAccessor hudsonServerAccessor,
+									HudsonServerManager hudsonServerManager) {
 		super(authenticationContext, userUtil, webResourceManager, permissionManager, applicationProperties,
 			hudsonServerAccessor, hudsonServerManager);
-		this.projectManager = projectManager;
 	}
 
 	/**
@@ -85,19 +78,23 @@ public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
 	protected Map<String, Object> getVelocityParams(PortletConfiguration portletConfiguration) {
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
 		if (isHudsonConfigured()) {
-			final HudsonProjectStatusPortletResult result = new HudsonProjectStatusPortletResult(null, null);
+			final HudsonViewStatusPortletResult result = new HudsonViewStatusPortletResult(null, null);
 			try {
-				final long projectId = portletConfiguration.getLongProperty("projectId");
-				params.put("showBuilds", portletConfiguration.getProperty("showBuilds"));
-				final Project project = projectManager.getProjectObj(projectId);
-				final HudsonServer server = hudsonServerManager.getServerByJiraProject(project);
+				final String[] configuration = portletConfiguration.getProperty("hudsonView").split(";view:");
+				final HudsonServer server = hudsonServerManager.getServer(Integer.parseInt(configuration[0]));
 				result.setServer(server);
-				result.setProject(project);
-				result.setJob(hudsonServerAccessor.getProject(server, project));
-				if (!result.hasJob()) {
-					result.setError(getErrorText("hudson.error.portlet.no.job.found"));
+				result.setViewName(configuration[1]);
+				final HudsonView view = hudsonServerAccessor.getView(server, configuration[1]);
+				if (!StringUtils.isEmpty(view.getName())) {
+					result.setViewDescription(view.getDescription());
+					result.setJobs(view.getJobs());
+				} else {
+					result.setError(getErrorText("hudson.error.portlet.no.view.found"));
 				}
 			} catch (ObjectConfigurationException e) {
+				LOGGER.error("Invalid portlet configuration.", e);
+				result.setError(getErrorText("hudson.error.portlet.invalid.configuration"));
+			} catch (NumberFormatException e) {
 				LOGGER.error("Invalid portlet configuration.", e);
 				result.setError(getErrorText("hudson.error.portlet.invalid.configuration"));
 			} catch (HudsonServerAccessorException e) {

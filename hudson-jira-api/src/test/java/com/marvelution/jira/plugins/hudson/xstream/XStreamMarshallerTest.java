@@ -35,6 +35,8 @@ import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.BuildsList;
 import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.model.HealthReport;
+import com.marvelution.jira.plugins.hudson.model.HudsonView;
+import com.marvelution.jira.plugins.hudson.model.HudsonViewsList;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.model.Result;
@@ -290,6 +292,34 @@ public class XStreamMarshallerTest {
 		assertTrue(build.getRelatedIssueKeys().contains("ISSUE-1"));
 		assertTrue(build.getRelatedIssueKeys().contains("ISSUE-2"));
 		assertTrue(testResult.getFailedTests().contains("TestCase.java"));
+	}
+
+	/**
+	 * Test marshaling a {@link HudsonViewsList} into XML
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testMarshalViews() throws Exception {
+		final HudsonViewsList viewsList = new HudsonViewsList();
+		viewsList.getViews().add(new HudsonView("All", ""));
+		viewsList.getViews().add(new HudsonView("Atlassian", ""));
+		viewsList.getViews().add(new HudsonView("Marvelution", ""));
+		assertEquals(getXML("views.xml"), XStreamMarshaller.marshal(viewsList));
+	}
+
+	/**
+	 * Test unmarshaling a XML into {@link HudsonViewsList}
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testUnmarshalViews() throws Exception {
+		final String xml = getXML("views.xml");
+		final HudsonViewsList viewsList = XStreamMarshaller.unmarshal(xml, HudsonViewsList.class);
+		assertTrue(viewsList.getViews().contains(new HudsonView("All", "")));
+		assertTrue(viewsList.getViews().contains(new HudsonView("Atlassian", "")));
+		assertTrue(viewsList.getViews().contains(new HudsonView("Marvelution", "")));
 	}
 
 	/**

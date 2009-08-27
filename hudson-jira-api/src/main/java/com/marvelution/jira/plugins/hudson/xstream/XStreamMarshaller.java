@@ -24,6 +24,8 @@ import org.apache.log4j.Logger;
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.BuildsList;
 import com.marvelution.jira.plugins.hudson.model.HealthReport;
+import com.marvelution.jira.plugins.hudson.model.HudsonView;
+import com.marvelution.jira.plugins.hudson.model.HudsonViewsList;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.model.TestResult;
@@ -111,6 +113,8 @@ public class XStreamMarshaller {
 		xstream.processAnnotations(LegacyCodeTrigger.class);
 		xstream.processAnnotations(SCMTrigger.class);
 		xstream.processAnnotations(TimeTrigger.class);
+		xstream.processAnnotations(HudsonView.class);
+		xstream.processAnnotations(HudsonViewsList.class);
 		return xstream;
 	}
 

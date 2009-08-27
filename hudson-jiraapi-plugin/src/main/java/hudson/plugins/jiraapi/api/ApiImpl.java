@@ -22,12 +22,17 @@ package hudson.plugins.jiraapi.api;
 import java.util.SortedMap;
 
 import com.marvelution.jira.plugins.hudson.model.BuildsList;
+import com.marvelution.jira.plugins.hudson.model.HudsonView;
+import com.marvelution.jira.plugins.hudson.model.HudsonViewsList;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.JobsList;
 
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Hudson;
 import hudson.model.ItemGroup;
+import hudson.model.TopLevelItem;
+import hudson.model.View;
 import hudson.plugins.jiraapi.JiraProjectKeyJobProperty;
 import hudson.plugins.jiraapi.converters.HudsonBuildConverter;
 import hudson.plugins.jiraapi.converters.HudsonProjectConverter;
@@ -177,6 +182,40 @@ public class ApiImpl {
 			}
 		}
 		return builds;
+	}
+
+	/**
+	 * Get all Views from the Hudson instance
+	 * 
+	 * @return {@link HudsonViewsList} containing all available views
+	 */
+	public HudsonViewsList getAllViews() {
+		final HudsonViewsList views = new HudsonViewsList();
+		for (View view : Hudson.getInstance().getViews()) {
+			views.getViews().add(new HudsonView(view.getViewName(), view.getDescription()));
+		}
+		return views;
+	}
+
+	/**
+	 * Get the View by the name provided and all the related projects
+	 * 
+	 * @param viewName the name of the View to get
+	 * @return the {@link HudsonView}
+	 */
+	public HudsonView getView(String viewName) {
+		final View view = Hudson.getInstance().getView(viewName);
+		if (view != null) {
+			final HudsonView hudsonView = new HudsonView(view.getDisplayName(), view.getDescription());
+			for (TopLevelItem topItem : view.getItems()) {
+				if (topItem instanceof AbstractProject) {
+					hudsonView.getJobs().add(
+						HudsonProjectConverter.convertHudsonProject((AbstractProject<?, ?>) topItem));
+				}
+			}
+			return hudsonView;
+		}
+		return null;
 	}
 
 }

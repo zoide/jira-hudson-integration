@@ -21,7 +21,6 @@ package com.marvelution.jira.plugins.hudson.portlets;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.apache.velocity.tools.generic.SortTool;
 
 import com.atlassian.jira.config.properties.ApplicationProperties;
@@ -46,8 +45,6 @@ import com.marvelution.jira.plugins.hudson.utils.JobUtils;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class AbstractHudsonPorlet extends PortletImpl {
-
-	protected static final Logger LOGGER = Logger.getLogger(HudsonStatusPortlet.class);
 
 	private final WebResourceManager webResourceManager;
 

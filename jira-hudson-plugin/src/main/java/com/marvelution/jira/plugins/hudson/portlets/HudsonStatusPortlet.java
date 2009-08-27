@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.atlassian.jira.config.properties.ApplicationProperties;
 import com.atlassian.jira.portal.PortletConfiguration;
 import com.atlassian.jira.security.JiraAuthenticationContext;
@@ -43,6 +45,11 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class HudsonStatusPortlet extends AbstractHudsonPorlet {
+
+	/**
+	 * Log4J logger
+	 */
+	private static final Logger LOGGER = Logger.getLogger(HudsonStatusPortlet.class);
 
 	/**
 	 * Constructor
