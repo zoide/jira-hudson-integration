@@ -358,7 +358,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 		String response = "";
 		if (hudsonServer.isSecuredHudsonServer()) {
 			try {
-				String loginAction = constructHudsonActionURL(hudsonServer, "/j_security_check").toString();
+				String loginAction = constructHudsonActionURL(hudsonServer, "/j_acegi_security_check").toString();
 				while (true) {
 					final PostMethod loginMethod = createPostMethod(hudsonServer, loginAction);
 					loginMethod.addParameter("j_username", hudsonServer.getUsername());
