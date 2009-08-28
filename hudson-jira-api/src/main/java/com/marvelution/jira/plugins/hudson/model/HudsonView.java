@@ -45,8 +45,8 @@ public class HudsonView implements Comparable<HudsonView> {
 	 * @param description the view description
 	 */
 	public HudsonView(String name, String description) {
-		this.name = name;
-		this.description = description;
+		setName(name);
+		setDescription(description);
 	}
 
 	/**

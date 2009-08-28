@@ -323,6 +323,42 @@ public class XStreamMarshallerTest {
 	}
 
 	/**
+	 * Test marshalling a {@link HudsonView} into XML
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testMarshalView() throws Exception {
+		final HudsonView view = new HudsonView("Test View", "View Description");
+		Job job = new Job("Testcase", "");
+		job.setUrl("/job/Testcase");
+		job.setJiraKey("TESTCASE");
+		view.getJobs().add(job);
+		job = new Job("Test Job", "");
+		job.setUrl("/job/Test");
+		job.setJiraKey("TEST");
+		view.getJobs().add(job);
+		assertEquals(getXML("view.xml"), XStreamMarshaller.marshal(view));
+	}
+
+	/**
+	 * Test unmarshalling a XML into {@link HudsonView}
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testUnmarshalView() throws Exception {
+		final HudsonView view = XStreamMarshaller.unmarshal(getXML("view.xml"), HudsonView.class);
+		assertEquals("Test View", view.getName());
+		assertEquals("View Description", view.getDescription());
+		assertEquals(2, view.getJobs().size());
+		assertEquals("TESTCASE", view.getJobs().get(0).getJiraKey());
+		assertEquals("Testcase", view.getJobs().get(0).getName());
+		assertEquals("TEST", view.getJobs().get(1).getJiraKey());
+		assertEquals("Test Job", view.getJobs().get(1).getName());
+	}
+
+	/**
 	 * Get the content of a file as String
 	 * 
 	 * @param filename the file name to get the content from
