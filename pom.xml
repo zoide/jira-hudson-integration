@@ -68,7 +68,7 @@
 			<notifier>
 				<type>mail</type>
 				<configuration>
-					<address>build-notifications@marvelution.com</address>
+					<address>ci@lists.marvelution.com</address>
 				</configuration>
 			</notifier>
 		</notifiers>
