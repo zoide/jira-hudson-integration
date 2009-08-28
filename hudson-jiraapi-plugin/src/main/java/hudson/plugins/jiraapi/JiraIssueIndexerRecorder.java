@@ -43,14 +43,11 @@ import hudson.tasks.Recorder;
 @SuppressWarnings("unchecked")
 public class JiraIssueIndexerRecorder extends Recorder {
 
-	private final transient IssueIndexer indexer;
-
 	/**
 	 * Constructor
 	 */
 	@DataBoundConstructor
 	public JiraIssueIndexerRecorder() {
-		indexer = IssueIndexer.getInstance();
 	}
 
 	/**
@@ -60,12 +57,17 @@ public class JiraIssueIndexerRecorder extends Recorder {
 	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
 					throws InterruptedException, IOException {
 		final PrintStream logger = listener.getLogger();
-		logger.println("Started indexing related Jira issue keys");
-		try {
-			indexer.indexBuild(build);
-			logger.println("Successfully indexed related Jira issue keys");
-		} catch (IOException e) {
-			logger.println("Failed to index Jira issues related to this build");
+		final IssueIndexer indexer = IssueIndexer.getInstance();
+		if (indexer != null) {
+			logger.println("Started indexing related Jira issue keys");
+			try {
+				indexer.indexBuild(build);
+				logger.println("Successfully indexed related Jira issue keys");
+			} catch (IOException e) {
+				logger.println("Failed to index Jira issues related to this build");
+			}
+		} else {
+			logger.println("Failed to index related Jira issues. Reason: No IssueIndexer found.");
 		}
 		return true;
 	}
