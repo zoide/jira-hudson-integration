@@ -83,9 +83,9 @@ public class HudsonViewStatusPortlet extends AbstractHudsonPorlet {
 				final String[] configuration = portletConfiguration.getProperty("hudsonView").split(";view:");
 				final HudsonServer server = hudsonServerManager.getServer(Integer.parseInt(configuration[0]));
 				result.setServer(server);
-				result.setViewName(configuration[1]);
 				final HudsonView view = hudsonServerAccessor.getView(server, configuration[1]);
 				if (!StringUtils.isEmpty(view.getName())) {
+					result.setViewName(view.getName());
 					result.setViewDescription(view.getDescription());
 					result.setJobs(view.getJobs());
 				} else {
@@ -101,8 +101,8 @@ public class HudsonViewStatusPortlet extends AbstractHudsonPorlet {
 				LOGGER.error("Failed to connect to the Hudson server.", e);
 				result.setError(getErrorText("hudson.error.cannot.connect"));
 			} catch (HudsonServerAccessDeniedException e) {
-				result.setError(getErrorText("hudson.error.access.denied"));
 				LOGGER.error("Failed to connect to the Hudson server. Access Denied", e);
+				result.setError(getErrorText("hudson.error.access.denied"));
 			}
 			params.put("result", result);
 		}

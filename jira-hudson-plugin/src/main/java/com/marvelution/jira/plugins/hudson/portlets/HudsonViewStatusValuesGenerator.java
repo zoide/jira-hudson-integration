@@ -19,7 +19,6 @@
 
 package com.marvelution.jira.plugins.hudson.portlets;
 
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.map.ListOrderedMap;
@@ -27,7 +26,6 @@ import org.apache.log4j.Logger;
 
 import com.atlassian.configurable.ValuesGenerator;
 import com.atlassian.jira.ComponentManager;
-import com.atlassian.jira.web.bean.I18nBean;
 import com.marvelution.jira.plugins.hudson.model.HudsonView;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
@@ -56,8 +54,7 @@ public class HudsonViewStatusValuesGenerator implements ValuesGenerator {
 		final Map values = new ListOrderedMap();
 		for (HudsonServer server : getServerManager().getServers()) {
 			try {
-				final List<HudsonView> views = getServerAccessor().getViewsList(server);
-				for (HudsonView view : views) {
+				for (HudsonView view : getServerAccessor().getViewsList(server)) {
 					values.put(server.getServerId() + ";view:" + view.getName(), server.getName() + " - "
 						+ view.getName());
 				}
@@ -71,21 +68,11 @@ public class HudsonViewStatusValuesGenerator implements ValuesGenerator {
 	}
 
 	/**
-	 * Get internationalisation text
-	 * 
-	 * @param key the key of the text to get
-	 * @return the text
-	 */
-	String getText(String key) {
-		return new I18nBean().getText(key);
-	}
-
-	/**
 	 * Get the {@link HudsonServerManager} from the {@link ComponentManager}
 	 * 
 	 * @return the {@link HudsonServerManager}
 	 */
-	private HudsonServerManager getServerManager() {
+	HudsonServerManager getServerManager() {
 		return (HudsonServerManager) ComponentManager.getComponentInstanceOfType(HudsonServerManager.class);
 	}
 
@@ -94,7 +81,7 @@ public class HudsonViewStatusValuesGenerator implements ValuesGenerator {
 	 * 
 	 * @return the {@link HudsonServerAccessor}
 	 */
-	private HudsonServerAccessor getServerAccessor() {
+	HudsonServerAccessor getServerAccessor() {
 		return (HudsonServerAccessor) ComponentManager.getComponentInstanceOfType(HudsonServerAccessor.class);
 	}
 

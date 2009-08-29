@@ -30,7 +30,7 @@
             <td class="colHeaderLink">
             	<span class="switch actionLinks subText" id="${domId}-switch" onclick="CookieUtil.toggleVisibility('${domId}', '[${i18n.getText("hudson.portlet.show")} >>]', '[${i18n.getText("hudson.portlet.hide")}]')">[${i18n.getText("hudson.portlet.hide")}]</span>
                 ${i18n.getText("hudson.portlet.jobs.status.summary")}:
-                <strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($result.viewName)
+                <strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($i18n.getText("hudson.portlet.view", $result.viewName))
                 #if ($result.hasViewDescription())
                 <p class="subText">$result.viewDescription</p>
                 #end
@@ -101,7 +101,7 @@
             <tr class="rowHeader">
                 <td class="colHeaderLink">
                 	${i18n.getText("hudson.portlet.jobs.status.summary")}: 
-                	<strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($result.viewName)
+                	<strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($i18n.getText("hudson.portlet.view", $result.viewName))
                 	#if ($result.hasViewDescription())
 	                <p class="subText">$result.viewDescription</p>
 	                #end
