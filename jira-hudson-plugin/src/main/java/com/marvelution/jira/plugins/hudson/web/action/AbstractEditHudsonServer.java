@@ -19,10 +19,11 @@
 
 package com.marvelution.jira.plugins.hudson.web.action;
 
+import java.io.IOException;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.jira.security.PermissionManager;
-import com.marvelution.jira.plugins.hudson.JiraApi;
 import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
@@ -66,6 +67,7 @@ public abstract class AbstractEditHudsonServer extends AbstractHudsonWebActionSu
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void doValidation() {
 		if (StringUtils.isBlank(getName())) {
 			addError("name", getText("hudson.config.serverName.required"));
@@ -76,16 +78,20 @@ public abstract class AbstractEditHudsonServer extends AbstractHudsonWebActionSu
 			addError("host", getText("hudson.config.host.invalid"));
 		} else {
 			try {
-				hudsonServerAccessor.getCrumb(hudsonServer);
-				final ApiImplementation remoteApi = hudsonServerAccessor.getApiImplementation(hudsonServer);
-				if (!JiraApi.getApiImplementation().equals(remoteApi)) {
-					addError("host", getText("hudson.config.host.incompatible.api.version", JiraApi
-						.getApiImplementation()));
+				final ApiImplementation current = ApiImplementation.getApiImplementation();
+				try {
+					hudsonServerAccessor.getCrumb(hudsonServer);
+					final ApiImplementation remoteApi = hudsonServerAccessor.getApiImplementation(hudsonServer);
+					if (!current.isCompatibleWith(remoteApi)) {
+						addError("host", getText("hudson.config.host.incompatible.api.version", current));
+					}
+				} catch (HudsonServerAccessorException e) {
+					addError("host", getText("hudson.config.host.connection.error", current));
+				} catch (HudsonServerAccessDeniedException e) {
+					addError("host", getText("hudson.config.host.access.denied.error"));
 				}
-			} catch (HudsonServerAccessorException e) {
-				addError("host", getText("hudson.config.host.connection.error", JiraApi.getApiImplementation()));
-			} catch (HudsonServerAccessDeniedException e) {
-				addError("host", getText("hudson.config.host.access.denied.error"));
+			} catch (IOException e) {
+				addError("host", getText("hudson.config.api.impl.failed"));
 			}
 		}
 	}

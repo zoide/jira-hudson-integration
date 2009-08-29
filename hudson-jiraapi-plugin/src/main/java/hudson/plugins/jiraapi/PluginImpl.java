@@ -32,7 +32,7 @@ import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-import com.marvelution.jira.plugins.hudson.JiraApi;
+import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.model.JobsList;
 import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
 import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshallerException;
@@ -105,7 +105,7 @@ public class PluginImpl extends Plugin {
 	public void doGetCrumb(final StaplerRequest request, final StaplerResponse response) throws IOException,
 					ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
-		final String userAgent = "Jira Hudson Integration Client/" + JiraApi.getApiImplementation().getVersion();
+		final String userAgent = "Jira Hudson Integration Client/1.0";
 		if (userAgent.equals(request.getHeader("User-Agent")) && Hudson.getInstance().isUseCrumbs()) {
 			final CrumbIssuer issuer = Hudson.getInstance().getCrumbIssuer();
 			response.setHeader("Crumb-Field", issuer.getCrumbRequestField());
@@ -125,7 +125,7 @@ public class PluginImpl extends Plugin {
 			ServletException {
 		Hudson.getInstance().checkPermission(Hudson.READ);
 		try {
-			writeToResponse(request, response, "application/xml", XStreamMarshaller.marshal(JiraApi
+			writeToResponse(request, response, "application/xml", XStreamMarshaller.marshal(ApiImplementation
 				.getApiImplementation()));
 		} catch (XStreamMarshallerException e) {
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);

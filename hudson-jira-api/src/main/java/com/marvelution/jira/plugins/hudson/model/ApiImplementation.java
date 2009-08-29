@@ -19,7 +19,14 @@
 
 package com.marvelution.jira.plugins.hudson.model;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * Model for exposing the version of the API through the API
@@ -27,9 +34,47 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @XStreamAlias("jiraApi")
-public class ApiImplementation {
+public final class ApiImplementation {
+
+	@XStreamOmitField
+	private static ApiImplementation api;
 
 	private String version;
+
+	@XStreamOmitField
+	private Set<String> compatibleVersions;
+
+	/**
+	 * Private constructor
+	 * 
+	 * @param version the Api version
+	 * @param compatibleVersions the compatible versions
+	 */
+	private ApiImplementation(String version, Set<String> compatibleVersions) {
+		this.version = version;
+		this.compatibleVersions = compatibleVersions;
+	}
+
+	/**
+	 * Static method to get the {@link ApiImplementation}
+	 * 
+	 * @return the {@link ApiImplementation} instance
+	 * @throws IOException in case the properties cannot be loaded to initiate the {@link ApiImplementation}
+	 */
+	public static ApiImplementation getApiImplementation() throws IOException {
+		if (api == null) {
+			final Properties props = new Properties();
+			props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(
+				"com/marvelution/jira/plugins/hudson/model/ApiImplementation.properties"));
+			final String currentVersion = props.getProperty("current.version");
+			final Set<String> versions = new HashSet<String>();
+			for (String version : props.getProperty(currentVersion, currentVersion).split(" ,;:")) {
+				versions.add(version);
+			}
+			api = new ApiImplementation(currentVersion, Collections.unmodifiableSet(versions));
+		}
+		return api;
+	}
 
 	/**
 	 * Gets the version
@@ -41,12 +86,22 @@ public class ApiImplementation {
 	}
 
 	/**
-	 * Sets the version
+	 * Gets the compatible versions
 	 * 
-	 * @param version the version
+	 * @return {@link Set} of compatible versions
 	 */
-	public void setVersion(String version) {
-		this.version = version;
+	public Set<String> getCompatibleVersions() {
+		return compatibleVersions;
+	}
+
+	/**
+	 * Check if the given {@link ApiImplementation} is compatible with this one
+	 * 
+	 * @param other the other {@link ApiImplementation} to check with
+	 * @return <code>true</code> if compatible, <code>false</code> otherwise
+	 */
+	public boolean isCompatibleWith(ApiImplementation other) {
+		return (getVersion().equals(other.getVersion()) || getCompatibleVersions().contains(other.getVersion()));
 	}
 
 	/**

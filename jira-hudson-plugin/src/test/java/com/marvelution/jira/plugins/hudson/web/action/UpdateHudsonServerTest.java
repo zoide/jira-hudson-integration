@@ -34,7 +34,7 @@ import org.mockito.internal.verification.VerificationModeFactory;
 
 import com.atlassian.jira.security.Permissions;
 import com.marvelution.jira.plugins.hudson.DefaultHudsonServerFactoryImpl;
-import com.marvelution.jira.plugins.hudson.JiraApi;
+import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.opensymphony.user.User;
 
@@ -127,7 +127,8 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 		updateHudsonServer.setName("Hudson CI");
 		updateHudsonServer.setHost("http://hudson.marvelution.com");
 		updateHudsonServer.setHudsonServerId(2);
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(
+			ApiImplementation.getApiImplementation());
 		when(serverManager.getServer(eq("Hudson CI"))).thenReturn(server);
 		when(server.getServerId()).thenReturn(1);
 		updateHudsonServer.doValidation();
@@ -144,7 +145,8 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 		updateHudsonServer.setName("Hudson CI");
 		updateHudsonServer.setHost("http://hudson.marvelution.com");
 		updateHudsonServer.setHudsonServerId(1);
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(
+			ApiImplementation.getApiImplementation());
 		when(serverManager.getServer(eq("Hudson CI"))).thenReturn(server);
 		when(server.getServerId()).thenReturn(1);
 		updateHudsonServer.doValidation();

@@ -27,7 +27,6 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
-import com.marvelution.jira.plugins.hudson.JiraApi;
 import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
@@ -57,7 +56,8 @@ public abstract class AbstractEditHudsonServerTest extends AbstractHudsonWebActi
 	 */
 	@Test
 	public void testDoValidationName() throws Exception {
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(
+			ApiImplementation.getApiImplementation());
 		editHudsonServer.setName("Hudson CI");
 		editHudsonServer.setHost("http://hudson.marvelution.com");
 		editHudsonServer.doValidation();
@@ -71,7 +71,8 @@ public abstract class AbstractEditHudsonServerTest extends AbstractHudsonWebActi
 	 */
 	@Test
 	public void testDoValidationBlankName() throws Exception {
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(
+			ApiImplementation.getApiImplementation());
 		editHudsonServer.doValidation();
 		assertTrue(webworkAction.getHasErrors());
 		assertTrue(webworkAction.getErrors().containsKey("name"));
@@ -85,7 +86,8 @@ public abstract class AbstractEditHudsonServerTest extends AbstractHudsonWebActi
 	 */
 	@Test
 	public void testDoValidationBlankHost() throws Exception {
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(
+			ApiImplementation.getApiImplementation());
 		editHudsonServer.setName("Hudson CI");
 		editHudsonServer.doValidation();
 		assertTrue(webworkAction.getHasErrors());
@@ -100,7 +102,8 @@ public abstract class AbstractEditHudsonServerTest extends AbstractHudsonWebActi
 	 */
 	@Test
 	public void testDoValidationValidHost() throws Exception {
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(
+			ApiImplementation.getApiImplementation());
 		editHudsonServer.setName("Hudson CI");
 		editHudsonServer.setHost("http://hudson.marvelution.com");
 		editHudsonServer.doValidation();
@@ -114,7 +117,8 @@ public abstract class AbstractEditHudsonServerTest extends AbstractHudsonWebActi
 	 */
 	@Test
 	public void testDoValidationInvalidHost() throws Exception {
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(
+			ApiImplementation.getApiImplementation());
 		editHudsonServer.setName("Hudson CI");
 		editHudsonServer.setHost("i.am.not.valid");
 		editHudsonServer.doValidation();
@@ -130,27 +134,12 @@ public abstract class AbstractEditHudsonServerTest extends AbstractHudsonWebActi
 	 */
 	@Test
 	public void testDoValidationCorrectApiImplementation() throws Exception {
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(
+			ApiImplementation.getApiImplementation());
 		editHudsonServer.setName("Hudson CI");
 		editHudsonServer.setHost("http://hudson.marvelution.com/");
 		editHudsonServer.doValidation();
 		assertFalse(webworkAction.getHasErrors());
-	}
-
-	/**
-	 * Test validation of correct Api Implementation version of the configured server
-	 * 
-	 * @throws Exception in case of test exception
-	 */
-	@Test
-	public void testDoValidationIncorrectApiImplementation() throws Exception {
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(new ApiImplementation());
-		editHudsonServer.setName("Hudson CI");
-		editHudsonServer.setHost("http://hudson.marvelution.com/");
-		editHudsonServer.doValidation();
-		assertTrue(webworkAction.getHasErrors());
-		assertTrue(webworkAction.getErrors().containsKey("host"));
-		assertEquals("hudson.config.host.incompatible.api.version", webworkAction.getErrors().get("host"));
 	}
 
 	/**

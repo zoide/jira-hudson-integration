@@ -74,18 +74,6 @@ public class XStreamMarshallerTest {
 	}
 
 	/**
-	 * Test marshaling a {@link ApiImplementation} object into XML
-	 * 
-	 * @throws Exception in case of Exceptions that always fail the test
-	 */
-	@Test
-	public void testMarshalJiraApi() throws Exception {
-		final ApiImplementation api = new ApiImplementation();
-		api.setVersion("1.0");
-		assertEquals(getXML("JiraApi.xml"), XStreamMarshaller.marshal(api));
-	}
-
-	/**
 	 * Test unmarshaling a XML into a {@link ApiImplementation} object
 	 * 
 	 * @throws Exception in case of Exceptions that always fail the test

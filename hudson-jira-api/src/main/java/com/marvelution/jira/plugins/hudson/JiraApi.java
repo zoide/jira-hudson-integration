@@ -19,9 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson;
 
-import java.net.URL;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
+import java.io.IOException;
 
 import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 
@@ -35,21 +33,15 @@ public final class JiraApi {
 	/**
 	 * Get the {@link ApiImplementation} of the API
 	 * 
+	 * @deprecated Use the {@link ApiImplementation} constructor to get the {@link ApiImplementation}
 	 * @return the {@link ApiImplementation}
 	 */
+	@Deprecated
 	public static ApiImplementation getApiImplementation() {
-		final ApiImplementation api = new ApiImplementation();
 		try {
-			final String classContainer =
-				JiraApi.class.getProtectionDomain().getCodeSource().getLocation().toString();
-			final URL manifestUrl = new URL("jar:" + classContainer + "!/META-INF/MANIFEST.MF");
-			final Manifest manifest = new Manifest(manifestUrl.openStream());
-			final Attributes attributes = manifest.getMainAttributes();
-			api.setVersion(attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION));
-			return api;
-		} catch (Exception e) {
-			api.setVersion("UNKNOWN");
-			return api;
+			return ApiImplementation.getApiImplementation();
+		} catch (IOException e) {
+			return null;
 		}
 	}
 

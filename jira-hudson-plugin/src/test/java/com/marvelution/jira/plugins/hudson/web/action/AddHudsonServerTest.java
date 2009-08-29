@@ -32,7 +32,7 @@ import org.mockito.Mock;
 import org.mockito.internal.verification.VerificationModeFactory;
 
 import com.marvelution.jira.plugins.hudson.DefaultHudsonServerFactoryImpl;
-import com.marvelution.jira.plugins.hudson.JiraApi;
+import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerFactory;
 
@@ -94,7 +94,8 @@ public class AddHudsonServerTest extends AbstractEditHudsonServerTest {
 	 */
 	@Override
 	public void testDoValidationWithErrors() throws Exception {
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(
+			ApiImplementation.getApiImplementation());
 		when(serverManager.hasServer(eq("Hudson CI"))).thenReturn(true);
 		addHudsonServer.setName("Hudson CI");
 		addHudsonServer.setHost("http://hudson.marvelution.com");
@@ -109,7 +110,8 @@ public class AddHudsonServerTest extends AbstractEditHudsonServerTest {
 	 */
 	@Override
 	public void testDoValidationWithoutErrors() throws Exception {
-		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(JiraApi.getApiImplementation());
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(
+			ApiImplementation.getApiImplementation());
 		when(serverManager.hasServer(eq("Hudson CI"))).thenReturn(false);
 		addHudsonServer.setName("Hudson CI");
 		addHudsonServer.setHost("http://hudson.marvelution.com");

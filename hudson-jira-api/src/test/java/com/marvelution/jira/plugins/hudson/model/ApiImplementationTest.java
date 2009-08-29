@@ -21,6 +21,8 @@ package com.marvelution.jira.plugins.hudson.model;
 
 import static org.junit.Assert.*;
 
+import java.util.Properties;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,13 +35,19 @@ public class ApiImplementationTest {
 
 	private ApiImplementation api;
 
+	private Properties props;
+
 	/**
 	 * Setup tests
+	 * 
+	 * @throws Exception in case of errors
 	 */
 	@Before
-	public void setUp() {
-		api = new ApiImplementation();
-		api.setVersion("1.0");
+	public void setUp() throws Exception {
+		props = new Properties();
+		props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(
+			"com/marvelution/jira/plugins/hudson/model/ApiImplementation.properties"));
+		api = ApiImplementation.getApiImplementation();
 	}
 
 	/**
@@ -47,7 +55,7 @@ public class ApiImplementationTest {
 	 */
 	@Test
 	public void testHashCode() {
-		assertEquals("1.0".hashCode(), api.hashCode());
+		assertEquals(props.getProperty("current.version").hashCode(), api.hashCode());
 	}
 
 	/**
@@ -57,19 +65,16 @@ public class ApiImplementationTest {
 	public void testEqualsObject() {
 		assertFalse(api.equals(null));
 		assertFalse(api.equals("1.0"));
-		final ApiImplementation otherApi = new ApiImplementation();
-		otherApi.setVersion("1.1");
-		assertFalse(api.equals(otherApi));
 	}
 
 	/**
 	 * Test {@link ApiImplementation#equals(Object)}
+	 * 
+	 * @throws Exception in case of errors
 	 */
 	@Test
-	public void testEqualsApiImplementation() {
-		final ApiImplementation otherApi = new ApiImplementation();
-		otherApi.setVersion("1.0");
-		assertTrue(api.equals(otherApi));
+	public void testEqualsApiImplementation() throws Exception {
+		assertTrue(api.equals(ApiImplementation.getApiImplementation()));
 	}
 
 	/**
@@ -77,7 +82,7 @@ public class ApiImplementationTest {
 	 */
 	@Test
 	public void testToString() {
-		assertEquals("1.0", api.toString());
+		assertEquals(props.getProperty("current.version"), api.toString());
 	}
 
 }
