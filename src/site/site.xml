@@ -31,6 +31,7 @@
 
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
+			<item name="Release Notes" href="release-notes.html" />
 			<item name="Features" href="features/index.html">
 				<item name="Jira" href="features/jira/index.html" collapse="true">
 					<item name="Administration" href="features/jira/administration.html" />
