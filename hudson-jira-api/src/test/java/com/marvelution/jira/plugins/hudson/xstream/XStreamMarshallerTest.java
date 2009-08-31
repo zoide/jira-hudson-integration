@@ -32,6 +32,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.marvelution.jira.plugins.hudson.model.Build;
+import com.marvelution.jira.plugins.hudson.model.BuildArtifact;
 import com.marvelution.jira.plugins.hudson.model.BuildsList;
 import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.model.HealthReport;
@@ -245,8 +246,8 @@ public class XStreamMarshallerTest {
 		relatedIssueKeys.add("ISSUE-1");
 		relatedIssueKeys.add("ISSUE-2");
 		build.setRelatedIssueKeys(relatedIssueKeys);
-		final List<String> artifacts = new ArrayList<String>();
-		artifacts.add("pom.xml");
+		final List<BuildArtifact> artifacts = new ArrayList<BuildArtifact>();
+		artifacts.add(new BuildArtifact("pom.xml", "pom.xml"));
 		build.setArtifacts(artifacts);
 		assertEquals(getXML("Build.xml"), XStreamMarshaller.marshal(build));
 	}
@@ -266,7 +267,9 @@ public class XStreamMarshallerTest {
 		assertEquals("Marvelution-utils", build.getJobName());
 		assertEquals("job/Marvelution-utils/", build.getJobUrl());
 		assertTrue(build.getTriggers().get(0) instanceof SCMTrigger);
-		assertTrue(build.getArtifacts().contains("pom.xml"));
+		assertTrue(build.getArtifacts().size() == 1);
+		assertEquals("pom.xml", build.getArtifacts().get(0).getName());
+		assertEquals("pom.xml", build.getArtifacts().get(0).getUrl());
 		assertEquals(114554L, build.getDuration());
 		assertEquals(1241906926000L, build.getTimestamp());
 		assertEquals(Result.SUCCESS, build.getResult());

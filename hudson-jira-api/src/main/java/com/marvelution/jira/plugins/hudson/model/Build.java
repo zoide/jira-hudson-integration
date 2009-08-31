@@ -58,7 +58,7 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	private Set<String> relatedIssueKeys;
 
 	@XStreamImplicit(itemFieldName = "artifact")
-	private List<String> artifacts;
+	private List<BuildArtifact> artifacts;
 
 	@XStreamAlias("testResult")
 	private TestResult testResult;
@@ -295,9 +295,9 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * 
 	 * @return the artifacts
 	 */
-	public List<String> getArtifacts() {
+	public List<BuildArtifact> getArtifacts() {
 		if (artifacts == null) {
-			artifacts = new ArrayList<String>();
+			artifacts = new ArrayList<BuildArtifact>();
 		}
 		return artifacts;
 	}
@@ -307,7 +307,7 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 * 
 	 * @param artifacts the artifacts
 	 */
-	public void setArtifacts(List<String> artifacts) {
+	public void setArtifacts(List<BuildArtifact> artifacts) {
 		this.artifacts = artifacts;
 	}
 

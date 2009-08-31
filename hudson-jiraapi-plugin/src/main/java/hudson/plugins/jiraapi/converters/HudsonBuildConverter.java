@@ -42,6 +42,7 @@ import hudson.triggers.SCMTrigger.SCMTriggerCause;
 import hudson.triggers.TimerTrigger.TimerTriggerCause;
 
 import com.marvelution.jira.plugins.hudson.model.Build;
+import com.marvelution.jira.plugins.hudson.model.BuildArtifact;
 import com.marvelution.jira.plugins.hudson.model.State;
 import com.marvelution.jira.plugins.hudson.model.TestResult;
 import com.marvelution.jira.plugins.hudson.model.triggers.LegacyCodeTrigger;
@@ -89,9 +90,10 @@ public class HudsonBuildConverter {
 			testResult.setTotal(testAction.getTotalCount());
 			build.setTestResult(testResult);
 		}
-		final List<String> artifacts = new ArrayList<String>();
+		final List<BuildArtifact> artifacts = new ArrayList<BuildArtifact>();
 		for (Artifact artifact : hudsonBuild.getArtifacts()) {
-			artifacts.add(artifact.getFileName());
+			artifacts.add(new BuildArtifact(artifact.getFileName(), hudsonBuild.getUrl() + "artifact/"
+				+ artifact.relativePath));
 		}
 		artifacts.addAll(getArtifactsFromModuleBuilds(hudsonBuild));
 		build.setArtifacts(artifacts);
@@ -138,11 +140,11 @@ public class HudsonBuildConverter {
 	 * Get the artifacts from the given build including module builds with the same build number
 	 * 
 	 * @param build the Build to get all the artifacts from, including modules
-	 * @return {@link List} of artifact names
+	 * @return {@link List} of artifacts
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<String> getArtifactsFromModuleBuilds(AbstractBuild<?, ?> build) {
-		final List<String> artifacts = new ArrayList<String>();
+	public static List<BuildArtifact> getArtifactsFromModuleBuilds(AbstractBuild<?, ?> build) {
+		final List<BuildArtifact> artifacts = new ArrayList<BuildArtifact>();
 		final AbstractProject<?, ?> project = (AbstractProject<?, ?>) build.getProject();
 		if (project instanceof ItemGroup) {
 			final ItemGroup<?> parent = (ItemGroup<?>) project;
@@ -151,7 +153,8 @@ public class HudsonBuildConverter {
 				final AbstractBuild<?, ?> moduleBuild = module.getBuildByNumber(build.getNumber());
 				if (moduleBuild != null) {
 					for (Artifact artifact : moduleBuild.getArtifacts()) {
-						artifacts.add(artifact.getFileName());
+						artifacts.add(new BuildArtifact(artifact.getFileName(), moduleBuild.getUrl() + "artifact/"
+							+ artifact.relativePath));
 					}
 				}
 			}

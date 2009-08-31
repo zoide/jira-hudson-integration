@@ -6,7 +6,10 @@
   <trigger class="scmTrigger"/>
   <relatedIssueKey>ISSUE-1</relatedIssueKey>
   <relatedIssueKey>ISSUE-2</relatedIssueKey>
-  <artifact>pom.xml</artifact>
+  <artifact>
+    <name>pom.xml</name>
+    <url>pom.xml</url>
+  </artifact>
   <testResult>
     <failed>0</failed>
     <failedTests class="list">

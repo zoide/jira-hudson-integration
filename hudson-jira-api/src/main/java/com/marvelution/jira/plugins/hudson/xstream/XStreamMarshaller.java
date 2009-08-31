@@ -22,6 +22,7 @@ package com.marvelution.jira.plugins.hudson.xstream;
 import org.apache.log4j.Logger;
 
 import com.marvelution.jira.plugins.hudson.model.Build;
+import com.marvelution.jira.plugins.hudson.model.BuildArtifact;
 import com.marvelution.jira.plugins.hudson.model.BuildsList;
 import com.marvelution.jira.plugins.hudson.model.HealthReport;
 import com.marvelution.jira.plugins.hudson.model.HudsonView;
@@ -115,6 +116,7 @@ public class XStreamMarshaller {
 		xstream.processAnnotations(TimeTrigger.class);
 		xstream.processAnnotations(HudsonView.class);
 		xstream.processAnnotations(HudsonViewsList.class);
+		xstream.processAnnotations(BuildArtifact.class);
 		return xstream;
 	}
 
