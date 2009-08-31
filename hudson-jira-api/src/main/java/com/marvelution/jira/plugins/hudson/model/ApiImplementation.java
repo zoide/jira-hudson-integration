@@ -64,8 +64,7 @@ public final class ApiImplementation {
 	public static ApiImplementation getApiImplementation() throws IOException {
 		if (api == null) {
 			final Properties props = new Properties();
-			props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(
-				"com/marvelution/jira/plugins/hudson/model/ApiImplementation.properties"));
+			props.load(ApiImplementation.class.getResourceAsStream("ApiImplementation.properties"));
 			final String currentVersion = props.getProperty("current.version");
 			final Set<String> versions = new HashSet<String>();
 			for (String version : props.getProperty(currentVersion, currentVersion).split(" ,;:")) {

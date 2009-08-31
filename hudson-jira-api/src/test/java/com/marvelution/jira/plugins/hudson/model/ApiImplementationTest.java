@@ -45,8 +45,7 @@ public class ApiImplementationTest {
 	@Before
 	public void setUp() throws Exception {
 		props = new Properties();
-		props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(
-			"com/marvelution/jira/plugins/hudson/model/ApiImplementation.properties"));
+		props.load(getClass().getResourceAsStream("ApiImplementation.properties"));
 		api = ApiImplementation.getApiImplementation();
 	}
 
