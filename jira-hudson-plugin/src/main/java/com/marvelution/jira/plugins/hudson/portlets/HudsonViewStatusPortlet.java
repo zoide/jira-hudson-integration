@@ -33,6 +33,7 @@ import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.plugin.webresource.WebResourceManager;
 import com.marvelution.jira.plugins.hudson.model.HudsonView;
 import com.marvelution.jira.plugins.hudson.model.HudsonViewStatusPortletResult;
+import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
@@ -77,6 +78,8 @@ public class HudsonViewStatusPortlet extends AbstractHudsonPorlet {
 	@Override
 	protected Map<String, Object> getVelocityParams(PortletConfiguration portletConfiguration) {
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
+		params.put("baseResourceUrl", "/download/resources/" + HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN
+			+ ":hudson-view-status");
 		if (isHudsonConfigured()) {
 			final HudsonViewStatusPortletResult result = new HudsonViewStatusPortletResult(null, null);
 			try {

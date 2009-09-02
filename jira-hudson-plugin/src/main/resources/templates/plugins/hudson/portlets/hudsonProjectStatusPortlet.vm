@@ -118,8 +118,9 @@
     <thead>
         <tr class="rowHeader">
             <td class="colHeaderLink" colspan="2">
+				<a href="${result.serverUrl}/${result.job.url}rssAll" class="actionLinks"><img src="${req.contextPath}${baseResourceUrl}/images/rss.gif" alt="${i18n.getText('hudson.panel.title.rss.description')}" /></a>
             	${i18n.getText("hudson.portlet.job.status.summary")}:
-            	<strong><a href="${result.serverUrl}">${result.serverName}</a></strong> (<a href="/browse/${result.project.key}">${result.project.name}</a>)
+            	<strong><a href="${result.serverUrl}/${result.job.url}">${result.serverName}</a></strong> (<a href="${req.contextPath}/browse/${result.project.key}">${result.project.name}</a>)
             </td>
         </tr>
     </thead>
