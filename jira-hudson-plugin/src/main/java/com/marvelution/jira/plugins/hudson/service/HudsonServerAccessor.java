@@ -123,7 +123,7 @@ public interface HudsonServerAccessor {
 
 	/**
 	 * Gets all Builds of a Jira {@link Project}. If the project is associated with a specific {@link HudsonServer}
-	 * only that server will be checked for builds, otherwise all the configured servers will be called.
+	 * only that server will be checked for builds, otherwise the default Hudson server will be called.
 	 * 
 	 * @param project the Jira {@link Project}
 	 * @return {@link List} of {@link Build}s of the project
@@ -146,7 +146,7 @@ public interface HudsonServerAccessor {
 
 	/**
 	 * Gets all Builds of a Jira {@link Version}. If the project version is associated with a specific
-	 * {@link HudsonServer} only that server will be checked for builds, otherwise all the configured servers will be
+	 * {@link HudsonServer} only that server will be checked for builds, otherwise the default Hudson server will be
 	 * called.
 	 * 
 	 * @param version the Jira {@link Version}

@@ -65,6 +65,8 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 	public String getHtml(Browser browser) {
 		final Project project = browser.getProjectObject();
 		final Map<String, Object> velocityParams = new HashMap<String, Object>();
+		velocityParams.put("showRss", Boolean.TRUE);
+		// TODO: Get RSS Feed link
 		tabPanelHelper.prepareVelocityParameters(velocityParams, project, "/browse/" + project.getKey() + "?report=",
 			HudsonBuildsTabPanelHelper.SUB_TABS);
 		return descriptor.getHtml("view", velocityParams);

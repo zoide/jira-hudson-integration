@@ -70,6 +70,7 @@ public class HudsonBuildsForComponentTabPanel extends GenericTabPanel {
 	protected Map createVelocityParams(ComponentContext context) {
 		final ProjectComponent component = context.getComponent();
 		final Map<String, Object> velocityParams = super.createVelocityParams(context);
+		velocityParams.put("showRss", Boolean.TRUE);
 		tabPanelHelper.prepareVelocityParameters(velocityParams, component);
 		return velocityParams;
 	}

@@ -57,6 +57,7 @@ import com.atlassian.jira.web.bean.PagerFilter;
 import com.atlassian.jira.web.bean.StatisticAccessorBean;
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.HudsonBuildTabPanelResult;
+import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
@@ -150,7 +151,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 		ActionContext.getRequest().setAttribute("__sitemesh__decorator", "none");
 		if (!serverManager.hasServers()) {
 			addErrorMessage(getText("hudson.panel.error.not.configured"));
-			return "error";
+			return ERROR;
 		}
 		HudsonServer server = serverManager.getDefaultServer();
 		results = new HudsonBuildTabPanelResult(server);
@@ -172,7 +173,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 					}
 				} else {
 					addErrorMessage(getText("hudson.panel.error.no.permission"));
-					return "error";
+					return ERROR;
 				}
 			} else if (getVersionId() != null && getVersionId() > 0L) {
 				final Version version = versionManager.getVersion(getVersionId());
@@ -187,7 +188,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 					}
 				} else {
 					addErrorMessage(getText("hudson.panel.error.no.permission"));
-					return "error";
+					return ERROR;
 				}
 			} else if (getComponentId() != null && getComponentId() > 0L) {
 				final ProjectComponent component = componentManager.find(getComponentId());
@@ -199,7 +200,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 					builds = serverAccessor.getBuilds(server, getIssueKeys(component));
 				} else {
 					addErrorMessage(getText("hudson.panel.error.no.permission"));
-					return "error";
+					return ERROR;
 				}
 			} else if (!StringUtils.isEmpty(getIssueKey())) {
 				final MutableIssue issue = issueManager.getIssueObject(getIssueKey());
@@ -210,11 +211,11 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 					builds = serverAccessor.getBuilds(server, Collections.singletonList(issue.getKey()));
 				} else {
 					addErrorMessage(getText("hudson.panel.error.no.permission"));
-					return "error";
+					return ERROR;
 				}
 			} else {
 				addErrorMessage(getText("hudson.panel.error.invalid.request"));
-				return "error";
+				return ERROR;
 			}
 			results.setServer(server);
 			processBuilds(builds);
@@ -222,13 +223,38 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 		} catch (HudsonServerAccessorException e) {
 			log.warn("Failed to connect to Hudson Server. Reason: " + e.getMessage(), e);
 			addErrorMessage(getText("hudson.panel.error.cannot.connect", server.getName()));
-			return "error";
+			return ERROR;
 		} catch (HudsonServerAccessDeniedException e) {
 			log.warn("Failed to connect to Hudson Server. Reason: " + e.getMessage(), e);
 			addErrorMessage(getText("hudson.panel.error.access.denied", server.getName()));
-			return "error";
+			return ERROR;
 		}
 		return super.doExecute();
+	}
+
+	/**
+	 * Get the redirect to the RSS feed of the project
+	 * 
+	 * @return the RSS feed link
+	 * @throws Exception in case the request is unsupported
+	 */
+	public String doShowRss() throws Exception {
+		Project project = null;
+		if (StringUtils.isNotEmpty(getProjectKey())) {
+			project = projectManager.getProjectObjByKey(getProjectKey());
+		} else if (getVersionId() != null && getVersionId() > 0L) {
+			project = versionManager.getVersion(getVersionId()).getProjectObject();
+		} else if (getComponentId() != null && getComponentId() > 0L) {
+			final ProjectComponent component = componentManager.find(getComponentId());
+			project = projectManager.getProjectObj(component.getProjectId());
+		}
+		if (project != null) {
+			final HudsonServer server = serverManager.getServerByJiraProject(project);
+			final Job job = serverAccessor.getProject(server, project);
+			return getRedirect(server.getHost() + "/" + job.getUrl() + "rssAll");
+		} else {
+			throw new UnsupportedOperationException(getText("hudson.panel.error.unsupport.rss.action"));
+		}
 	}
 
 	/**
@@ -238,7 +264,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 * @return {@link Collection} of issue keys
 	 */
 	@SuppressWarnings("unchecked")
-	private List<String> getIssueKeys(final  Project project) {
+	private List<String> getIssueKeys(final Project project) {
 		try {
 			final Set searchParams = new HashSet();
 			searchParams.add(new ProjectParameter(EasyList.build(project.getId())));
@@ -257,7 +283,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 * @return {@link Collection} of issue keys
 	 */
 	@SuppressWarnings("unchecked")
-	private List<String> getIssueKeys(final  Version version) {
+	private List<String> getIssueKeys(final Version version) {
 		try {
 			final Set searchParams = new HashSet();
 			searchParams.add(new VersionParameter(EasyList.build(version.getId())));

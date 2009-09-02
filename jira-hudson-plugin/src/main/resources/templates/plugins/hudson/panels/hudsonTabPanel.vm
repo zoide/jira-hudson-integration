@@ -27,10 +27,17 @@
 <div class="projectPanel" id="hudsonTabPanel">
 	<div class="header">
 		<h3 class="formtitle">
+			#if ($showRss)
+			<a href="${req.contextPath}/secure/ViewHudsonServerPanelContent!showRss.jspa?${querySection}" class="actionLinks"><img src="${req.contextPath}${baseResourceUrl}/images/rss.gif" alt="${i18n.getText('hudson.panel.title.rss.description')}" /></a>
+			#end
 			<a href="${hudsonServer.host}" class="actionLinks">${i18n.getText("hudson.panel.title.view.dashboard")}</a>
 			<img src="${req.contextPath}${baseResourceUrl}/images/hudson-icon-24.png" />
 			${i18n.getText("hudson.panel.title")}
 		</h3>
+		<p class="subText">
+			#set ($i18nDescription = "hudson.panel.${moduleKey}.$!{extraDescriptionKey}description")
+			${i18n.getText($i18nDescription)}
+        </p>
 		#if ($availableTabs && !$availableTabs.isEmpty())
         <ul class="square">
             <li>
@@ -41,10 +48,6 @@
             </li>
         </ul>
         #end
-		<p class="subText">
-			#set ($i18nDescription = "hudson.panel.${moduleKey}.$!{extraDescriptionKey}description")
-			${i18n.getText($i18nDescription)}
-        </p>
 	</div>
 	<div class="spaced" id="hudsonTabPanelBuilds">
 		<img src="${req.ContextPath}/images/icons/wait-large.gif" class="waitingImage" />
