@@ -53,9 +53,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk</developerConnection>
-		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk</url>
+		<connection>scm:svn:http://svn.marvelution.com/marvelution-jira-hudson-integration/trunk</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution-jira-hudson-integration/trunk</developerConnection>
+		<url>http://svn.marvelution.com/marvelution-jira-hudson-integration/trunk</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
