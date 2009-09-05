@@ -87,8 +87,8 @@
 		<stagingSiteURL>scp://marvelution.com/home/markrekveld/staging.marvelution.com/marvelution-jira-hudson-integration/</stagingSiteURL>
 		<jiraDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/jira-hudson-plugin</jiraDownloadBaseUrl>
 		<hudsonDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/hudson-jiraapi-plugin</hudsonDownloadBaseUrl>
-		<pmd.ruleset.location>http://svn.marvelution.com/marvelution/resources/pmd/marvelution-atlassian-related-pmd-ruleset.xml</pmd.ruleset.location>
-		<checkstyle.config.location>http://svn.marvelution.com/marvelution/resources/checkstyle/marvelution-atlassian-related-checkstyle-config.xml</checkstyle.config.location>
+		<pmd.ruleset.location>http://svn.marvelution.com/resources/pmd/marvelution-atlassian-related-pmd-ruleset.xml</pmd.ruleset.location>
+		<checkstyle.config.location>http://svn.marvelution.com/resources/checkstyle/marvelution-atlassian-related-checkstyle-config.xml</checkstyle.config.location>
 	</properties>
 	
 	<dependencies>
