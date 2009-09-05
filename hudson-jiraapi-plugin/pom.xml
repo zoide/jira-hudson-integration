@@ -23,12 +23,12 @@
 	<parent>
 		<groupId>com.marvelution.jira.plugins</groupId>
 		<artifactId>marvelution-jira-hudson-integration</artifactId>
-		<version>1.2-SNAPSHOT</version>
+		<version>2.0</version>
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>hudson-jiraapi-plugin</artifactId>
 	<packaging>hpi</packaging>
-	<version>1.2-SNAPSHOT</version>
+	<version>2.0</version>
 
 	<name>Hudson Jira Plugin</name>
 	<description>This plugin features a Job property, Issue indexer and a new REST API to integration Hudson with Portlets and Tab Atlassian Jira.</description>
@@ -47,9 +47,9 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/hudson-jiraapi-plugin</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/hudson-jiraapi-plugin</developerConnection>
-		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/hudson-jiraapi-plugin</url>
+		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-2.0</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-2.0</developerConnection>
+		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-2.0</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
