@@ -23,11 +23,11 @@
 	<parent>
 		<groupId>com.marvelution.jira.plugins</groupId>
 		<artifactId>marvelution-jira-hudson-integration</artifactId>
-		<version>2.0</version>
+		<version>2.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>jira-hudson-plugin</artifactId>
-	<version>2.0</version>
+	<version>2.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
 	<name>JIRA Hudson Plugin</name>
@@ -47,9 +47,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-2.0</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-2.0</developerConnection>
-		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/tags/marvelution-jira-hudson-integration-2.0</url>
+		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson-plugin</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson-plugin</developerConnection>
+		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson-plugin</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
