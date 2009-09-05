@@ -37,8 +37,8 @@ Hudson Features - Remote API
     <<<http://yourserver/hudson/plugin/hudson-jiraapi-plugin>>>
 
 
-** Get Crumb (<<NEW>>)
-~~~~~~~~~~~~~~~~~~~~~~
+** Get Crumb
+~~~~~~~~~~~~
 
   API endpoint to get a crumb for the Jira plugin to allow Jira to get data from Hudson even if the 
   "Prevent Cross Site Request Forgery exploits" feature is enabled.
@@ -120,5 +120,25 @@ Hudson Features - Remote API
   Parameters:
   
   * ISSUE_KEYS: Comma separated list of Jira Issue keys.
+  
+  []
+
+
+** Get All Views (<<NEW>>)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  API endpoint to get all the Views on the Hudson server. \
+  Endpoint: <<</plugin/hudson-jiraapi-plugin/listAllViews>>>
+
+
+** Get View (<<NEW>>)
+~~~~~~~~~~~~~~~~~~~~~
+
+  API endpoint to get the View on the Hudson server and all its related projects. \
+  Endpoint: <<</plugin/hudson-jiraapi-plugin/getView?viewName=VIEW_NAME>>>
+
+  Parameters:
+  
+  * VIEW_NAME: The name of the Hudson view to get.
   
   []

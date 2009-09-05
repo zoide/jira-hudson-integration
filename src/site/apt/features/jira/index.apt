@@ -43,23 +43,25 @@ Jira Features
     
     * Hudson Project Status Portlet
     
+    * Hudson View Status Portlet (<<NEW>>)
+    
     []
     
   * {{{./tabpanels.html}Tab Panels}}
   
     * Project Hudson Builds Tab Panel
     
-      * View build by project (<<NEW>>)
+      * View build by project
       
-      * View build by related Issue keys (<<NEW>>)
+      * View build by related Issue keys
       
       []
 
     * Version Hudson Builds Tab Panel
     
-      * View build by date (<<NEW>>)
+      * View build by date
       
-      * View build by related Issue keys (<<NEW>>)
+      * View build by related Issue keys
       
       []
 

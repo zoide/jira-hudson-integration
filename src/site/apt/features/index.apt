@@ -43,6 +43,8 @@ Features
   * {{{./jira/portlets.html}Portlets}}
   
     * Hudson Status Portlet
+  
+    * Hudson View Status Portlet (<<NEW>>)
     
     * Hudson Project Status Portlet
     
@@ -72,7 +74,7 @@ Features
   
   * {{{./hudson/issue-indexer.html}Issue key indexer}}
   
-    * Also supporting lowercase issue keys (<<NEW>>)
+    * Also supporting lowercase issue keys
     
     []
   

@@ -29,6 +29,8 @@ Introduction
 
   This project features two plugins to integrate {{{http://www.atlassian.com/software/jira}Jira}} with
   {{{https://hudson.dev.java.net}Hudson}}.
+  
+  Please refer to the {{{./release-notes.html}Release Notes}} for a complete overview of new features and bug fixes.
 
 
 * {{{./hudson-jiraapi-plugin/index.html}Hudson Plugin}}
@@ -65,6 +67,8 @@ Introduction
   * a portlet to view all projects statuses on a Hudson server.
   
   * a portlet to view detailed Hudson project build information.
+  
+  * a portlet to view all projects related to a Hudson View (<<NEW>>).
   
   []
 

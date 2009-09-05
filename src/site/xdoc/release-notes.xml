@@ -24,6 +24,30 @@
 	</properties>
 
 	<body>
+        <section name="Release Notes - Version 2.0">
+			<h3>Bug</h3>
+			<ul>
+				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-24">MARVJIRAHUDSON-24</a>] - User authentication and authorization failes when configurating a Secured Hudson Instance</li>
+				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-26">MARVJIRAHUDSON-26</a>] - Related Issue link in Builds tab panels doesn't work if Jira is not the ROOT application</li>
+				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-30">MARVJIRAHUDSON-30</a>] - JiraIssueIndexerRecorder can fail the build</li>
+			</ul>
+			<h3>Documentation</h3>
+			<ul>
+				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-22">MARVJIRAHUDSON-22</a>] - No documentation available in the introduction page of Hudson Jira API project</li>
+				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-34">MARVJIRAHUDSON-34</a>] - Document changes in plugins</li>
+			</ul>
+			<h3>Improvement</h3>
+			<ul>
+				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-25">MARVJIRAHUDSON-25</a>] - Improve API compatibility check</li>
+				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-28">MARVJIRAHUDSON-28</a>] - Update Crumb from Hudson List</li>
+				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-31">MARVJIRAHUDSON-31</a>] - Show build artifacts in list and link to build artifacts on Hudson</li>
+			</ul>
+			<h3>New Feature</h3>
+			<ul>
+				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-21">MARVJIRAHUDSON-21</a>] - Portlet to view project statusses by Hudson views</li>
+				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-32">MARVJIRAHUDSON-32</a>] - RSS links in Tab Panels</li>
+			</ul>
+		</section>	
         <section name="Release Notes - Version Jira Plugin 1.1.2">
 			<h3>Bug</h3>
 			<ul>
