@@ -62,8 +62,8 @@
 		<url>http://jira.marvelution.com/browse/MARVJIRAHUDSON</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Hudson</system>
-		<url>http://ci.marvelution.com/hudson</url>
+		<system>Bamboo</system>
+		<url>http://bamboo.marvelution.com/</url>
 		<notifiers>
 			<notifier>
 				<type>mail</type>
