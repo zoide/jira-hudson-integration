@@ -40,6 +40,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
@@ -65,6 +66,8 @@ import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshallerException;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
+
+	private static final Logger LOGGER = Logger.getLogger(DefaultHudsonServerAccessorImpl.class);
 
 	private static final int TIMEOUT_MS = 30000;
 
@@ -106,6 +109,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 				hudsonServer.setCrumbField(method.getResponseHeader("Crumb-Field").getValue());
 			}
 		} catch (MalformedURLException e) {
+			LOGGER.error("Failed to get Crumb information form Hudson Server: " + hudsonServer.getName(), e);
 			throw new HudsonServerAccessorException("Failed to get Crumb information form Hudson Server: "
 				+ hudsonServer.getName(), e);
 		}
@@ -121,6 +125,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			final ApiImplementation api = XStreamMarshaller.unmarshal(response, ApiImplementation.class);
 			return api;
 		} catch (XStreamMarshallerException e) {
+			LOGGER.error("Failed to unmarshal the Hudson server response to a API Implementation object. Reason: "
+				+ e.getMessage(), e);
 			throw new HudsonServerAccessorException(
 				"Failed to unmarshal the Hudson server response to a API Implementation object. Reason: "
 					+ e.getMessage(), e);
@@ -137,6 +143,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			final JobsList jobs = XStreamMarshaller.unmarshal(response, JobsList.class);
 			return jobs.getJobs();
 		} catch (XStreamMarshallerException e) {
+			LOGGER.error(
+				"Failed to unmarshal the Hudson server response to a Jobs object. Reason: " + e.getMessage(), e);
 			throw new HudsonServerAccessorException(
 				"Failed to unmarshal the Hudson server response to a Jobs object. Reason: " + e.getMessage(), e);
 		}
@@ -152,6 +160,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			final JobsList jobs = XStreamMarshaller.unmarshal(response, JobsList.class);
 			return jobs.getJobs();
 		} catch (XStreamMarshallerException e) {
+			LOGGER.error(
+				"Failed to unmarshal the Hudson server response to a Jobs object. Reason: " + e.getMessage(), e);
 			throw new HudsonServerAccessorException(
 				"Failed to unmarshal the Hudson server response to a Jobs object. Reason: " + e.getMessage(), e);
 		}
@@ -175,6 +185,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 		try {
 			return XStreamMarshaller.unmarshal(response, Job.class);
 		} catch (XStreamMarshallerException e) {
+			LOGGER.error("Failed to unmarshal the Hudson server response to a Job object. Reason: " + e.getMessage(),
+				e);
 			throw new HudsonServerAccessorException(
 				"Failed to unmarshal the Hudson server response to a Job object. Reason: " + e.getMessage(), e);
 		}
@@ -201,6 +213,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			associateHudsonServer(builds.getBuilds(), hudsonServer);
 			return builds.getBuilds();
 		} catch (XStreamMarshallerException e) {
+			LOGGER.error("Failed to unmarshal the Hudson server response to a Builds object. Reason: "
+				+ e.getMessage(), e);
 			throw new HudsonServerAccessorException(
 				"Failed to unmarshal the Hudson server response to a Builds object. Reason: " + e.getMessage(), e);
 		}
@@ -242,6 +256,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			associateHudsonServer(builds.getBuilds(), hudsonServer);
 			return builds.getBuilds();
 		} catch (XStreamMarshallerException e) {
+			LOGGER.error("Failed to unmarshal the Hudson server response to a Builds object. Reason: "
+				+ e.getMessage(), e);
 			throw new HudsonServerAccessorException(
 				"Failed to unmarshal the Hudson server response to a Builds object. Reason: " + e.getMessage(), e);
 		}
@@ -276,6 +292,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			associateHudsonServer(builds.getBuilds(), hudsonServer);
 			return builds.getBuilds();
 		} catch (XStreamMarshallerException e) {
+			LOGGER.error("Failed to unmarshal the Hudson server response to a Builds object. Reason: "
+				+ e.getMessage(), e);
 			throw new HudsonServerAccessorException(
 				"Failed to unmarshal the Hudson server response to a Builds object. Reason: " + e.getMessage(), e);
 		}
@@ -291,6 +309,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			final HudsonViewsList viewsList = XStreamMarshaller.unmarshal(response, HudsonViewsList.class);
 			return viewsList.getViews();
 		} catch (XStreamMarshallerException e) {
+			LOGGER.error("Failed to unmarshal the Hudson server response to a Builds object. Reason: "
+				+ e.getMessage(), e);
 			throw new HudsonServerAccessorException(
 				"Failed to unmarshal the Hudson server response to a Builds object. Reason: " + e.getMessage(), e);
 		}
@@ -307,6 +327,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 		try {
 			return XStreamMarshaller.unmarshal(response, HudsonView.class);
 		} catch (XStreamMarshallerException e) {
+			LOGGER.error("Failed to unmarshal the Hudson server response to a Builds object. Reason: "
+				+ e.getMessage(), e);
 			throw new HudsonServerAccessorException(
 				"Failed to unmarshal the Hudson server response to a Builds object. Reason: " + e.getMessage(), e);
 		}
@@ -337,6 +359,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			}
 			return getHudsonServerActionResponse(hudsonServer, actionMethod);
 		} catch (MalformedURLException e) {
+			LOGGER.error("Failed to construct the Hudson Server Action URL", e);
 			throw new HudsonServerAccessorException("Failed to construct the Hudson Server Action URL", e);
 		}
 	}
@@ -378,8 +401,10 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 					handleNotOKResponse(actionMethod);
 				}
 			} catch (MalformedURLException e) {
+				LOGGER.error("Invalid Hduson action URL specified", e);
 				throw new HudsonServerAccessorException("Invalid Hduson action URL specified", e);
 			} catch (IOException e) {
+				LOGGER.error("Failed to connect to the Hudson Server", e);
 				throw new HudsonServerAccessorException("Failed to connect to the Hudson Server", e);
 			} finally {
 				if (actionMethod != null) {
@@ -407,6 +432,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 					handleNotOKResponse(actionMethod);
 				}
 			} catch (IOException e) {
+				LOGGER.error("Failed to connect to the Hudson Server", e);
 				throw new HudsonServerAccessorException("Failed to connect to the Hudson Server", e);
 			} finally {
 				if (actionMethod != null) {

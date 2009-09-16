@@ -81,6 +81,7 @@ public class StringEncrypter {
 			final BASE64Encoder base64Encoder = new BASE64Encoder();
 			return base64Encoder.encode(cipher.doFinal(stringToEncrypt.getBytes(UNICODE_FORMAT)));
 		} catch (Exception e) {
+			LOGGER.error("Failed to encrypt provided String. Reason: " + e.getMessage(), e);
 			throw new StringEncryptionException("Failed to encrypt provided String. Reason: " + e.getMessage(), e);
 		}
 	}
@@ -100,6 +101,7 @@ public class StringEncrypter {
 			final BASE64Decoder base64Decoder = new BASE64Decoder();
 			return new String(cipher.doFinal(base64Decoder.decodeBuffer(stringToDecrypt)));
 		} catch (Exception e) {
+			LOGGER.error("Failed to decrypt provided String. Reason: " + e.getMessage(), e);
 			throw new StringEncryptionException("Failed to decrypt provided String. Reason: " + e.getMessage(), e);
 		}
 	}
