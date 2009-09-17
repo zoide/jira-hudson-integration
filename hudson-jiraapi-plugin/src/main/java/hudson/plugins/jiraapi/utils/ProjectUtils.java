@@ -162,4 +162,20 @@ public class ProjectUtils {
 		return builds;
 	}
 
+	/**
+	 * Get the {@link JiraProjectKeyJobProperty} of a given Hudson Project
+	 * 
+	 * @param <PROJECT> the Project type
+	 * @param project the Hudson project
+	 * @return the {@link JiraProjectKeyJobProperty} property of the project if any is configured, may be
+	 *         <code>null</code>
+	 */
+	public static <PROJECT extends AbstractProject<?, ?>> JiraProjectKeyJobProperty getJiraProjectKeyPropertyOfProject(
+					PROJECT project) {
+		if (project.getProperty(JiraProjectKeyJobProperty.class) != null) {
+			return (JiraProjectKeyJobProperty) project.getProperty(JiraProjectKeyJobProperty.class);
+		}
+		return null;
+	}
+
 }

@@ -128,6 +128,7 @@ public class PluginImpl extends Plugin {
 			writeToResponse(request, response, "application/xml", XStreamMarshaller.marshal(ApiImplementation
 				.getApiImplementation()));
 		} catch (XStreamMarshallerException e) {
+			LOGGER.log(Level.SEVERE, "Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
 	}
@@ -148,6 +149,7 @@ public class PluginImpl extends Plugin {
 		try {
 			writeToResponse(request, response, "application/xml", XStreamMarshaller.marshal(jobs));
 		} catch (XStreamMarshallerException e) {
+			LOGGER.log(Level.SEVERE, "Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
 	}
@@ -168,6 +170,7 @@ public class PluginImpl extends Plugin {
 		try {
 			writeToResponse(request, response, "application/xml", XStreamMarshaller.marshal(jobs));
 		} catch (XStreamMarshallerException e) {
+			LOGGER.log(Level.SEVERE, "Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
 	}
@@ -190,6 +193,7 @@ public class PluginImpl extends Plugin {
 			final String xml = XStreamMarshaller.marshal(apiImpl.getProjectByJiraKey(projectKey));
 			writeToResponse(request, response, "application/xml", xml);
 		} catch (XStreamMarshallerException e) {
+			LOGGER.log(Level.SEVERE, "Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
 	}
@@ -212,6 +216,7 @@ public class PluginImpl extends Plugin {
 			final String xml = XStreamMarshaller.marshal(apiImpl.getBuildsByJiraProject(projectKey));
 			writeToResponse(request, response, "application/xml", xml);
 		} catch (XStreamMarshallerException e) {
+			LOGGER.log(Level.SEVERE, "Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
 	}
@@ -240,6 +245,7 @@ public class PluginImpl extends Plugin {
 				XStreamMarshaller.marshal(apiImpl.getBuildsByJiraVersion(projectKey, startDate, releaseDate));
 			writeToResponse(request, response, "application/xml", xml);
 		} catch (XStreamMarshallerException e) {
+			LOGGER.log(Level.SEVERE, "Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
 	}
@@ -262,6 +268,7 @@ public class PluginImpl extends Plugin {
 			final String xml = XStreamMarshaller.marshal(apiImpl.getBuildsByJiraIssueKeys(issueKeys));
 			writeToResponse(request, response, "application/xml", xml);
 		} catch (XStreamMarshallerException e) {
+			LOGGER.log(Level.SEVERE, "Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
 	}
@@ -282,6 +289,7 @@ public class PluginImpl extends Plugin {
 			final String xml = XStreamMarshaller.marshal(apiImpl.getAllViews());
 			writeToResponse(request, response, "application/xml", xml);
 		} catch (XStreamMarshallerException e) {
+			LOGGER.log(Level.SEVERE, "Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
 	}
@@ -304,6 +312,7 @@ public class PluginImpl extends Plugin {
 			final String xml = XStreamMarshaller.marshal(apiImpl.getView(viewName));
 			writeToResponse(request, response, "application/xml", xml);
 		} catch (XStreamMarshallerException e) {
+			LOGGER.log(Level.SEVERE, "Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 			throw new ServletException("Failed to marshal response object to XML. Reason: " + e.getMessage(), e);
 		}
 	}
@@ -327,6 +336,7 @@ public class PluginImpl extends Plugin {
 			writer.write(content);
 			writer.flush();
 		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "Failed to write to response. Reason: " + e.getMessage(), e);
 			throw new ServletException("Failed to write to response. Reason: " + e.getMessage(), e);
 		} finally {
 			try {

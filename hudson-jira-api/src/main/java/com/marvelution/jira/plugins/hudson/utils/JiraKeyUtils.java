@@ -28,7 +28,9 @@ import java.util.regex.Pattern;
  * Helper class for Jira Issue and Project Keys
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
+ * @deprecated use the JiraKeyUtils helper class in the hudson-jiraapi-plugin
  */
+@Deprecated
 public final class JiraKeyUtils {
 	
 	private static final Pattern JIRA_PROJECT_KEY_PATTERN = Pattern.compile("\\b[A-Z]([A-Z]+)\\b");

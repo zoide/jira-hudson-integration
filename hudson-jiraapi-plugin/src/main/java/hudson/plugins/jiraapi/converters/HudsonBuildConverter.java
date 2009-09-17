@@ -36,6 +36,8 @@ import hudson.model.Cause.RemoteCause;
 import hudson.model.Cause.UpstreamCause;
 import hudson.model.Cause.UserCause;
 import hudson.model.Run.Artifact;
+import hudson.plugins.jiraapi.utils.JiraKeyUtils;
+import hudson.plugins.jiraapi.utils.ProjectUtils;
 import hudson.scm.ChangeLogSet.Entry;
 import hudson.tasks.test.AbstractTestResultAction;
 import hudson.triggers.SCMTrigger.SCMTriggerCause;
@@ -52,7 +54,6 @@ import com.marvelution.jira.plugins.hudson.model.triggers.SCMTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.TimeTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.Trigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.UserTrigger;
-import com.marvelution.jira.plugins.hudson.utils.JiraKeyUtils;
 
 /**
  * Converter class to convert a Hudson Build into a Jira Integration Model Build
@@ -130,7 +131,8 @@ public class HudsonBuildConverter {
 		build.setTriggers(triggers);
 		final Set<String> relatedIssueKeys = new HashSet<String>();
 		for (Entry entry : hudsonBuild.getChangeSet()) {
-			relatedIssueKeys.addAll(JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg()));
+			relatedIssueKeys.addAll(JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg(), ProjectUtils
+				.getJiraProjectKeyPropertyOfProject(hudsonBuild.getProject()).getIssueKeyPattern()));
 		}
 		build.setRelatedIssueKeys(relatedIssueKeys);
 		return build;

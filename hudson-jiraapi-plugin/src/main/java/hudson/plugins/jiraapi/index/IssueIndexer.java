@@ -25,6 +25,7 @@ import hudson.model.Hudson;
 import hudson.plugins.jiraapi.index.model.IssueIndex;
 import hudson.plugins.jiraapi.index.model.Issue;
 import hudson.plugins.jiraapi.index.model.Project;
+import hudson.plugins.jiraapi.utils.JiraKeyUtils;
 import hudson.plugins.jiraapi.utils.ProjectUtils;
 import hudson.scm.ChangeLogSet.Entry;
 
@@ -39,7 +40,6 @@ import java.util.SortedMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.marvelution.jira.plugins.hudson.utils.JiraKeyUtils;
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -207,7 +207,8 @@ public final class IssueIndexer {
 	private List<String> findBuildRelatedIssues(AbstractBuild<?, ?> build) {
 		final List<String> keys = new ArrayList<String>();
 		for (Entry entry : build.getChangeSet()) {
-			keys.addAll(JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg()));
+			keys.addAll(JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg(), ProjectUtils
+				.getJiraProjectKeyPropertyOfProject(build.getProject()).getIssueKeyPattern()));
 		}
 		return keys;
 	}
