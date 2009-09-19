@@ -53,11 +53,11 @@
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
-		<url>http://jira.marvelution.com/browse/MARVJIRAHUDSON</url>
+		<url>http://issues.marvelution.com/browse/MARVJIRAHUDSON</url>
 	</issueManagement>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://hudson.marvelution.com/</url>
+		<url>http://builds.marvelution.com/browse/MARVJIRAHUDSON</url>
 		<notifiers>
 			<notifier>
 				<type>mail</type>
