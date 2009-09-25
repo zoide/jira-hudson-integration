@@ -35,10 +35,12 @@
 	</web-resource>
 
 	<!-- P O R T L E T S -->
-	<portlet key="hudson-status" name="Hudson Status" class="com.marvelution.jira.plugins.hudson.portlets.HudsonStatusPortlet">
+	<portlet key="hudson-status" name="Hudson Status"
+		class="com.marvelution.jira.plugins.hudson.portlets.HudsonStatusPortlet" lazy="true">
 		<objectdescriptor key="hudson.jira.portlet.status.name" />
 		<label key="hudson.jira.portlet.status.name" />
 		<description key="hudson.portlet.status.description" />
+		<resource type="velocity" name="loading" location="templates/plugins/hudson/portlets/loadingHudsonPortlet.vm" />
 		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonStatusPortlet.vm" />
 		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
 		<permission>viewversioncontrol</permission>
@@ -47,10 +49,11 @@
 	</portlet>
 
 	<portlet key="hudson-project-status" name="Hudson Project Status"
-		class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet">
+		class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet" lazy="true">
 		<objectdescriptor key="hudson.jira.portlet.project.status.name" />
 		<label key="hudson.jira.portlet.project.status.name" />
 		<description key="hudson.portlet.project.status.description" />
+		<resource type="velocity" name="loading" location="templates/plugins/hudson/portlets/loadingHudsonPortlet.vm" />
 		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonProjectStatusPortlet.vm" />
 		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
 		<permission>viewversioncontrol</permission>
@@ -74,10 +77,11 @@
 	</portlet>
 
 	<portlet key="hudson-view-status" name="Hudson View Status"
-		class="com.marvelution.jira.plugins.hudson.portlets.HudsonViewStatusPortlet">
+		class="com.marvelution.jira.plugins.hudson.portlets.HudsonViewStatusPortlet" lazy="true">
 		<objectdescriptor key="hudson.jira.portlet.view.status.name" />
 		<label key="hudson.portlet.view.status.name" />
 		<description key="hudson.portlet.view.status.description" />
+		<resource type="velocity" name="loading" location="templates/plugins/hudson/portlets/loadingHudsonPortlet.vm" />
 		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonViewStatusPortlet.vm" />
 		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
 		<permission>viewversioncontrol</permission>

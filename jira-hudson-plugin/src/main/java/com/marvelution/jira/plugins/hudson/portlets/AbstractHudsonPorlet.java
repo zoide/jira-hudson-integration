@@ -24,6 +24,7 @@ import java.util.Map;
 import org.apache.velocity.tools.generic.SortTool;
 
 import com.atlassian.jira.config.properties.ApplicationProperties;
+import com.atlassian.jira.portal.LazyLoadingPortlet;
 import com.atlassian.jira.portal.PortletConfiguration;
 import com.atlassian.jira.portal.PortletImpl;
 import com.atlassian.jira.security.JiraAuthenticationContext;
@@ -44,7 +45,7 @@ import com.marvelution.jira.plugins.hudson.utils.JobUtils;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class AbstractHudsonPorlet extends PortletImpl {
+public abstract class AbstractHudsonPorlet extends PortletImpl implements LazyLoadingPortlet {
 
 	private final WebResourceManager webResourceManager;
 
@@ -149,6 +150,25 @@ public class AbstractHudsonPorlet extends PortletImpl {
 	@SuppressWarnings("unchecked")
 	protected Map<String, Object> getSuperClassVelocityParams(PortletConfiguration portletConfiguration) {
 		return super.getVelocityParams(portletConfiguration);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getLoadingHtml(PortletConfiguration portletConfiguration) {
+		webResourceManager.requireResource(HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");
+		final Map<String, Object> velocityParams = getSuperClassVelocityParams(portletConfiguration);
+		velocityParams.put("portletConfig", portletConfiguration);
+		velocityParams.put("portletId", portletConfiguration.getId());
+		return getDescriptor().getHtml("loading", velocityParams);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getStaticHtml(PortletConfiguration portletConfiguration) {
+		webResourceManager.requireResource(HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");
+		return "";
 	}
 
 }
