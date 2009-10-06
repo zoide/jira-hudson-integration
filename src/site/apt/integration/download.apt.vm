@@ -1,0 +1,78 @@
+ 												------
+ 												Download
+ 												------
+ 												Mark Rekveld
+ 												------
+ 												October 5 2009
+ 												------
+
+~~ Licensed to Marvelution under one or more contributor license 
+~~ agreements.  See the NOTICE file distributed with this work 
+~~ for additional information regarding copyright ownership.
+~~ Marvelution licenses this file to you under the Apache License,
+~~ Version 2.0 (the "License"); you may not use this file except
+~~ in compliance with the License.
+~~ You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied. See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+
+Download
+~~~~~~~~
+
+  Distributed under the {{{http://www.apache.org/licenses/LICENSE-2.0.txt}Apache Software License, Version 2.0}}
+
+
+* Current Version
+~~~~~~~~~~~~~~~~~
+
+*--------------------*--------------------------------------------------------------------------------------------------------------------------------------------*----------------------------------------------------------------------------------------------------------------------------------------------------*----------------------------------------------------------------------------------------------------------------------------------------------------*
+|| Version           || Artifact                                                                                                                                  || Checksum                                                                                                                                          || Signature                                                                                                                                        ||
+*--------------------+--------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+| ${project.version} | {{{${jiraDownloadBaseUrl}/${project.version}/jira-hudson-plugin-${project.version}.jar}jira-hudson-plugin-${project.version}.jar}}         | {{{${jiraDownloadBaseUrl}/${project.version}/jira-hudson-plugin-${project.version}.jar.md5}jira-hudson-plugin-${project.version}.jar.md5}}         | {{{${jiraDownloadBaseUrl}/${project.version}/jira-hudson-plugin-${project.version}.jar.asc}jira-hudson-plugin-${project.version}.jar.asc}}         |
+*--------------------+--------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+|                    | {{{${hudsonDownloadBaseUrl}/${project.version}/hudson-jiraapi-plugin-${project.version}.hpi}hudson-jiraapi-plugin-${project.version}.hpi}} | {{{${hudsonDownloadBaseUrl}/${project.version}/hudson-jiraapi-plugin-${project.version}.hpi.md5}hudson-jiraapi-plugin-${project.version}.hpi.md5}} | {{{${hudsonDownloadBaseUrl}/${project.version}/hudson-jiraapi-plugin-${project.version}.hpi.asc}hudson-jiraapi-plugin-${project.version}.hpi.asc}} |
+*--------------------+--------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
+* Previous Versions
+~~~~~~~~~~~~~~~~~~~
+
+*---------------*-----------------------------------------------------------------------------------------------*-----------------------------------------------------------------------------------------------------------*-------------------------------------------------------------------------------------------------------*
+|| Version      || Artifact                                                                                     || Checksum                                                                                                 || Signature                                                                                           ||
+*---------------+-----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
+| 2.0           | {{{${jiraDownloadBaseUrl}/2.0/jira-hudson-plugin-2.0.jar}jira-hudson-plugin-2.0.jar}}         | {{{${jiraDownloadBaseUrl}/2.0/jira-hudson-plugin-2.0.jar.md5}jira-hudson-plugin-2.0.jar.md5}}             | {{{${jiraDownloadBaseUrl}/2.0/jira-hudson-plugin-2.0.jar.asc}jira-hudson-plugin-2.0.jar.asc}}         |
+*---------------+-----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
+|               | {{{${hudsonDownloadBaseUrl}/2.0/hudson-jiraapi-plugin-2.0.hpi}hudson-jiraapi-plugin-2.0.hpi}} | {{{${hudsonDownloadBaseUrl}/2.0/hudson-jiraapi-plugin-2.0.hpi.md5}hudson-jiraapi-plugin-2.0.hpi.md5}}     | {{{${hudsonDownloadBaseUrl}/2.0/hudson-jiraapi-plugin-2.0.hpi.asc}hudson-jiraapi-plugin-2.0.hpi.asc}} |
+*---------------+-----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
+| 1.1.2         | {{{${jiraDownloadBaseUrl}/1.1.2/jira-hudson-plugin-1.1.2.jar}jira-hudson-plugin-1.1.2.jar}}   | {{{${jiraDownloadBaseUrl}/1.1.2/jira-hudson-plugin-1.1.2.jar.md5}jira-hudson-plugin-1.1.2.jar.md5}}       | {{{${jiraDownloadBaseUrl}/1.1.2/jira-hudson-plugin-1.1.2.jar.asc}jira-hudson-plugin-1.1.2.jar.asc}}   |
+*---------------+-----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
+| 1.1.1         | {{{${jiraDownloadBaseUrl}/1.1.1/jira-hudson-plugin-1.1.1.jar}jira-hudson-plugin-1.1.1.jar}}   | {{{${jiraDownloadBaseUrl}/1.1.1/jira-hudson-plugin-1.1.1.jar.md5}jira-hudson-plugin-1.1.1.jar.md5}}       | {{{${jiraDownloadBaseUrl}/1.1.1/jira-hudson-plugin-1.1.1.jar.asc}jira-hudson-plugin-1.1.1.jar.asc}}   |
+*---------------+-----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
+| 1.1           | {{{${jiraDownloadBaseUrl}/1.1/jira-hudson-plugin-1.1.jar}jira-hudson-plugin-1.1.jar}}         | {{{${jiraDownloadBaseUrl}/1.1/jira-hudson-plugin-1.1.jar.md5}jira-hudson-plugin-1.1.jar.md5}}             | {{{${jiraDownloadBaseUrl}/1.1/jira-hudson-plugin-1.1.jar.asc}jira-hudson-plugin-1.1.jar.asc}}         |
+*---------------+-----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
+|               | {{{${hudsonDownloadBaseUrl}/1.1/hudson-jiraapi-plugin-1.1.hpi}hudson-jiraapi-plugin-1.1.hpi}} | {{{${hudsonDownloadBaseUrl}/1.1/hudson-jiraapi-plugin-1.1.hpi.md5}hudson-jiraapi-plugin-1.1.hpi.md5}}     | {{{${hudsonDownloadBaseUrl}/1.1/hudson-jiraapi-plugin-1.1.hpi.asc}hudson-jiraapi-plugin-1.1.hpi.asc}} |
+*---------------+-----------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------+
+| 1.0           | {{{${jiraDownloadBaseUrl}/1.0/jira-hudson-plugin-1.0.jar}jira-hudson-plugin-1.0.jar}}         | {{{${jiraDownloadBaseUrl}/1.0/jira-hudson-plugin-1.0.jar.md5}jira-hudson-plugin-1.0.jar.md5}}             | {{{${jiraDownloadBaseUrl}/1.0/jira-hudson-plugin-1.0.jar.asc}jira-hudson-plugin-1.0.jar.asc}}         |
+*---------------+-----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
+|               | {{{${hudsonDownloadBaseUrl}/1.0/hudson-jiraapi-plugin-1.0.hpi}hudson-jiraapi-plugin-1.0.hpi}} | {{{${hudsonDownloadBaseUrl}/1.0/hudson-jiraapi-plugin-1.0.hpi.md5}hudson-jiraapi-plugin-1.0.hpi.md5}}     | {{{${hudsonDownloadBaseUrl}/1.0/hudson-jiraapi-plugin-1.0.hpi.asc}hudson-jiraapi-plugin-1.0.hpi.asc}} |
+*---------------+-----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
+
+
+* System Requirements
+~~~~~~~~~~~~~~~~~~~~~
+
+*------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+
+| <<JDK>>    | Sun JDK 1.5 or higher. You can download the Java SE Development Kit (JDK) from the {{{http://java.sun.com/javase/downloads/index.jsp}Sun website}}. |
+*------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+
+| <<Jira>>   | Atlassian Jira ${atlassianJiraVersion}.                                                                                                                    |
+*------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+
+| <<Hudson>> | Hudson ${hudsonVersion}.                                                                                                                    |
+*------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+
