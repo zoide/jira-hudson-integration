@@ -22,7 +22,7 @@ package hudson.plugins.jiraapi;
 import java.io.IOException;
 import java.io.PrintStream;
 
-//import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundConstructor;
 
 import hudson.Extension;
 import hudson.Launcher;
@@ -43,12 +43,13 @@ import hudson.tasks.Recorder;
 @SuppressWarnings("unchecked")
 public class JiraIssueIndexerRecorder extends Recorder {
 
-	/* *
+	/**
 	 * Constructor
+	 */
 	@DataBoundConstructor
 	public JiraIssueIndexerRecorder() {
+		/* This is required for the plugin to be configurable */
 	}
-	 */
 
 	/**
 	 * {@inheritDoc}

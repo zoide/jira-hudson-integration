@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
@@ -131,8 +132,12 @@ public class HudsonBuildConverter {
 		build.setTriggers(triggers);
 		final Set<String> relatedIssueKeys = new HashSet<String>();
 		for (Entry entry : hudsonBuild.getChangeSet()) {
-			relatedIssueKeys.addAll(JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg(), ProjectUtils
-				.getJiraProjectKeyPropertyOfProject(hudsonBuild.getProject()).getIssueKeyPattern()));
+			Pattern pattern = null;
+			if (ProjectUtils.getJiraProjectKeyPropertyOfProject(hudsonBuild.getProject()) != null) {
+				pattern =
+					ProjectUtils.getJiraProjectKeyPropertyOfProject(hudsonBuild.getProject()).getIssueKeyPattern();
+			}
+			relatedIssueKeys.addAll(JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg(), pattern));
 		}
 		build.setRelatedIssueKeys(relatedIssueKeys);
 		return build;
