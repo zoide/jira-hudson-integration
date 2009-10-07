@@ -51,7 +51,7 @@
 	<portlet key="hudson-project-status" name="Hudson Project Status"
 		class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet" lazy="true">
 		<objectdescriptor key="hudson.jira.portlet.project.status.name" />
-		<label key="hudson.jira.portlet.project.status.name" />
+		<label key="hudson.portlet.project.status.name" />
 		<description key="hudson.portlet.project.status.description" />
 		<resource type="velocity" name="loading" location="templates/plugins/hudson/portlets/loadingHudsonPortlet.vm" />
 		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonProjectStatusPortlet.vm" />
@@ -92,6 +92,26 @@
 				<description>hudson.portlet.configuration.status.view.description</description>
 				<type>select</type>
 				<values class="com.marvelution.jira.plugins.hudson.portlets.HudsonViewStatusValuesGenerator" />
+			</property>
+		</properties>
+	</portlet>
+
+	<portlet key="hudson-project-build-trend" name="Hudson Project Build Trend"
+		class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectBuildTrendPortlet" lazy="true">
+		<objectdescriptor key="hudson.jira.portlet.project.build.trend.name" />
+		<label key="hudson.portlet.project.build.trend.name" />
+		<description key="hudson.portlet.project.build.trend.description" />
+		<resource type="velocity" name="loading" location="templates/plugins/hudson/portlets/loadingHudsonPortlet.vm" />
+		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonProjectBuildTrendPortlet.vm" />
+		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
+		<permission>viewversioncontrol</permission>
+		<properties>
+			<property>
+				<key>projectId</key>
+				<name>hudson.portlet.configuration.project.status.project.name</name>
+				<description>hudson.portlet.configuration.project.status.project.description</description>
+				<type>select</type>
+				<values class="com.atlassian.jira.portal.ProjectValuesGenerator" />
 			</property>
 		</properties>
 	</portlet>

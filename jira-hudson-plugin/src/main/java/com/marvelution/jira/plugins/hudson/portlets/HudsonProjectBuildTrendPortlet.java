@@ -19,6 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson.portlets;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -32,6 +33,8 @@ import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.plugin.webresource.WebResourceManager;
+import com.marvelution.jira.plugins.hudson.chart.ChartUtils;
+import com.marvelution.jira.plugins.hudson.chart.HudsonChart;
 import com.marvelution.jira.plugins.hudson.model.HudsonProjectPortletResult;
 import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
@@ -45,12 +48,12 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
+public class HudsonProjectBuildTrendPortlet extends AbstractHudsonPorlet {
 
 	/**
 	 * Log4J logger
 	 */
-	private static final Logger LOGGER = Logger.getLogger(HudsonProjectStatusPortlet.class);
+	private static final Logger LOGGER = Logger.getLogger(HudsonProjectBuildTrendPortlet.class);
 
 	/**
 	 * {@link ProjectManager} implementation
@@ -69,7 +72,7 @@ public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
 	 * @param hudsonServerAccessor the {@link HudsonServerAccessor} implementation
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 */
-	public HudsonProjectStatusPortlet(JiraAuthenticationContext authenticationContext, UserUtil userUtil,
+	public HudsonProjectBuildTrendPortlet(JiraAuthenticationContext authenticationContext, UserUtil userUtil,
 										WebResourceManager webResourceManager, PermissionManager permissionManager,
 										ApplicationProperties applicationProperties, ProjectManager projectManager,
 										HudsonServerAccessor hudsonServerAccessor,
@@ -86,12 +89,11 @@ public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
 	protected Map<String, Object> getVelocityParams(PortletConfiguration portletConfiguration) {
 		final Map<String, Object> params = super.getVelocityParams(portletConfiguration);
 		params.put("baseResourceUrl", "/download/resources/" + HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN
-			+ ":hudson-project-status");
+			+ ":hudson-project-build-trend");
 		if (isHudsonConfigured()) {
 			final HudsonProjectPortletResult result = new HudsonProjectPortletResult(null, null);
 			try {
 				final long projectId = portletConfiguration.getLongProperty("projectId");
-				params.put("showBuilds", portletConfiguration.getProperty("showBuilds"));
 				final Project project = projectManager.getProjectObj(projectId);
 				final HudsonServer server = hudsonServerManager.getServerByJiraProject(project);
 				result.setServer(server);
@@ -99,6 +101,10 @@ public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
 				result.setJob(hudsonServerAccessor.getProject(server, project));
 				if (!result.hasJob()) {
 					result.setError(getErrorText("hudson.error.portlet.no.job.found"));
+				} else {
+					final HudsonChart chart = ChartUtils.generateSuccessFailedRatioChart(server, result.getJob());
+					chart.generate(ChartUtils.PORTLET_CHART_WIDTH, ChartUtils.PORTLET_CHART_HEIGHT);
+					params.put("chart", chart);
 				}
 			} catch (ObjectConfigurationException e) {
 				LOGGER.error("Invalid portlet configuration.", e);
@@ -109,6 +115,9 @@ public class HudsonProjectStatusPortlet extends AbstractHudsonPorlet {
 			} catch (HudsonServerAccessDeniedException e) {
 				result.setError(getErrorText("hudson.error.access.denied"));
 				LOGGER.error("Failed to connect to the Hudson server. Access Denied", e);
+			} catch (IOException e) {
+				result.setError(getErrorText("hudson.error.chart.generation.failed"));
+				LOGGER.error("Failed to the Hudson Project build trend Chart", e);
 			}
 			params.put("result", result);
 		}

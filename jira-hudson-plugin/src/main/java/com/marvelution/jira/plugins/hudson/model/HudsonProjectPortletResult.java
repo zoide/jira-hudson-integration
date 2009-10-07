@@ -27,7 +27,7 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServer;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class HudsonProjectStatusPortletResult extends HudsonServerResult<Job> {
+public class HudsonProjectPortletResult extends HudsonServerResult<Job> {
 
 	private Project project;
 
@@ -37,7 +37,7 @@ public class HudsonProjectStatusPortletResult extends HudsonServerResult<Job> {
 	 * @param server the {@link HudsonServer}
 	 * @param project the Jira {@link Project}
 	 */
-	public HudsonProjectStatusPortletResult(HudsonServer server, Project project) {
+	public HudsonProjectPortletResult(HudsonServer server, Project project) {
 		super(server);
 		setProject(project);
 	}

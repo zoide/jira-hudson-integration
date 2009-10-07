@@ -23,6 +23,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +46,8 @@ import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.jira.web.bean.I18nBean;
 import com.atlassian.plugin.webresource.WebResourceManager;
+import com.marvelution.jira.plugins.hudson.chart.ChartUtils;
+import com.marvelution.jira.plugins.hudson.chart.HudsonChart;
 import com.marvelution.jira.plugins.hudson.model.HudsonProjectPortletResult;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
@@ -52,6 +56,7 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedExcep
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
+import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
 
 
 /**
@@ -59,9 +64,9 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class HudsonProjectStatusPortletTest {
+public class HudsonProjectBuildTrendPortletTest {
 
-	private HudsonProjectStatusPortlet portlet;
+	private HudsonProjectBuildTrendPortlet portlet;
 
 	@Mock
 	private JiraAuthenticationContext authenticationContext;
@@ -118,7 +123,7 @@ public class HudsonProjectStatusPortletTest {
 		});
 		when(serverManager.getServerByJiraProject(eq(project))).thenReturn(server);
 		portlet =
-			new HudsonProjectStatusPortlet(authenticationContext, userUtil, webResourceManager, permissionManager,
+			new HudsonProjectBuildTrendPortlet(authenticationContext, userUtil, webResourceManager, permissionManager,
 				applicationProperties, projectManager, serverAccessor, serverManager) {
 
 			/**
@@ -143,7 +148,7 @@ public class HudsonProjectStatusPortletTest {
 	public void testGetVelocityParamsWithHudsonConfigured() throws Exception {
 		when(serverManager.isHudsonConfigured()).thenReturn(true);
 		when(serverAccessor.getProject(eq(server), eq(project))).thenReturn(
-			new Job("Marvelution", "job/Marvelution/"));
+			XStreamMarshaller.unmarshal(getXmlFromClasspath("job.xml"), Job.class));
 		when(portletConfiguration.getLongProperty("projectId")).thenReturn(1000L);
 		when(projectManager.getProjectObj(1000L)).thenReturn(project);
 		final Map<String, Object> params = portlet.getVelocityParams(portletConfiguration);
@@ -161,6 +166,18 @@ public class HudsonProjectStatusPortletTest {
 		assertEquals("Marvelution", result.getJob().getName());
 		assertEquals(project, result.getProject());
 		assertEquals(result.getServerLargeImageUrl(), result.getServerImageUrl());
+		assertTrue(params.containsKey("chart"));
+		final HudsonChart chart = (HudsonChart) params.get("chart");
+		assertTrue(chart.isGenerated());
+		assertNotNull(chart.getChart());
+		assertEquals(ChartUtils.PORTLET_CHART_WIDTH, chart.getWidth());
+		assertEquals(ChartUtils.PORTLET_CHART_HEIGHT, chart.getHeight());
+		assertNotNull(chart.getLocation());
+		assertNotNull(chart.getImageMap());
+		assertNotNull(chart.getImageMapName());
+		final String location = chart.getLocation();
+		chart.generate(ChartUtils.PORTLET_CHART_WIDTH, ChartUtils.PORTLET_CHART_HEIGHT);
+		assertEquals(location, chart.getLocation());
 		verify(serverManager, VerificationModeFactory.times(2)).isHudsonConfigured();
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
 			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");
@@ -302,6 +319,18 @@ public class HudsonProjectStatusPortletTest {
 		verify(serverManager, VerificationModeFactory.times(2)).isHudsonConfigured();
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
 			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":portlet-css");
+	}
+
+	/**
+	 * Load the XML file from the class-path
+	 * 
+	 * @param filename the filename to load
+	 * @return the content of the file
+	 * @throws IOException in case of load exceptions
+	 */
+	protected String getXmlFromClasspath(String filename) throws IOException {
+		final InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
+		return com.atlassian.jira.util.IOUtil.toString(inputStream);
 	}
 
 }
