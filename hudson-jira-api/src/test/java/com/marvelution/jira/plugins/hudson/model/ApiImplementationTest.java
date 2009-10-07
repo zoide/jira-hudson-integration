@@ -21,6 +21,7 @@ package com.marvelution.jira.plugins.hudson.model;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Field;
 import java.util.Properties;
 
 import org.junit.Before;
@@ -82,6 +83,19 @@ public class ApiImplementationTest {
 	@Test
 	public void testToString() {
 		assertEquals(props.getProperty("current.version"), api.toString());
+	}
+
+	/**
+	 * Test {@link ApiImplementation#isCompatibleWith(ApiImplementation)} by Major version
+	 * @throws Exception in case of test exceptions
+	 */
+	@Test
+	public void testMajorVersionCompatiblity() throws Exception {
+		final ApiImplementation otherApi = ApiImplementation.getApiImplementation();
+		final Field versionField = ApiImplementation.class.getDeclaredField("version");
+		versionField.setAccessible(true);
+		versionField.set(otherApi, props.getProperty("current.version").split("\\.")[0] + ".99.99");
+		assertTrue(api.isCompatibleWith(otherApi));
 	}
 
 }

@@ -85,6 +85,15 @@ public final class ApiImplementation {
 	}
 
 	/**
+	 * Gets the Major version of the API
+	 * 
+	 * @return the Major version
+	 */
+	public String getMajorVersion() {
+		return getVersion().split("\\.")[0];
+	}
+
+	/**
 	 * Gets the compatible versions
 	 * 
 	 * @return {@link Set} of compatible versions
@@ -100,7 +109,8 @@ public final class ApiImplementation {
 	 * @return <code>true</code> if compatible, <code>false</code> otherwise
 	 */
 	public boolean isCompatibleWith(ApiImplementation other) {
-		return (getVersion().equals(other.getVersion()) || getCompatibleVersions().contains(other.getVersion()));
+		return (getMajorVersion().equals(other.getMajorVersion()) || getVersion().equals(other.getVersion())
+						|| getCompatibleVersions().contains(other.getVersion()));
 	}
 
 	/**
