@@ -26,7 +26,7 @@
 		<version>1.4-SNAPSHOT</version>
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
-	<artifactId>marvelution-jira-hudson-integration</artifactId>
+	<artifactId>jira-hudson-integration</artifactId>
 	<packaging>pom</packaging>
 	<version>2.1-SNAPSHOT</version>
 	
@@ -38,7 +38,7 @@
 	
 	<name>Marvelution Jira Hudson Integration</name>
 	<description>project to integrate Jira with Hudson by use of Portlets and Tab Panels</description>
-	<url>http://www.marvelution.com/marvelution-jira-hudson-integration/</url>
+	<url>http://www.marvelution.com/atlassian/jira-hudson-integration/</url>
 	<inceptionYear>2009</inceptionYear>
 	<organization>
 		<name>Marvelution</name>
@@ -53,9 +53,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/marvelution-jira-hudson-integration/trunk</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution-jira-hudson-integration/trunk</developerConnection>
-		<url>http://svn.marvelution.com/marvelution-jira-hudson-integration/trunk</url>
+		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk</developerConnection>
+		<url>http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
@@ -76,7 +76,7 @@
 	<distributionManagement>
 		<site>
 			<id>marvelution.website</id>
-			<url>scp://marvelution.com/home/markrekveld/marvelution.com/marvelution-jira-hudson-integration/</url>
+			<url>scp://marvelution.com/home/markrekveld/marvelution.com/atlassian/jira-hudson-integration/</url>
 		</site>
 	</distributionManagement>
 	
@@ -84,7 +84,7 @@
 		<project.jdk.revision>1.5</project.jdk.revision>
 		<hudsonVersion>1.319</hudsonVersion>
 		<atlassianJiraVersion>3.13.5</atlassianJiraVersion>
-		<stagingSiteURL>scp://marvelution.com/home/markrekveld/staging.marvelution.com/marvelution-jira-hudson-integration/</stagingSiteURL>
+		<stagingSiteURL>scp://marvelution.com/home/markrekveld/staging.marvelution.com/atlassian/jira-hudson-integration/</stagingSiteURL>
 		<jiraDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/jira-hudson-plugin</jiraDownloadBaseUrl>
 		<hudsonDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/hudson-jiraapi-plugin</hudsonDownloadBaseUrl>
 		<pmd.ruleset.location>http://svn.marvelution.com/resources/pmd/marvelution-atlassian-related-pmd-ruleset.xml</pmd.ruleset.location>
