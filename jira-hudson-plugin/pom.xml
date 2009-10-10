@@ -77,9 +77,16 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.marvelution.jira.plugins</groupId>
+			<artifactId>jira-plugin-commons</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.atlassian.jira</groupId>
 			<artifactId>atlassian-jira</artifactId>
-			<version>${atlassianJiraVersion}</version>
+			<version>3.13.5</version>
 			<type>jar</type>
 			<scope>provided</scope>
 			<exclusions>
@@ -148,12 +155,6 @@
 					<artifactId>xalan</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.7</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

@@ -16,8 +16,7 @@
  ~ KIND, either express or implied. See the License for the
  ~ specific language governing permissions and limitations
  ~ under the License.
- -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+ --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
@@ -33,7 +32,9 @@
 	<modules>
 		<module>hudson-jira-api</module>
 		<module>hudson-jiraapi-plugin</module>
+		<module>jira-plugin-commons</module>
 		<module>jira-hudson-plugin</module>
+		<module>jira4-hudson-plugin</module>
 	</modules>
 	
 	<name>Marvelution Jira Hudson Integration</name>
@@ -83,9 +84,8 @@
 	<properties>
 		<project.jdk.revision>1.5</project.jdk.revision>
 		<hudsonVersion>1.319</hudsonVersion>
-		<atlassianJiraVersion>3.13.5</atlassianJiraVersion>
 		<stagingSiteURL>scp://marvelution.com/home/markrekveld/staging.marvelution.com/atlassian/jira-hudson-integration/</stagingSiteURL>
-		<jiraDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/jira-hudson-plugin</jiraDownloadBaseUrl>
+		<jiraDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins</jiraDownloadBaseUrl>
 		<hudsonDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/hudson-jiraapi-plugin</hudsonDownloadBaseUrl>
 		<pmd.ruleset.location>http://svn.marvelution.com/resources/pmd/marvelution-atlassian-related-pmd-ruleset.xml</pmd.ruleset.location>
 		<checkstyle.config.location>http://svn.marvelution.com/resources/checkstyle/marvelution-atlassian-related-checkstyle-config.xml</checkstyle.config.location>
@@ -96,6 +96,13 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.5</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.7</version>
 			<type>jar</type>
 			<scope>test</scope>
 		</dependency>
