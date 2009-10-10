@@ -44,9 +44,11 @@ Features
   
     * Hudson Status Portlet
   
-    * Hudson View Status Portlet (<<NEW>>)
+    * Hudson View Status Portlet
     
     * Hudson Project Status Portlet
+    
+    * Hudson Build Trend Portlet (<<NEW>>)
     
     []
     
@@ -79,5 +81,7 @@ Features
     []
   
   * {{{./hudson/remote-api.html}New Remote API}}
+  
+  * {{{./hudson/jira-job-property.html#Non-Standard}Non-Standard Jira project and issue keys (<<NEW>>)
   
   []

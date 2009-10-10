@@ -32,6 +32,7 @@ Jira Features - Administration
 
 [../../images/jira/hudson-server-list.png] Hudson servers list
 
+
 * Manage Jira Project to Hudson Server associations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -39,6 +40,7 @@ Jira Features - Administration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [../../images/jira/associate-single-project.png] Associate single project
+
 
 ** Associate multiple projects to one Hudson server at a time
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

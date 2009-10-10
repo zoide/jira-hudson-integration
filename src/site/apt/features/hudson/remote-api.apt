@@ -124,15 +124,15 @@ Hudson Features - Remote API
   []
 
 
-** Get All Views (<<NEW>>)
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+** Get All Views
+~~~~~~~~~~~~~~~~
 
   API endpoint to get all the Views on the Hudson server. \
   Endpoint: <<</plugin/hudson-jiraapi-plugin/listAllViews>>>
 
 
-** Get View (<<NEW>>)
-~~~~~~~~~~~~~~~~~~~~~
+** Get View
+~~~~~~~~~~~
 
   API endpoint to get the View on the Hudson server and all its related projects. \
   Endpoint: <<</plugin/hudson-jiraapi-plugin/getView?viewName=VIEW_NAME>>>

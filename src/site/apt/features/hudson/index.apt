@@ -31,6 +31,8 @@ Hudson Features
   
   * {{{./jira-job-property.html}Jira project key Job property}}
   
+  * {{{./jira-job-property.html#Non-Standard}Non-standard Jira project and issue keys}}
+  
   * {{{./issue-indexer.html}Issue key indexer}}
   
   * {{{./remote-api.html}New Remote API}}

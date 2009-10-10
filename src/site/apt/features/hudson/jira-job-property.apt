@@ -31,3 +31,9 @@ Hudson Features - Job Properties
 ~~~~~~~~~~~~~~~~~~
 
 [../../images/hudson/jira-project-key.png] Jira project key Job property
+
+
+* {Non-Standard} Jira Project and Issue keys
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[../../images/hudson/jira-key-patterns.png] Non-Standard Jira project and issue keys

@@ -24,107 +24,128 @@
 	</properties>
 
 	<body>
-        <section name="Release Notes - Version 2.0">
-			<h3>Bug</h3>
+		<section name="Release Notes - Version 2.1">
+			<h3>Improvement</h3>
 			<ul>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-24">MARVJIRAHUDSON-24</a>] - User authentication and authorization failes when configurating a Secured Hudson Instance</li>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-26">MARVJIRAHUDSON-26</a>] - Related Issue link in Builds tab panels doesn't work if Jira is not the ROOT application</li>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-30">MARVJIRAHUDSON-30</a>] - JiraIssueIndexerRecorder can fail the build</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-36">MARVJIRAHUDSON-36</a>] - Compatibility with non standard issue key</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-37">MARVJIRAHUDSON-37</a>] - Improve logging in Jira plugin beans</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-38">MARVJIRAHUDSON-38</a>] - Lazy initiate all the portlets to improve dashboard load time</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-40">MARVJIRAHUDSON-40</a>] - Merge all the download pages into one download page</li>
 			</ul>
 			<h3>Documentation</h3>
 			<ul>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-22">MARVJIRAHUDSON-22</a>] - No documentation available in the introduction page of Hudson Jira API project</li>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-34">MARVJIRAHUDSON-34</a>] - Document changes in plugins</li>
-			</ul>
-			<h3>Improvement</h3>
-			<ul>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-25">MARVJIRAHUDSON-25</a>] - Improve API compatibility check</li>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-28">MARVJIRAHUDSON-28</a>] - Update Crumb from Hudson List</li>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-31">MARVJIRAHUDSON-31</a>] - Show build artifacts in list and link to build artifacts on Hudson</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-44">MARVJIRAHUDSON-44</a>] - Update documentation</li>
 			</ul>
 			<h3>New Feature</h3>
 			<ul>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-21">MARVJIRAHUDSON-21</a>] - Portlet to view project statusses by Hudson views</li>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-32">MARVJIRAHUDSON-32</a>] - RSS links in Tab Panels</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-33">MARVJIRAHUDSON-33</a>] - Build trend report</li>
+			</ul>
+			<h3>Refactoring</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-43">MARVJIRAHUDSON-43</a>] - Refactor the ApiImplementation compatibility check</li>
+			</ul>
+		</section>
+        <section name="Release Notes - Version 2.0">
+			<h3>Bug</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-24">MARVJIRAHUDSON-24</a>] - User authentication and authorization failes when configurating a Secured Hudson Instance</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-26">MARVJIRAHUDSON-26</a>] - Related Issue link in Builds tab panels doesn't work if Jira is not the ROOT application</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-30">MARVJIRAHUDSON-30</a>] - JiraIssueIndexerRecorder can fail the build</li>
+			</ul>
+			<h3>Documentation</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-22">MARVJIRAHUDSON-22</a>] - No documentation available in the introduction page of Hudson Jira API project</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-34">MARVJIRAHUDSON-34</a>] - Document changes in plugins</li>
+			</ul>
+			<h3>Improvement</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-25">MARVJIRAHUDSON-25</a>] - Improve API compatibility check</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-28">MARVJIRAHUDSON-28</a>] - Update Crumb from Hudson List</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-31">MARVJIRAHUDSON-31</a>] - Show build artifacts in list and link to build artifacts on Hudson</li>
+			</ul>
+			<h3>New Feature</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-21">MARVJIRAHUDSON-21</a>] - Portlet to view project statusses by Hudson views</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-32">MARVJIRAHUDSON-32</a>] - RSS links in Tab Panels</li>
 			</ul>
 		</section>	
         <section name="Release Notes - Version Jira Plugin 1.1.2">
 			<h3>Bug</h3>
 			<ul>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-27">MARVJIRAHUDSON-27</a>] - The Project Builds Tab panel brakes the Projects portlet</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-27">MARVJIRAHUDSON-27</a>] - The Project Builds Tab panel brakes the Projects portlet</li>
 			</ul>
 		</section>
 		<section name="Release Notes - Version Jira Plugin 1.1.1">
 			<h3>Bug</h3>
 			<ul>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-23">MARVJIRAHUDSON-23</a>] - Maven build brakes velocity templates</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-23">MARVJIRAHUDSON-23</a>] - Maven build brakes velocity templates</li>
 			</ul>
 		</section>
         <section name="Release Notes - Version 1.1">
 			<h3>Bug</h3>
 			<ul>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-17">MARVJIRAHUDSON-17</a>] - &quot;Prevent Cross Site Request Forgery exploits&quot; setting in Hudson prevents Jira from getting data</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-17">MARVJIRAHUDSON-17</a>] - &quot;Prevent Cross Site Request Forgery exploits&quot; setting in Hudson prevents Jira from getting data</li>
 			</ul>
 			<h3>Improvement</h3>
 			<ul>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-16">MARVJIRAHUDSON-16</a>] - Change HttpMethod.getResponseBodyAsString() to HttpMethod.getResponseBodyAsStream()</li>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-18">MARVJIRAHUDSON-18</a>] - View build for versions by dates (current) or related issues</li>
-				<li>[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-19">MARVJIRAHUDSON-19</a>] - Support Jira issue keys in lower case</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-16">MARVJIRAHUDSON-16</a>] - Change HttpMethod.getResponseBodyAsString() to HttpMethod.getResponseBodyAsStream()</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-18">MARVJIRAHUDSON-18</a>] - View build for versions by dates (current) or related issues</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-19">MARVJIRAHUDSON-19</a>] - Support Jira issue keys in lower case</li>
 			</ul>
 		</section>
 		<section name="Release Notes - Version 1.0">
 			<h3>Documentation</h3>
 			<ul>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-14">MARVJIRAHUDSON-14</a>] - Document the Installation, configuration and usage of the Hudson Plugin
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-14">MARVJIRAHUDSON-14</a>] - Document the Installation, configuration and usage of the Hudson Plugin
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-15">MARVJIRAHUDSON-15</a>] - Document the Installation, configuration and usage of the Jira Plugin
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-15">MARVJIRAHUDSON-15</a>] - Document the Installation, configuration and usage of the Jira Plugin
 				</li>
 			</ul>
 			<h3>Requirement</h3>
 			<ul>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-1">MARVJIRAHUDSON-1</a>] - Configurable Jira project key in Hudson
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-1">MARVJIRAHUDSON-1</a>] - Configurable Jira project key in Hudson
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-2">MARVJIRAHUDSON-2</a>] - New Hudson Remote API for Jira
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-2">MARVJIRAHUDSON-2</a>] - New Hudson Remote API for Jira
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-3">MARVJIRAHUDSON-3</a>] - Jira Portlet to show Hudson Job Statuses
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-3">MARVJIRAHUDSON-3</a>] - Jira Portlet to show Hudson Job Statuses
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-4">MARVJIRAHUDSON-4</a>] - Configure Hudson Server
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-4">MARVJIRAHUDSON-4</a>] - Configure Hudson Server
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-5">MARVJIRAHUDSON-5</a>] - Issue builds tabpanel
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-5">MARVJIRAHUDSON-5</a>] - Issue builds tabpanel
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-6">MARVJIRAHUDSON-6</a>] - Project builds tabpanel
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-6">MARVJIRAHUDSON-6</a>] - Project builds tabpanel
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-7">MARVJIRAHUDSON-7</a>] - Project version builds tabpanel
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-7">MARVJIRAHUDSON-7</a>] - Project version builds tabpanel
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-8">MARVJIRAHUDSON-8</a>] - Check Hudson when configuring Hudson Server in Jira
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-8">MARVJIRAHUDSON-8</a>] - Check Hudson when configuring Hudson Server in Jira
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-9">MARVJIRAHUDSON-9</a>] - Issue to Builds mapping
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-9">MARVJIRAHUDSON-9</a>] - Issue to Builds mapping
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-10">MARVJIRAHUDSON-10</a>] - Plugin configuration store
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-10">MARVJIRAHUDSON-10</a>] - Plugin configuration store
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-11">MARVJIRAHUDSON-11</a>] - Component builds tab panel
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-11">MARVJIRAHUDSON-11</a>] - Component builds tab panel
 				</li>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-12">MARVJIRAHUDSON-12</a>] - Jira Portlet to show specific Hudson Project status information
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-12">MARVJIRAHUDSON-12</a>] - Jira Portlet to show specific Hudson Project status information
 				</li>
 			</ul>
 			<h3>Task</h3>
 			<ul>
 				<li>
-					[<a href="http://jira.marvelution.com/browse/MARVJIRAHUDSON-13">MARVJIRAHUDSON-13</a>] - Get test coverage up to atleast 80%
+					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-13">MARVJIRAHUDSON-13</a>] - Get test coverage up to atleast 80%
 				</li>
 			</ul>
 		</section>

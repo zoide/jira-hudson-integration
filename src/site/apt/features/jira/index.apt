@@ -43,7 +43,9 @@ Jira Features
     
     * Hudson Project Status Portlet
     
-    * Hudson View Status Portlet (<<NEW>>)
+    * Hudson View Status Portlet
+    
+    * Hudson Project Build Trend Portlet (<<NEW>>)
     
     []
     

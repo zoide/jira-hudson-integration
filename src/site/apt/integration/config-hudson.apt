@@ -40,6 +40,15 @@ Configure Hudson
 [../images/hudson/config-jira-key-property.png] Configure Jira project key Job property
 
 
+* {Jira Key Patterns}
+~~~~~~~~~~~~~~~~~~~~~
+
+  If you are using non-standard Jira project and issue key patterns, you will need to update the Hudson plugin
+  configuration to adhere to your key patterns. This can be done in the Hudson System configuration page.
+
+[../images/hudson/jira-key-patterns.png] Configure Jira key patterns
+
+
 * {Jira issue indexer}
 ~~~~~~~~~~~~~~~~~~~~~~
 

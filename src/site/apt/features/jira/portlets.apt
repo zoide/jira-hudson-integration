@@ -32,12 +32,20 @@ Jira Features - Portlets
 
 [../../images/jira/hudson-status-portlet.png] Hudson status portlet
 
-* Hudson View Status Portlet (<<NEW>>)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Hudson View Status Portlet
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [../../images/jira/hudson-view-status-portlet.png] Hudson view status portlet
+
 
 * Hudson Project Status Portlet
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [../../images/jira/hudson-project-status-portlet.png] Hudson project status portlet
+
+
+* Hudson Project Build Trend Portlet (<<NEW>>)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[../../images/jira/build-trend-portlet.png] Hudson project build trend portlet

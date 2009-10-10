@@ -44,6 +44,8 @@ Introduction
   
   * a Jira issue key indexer to index all the issue keys and the builds they are linked to.
   
+  * support for non-standard Jira project and issue keys (<<NEW>>).
+  
   []
 
 
@@ -68,7 +70,9 @@ Introduction
   
   * a portlet to view detailed Hudson project build information.
   
-  * a portlet to view all projects related to a Hudson View (<<NEW>>).
+  * a portlet to view all projects related to a Hudson View.
+  
+  * a portlet to view the build trend graph of a project (<<NEW>>).
   
   []
 
