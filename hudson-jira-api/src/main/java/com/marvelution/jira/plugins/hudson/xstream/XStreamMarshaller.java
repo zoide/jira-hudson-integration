@@ -48,6 +48,8 @@ public class XStreamMarshaller {
 
 	private static final Logger LOGGER = Logger.getLogger(XStreamMarshaller.class);
 
+	private static XStream xstream;
+
 	/**
 	 * Marshal the given Source object to XML
 	 * 
@@ -62,7 +64,6 @@ public class XStreamMarshaller {
 		}
 		try {
 			XStream.class.getMethod("autodetectAnnotations", boolean.class);
-			final XStream xstream = getAnnotationDetectingXStream();
 			return xstream.toXML(source);
 		} catch (Exception e) {
 			LOGGER.debug("Cannot use Automatic Annotation Detecting XStream. Reason: " + e.getMessage(), e);
@@ -85,7 +86,6 @@ public class XStreamMarshaller {
 		}
 		try {
 			XStream.class.getMethod("autodetectAnnotations", boolean.class);
-			final XStream xstream = getAnnotationDetectingXStream();
 			return clazz.cast(xstream.fromXML(xml));
 		} catch (Exception e) {
 			LOGGER.debug("Cannot use Automatic Annotation Detecting XStream. Reason: " + e.getMessage(), e);
@@ -93,13 +93,8 @@ public class XStreamMarshaller {
 		}
 	}
 
-	/**
-	 * Gets the Automatic Annotation Detecting {@link XStream} object
-	 * 
-	 * @return the automatic annotation detecting {@link XStream} 
-	 */
-	public static XStream getAnnotationDetectingXStream() {
-		final XStream xstream = new XStream();
+	static {
+		xstream = new XStream();
 		xstream.autodetectAnnotations(true);
 		xstream.processAnnotations(ApiImplementation.class);
 		xstream.processAnnotations(JobsList.class);
@@ -117,7 +112,6 @@ public class XStreamMarshaller {
 		xstream.processAnnotations(HudsonView.class);
 		xstream.processAnnotations(HudsonViewsList.class);
 		xstream.processAnnotations(BuildArtifact.class);
-		return xstream;
 	}
 
 }
