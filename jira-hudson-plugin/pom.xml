@@ -22,7 +22,7 @@
 	
 	<parent>
 		<groupId>com.marvelution.jira.plugins</groupId>
-		<artifactId>marvelution-jira-hudson-integration</artifactId>
+		<artifactId>jira-hudson-integration</artifactId>
 		<version>2.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
@@ -32,7 +32,7 @@
 	
 	<name>Jira Hudson Plugin</name>
 	<description>Jira Plugin to integrate Hudson CI</description>
-	<url>http://www.marvelution.com/marvelution-jira-hudson-integration/jira-hudson-plugin/</url>
+	<url>http://www.marvelution.com/atlassian/jira-hudson-integration/jira-hudson-plugin/</url>
 	<inceptionYear>2009</inceptionYear>
 	<organization>
 		<name>Marvelution</name>
