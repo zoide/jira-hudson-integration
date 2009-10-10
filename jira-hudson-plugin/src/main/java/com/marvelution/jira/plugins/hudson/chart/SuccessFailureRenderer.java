@@ -62,11 +62,11 @@ public class SuccessFailureRenderer extends XYBarRenderer implements XYToolTipGe
 		final Integer columnKey = new Integer(new Double(getPlot().getDataset().getXValue(0, column)).intValue());
 		final Build build = buildsMap.get(columnKey);
 		if (Result.SUCCESS.equals(build.getResult())) {
-			return ChartUtils.GREEN_PAINT;
+			return ChartUtils.GREEN_OUTLINE;
 		} else if (Result.UNSTABLE.equals(build.getResult())) {
-			return ChartUtils.YELLOW_PAINT;
+			return ChartUtils.YELLOW_OUTLINE;
 		}
-		return ChartUtils.RED_PAINT;
+		return ChartUtils.RED_OUTLINE;
 	}
 
 	/**
@@ -76,11 +76,11 @@ public class SuccessFailureRenderer extends XYBarRenderer implements XYToolTipGe
 		final Integer columnKey = new Integer(new Double(getPlot().getDataset().getXValue(0, column)).intValue());
 		final Build build = buildsMap.get(columnKey);
 		if (Result.SUCCESS.equals(build.getResult())) {
-			return ChartUtils.GREEN_PAINT;
+			return ChartUtils.GREEN_OUTLINE;
 		} else if (Result.UNSTABLE.equals(build.getResult())) {
-			return ChartUtils.YELLOW_PAINT;
+			return ChartUtils.YELLOW_OUTLINE;
 		}
-		return ChartUtils.RED_PAINT;
+		return ChartUtils.RED_OUTLINE;
 	}
 
 	/**

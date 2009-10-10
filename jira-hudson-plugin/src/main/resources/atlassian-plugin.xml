@@ -105,6 +105,7 @@
 		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonProjectBuildTrendPortlet.vm" />
 		<resource type="i18n" name="i18n" location="templates.plugins.hudson.hudson-plugin" />
 		<permission>viewversioncontrol</permission>
+		<thumbnail>templates/plugins/hudson/portlets/thumbnails/buildtrend.png</thumbnail>
 		<properties>
 			<property>
 				<key>projectId</key>
