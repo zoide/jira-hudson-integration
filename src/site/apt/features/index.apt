@@ -82,6 +82,6 @@ Features
   
   * {{{./hudson/remote-api.html}New Remote API}}
   
-  * {{{./hudson/jira-job-property.html#Non-Standard}Non-Standard Jira project and issue keys (<<NEW>>)
+  * {{{./hudson/jira-job-property.html#Non-Standard}Non-Standard Jira project and issue keys}} (<<NEW>>)
   
   []
