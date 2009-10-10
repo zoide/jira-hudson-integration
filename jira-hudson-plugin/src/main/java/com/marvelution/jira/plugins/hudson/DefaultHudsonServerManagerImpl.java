@@ -19,6 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,8 +38,6 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerFactory;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonPropertyManager;
 import com.opensymphony.module.propertyset.PropertySet;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * Default {@link HudsonServerManager} implementation
@@ -292,7 +291,6 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	 * 
 	 * @param serverId the serverId to load
 	 */
-	@SuppressWarnings("unchecked")
 	private void load(int serverId) {
 		final HudsonServer server = serverFactory.createHudsonServer();
 		server.setServerId(propertySet.getInt(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_ID_KEY_SUFFIX));
