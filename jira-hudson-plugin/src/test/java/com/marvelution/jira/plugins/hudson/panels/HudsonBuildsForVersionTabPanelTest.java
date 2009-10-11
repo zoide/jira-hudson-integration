@@ -30,10 +30,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.verification.VerificationModeFactory;
-import org.ofbiz.core.entity.GenericValue;
 
 import com.atlassian.jira.issue.search.SearchProvider;
-import com.atlassian.jira.plugin.versionpanel.VersionContext;
+import com.atlassian.jira.plugin.versionpanel.BrowseVersionContext;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.project.version.Version;
@@ -75,13 +74,10 @@ public class HudsonBuildsForVersionTabPanelTest {
 	private HudsonBuildsTabPanelHelper tabPanelHelper;
 
 	@Mock
-	private VersionContext versionContext;
+	private BrowseVersionContext versionContext;
 
 	@Mock
 	private Version version;
-
-	@Mock
-	private GenericValue genericValue;
 
 	@Mock
 	private Project project;
@@ -103,7 +99,6 @@ public class HudsonBuildsForVersionTabPanelTest {
 				serverManager, tabPanelHelper);
 		when(versionContext.getVersion()).thenReturn(version);
 		when(versionContext.getProject()).thenReturn(project);
-		when(version.getProject()).thenReturn(genericValue);
 		when(version.getProjectObject()).thenReturn(project);
 		when(version.getId()).thenReturn(1024L);
 		when(serverManager.isHudsonConfigured()).thenReturn(true);
@@ -133,7 +128,6 @@ public class HudsonBuildsForVersionTabPanelTest {
 			+ ":hudson-version-tabpanel", params.get("baseResourceUrl"));
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
 			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":tabpanel-css");
-		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource("jira.webresources:prototype");
 	}
 
 	/**
@@ -159,7 +153,6 @@ public class HudsonBuildsForVersionTabPanelTest {
 			+ ":hudson-version-tabpanel", params.get("baseResourceUrl"));
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
 			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":tabpanel-css");
-		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource("jira.webresources:prototype");
 	}
 
 	/**

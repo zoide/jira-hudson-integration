@@ -23,13 +23,11 @@
 
 #if ($isHudsonConfigured)
 #set ($buildTriggerParser.server = $result.server)
-#set ($domId = "hudson_view_status_${result.serverName}")
 <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
     <thead>
         <tr class="rowHeader">
             <td class="colHeaderLink">
 				<a href="${result.serverUrl}/view/${result.viewName}/rssAll" class="actionLinks"><img src="${req.contextPath}${baseResourceUrl}/images/rss.gif" alt="${i18n.getText('hudson.panel.title.rss.description')}" /></a>
-            	<span class="switch actionLinks subText" id="${domId}-switch" onclick="CookieUtil.toggleVisibility('${domId}', '[${i18n.getText("hudson.portlet.show")} >>]', '[${i18n.getText("hudson.portlet.hide")}]')">[${i18n.getText("hudson.portlet.hide")}]</span>
                 ${i18n.getText("hudson.portlet.jobs.status.summary")}:
                 <strong><a href=${result.serverUrl}>${result.serverName}</a></strong> ($i18n.getText("hudson.portlet.view", $result.viewName))
                 #if ($result.hasViewDescription())
@@ -38,7 +36,7 @@
             </td>
         </tr>
     </thead>
-    <tbody id="${domId}">
+    <tbody>
     	<tr class="portletBody">
         	<td bgcolor="#ffffff">
         		#if ($result.hasError())
@@ -93,9 +91,6 @@
     </tbody>
 </table>
 <br>
-<script type="text/javascript" language="JavaScript">
-    cookieHide("${domId}", "[${i18n.getText("hudson.portlet.show")} >>]");
-</script>
 #else
     <table class="hudsonStatusTable" cellpadding="3" cellspacing="0" width="99%">
         <thead>

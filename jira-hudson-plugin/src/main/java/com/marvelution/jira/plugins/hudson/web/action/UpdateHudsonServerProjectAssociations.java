@@ -22,8 +22,6 @@ package com.marvelution.jira.plugins.hudson.web.action;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.ofbiz.core.entity.GenericValue;
-
 import webwork.action.ActionContext;
 
 import com.atlassian.jira.project.Project;
@@ -90,9 +88,8 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 				getHudsonServerManager().put(hudsonServer);
 			}
 		} else if (buttonClicked("addAllButton")) {
-			for (Object entry : getProjectManager().getProjects()) {
-				final GenericValue project = (GenericValue) entry;
-				hudsonServer.addAssociatedProjectKey(project.getString("key"));
+			for (Project project : getProjectManager().getProjectObjects()) {
+				hudsonServer.addAssociatedProjectKey(project.getKey());
 			}
 			LOGGER.debug("Associated all projects with HudsonServer [" + getHudsonServerId() + "] "
 				+ hudsonServer.getName());
@@ -215,11 +212,10 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 	 * 
 	 * @return the {@link Collection} of {@link GenericValue} object
 	 */
-	public Collection<GenericValue> getAvailableProjects() {
-		final Collection<GenericValue> projects = new HashSet<GenericValue>();
-		for (Object entry : getProjectManager().getProjects()) {
-			final GenericValue project = (GenericValue) entry;
-			if (!hudsonServer.getAssociatedProjectKeys().contains(project.getString("key"))) {
+	public Collection<Project> getAvailableProjects() {
+		final Collection<Project> projects = new HashSet<Project>();
+		for (Project project : getProjectManager().getProjectObjects()) {
+			if (!hudsonServer.getAssociatedProjectKeys().contains(project.getKey())) {
 				projects.add(project);
 			}
 		}

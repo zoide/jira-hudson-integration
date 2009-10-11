@@ -30,7 +30,7 @@ import com.atlassian.jira.portal.PortletImpl;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.user.util.UserUtil;
-import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.jira.util.I18nHelper;
 import com.atlassian.plugin.webresource.WebResourceManager;
 import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
@@ -55,7 +55,7 @@ public abstract class AbstractHudsonPorlet extends PortletImpl implements LazyLo
 
 	protected UserUtil userUtil;
 	
-	private I18nBean i18nBean = null;
+	private I18nHelper i18n = null;
 	
 	/**
 	 * Constructor
@@ -84,11 +84,11 @@ public abstract class AbstractHudsonPorlet extends PortletImpl implements LazyLo
 	 * 
 	 * @return the {@link I18nBean} implementation
 	 */
-	protected I18nBean getI18nBean() {
-		if (i18nBean == null) {
-			i18nBean = authenticationContext.getI18nBean("com.marvelution.jira.plugins.hudson.hudson-portlet");
+	protected I18nHelper getI18nHelper() {
+		if (i18n == null) {
+			i18n = authenticationContext.getI18nHelper();
 		}
-		return i18nBean;
+		return i18n;
 	}
 
 	/**
@@ -98,7 +98,7 @@ public abstract class AbstractHudsonPorlet extends PortletImpl implements LazyLo
 	 * @return the text
 	 */
 	protected String getText(String i18nKey) {
-		return getI18nBean().getText(i18nKey);
+		return getI18nHelper().getText(i18nKey);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public abstract class AbstractHudsonPorlet extends PortletImpl implements LazyLo
 	 * @return the error text
 	 */
 	protected String getErrorText(String i18nKey) {
-		return authenticationContext.getI18nBean("com.marvelution.jira.plugins.hudson.hudson-error").getText(i18nKey);
+		return authenticationContext.getI18nHelper().getText(i18nKey);
 	}
 
 	/**
@@ -147,7 +147,6 @@ public abstract class AbstractHudsonPorlet extends PortletImpl implements LazyLo
 	 * @param portletConfiguration the {@link PortletConfiguration} of this portlet instance
 	 * @return the {@link Map} of velocity parameters
 	 */
-	@SuppressWarnings("unchecked")
 	protected Map<String, Object> getSuperClassVelocityParams(PortletConfiguration portletConfiguration) {
 		return super.getVelocityParams(portletConfiguration);
 	}

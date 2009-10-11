@@ -32,7 +32,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.internal.verification.VerificationModeFactory;
 
 import com.atlassian.jira.bc.project.component.ProjectComponent;
-import com.atlassian.jira.plugin.componentpanel.ComponentContext;
+import com.atlassian.jira.plugin.componentpanel.BrowseComponentContext;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.JiraAuthenticationContext;
@@ -70,7 +70,7 @@ public class HudsonBuildsForComponentTabPanelTest {
 	private HudsonBuildsTabPanelHelper tabPanelHelper;
 
 	@Mock
-	private ComponentContext componentContext;
+	private BrowseComponentContext componentContext;
 
 	@Mock
 	private ProjectComponent component;
@@ -93,7 +93,9 @@ public class HudsonBuildsForComponentTabPanelTest {
 		panel =
 			new HudsonBuildsForComponentTabPanel(projectManager, authenticationContext, permissionManager,
 				serverManager, tabPanelHelper);
+		when(componentContext.getProject()).thenReturn(project);
 		when(componentContext.getComponent()).thenReturn(component);
+		when(componentContext.getUser()).thenReturn(null);
 		when(component.getId()).thenReturn(1024L);
 		when(component.getProjectId()).thenReturn(1000L);
 		when(projectManager.getProjectObj(eq(1000L))).thenReturn(project);
@@ -125,7 +127,6 @@ public class HudsonBuildsForComponentTabPanelTest {
 			+ ":hudson-component-tabpanel", params.get("baseResourceUrl"));
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
 			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":tabpanel-css");
-		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource("jira.webresources:prototype");
 	}
 
 	/**
@@ -136,6 +137,8 @@ public class HudsonBuildsForComponentTabPanelTest {
 		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(project), (User) eq(null)))
 			.thenReturn(true);
 		assertTrue(panel.showPanel(componentContext));
+		verify(permissionManager, VerificationModeFactory.times(1)).hasPermission(
+			eq(Permissions.VIEW_VERSION_CONTROL), eq(project), (User) eq(null));
 	}
 
 	/**
@@ -146,6 +149,8 @@ public class HudsonBuildsForComponentTabPanelTest {
 		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(project), (User) eq(null)))
 			.thenReturn(false);
 		assertFalse(panel.showPanel(componentContext));
+		verify(permissionManager, VerificationModeFactory.times(1)).hasPermission(
+			eq(Permissions.VIEW_VERSION_CONTROL), eq(project), (User) eq(null));
 	}
 
 }

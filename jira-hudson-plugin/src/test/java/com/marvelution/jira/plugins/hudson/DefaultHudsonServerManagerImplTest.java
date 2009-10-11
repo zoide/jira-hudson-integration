@@ -23,6 +23,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,8 +38,6 @@ import com.marvelution.jira.plugins.hudson.service.HudsonPropertyManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerFactory;
 import com.opensymphony.module.propertyset.PropertySet;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * TestCase for the {@link DefaultHudsonServerManagerImpl}

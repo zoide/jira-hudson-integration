@@ -123,7 +123,6 @@ public class HudsonBuildsForIssueTabPanelActionTest {
 			+ ":hudson-issue-tabpanel", params.get("baseResourceUrl"));
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
 			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":tabpanel-css");
-		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource("jira.webresources:prototype");
 	}
 
 }

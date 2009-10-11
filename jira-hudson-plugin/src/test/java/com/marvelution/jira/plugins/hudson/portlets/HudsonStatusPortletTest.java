@@ -42,7 +42,7 @@ import com.atlassian.jira.portal.PortletConfiguration;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.user.util.UserUtil;
-import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.jira.util.I18nHelper;
 import com.atlassian.plugin.webresource.WebResourceManager;
 import com.marvelution.jira.plugins.hudson.model.HudsonStatusPortletResult;
 import com.marvelution.jira.plugins.hudson.model.Job;
@@ -66,7 +66,7 @@ public class HudsonStatusPortletTest {
 	private JiraAuthenticationContext authenticationContext;
 
 	@Mock
-	private I18nBean i18n;
+	private I18nHelper i18n;
 
 	@Mock
 	private UserUtil userUtil;
@@ -100,8 +100,7 @@ public class HudsonStatusPortletTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		when(authenticationContext.getI18nBean()).thenReturn(i18n);
-		when(authenticationContext.getI18nBean(anyString())).thenReturn(i18n);
+		when(authenticationContext.getI18nHelper()).thenReturn(i18n);
 		when(i18n.getText(anyString())).thenAnswer(new Answer<String>() {
 
 			public String answer(InvocationOnMock invocation) throws Throwable {

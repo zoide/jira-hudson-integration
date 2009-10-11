@@ -34,6 +34,12 @@ public class BuildArtifact {
 	private String url;
 
 	/**
+	 * Default argument less constructor for XStream
+	 */
+	public BuildArtifact() {
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param name the Artifact name

@@ -39,6 +39,12 @@ public class HudsonView implements Comparable<HudsonView> {
 	private JobsList jobs;
 
 	/**
+	 * Default argument less constructor for XStream
+	 */
+	public HudsonView() {
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param name the view name

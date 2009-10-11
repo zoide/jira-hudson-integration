@@ -22,16 +22,15 @@ package com.marvelution.jira.plugins.hudson.web.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
 import org.apache.commons.lang.StringUtils;
 
 import webwork.action.ActionContext;
 
-import com.atlassian.core.util.collection.EasyList;
 import com.atlassian.jira.bc.project.component.ProjectComponent;
 import com.atlassian.jira.bc.project.component.ProjectComponentManager;
 import com.atlassian.jira.issue.Issue;
@@ -40,9 +39,7 @@ import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.issue.search.SearchException;
 import com.atlassian.jira.issue.search.SearchProvider;
 import com.atlassian.jira.issue.search.SearchResults;
-import com.atlassian.jira.issue.search.parameters.lucene.ComponentParameter;
-import com.atlassian.jira.issue.search.parameters.lucene.ProjectParameter;
-import com.atlassian.jira.issue.search.parameters.lucene.VersionParameter;
+import com.atlassian.jira.jql.builder.JqlQueryBuilder;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.project.version.Version;
@@ -51,10 +48,9 @@ import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
 import com.atlassian.jira.user.util.UserUtil;
+import com.atlassian.jira.util.I18nHelper;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
-import com.atlassian.jira.web.bean.I18nBean;
 import com.atlassian.jira.web.bean.PagerFilter;
-import com.atlassian.jira.web.bean.StatisticAccessorBean;
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.HudsonBuildTabPanelResult;
 import com.marvelution.jira.plugins.hudson.model.Job;
@@ -95,7 +91,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 
 	private final SearchProvider searchProvider;
 
-	private final I18nBean i18n;
+	private final I18nHelper i18n;
 
 	private final UserUtil userUtil;
 
@@ -139,8 +135,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 		this.serverAccessor = serverAccessor;
 		this.serverManager = serverManager;
 		this.searchProvider = searchProvider;
-		i18n = authenticationContext
-				.getI18nBean("com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServerPanelContent");
+		i18n = authenticationContext.getI18nHelper();
 	}
 
 	/**
@@ -263,12 +258,11 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 * @param project the {@link Project} to get the related issues for
 	 * @return {@link Collection} of issue keys
 	 */
-	@SuppressWarnings("unchecked")
-	private List<String> getIssueKeys(final Project project) {
+	private Collection<String> getIssueKeys(final Project project) {
 		try {
-			final Set searchParams = new HashSet();
-			searchParams.add(new ProjectParameter(EasyList.build(project.getId())));
-			return getIssueKeys(searchParams, project.getId());
+			final JqlQueryBuilder queryBuilder =
+				JqlQueryBuilder.newBuilder().where().project(new Long[] {project.getId()}).endWhere();
+			return getIssueKeys(queryBuilder, project.getId());
 		} catch (SearchException e) {
 			log.warn(
 				"Unable to get all issues from project " + project.getName() + ". Reason: " + e.getMessage(), e);
@@ -282,12 +276,12 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 * @param version the {@link Version} to get the related issues for
 	 * @return {@link Collection} of issue keys
 	 */
-	@SuppressWarnings("unchecked")
-	private List<String> getIssueKeys(final Version version) {
+	private Collection<String> getIssueKeys(final Version version) {
 		try {
-			final Set searchParams = new HashSet();
-			searchParams.add(new VersionParameter(EasyList.build(version.getId())));
-			return getIssueKeys(searchParams, version.getProjectObject().getId());
+			final JqlQueryBuilder queryBuilder =
+				JqlQueryBuilder.newBuilder().where().project(new Long[] {version.getProjectObject().getId()}).and()
+					.fixVersion(version.getId()).endWhere();
+			return getIssueKeys(queryBuilder, version.getProjectObject().getId());
 		} catch (SearchException e) {
 			log.warn(
 				"Unable to get all issues from version " + version.getName() + ". Reason: " + e.getMessage(), e);
@@ -301,12 +295,11 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 * @param component the {@link ProjectComponent} to get the related issues for
 	 * @return {@link Collection} of issue keys
 	 */
-	@SuppressWarnings("unchecked")
-	private List<String> getIssueKeys(final ProjectComponent component) {
+	private Collection<String> getIssueKeys(final ProjectComponent component) {
 		try {
-			final Set searchParams = new HashSet();
-			searchParams.add(new ComponentParameter(EasyList.build(component.getId())));
-			return getIssueKeys(searchParams, component.getProjectId());
+			final JqlQueryBuilder queryBuilder =
+				JqlQueryBuilder.newBuilder().where().component(new Long[] {component.getId()}).endWhere();
+			return getIssueKeys(queryBuilder, component.getProjectId());
 		} catch (SearchException e) {
 			log.warn(
 				"Unable to get all issues from component " + component.getName() + ". Reason: " + e.getMessage(), e);
@@ -317,26 +310,26 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	/**
 	 * Get the issue keys that relate to the given component
 	 * 
-	 * @param searchParams the {@link Set} of {@link SearchParameter}
+	 * @param queryBuilder the {@link JqlQueryBuilder}
 	 * @param projectId the project id to search within
 	 * @return {@link Collection} of issue keys
 	 * @throws SearchException in case of search exceptions
 	 */
 	@SuppressWarnings("unchecked")
-	private List<String> getIssueKeys(final Set searchParams, final long projectId)
+	private Collection<String> getIssueKeys(final JqlQueryBuilder queryBuilder, final long projectId)
 					throws SearchException {
-		final StatisticAccessorBean statisticAccessorBean =
-			new StatisticAccessorBean(this.authenticationContext.getUser(), projectId, searchParams, false);
 		final SearchResults searchResults =
-			this.searchProvider.search(statisticAccessorBean.getFilter(), this.authenticationContext.getUser(),
-				PagerFilter.getUnlimitedFilter());
-		final Collection<?> issues = searchResults.getIssues();
-		final List<String> issueKeys = new ArrayList<String>();
-		for (Object obj : issues) {
-			if (obj instanceof Issue) {
-				issueKeys.add(((Issue) obj).getKey());
+			this.searchProvider.search(queryBuilder.buildQuery(), this.authenticationContext.getUser(), PagerFilter
+				.getUnlimitedFilter());
+		final Collection issues = searchResults.getIssues();
+		final Collection issueKeys = CollectionUtils.collect(issues, new Transformer() {
+
+			public Object transform(Object object) {
+				final Issue issue = (Issue) object;
+				return issue.getKey();
 			}
-		}
+
+		});
 		return issueKeys;
 	}
 
@@ -465,7 +458,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 * 
 	 * @return the {@link I18nBean}
 	 */
-	public I18nBean getI18n() {
+	public I18nHelper getI18n() {
 		return i18n;
 	}
 

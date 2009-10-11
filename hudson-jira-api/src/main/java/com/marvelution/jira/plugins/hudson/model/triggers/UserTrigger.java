@@ -32,6 +32,12 @@ public class UserTrigger implements Trigger {
 	private String userName;
 
 	/**
+	 * Default no-argument constructor for XStream
+	 */
+	public UserTrigger() {
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param userName the username that triggered the build

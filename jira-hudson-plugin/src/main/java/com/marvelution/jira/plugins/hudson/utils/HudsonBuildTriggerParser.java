@@ -23,7 +23,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.user.util.UserUtil;
-import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.jira.util.I18nHelper;
 import com.marvelution.jira.plugins.hudson.model.triggers.LegacyCodeTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.ProjectTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.RemoteTrigger;
@@ -41,7 +41,7 @@ import com.opensymphony.user.User;
  */
 public final class HudsonBuildTriggerParser {
 
-	private final I18nBean i18n;
+	private final I18nHelper i18n;
 
 	private final UserUtil userUtil;
 
@@ -55,7 +55,7 @@ public final class HudsonBuildTriggerParser {
 	 * @param userUtil the {@link UserUtil} implementation
 	 */
 	public HudsonBuildTriggerParser(JiraAuthenticationContext authenticationContext, UserUtil userUtil) {
-		i18n = authenticationContext.getI18nBean("com.marvelution.jira.plugins.hudson.hudson-trigger");
+		i18n = authenticationContext.getI18nHelper();
 		this.userUtil = userUtil;
 	}
 
@@ -100,8 +100,8 @@ public final class HudsonBuildTriggerParser {
 			}
 		} else if (trigger instanceof ProjectTrigger) {
 			return i18n.getText("hudson.trigger.project", server.getHost(), ((ProjectTrigger) trigger)
-				.getProjectUrl(), ((ProjectTrigger) trigger).getProjectName(), ((ProjectTrigger) trigger)
-				.getBuildNumber());
+				.getProjectUrl(), ((ProjectTrigger) trigger).getProjectName(), Integer
+				.toString(((ProjectTrigger) trigger).getBuildNumber()));
 		} else if (trigger instanceof LegacyCodeTrigger) {
 			return i18n.getText("hudson.trigger.legacy");
 		} else if (trigger instanceof RemoteTrigger) {

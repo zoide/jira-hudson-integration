@@ -39,7 +39,7 @@ import org.mockito.stubbing.Answer;
 
 import com.atlassian.core.util.DateUtils;
 import com.atlassian.jira.security.JiraAuthenticationContext;
-import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.jira.util.I18nHelper;
 
 /**
  * TestCase for {@link DateTimeUtils}
@@ -52,7 +52,7 @@ public class DateTimeUtilsTest {
 	private JiraAuthenticationContext authenticationContext;
 
 	@Mock
-	private I18nBean i18n;
+	private I18nHelper i18n;
 
 	private DateTimeUtils utils;
 
@@ -83,10 +83,10 @@ public class DateTimeUtilsTest {
 		} finally {
 			IOUtils.closeQuietly(input);
 		}
-		when(i18n.getText(anyString(), anyObject())).thenAnswer(answer);
 		when(i18n.getText(anyString(), anyString())).thenAnswer(answer);
+		when(i18n.getText(anyString(), anyObject())).thenAnswer(answer);
 		when(i18n.getLocale()).thenReturn(Locale.ENGLISH);
-		when(authenticationContext.getI18nBean(anyString())).thenReturn(i18n);
+		when(authenticationContext.getI18nHelper()).thenReturn(i18n);
 		utils = new DateTimeUtils(authenticationContext);
 	}
 

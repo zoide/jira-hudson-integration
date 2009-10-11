@@ -76,6 +76,12 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	private State state;
 
 	/**
+	 * Default argument less constructor for XStream
+	 */
+	public Build() {
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param number the build number

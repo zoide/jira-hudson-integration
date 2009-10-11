@@ -21,7 +21,6 @@ package com.marvelution.jira.plugins.hudson.utils;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
@@ -35,7 +34,7 @@ import org.mockito.stubbing.Answer;
 
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.user.util.UserUtil;
-import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.jira.util.I18nHelper;
 import com.marvelution.jira.plugins.hudson.model.triggers.LegacyCodeTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.ProjectTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.RemoteTrigger;
@@ -56,7 +55,7 @@ public class HudsonBuildTriggerParserTest {
 	private JiraAuthenticationContext authenticationContext;
 
 	@Mock
-	private I18nBean i18n;
+	private I18nHelper i18n;
 
 	@Mock
 	private UserUtil userUtil;
@@ -86,9 +85,9 @@ public class HudsonBuildTriggerParserTest {
 		when(i18n.getText(anyString(), anyString(), anyString())).thenAnswer(answer);
 		when(i18n.getText(anyString(), anyString(), anyString(), anyString())).thenAnswer(answer);
 		when(i18n.getText(anyString(), anyString(), anyString(), anyString(), anyString())).thenAnswer(answer);
-		when(i18n.getText(anyString(), anyString(), anyString(), anyString(), anyObject())).thenAnswer(answer);
+		when(i18n.getText(anyString(), anyString(), anyString(), anyString(), anyString())).thenAnswer(answer);
 		when(i18n.getLocale()).thenReturn(Locale.ENGLISH);
-		when(authenticationContext.getI18nBean(anyString())).thenReturn(i18n);
+		when(authenticationContext.getI18nHelper()).thenReturn(i18n);
 		when(server.getHost()).thenReturn("http://localhost:8080");
 		triggerParser = new HudsonBuildTriggerParser(authenticationContext, userUtil, server);
 	}

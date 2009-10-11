@@ -38,6 +38,12 @@ public class ProjectTrigger implements Trigger {
 	private Integer buildNumber;
 
 	/**
+	 * Default no-argument constructor for XStream
+	 */
+	public ProjectTrigger() {
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param projectName the project name

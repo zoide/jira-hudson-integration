@@ -32,7 +32,7 @@ public class RemoteTrigger implements Trigger {
 	private String note;
 
 	/**
-	 * Constructor
+	 * Default no-argument constructor for XStream
 	 */
 	public RemoteTrigger() {
 	}

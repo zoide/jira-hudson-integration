@@ -54,6 +54,22 @@ Installation
   To install the Jira Plugin, {{{../jira-hudson-plugin/download.html}download}} the plugin.
   Once you have the jar artifact, shutdown Jira and install it using the directions for your Jira installation.
 
+  <<NOTE:>> Version 3.x and above are only supported on Jira 4. If you are running Jira 3.13.x be sure to download
+            version 2.x.
+
+
+* Jira 4 Installation
+~~~~~~~~~~~~~~~~~~~~~
+
+  [[1]] Copy the plugin into the <<<\{JIRA_HOME\}/plugins/installed-plugins>>> directory.
+  
+  [[2]] Start your Jira instance.
+  
+  []
+
+
+* Jira 3.13.x Installation
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   <<Jira Standalone Installation>>
 
@@ -76,7 +92,11 @@ Installation
   [[1]] Start your application server
   
   []
-  
+
+
+* Check the Installation
+~~~~~~~~~~~~~~~~~~~~~~~~
+
   Once you Jira instance is up-and-running again, check that the plugin is installed by going to the page
   <<Administration>> > <<Plugins>>.
   In the list you should see:

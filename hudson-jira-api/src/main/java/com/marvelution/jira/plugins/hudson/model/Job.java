@@ -78,6 +78,12 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	private JobsList modules;
 
 	/**
+	 * Default argument less constructor for XStream
+	 */
+	public Job() {
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param name the job name

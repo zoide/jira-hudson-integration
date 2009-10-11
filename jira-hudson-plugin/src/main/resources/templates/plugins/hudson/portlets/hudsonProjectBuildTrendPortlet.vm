@@ -15,18 +15,16 @@
 ## specific language governing permissions and limitations
 ## under the License.
 
-#set ($domId = "hudson_project_build_trend_${result.project.key}")
 <table class="hudsonJobStatusTable" cellpadding="3" cellspacing="0" width="99%">
     <thead>
         <tr class="rowHeader">
             <td class="colHeaderLink" colspan="2">
-				<span class="switch actionLinks subText" id="${domId}-switch" onclick="CookieUtil.toggleVisibility('${domId}', '[${i18n.getText("hudson.portlet.show")} >>]', '[${i18n.getText("hudson.portlet.hide")}]')">[${i18n.getText("hudson.portlet.hide")}]</span>
             	${i18n.getText("hudson.portlet.project.build.trend")}:
             	<strong><a href="${result.serverUrl}">${result.serverName}</a></strong> (<a href="${req.contextPath}/browse/${result.project.key}">${result.project.name}</a>)
             </td>
         </tr>
     </thead>
-	<tbody id="${domId}">
+	<tbody>
 		#if ($isHudsonConfigured && !$result.hasError())
 		<tr class="portletBody">
 			<td bgcolor=ffffff>

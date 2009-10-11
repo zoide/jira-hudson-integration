@@ -22,7 +22,7 @@ package com.marvelution.jira.plugins.hudson.panels;
 import java.util.Map;
 
 import com.atlassian.jira.issue.search.SearchProvider;
-import com.atlassian.jira.plugin.versionpanel.VersionContext;
+import com.atlassian.jira.plugin.versionpanel.BrowseVersionContext;
 import com.atlassian.jira.plugin.versionpanel.impl.GenericTabPanel;
 import com.atlassian.jira.project.version.Version;
 import com.atlassian.jira.security.JiraAuthenticationContext;
@@ -65,9 +65,8 @@ public class HudsonBuildsForVersionTabPanel extends GenericTabPanel {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	protected Map<String, Object> createVelocityParams(VersionContext context) {
+	protected Map<String, Object> createVelocityParams(BrowseVersionContext context) {
 		final Version version = context.getVersion();
 		final Map<String, Object> velocityParams = super.createVelocityParams(context);
 		if (version.isReleased()) {
@@ -83,7 +82,7 @@ public class HudsonBuildsForVersionTabPanel extends GenericTabPanel {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean showPanel(VersionContext context) {
+	public boolean showPanel(BrowseVersionContext context) {
 		return (serverManager.isHudsonConfigured() && permissionManager.hasPermission(
 			Permissions.VIEW_VERSION_CONTROL, context.getProject(), authenticationContext.getUser()));
 	}

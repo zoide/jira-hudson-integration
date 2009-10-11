@@ -19,6 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.atlassian.jira.project.Project;
@@ -171,24 +172,24 @@ public interface HudsonServerAccessor {
 	/**
 	 * Gets all the Builds related to a Set of Jira issue keys that are configured in all known Hudson Servers
 	 * 
-	 * @param issueKeys the {@link List} of issue keys
+	 * @param issueKeys the {@link Collection} of issue keys
 	 * @return {@link List} issue related {@link Build} objects
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
 	 * @throws HudsonServerAccessDeniedException in case Hudson denies access to the Remote API
 	 */
-	List<Build> getBuilds(List<String> issueKeys) throws HudsonServerAccessorException,
+	List<Build> getBuilds(Collection<String> issueKeys) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException;
 
 	/**
 	 * Gets all the Builds related to a Set of Jira issue keys that are configured in all known Hudson Servers
 	 * 
 	 * @param hudsonServer the {@link HudsonServer} to get the builds from
-	 * @param issueKeys the {@link List} of issue keys
+	 * @param issueKeys the {@link Collection} of issue keys
 	 * @return {@link List} issue related {@link Build} objects
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
 	 * @throws HudsonServerAccessDeniedException in case Hudson denies access to the Remote API
 	 */
-	List<Build> getBuilds(HudsonServer hudsonServer, List<String> issueKeys) throws HudsonServerAccessorException,
+	List<Build> getBuilds(HudsonServer hudsonServer, Collection<String> issueKeys) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException;
 
 	/**

@@ -24,7 +24,7 @@ import java.util.Map;
 import org.apache.commons.collections.map.ListOrderedMap;
 
 import com.atlassian.configurable.ValuesGenerator;
-import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.jira.ComponentManager;
 
 /**
  * {@link ValuesGenerator} implementation to generate the {@link Map} of possible values for the
@@ -56,7 +56,7 @@ public class HudsonProjectStatusShowBuildsValuesGenerator implements ValuesGener
 	 * @return the text
 	 */
 	String getText(String key) {
-		return new I18nBean().getText(key);
+		return ComponentManager.getInstance().getJiraAuthenticationContext().getI18nHelper().getText(key);
 	}
 
 }

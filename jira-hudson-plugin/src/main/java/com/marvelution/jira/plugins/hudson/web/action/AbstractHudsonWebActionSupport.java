@@ -22,8 +22,10 @@ package com.marvelution.jira.plugins.hudson.web.action;
 import org.apache.log4j.Logger;
 import org.apache.velocity.tools.generic.SortTool;
 
+import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
+import com.atlassian.jira.util.I18nHelper;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
@@ -89,6 +91,31 @@ public abstract class AbstractHudsonWebActionSupport extends JiraWebActionSuppor
 	 */
 	public SortTool getSorter() {
 		return sorter;
+	}
+
+	/**
+	 * Get the {@link I18nHelper}
+	 * 
+	 * @return the {@link I18nHelper}
+	 */
+	public I18nHelper getI18nHelper() {
+		return ComponentManager.getInstance().getJiraAuthenticationContext().getI18nHelper();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getText(String i18nKey) {
+		return getI18nHelper().getText(i18nKey);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getText(String i18nKey, String value) {
+		return getI18nHelper().getText(i18nKey, value);
 	}
 
 }

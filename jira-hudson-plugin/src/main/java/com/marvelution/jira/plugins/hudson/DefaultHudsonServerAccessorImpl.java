@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -266,7 +267,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Build> getBuilds(List<String> issueKeys) throws HudsonServerAccessorException,
+	public List<Build> getBuilds(Collection<String> issueKeys) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		final List<Build> builds = new ArrayList<Build>();
 		for (HudsonServer server : serverManager.getServers()) {
@@ -278,7 +279,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Build> getBuilds(HudsonServer hudsonServer, List<String> issueKeys)
+	public List<Build> getBuilds(HudsonServer hudsonServer, Collection<String> issueKeys)
 					throws HudsonServerAccessorException, HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();
 		String issueKeysString = "";

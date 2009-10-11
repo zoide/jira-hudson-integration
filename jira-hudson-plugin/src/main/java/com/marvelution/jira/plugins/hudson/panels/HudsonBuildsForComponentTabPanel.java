@@ -22,7 +22,7 @@ package com.marvelution.jira.plugins.hudson.panels;
 import java.util.Map;
 
 import com.atlassian.jira.bc.project.component.ProjectComponent;
-import com.atlassian.jira.plugin.componentpanel.ComponentContext;
+import com.atlassian.jira.plugin.componentpanel.BrowseComponentContext;
 import com.atlassian.jira.plugin.componentpanel.impl.GenericTabPanel;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.JiraAuthenticationContext;
@@ -65,9 +65,8 @@ public class HudsonBuildsForComponentTabPanel extends GenericTabPanel {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	protected Map createVelocityParams(ComponentContext context) {
+	protected Map<String, Object> createVelocityParams(BrowseComponentContext context) {
 		final ProjectComponent component = context.getComponent();
 		final Map<String, Object> velocityParams = super.createVelocityParams(context);
 		velocityParams.put("showRss", Boolean.TRUE);
@@ -79,10 +78,9 @@ public class HudsonBuildsForComponentTabPanel extends GenericTabPanel {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean showPanel(ComponentContext context) {
+	public boolean showPanel(BrowseComponentContext context) {
 		return (serverManager.isHudsonConfigured() && permissionManager.hasPermission(
-			Permissions.VIEW_VERSION_CONTROL, projectManager.getProjectObj(context.getComponent().getProjectId()),
-			authenticationContext.getUser()));
+			Permissions.VIEW_VERSION_CONTROL, context.getProject(), context.getUser()));
 	}
 
 }

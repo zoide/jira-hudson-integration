@@ -39,6 +39,12 @@ public class HealthReport implements Comparable<HealthReport> {
 	private int score;
 
 	/**
+	 * Default argument less constructor for XStream
+	 */
+	public HealthReport() {
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param description the description

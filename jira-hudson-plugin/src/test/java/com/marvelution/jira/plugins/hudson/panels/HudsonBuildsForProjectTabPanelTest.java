@@ -30,17 +30,14 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.verification.VerificationModeFactory;
-import org.ofbiz.core.entity.GenericValue;
 
-import com.atlassian.jira.exception.PermissionException;
 import com.atlassian.jira.plugin.projectpanel.ProjectTabPanelModuleDescriptor;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
+import com.atlassian.jira.project.browse.BrowseContext;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
-import com.atlassian.jira.web.action.ProjectActionSupport;
-import com.atlassian.jira.web.action.browser.Browser;
 import com.atlassian.plugin.webresource.WebResourceManager;
 import com.marvelution.jira.plugins.hudson.DefaultHudsonServerImpl;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
@@ -76,16 +73,10 @@ public class HudsonBuildsForProjectTabPanelTest {
 	private WebResourceManager webResourceManager;
 
 	@Mock
-	private Browser browser;
-
-	@Mock
-	private ProjectActionSupport actionSupport;
+	private BrowseContext browseContext;
 
 	@Mock
 	private Project project;
-
-	@Mock
-	private GenericValue genericValue;
 
 	private Map<String, Object> velocityParams;
 
@@ -98,7 +89,8 @@ public class HudsonBuildsForProjectTabPanelTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		tabPanelHelper = new HudsonBuildsTabPanelHelper(projectManager, serverManager, webResourceManager);
-		panel = new HudsonBuildsForProjectTabPanel(permissionManager, serverManager, tabPanelHelper);
+		panel = new HudsonBuildsForProjectTabPanel(authenticationContext, permissionManager, serverManager,
+				tabPanelHelper);
 		panel.init(new ProjectTabPanelModuleDescriptor(authenticationContext) {
 
 			@SuppressWarnings("unchecked")
@@ -114,7 +106,7 @@ public class HudsonBuildsForProjectTabPanelTest {
 		server.setName("Hudson CI");
 		server.setHost("http://hudson.marvelution.com");
 		when(serverManager.getServerByJiraProject(eq(project))).thenReturn(server);
-		when(browser.getProjectObject()).thenReturn(project);
+		when(browseContext.getProject()).thenReturn(project);
 		when(project.getKey()).thenReturn("MARVADMIN");
 	}
 
@@ -123,7 +115,7 @@ public class HudsonBuildsForProjectTabPanelTest {
 	 */
 	@Test
 	public void testGetHtml() {
-		assertEquals("fake html for view", panel.getHtml(browser));
+		assertEquals("fake html for view", panel.getHtml(browseContext));
 		assertTrue(velocityParams.containsKey("projectKey"));
 		assertEquals("MARVADMIN", velocityParams.get("projectKey"));
 		assertTrue(velocityParams.containsKey("hudsonServer"));
@@ -137,7 +129,6 @@ public class HudsonBuildsForProjectTabPanelTest {
 			+ ":hudson-project-tabpanel", velocityParams.get("baseResourceUrl"));
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
 			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":tabpanel-css");
-		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource("jira.webresources:prototype");
 	}
 
 	/**
@@ -145,12 +136,11 @@ public class HudsonBuildsForProjectTabPanelTest {
 	 * 
 	 * @throws Exception in case of failures
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testShowPanelWithPermission() throws Exception {
-		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(genericValue), (User) eq(null)))
+		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(project), (User) eq(null)))
 			.thenReturn(true);
-		assertTrue(panel.showPanel(actionSupport, genericValue));
+		assertTrue(panel.showPanel(browseContext));
 	}
 
 	/**
@@ -158,12 +148,11 @@ public class HudsonBuildsForProjectTabPanelTest {
 	 * 
 	 * @throws Exception in case of failures
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testShowPanelWithoutPermission() throws Exception {
-		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(genericValue), (User) eq(null)))
+		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(project), (User) eq(null)))
 			.thenReturn(false);
-		assertFalse(panel.showPanel(actionSupport, genericValue));
+		assertFalse(panel.showPanel(browseContext));
 	}
 
 	/**
@@ -173,10 +162,9 @@ public class HudsonBuildsForProjectTabPanelTest {
 	 */
 	@Test
 	public void testShowPanelThrowingPermissionException() throws Exception {
-		when(actionSupport.getSelectedProjectObject()).thenThrow(new PermissionException());
 		when(permissionManager.hasPermission(eq(Permissions.VIEW_VERSION_CONTROL), eq(project), (User) eq(null)))
 			.thenReturn(false);
-		assertFalse(panel.showPanel(actionSupport, genericValue));
+		assertFalse(panel.showPanel(browseContext));
 	}
 
 }

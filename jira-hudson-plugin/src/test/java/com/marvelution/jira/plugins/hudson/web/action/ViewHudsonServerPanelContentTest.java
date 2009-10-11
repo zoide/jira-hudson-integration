@@ -60,7 +60,7 @@ import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
 import com.atlassian.jira.user.util.UserUtil;
-import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.jira.util.I18nHelper;
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
@@ -105,7 +105,7 @@ public class ViewHudsonServerPanelContentTest {
 	private JiraAuthenticationContext authenticationContext;
 
 	@Mock
-	private I18nBean i18n;
+	private I18nHelper i18n;
 
 	@Mock
 	private ProjectManager projectManager;
@@ -178,7 +178,7 @@ public class ViewHudsonServerPanelContentTest {
 		when(i18n.getText(anyString(), anyObject())).thenAnswer(answer);
 		when(i18n.getText(anyString(), anyString())).thenAnswer(answer);
 		when(i18n.getLocale()).thenReturn(Locale.ENGLISH);
-		when(authenticationContext.getI18nBean(anyString())).thenReturn(i18n);
+		when(authenticationContext.getI18nHelper()).thenReturn(i18n);
 		panelContent =
 			new ViewHudsonServerPanelContent(authenticationContext, permissionManager, projectManager,
 				componentManager, issueManager, versionManager, userUtil, serverAccessor, serverManager,

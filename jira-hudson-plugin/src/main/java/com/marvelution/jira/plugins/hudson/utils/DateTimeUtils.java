@@ -24,7 +24,7 @@ import static com.atlassian.core.util.DateUtils.*;
 import java.util.Calendar;
 
 import com.atlassian.jira.security.JiraAuthenticationContext;
-import com.atlassian.jira.web.bean.I18nBean;
+import com.atlassian.jira.util.I18nHelper;
 
 /**
  * Helper class for formatting Dates and Times
@@ -33,7 +33,7 @@ import com.atlassian.jira.web.bean.I18nBean;
  */
 public class DateTimeUtils {
 
-	private I18nBean i18nBean;
+	private I18nHelper i18n;
 
 	/**
 	 * Constructor
@@ -42,7 +42,7 @@ public class DateTimeUtils {
 	 *            current user
 	 */
 	public DateTimeUtils(JiraAuthenticationContext authenticationContext) {
-		i18nBean = authenticationContext.getI18nBean("com.marvelution.jira.plugins.hudson.hudson-datetime");
+		i18n = authenticationContext.getI18nHelper();
 	}
 
 	/**
@@ -67,35 +67,35 @@ public class DateTimeUtils {
 		final long millisecs = remDuration;
 
 		if (years > 0L) {
-			return makeTimeSpanString(years, i18nBean.getText("hudson.time.year", Long.valueOf(years)), months,
-				i18nBean.getText("hudson.time.month", Long.valueOf(months)));
+			return makeTimeSpanString(years, i18n.getText("hudson.time.year", Long.valueOf(years)), months,
+				i18n.getText("hudson.time.month", Long.valueOf(months)));
 		} else if (months > 0L && days == 1L) {
-			return makeTimeSpanString(months, i18nBean.getText("hudson.time.month", Long.valueOf(months)), days,
-				i18nBean.getText("hudson.time.day", Long.valueOf(days)));
+			return makeTimeSpanString(months, i18n.getText("hudson.time.month", Long.valueOf(months)), days,
+				i18n.getText("hudson.time.day", Long.valueOf(days)));
 		} else if (months > 0L) {
-			return makeTimeSpanString(months, i18nBean.getText("hudson.time.month", Long.valueOf(months)), days,
-				i18nBean.getText("hudson.time.days", Long.valueOf(days)));
+			return makeTimeSpanString(months, i18n.getText("hudson.time.month", Long.valueOf(months)), days,
+				i18n.getText("hudson.time.days", Long.valueOf(days)));
 		} else if (days == 1L) {
-			return makeTimeSpanString(days, i18nBean.getText("hudson.time.day", Long.valueOf(days)), hours, i18nBean
+			return makeTimeSpanString(days, i18n.getText("hudson.time.day", Long.valueOf(days)), hours, i18n
 				.getText("hudson.time.hour", Long.valueOf(hours)));
 		} else if (days > 0L) {
-			return makeTimeSpanString(days, i18nBean.getText("hudson.time.days", Long.valueOf(days)), hours, i18nBean
+			return makeTimeSpanString(days, i18n.getText("hudson.time.days", Long.valueOf(days)), hours, i18n
 				.getText("hudson.time.hour", Long.valueOf(hours)));
 		} else if (hours > 0L) {
-			return makeTimeSpanString(hours, i18nBean.getText("hudson.time.hour", Long.valueOf(hours)), minutes,
-				i18nBean.getText("hudson.time.minute", Long.valueOf(minutes)));
+			return makeTimeSpanString(hours, i18n.getText("hudson.time.hour", Long.valueOf(hours)), minutes,
+				i18n.getText("hudson.time.minute", Long.valueOf(minutes)));
 		} else if (minutes > 0L) {
-			return makeTimeSpanString(minutes, i18nBean.getText("hudson.time.minute", Long.valueOf(minutes)),
-				seconds, i18nBean.getText("hudson.time.second", Long.valueOf(seconds)));
+			return makeTimeSpanString(minutes, i18n.getText("hudson.time.minute", Long.valueOf(minutes)),
+				seconds, i18n.getText("hudson.time.second", Long.valueOf(seconds)));
 		} else if (seconds >= 10L) {
-			return i18nBean.getText("hudson.time.second", Long.valueOf(seconds));
+			return i18n.getText("hudson.time.second", Long.valueOf(seconds));
 		} else if (seconds >= 1L) {
-			return i18nBean.getText("hudson.time.second", Float.valueOf((float) seconds + (float) (millisecs / 100L)
+			return i18n.getText("hudson.time.second", Float.valueOf((float) seconds + (float) (millisecs / 100L)
 				/ 10.0F));
 		} else if (millisecs >= 100L) {
-			return i18nBean.getText("hudson.time.second", Float.valueOf((float) (millisecs / 10L) / 100.0F));
+			return i18n.getText("hudson.time.second", Float.valueOf((float) (millisecs / 10L) / 100.0F));
 		}
-		return i18nBean.getText("hudson.time.millisecond", Long.valueOf(millisecs));
+		return i18n.getText("hudson.time.millisecond", Long.valueOf(millisecs));
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class DateTimeUtils {
 	 * @return the formatted time {@link String}
 	 */
 	public String getPastTimeString(long duration) {
-		return i18nBean.getText("hudson.past.time", getTimeSpanString(getTimePastSince(duration)));
+		return i18n.getText("hudson.past.time", getTimeSpanString(getTimePastSince(duration)));
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class DateTimeUtils {
 	 * @return the time in milliseconds that past
 	 */
 	public long getTimePastSince(long time) {
-		return Calendar.getInstance(i18nBean.getLocale()).getTimeInMillis() - time;
+		return Calendar.getInstance(i18n.getLocale()).getTimeInMillis() - time;
 	}
 
 }

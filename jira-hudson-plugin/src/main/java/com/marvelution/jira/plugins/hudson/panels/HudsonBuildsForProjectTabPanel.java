@@ -22,14 +22,12 @@ package com.marvelution.jira.plugins.hudson.panels;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.ofbiz.core.entity.GenericValue;
-
 import com.atlassian.jira.plugin.projectpanel.impl.AbstractProjectTabPanel;
 import com.atlassian.jira.project.Project;
+import com.atlassian.jira.project.browse.BrowseContext;
+import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
-import com.atlassian.jira.web.action.ProjectActionSupport;
-import com.atlassian.jira.web.action.browser.Browser;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
 /**
@@ -48,12 +46,15 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 	/**
 	 * Constructor
 	 * 
+	 * @param authenticationContext te {@link JiraAuthenticationContext} implementation
 	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param serverManager the {@link HudsonServerManager} implementation
 	 * @param tabPanelHelper the {@link HudsonBuildsTabPanelHelper} class
 	 */
-	public HudsonBuildsForProjectTabPanel(PermissionManager permissionManager, HudsonServerManager serverManager,
+	public HudsonBuildsForProjectTabPanel(JiraAuthenticationContext authenticationContext,
+											PermissionManager permissionManager, HudsonServerManager serverManager,
 											HudsonBuildsTabPanelHelper tabPanelHelper) {
+		super(authenticationContext);
 		this.permissionManager = permissionManager;
 		this.serverManager = serverManager;
 		this.tabPanelHelper = tabPanelHelper;
@@ -62,8 +63,8 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getHtml(Browser browser) {
-		final Project project = browser.getProjectObject();
+	public String getHtml(BrowseContext browseContext) {
+		final Project project = browseContext.getProject();
 		final Map<String, Object> velocityParams = new HashMap<String, Object>();
 		velocityParams.put("showRss", Boolean.TRUE);
 		tabPanelHelper.prepareVelocityParameters(velocityParams, project, "/browse/" + project.getKey() + "?report=",
@@ -74,11 +75,9 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean showPanel(ProjectActionSupport action, GenericValue project) {
+	public boolean showPanel(BrowseContext browseContext) {
 		return (serverManager.isHudsonConfigured() && permissionManager.hasPermission(
-			Permissions.VIEW_VERSION_CONTROL, project, action.getRemoteUser()));
+			Permissions.VIEW_VERSION_CONTROL, browseContext.getProject(), browseContext.getUser()));
 	}
 
 }

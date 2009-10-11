@@ -34,7 +34,6 @@ import java.util.HashSet;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.verification.VerificationModeFactory;
-import org.ofbiz.core.entity.GenericValue;
 
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
@@ -57,9 +56,6 @@ public class UpdateHudsonServerProjectAssociationsTest extends AbstractHudsonWeb
 
 	@Mock
 	private Project project;
-
-	@Mock
-	private GenericValue projectGenericValue;
 
 	/**
 	 * {@inheritDoc}
@@ -154,14 +150,14 @@ public class UpdateHudsonServerProjectAssociationsTest extends AbstractHudsonWeb
 	 */
 	@Test
 	public void testAddAllAvailableProjects() throws Exception {
-		when(projectManager.getProjects()).thenReturn(Collections.singletonList(projectGenericValue));
-		when(projectGenericValue.getString(eq("key"))).thenReturn("MARVADMIN");
+		when(projectManager.getProjectObjects()).thenReturn(Collections.singletonList(project));
+		when(project.getKey()).thenReturn("MARVADMIN");
 		ActionContext.setParameters(Collections.singletonMap("addAllButton.x", "Clicked All Add Button"));
 		assertEquals("input", serverProjectAssociations.doExecute());
 		verify(server, VerificationModeFactory.times(1)).addAssociatedProjectKey("MARVADMIN");
 		verify(serverManager, VerificationModeFactory.times(1)).getServer(1);
-		verify(projectManager, VerificationModeFactory.times(1)).getProjects();
-		verify(projectGenericValue, VerificationModeFactory.times(1)).getString("key");
+		verify(projectManager, VerificationModeFactory.times(1)).getProjectObjects();
+		verify(project, VerificationModeFactory.times(1)).getKey();
 	}
 
 	/**
@@ -235,14 +231,14 @@ public class UpdateHudsonServerProjectAssociationsTest extends AbstractHudsonWeb
 	@Test
 	public void testGetAvailableProjects() throws Exception {
 		setServerFieldInServerProjectAssociations();
-		when(projectManager.getProjects()).thenReturn(Collections.singletonList(projectGenericValue));
-		when(projectGenericValue.getString(eq("key"))).thenReturn("MARVADMIN");
-		final Collection<GenericValue> values = serverProjectAssociations.getAvailableProjects();
+		when(projectManager.getProjectObjects()).thenReturn(Collections.singletonList(project));
+		when(project.getKey()).thenReturn("MARVADMIN");
+		final Collection<Project> values = serverProjectAssociations.getAvailableProjects();
 		assertFalse(values.isEmpty());
 		assertEquals(1, values.size());
-		assertTrue(values.contains(projectGenericValue));
-		verify(projectManager, VerificationModeFactory.times(1)).getProjects();
-		verify(projectGenericValue, VerificationModeFactory.times(1)).getString("key");
+		assertTrue(values.contains(project));
+		verify(projectManager, VerificationModeFactory.times(1)).getProjectObjects();
+		verify(project, VerificationModeFactory.times(1)).getKey();
 	}
 
 	/**
@@ -253,13 +249,13 @@ public class UpdateHudsonServerProjectAssociationsTest extends AbstractHudsonWeb
 	@Test
 	public void testGetEmptyAvailableProjects() throws Exception {
 		setServerFieldInServerProjectAssociations();
-		when(projectManager.getProjects()).thenReturn(Collections.singletonList(projectGenericValue));
-		when(projectGenericValue.getString(eq("key"))).thenReturn("MARVADMIN");
+		when(projectManager.getProjectObjects()).thenReturn(Collections.singletonList(project));
+		when(project.getKey()).thenReturn("MARVADMIN");
 		when(server.getAssociatedProjectKeys()).thenReturn(Collections.singletonList("MARVADMIN"));
-		final Collection<GenericValue> values = serverProjectAssociations.getAvailableProjects();
+		final Collection<Project> values = serverProjectAssociations.getAvailableProjects();
 		assertTrue(values.isEmpty());
-		verify(projectManager, VerificationModeFactory.times(1)).getProjects();
-		verify(projectGenericValue, VerificationModeFactory.times(1)).getString("key");
+		verify(projectManager, VerificationModeFactory.times(1)).getProjectObjects();
+		verify(project, VerificationModeFactory.times(1)).getKey();
 		verify(server, VerificationModeFactory.times(1)).getAssociatedProjectKeys();
 	}
 

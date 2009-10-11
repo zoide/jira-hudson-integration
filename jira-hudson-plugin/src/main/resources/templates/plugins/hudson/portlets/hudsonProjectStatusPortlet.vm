@@ -16,17 +16,9 @@
 ## under the License.
 
 #macro (buildRow $build $elId $type)
-	#set ($showText = "[${i18n.getText('hudson.portlet.show')} >>]")
-	#set ($hideText = "[${i18n.getText('hudson.portlet.hide')}]")
-	#if ($showBuilds.equals("all") || $showBuilds.equals($type))
-		#set ($currentText = $hideText)
-	#else
-		#set ($currentText = $showText)
-	#end
 	<tr class="portletBody">
 		<td align="left">
 			#if ($buildUtils.isValidBuild($build))
-			<span class="switch actionLinks subText" style="background-color: inherit;" id="${domId}_${type}-switch" onclick="CookieUtil.toggleVisibility('${domId}_${type}', '${showText}', '${hideText}')">${currentText}</span>
 			<strong>${i18n.getText("hudson.portlet.${type}")}: </strong>
 			<a href="${result.serverUrl}/${build.url}">${i18n.getText("hudson.portlet.build.number", ${build.number})}</a> 
 			(${i18n.getText("hudson.portlet.build.executed.and.took", ${dateTimeUtils.getPastTimeString(${build.timestamp})}, ${dateTimeUtils.getTimeSpanString(${build.duration})})})
@@ -71,7 +63,7 @@
 								<tr class="portletBody">
 									<td>
 										<strong>${i18n.getText("hudson.portlet.related.issues")}</strong>: #if ($build.relatedIssueKeys.isEmpty()) ${i18n.getText("hudson.portlet.no.related.issues")} #end
-										#foreach ($issueKey in $build.relatedIssueKeys) #if ($velocityCount > 1) | #end <a href="/browse/${issueKey}">${issueKey}</a>#end
+										#foreach ($issueKey in $build.relatedIssueKeys) #if ($velocityCount > 1) | #end <a href="${req.contextPath}/browse/${issueKey}">${issueKey}</a>#end
 									</td>
 									<td valign="top">
 										<strong>${i18n.getText("hudson.portlet.build.tests")}</strong>: 
@@ -88,7 +80,7 @@
 								<tr class="portletBody">
 									<td>
 										<strong>${i18n.getText("hudson.portlet.build.artifacts")}</strong>: #if ($build.artifacts.isEmpty()) ${i18n.getText("hudson.portlet.no.build.artifacts")} #end
-										#foreach ($artifact in $build.artifacts) #if ($velocityCount > 1) | #end ${artifact}#end
+										#foreach ($artifact in $build.artifacts) #if ($velocityCount > 1) | #end <a href="${result.serverUrl}/${artifact.url}">${artifact.name}</a>#end
 									</td>
 									<td>
 										<strong>${i18n.getText("hudson.portlet.build.triggers")}</strong>:

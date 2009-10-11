@@ -53,6 +53,14 @@
 		<img src="${req.ContextPath}/images/icons/wait-large.gif" class="waitingImage" />
 	</div>
 	<script type="text/javascript" >
-		new Ajax.Updater('hudsonTabPanelBuilds', '${req.contextPath}/secure/ViewHudsonServerPanelContent.jspa?${querySection}', {asynchronous:true, evalScripts:true} );
+		## dataType = 'html' will evaluate the included JS tags - http://docs.jquery.com/Ajax/jQuery.ajax#options
+		jQuery.ajax({
+			type : "GET",
+			dataType: "html",
+			url : "${req.contextPath}/secure/ViewHudsonServerPanelContent.jspa?${querySection}",
+			success : function(html) {
+				jQuery('#hudsonTabPanelBuilds').html(html);
+			}
+		});
 	</script>
 </div>

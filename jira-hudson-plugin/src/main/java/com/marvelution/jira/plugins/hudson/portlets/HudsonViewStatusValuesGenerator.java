@@ -73,7 +73,7 @@ public class HudsonViewStatusValuesGenerator implements ValuesGenerator {
 	 * @return the {@link HudsonServerManager}
 	 */
 	HudsonServerManager getServerManager() {
-		return (HudsonServerManager) ComponentManager.getComponentInstanceOfType(HudsonServerManager.class);
+		return (HudsonServerManager) ComponentManager.getOSGiComponentInstanceOfType(HudsonServerManager.class);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class HudsonViewStatusValuesGenerator implements ValuesGenerator {
 	 * @return the {@link HudsonServerAccessor}
 	 */
 	HudsonServerAccessor getServerAccessor() {
-		return (HudsonServerAccessor) ComponentManager.getComponentInstanceOfType(HudsonServerAccessor.class);
+		return (HudsonServerAccessor) ComponentManager.getOSGiComponentInstanceOfType(HudsonServerAccessor.class);
 	}
 
 }
