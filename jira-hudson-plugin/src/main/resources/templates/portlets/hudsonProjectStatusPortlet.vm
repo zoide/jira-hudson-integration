@@ -1,0 +1,178 @@
+## Licensed to Marvelution under one or more contributor license 
+## agreements.  See the NOTICE file distributed with this work 
+## for additional information regarding copyright ownership.
+## Marvelution licenses this file to you under the Apache License,
+## Version 2.0 (the "License"); you may not use this file except
+## in compliance with the License.
+## You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied. See the License for the
+## specific language governing permissions and limitations
+## under the License.
+
+#macro (buildRow $build $elId $type)
+	<tr class="portletBody">
+		<td align="left">
+			#if ($buildUtils.isValidBuild($build))
+			<strong>${i18n.getText("hudson.portlet.${type}")}: </strong>
+			<a href="${result.serverUrl}/${build.url}">${i18n.getText("hudson.portlet.build.number", ${build.number})}</a> 
+			(${i18n.getText("hudson.portlet.build.executed.and.took", ${dateTimeUtils.getPastTimeString(${build.timestamp})}, ${dateTimeUtils.getTimeSpanString(${build.duration})})})
+			#else
+			<strong>${i18n.getText("hudson.portlet.${type}")}: </strong> ${i18n.getText("hudson.not.applicable")}
+			#end
+		</td>
+	</tr>
+#end
+
+#macro (buildStatusOverview $build $elId $type)
+	#if ($buildUtils.isValidBuild($build))
+		#if ($buildUtils.isSuccessfulBuild($build))
+			#set($buildStyle = "successfulBuild")
+		#elseif ($buildUtils.isFailedBuild($build))
+			#set($buildStyle = "failedBuild")
+		#elseif ($buildUtils.isUnstableBuild($build))
+			#set($buildStyle = "unstableBuild")
+		#else
+			#set($buildStyle = "abortedOrNotBuild")
+		#end
+		#if ($showBuilds.equals("all") || $showBuilds.equals($type))
+			#set ($display = "")
+		#else
+			#set ($display = "display: none;")
+		#end
+		<table class="hudsonBuildStatusTable" cellpadding="3" cellspacing="0" id="${elId}_${type}" width="99%" style="${display}">
+			<tbody>
+				<tr class="portletBody">
+					<th>${i18n.getText("hudson.portlet.${type}")}</th>
+				</tr>
+				<tr class="portletBody">
+					<td>
+						<table class="hudsonJobBuildTable" cellpadding="3" cellspacing="0" width="99%">
+							<tbody>
+								<tr class="portletBody">
+									<td rowspan="4" width="30px" valign="top"><img src="${result.serverMediumImageUrl}${build.result.icon}" alt="${build.result.name()}" tooltip="${build.result.name()}" /></td>
+									<td width="40%" class="${buildStyle} smallText"><a href="${result.serverUrl}/${build.url}">${i18n.getText("hudson.portlet.build.number", ${build.number})}</a></td>
+									<td><strong>${i18n.getText("hudson.portlet.build.duration")}</strong>: ${dateTimeUtils.getTimeSpanString(${build.duration})}</td>
+									<td rowspan="4" valign="top" align="right">${dateTimeUtils.getPastTimeString(${build.timestamp})}</td>
+								</tr>
+								<tr class="portletBody">
+									<td>
+										<strong>${i18n.getText("hudson.portlet.related.issues")}</strong>: #if ($build.relatedIssueKeys.isEmpty()) ${i18n.getText("hudson.portlet.no.related.issues")} #end
+										#foreach ($issueKey in $build.relatedIssueKeys) #if ($velocityCount > 1) | #end <a href="${req.contextPath}/browse/${issueKey}">${issueKey}</a>#end
+									</td>
+									<td valign="top">
+										<strong>${i18n.getText("hudson.portlet.build.tests")}</strong>: 
+										#if (${build.testResult})
+										${i18n.getText("hudson.portlet.build.tests.total")}: ${build.testResult.total}, 
+										${i18n.getText("hudson.portlet.build.tests.passed")}: ${build.testResult.passed}, 
+										${i18n.getText("hudson.portlet.build.tests.failed")}: ${build.testResult.failed}, 
+										${i18n.getText("hudson.portlet.build.tests.skipped")}: ${build.testResult.skipped}
+										#else
+										${i18n.getText("hudson.portlet.build.no.test.results")}
+										#end
+									</td>
+								</tr>
+								<tr class="portletBody">
+									<td>
+										<strong>${i18n.getText("hudson.portlet.build.artifacts")}</strong>: #if ($build.artifacts.isEmpty()) ${i18n.getText("hudson.portlet.no.build.artifacts")} #end
+										#foreach ($artifact in $build.artifacts) #if ($velocityCount > 1) | #end <a href="${result.serverUrl}/${artifact.url}">${artifact.name}</a>#end
+									</td>
+									<td>
+										<strong>${i18n.getText("hudson.portlet.build.triggers")}</strong>:
+										<ul class="square">
+											#foreach ($trigger in $build.triggers)
+											<li>${buildTriggerParser.parse(${trigger})}</li>
+											#end
+										</ul>
+									</td>
+								</tr>
+								<tr class="portletBody">
+									<td colspan="2">
+										<a href="${result.serverUrl}/${build.url}console">${i18n.getText("hudson.portlet.build.log.console")}</a> | 
+										<a href="${result.serverUrl}/${build.url}changes">${i18n.getText("hudson.portlet.build.log.changes")}</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	#end
+#end
+
+<table class="hudsonJobStatusTable" cellpadding="3" cellspacing="0" width="99%">
+    <thead>
+        <tr class="rowHeader">
+            <td class="colHeaderLink" colspan="2">
+				<a href="${result.serverUrl}/${result.job.url}rssAll" class="actionLinks"><img src="${req.contextPath}${baseResourceUrl}/images/rss.gif" alt="${i18n.getText('hudson.panel.title.rss.description')}" /></a>
+            	${i18n.getText("hudson.portlet.job.status.summary")}:
+            	<strong><a href="${result.serverUrl}/${result.job.url}">${result.serverName}</a></strong> (<a href="${req.contextPath}/browse/${result.project.key}">${result.project.name}</a>)
+            </td>
+        </tr>
+    </thead>
+#if ($isHudsonConfigured && !$result.hasError())
+	#set ($buildTriggerParser.server = $result.server)
+	#if ($buildUtils.isSuccessfulBuild($result.job.lastBuild))
+		#set($buildStyle = "successfulBuild")
+	#elseif ($buildUtils.isFailedBuild($result.job.lastBuild))
+		#set($buildStyle = "failedBuild")
+	#elseif ($buildUtils.isUnstableBuild($result.job.lastBuild))
+		#set($buildStyle = "unstableBuild")
+	#else
+		#set($buildStyle = "abortedOrNotBuild")
+	#end
+	#set ($domId = "hudson_project_status_${result.job.name}")
+	<tbody>
+		<tr class="portletBody">
+			<th colspan="2">${i18n.getText("hudson.portlet.job.status.overview")}</th>
+		</tr>
+    	<tr class="portletBody">
+        	<td align="center" width="40px" rowspan="6">
+        		<img src="${result.serverImageUrl}${result.job.result.icon}" tooltip="${result.job.result.name()}" alt="${result.job.result.name()}" /><br />
+        		#if (!${result.job.healthReports.isEmpty})
+        			<img src="${result.serverImageUrl}${result.job.healthReports.get(0).icon}" />
+        		#end
+        	</td>
+        	<td align="left" class="${buildStyle}">
+        		<a href=${result.serverUrl}/${result.job.url}>${result.job.name}</a>
+        	</td>
+        </tr>
+		<tr class="portletBody">
+			<td align="left">
+				<strong>${i18n.getText("hudson.portlet.project.health.reports")}: </strong>
+				<ul class="noStyleList">
+				#foreach ($healthReport in ${result.job.healthReports})
+				<li><img src="${result.serverSmallImageUrl}${healthReport.icon}" /> ${healthReport.description} 
+				(${i18n.getText("hudson.portlet.build.success.rate", ${healthReport.score})})</li>
+				#end
+				</ul>
+			</td>
+		</tr>
+        #buildRow(${result.job.lastBuild} ${domId} "last_build")
+		#buildRow(${result.job.lastSuccessfulBuild} ${domId} "last_successful_build")
+		#buildRow(${result.job.lastUnstableBuild} ${domId} "last_unstable_build")
+		#buildRow(${result.job.lastFailedBuild} ${domId} "last_failed_build")
+	</tbody>
+</table>
+#buildStatusOverview(${result.job.lastBuild} ${domId} "last_build")
+#buildStatusOverview(${result.job.lastSuccessfulBuild} ${domId} "last_successful_build")
+#buildStatusOverview(${result.job.lastUnstableBuild} ${domId} "last_unstable_build")
+#buildStatusOverview(${result.job.lastFailedBuild} ${domId} "last_failed_build")
+#else
+    <tbody>
+        <tr class="portletBody">
+        	<td bgcolor=ffffff>
+	            <div align="center">
+	                <strong><em>${i18n.getText("hudson.portlet.error")}:</em></strong> $textutils.htmlEncode($result.error)
+	            </div>
+        	</td>
+        </tr>
+    </tbody>
+</table>
+#end

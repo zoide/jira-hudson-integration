@@ -1,0 +1,53 @@
+## Licensed to Marvelution under one or more contributor license 
+## agreements.  See the NOTICE file distributed with this work 
+## for additional information regarding copyright ownership.
+## Marvelution licenses this file to you under the Apache License,
+## Version 2.0 (the "License"); you may not use this file except
+## in compliance with the License.
+## You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied. See the License for the
+## specific language governing permissions and limitations
+## under the License.
+
+<table class="hudsonJobStatusTable" cellpadding="3" cellspacing="0" width="99%">
+    <thead>
+        <tr class="rowHeader">
+            <td class="colHeaderLink" colspan="2">
+            	${i18n.getText("hudson.portlet.project.build.trend")}:
+            	<strong><a href="${result.serverUrl}">${result.serverName}</a></strong> (<a href="${req.contextPath}/browse/${result.project.key}">${result.project.name}</a>)
+            </td>
+        </tr>
+    </thead>
+	<tbody>
+		#if ($isHudsonConfigured && !$result.hasError())
+		<tr class="portletBody">
+			<td bgcolor=ffffff>
+				<div align="center">
+					#if ($chart)
+		                #if ($chart.imageMap)
+		                    $chart.imageMap
+		                #end
+	                    <img src='$req.contextPath/charts?filename=$chart.location' border='0' #if ($chart.imageMap) usemap="\#$chart.imageMapName" #end width="$chart.width" height="$chart.height" />
+		            #else
+		            	$i18n.getText("hudson.portelt.no.chart")
+		            #end
+                </div>
+        	</td>
+		</tr>
+		#else
+		<tr class="portletBody">
+			<td bgcolor=ffffff>
+                <div align="center">
+                    <strong><em>${i18n.getText("hudson.portlet.error")}:</em></strong> $textutils.htmlEncode($result.error)
+                </div>
+        	</td>
+        </tr>
+		#end
+	</tbody>
+</table>
