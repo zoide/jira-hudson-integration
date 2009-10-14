@@ -1,0 +1,66 @@
+## Licensed to Marvelution under one or more contributor license 
+## agreements.  See the NOTICE file distributed with this work 
+## for additional information regarding copyright ownership.
+## Marvelution licenses this file to you under the Apache License,
+## Version 2.0 (the "License"); you may not use this file except
+## in compliance with the License.
+## You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied. See the License for the
+## specific language governing permissions and limitations
+## under the License.
+
+#macro(showLink $selectedSubTab $thisSubTab)
+#set ($i18nTitle = "hudson.panel.${thisSubTab}.${moduleKey}.title")
+#if ($selectedSubTab == $thisSubTab)
+    ${i18n.getText($i18nTitle)}
+#else
+    <a id="hudson_tab_panel_tab_link" href="${req.contextPath}${baseLinkUrl}&selectedSubTab=${thisSubTab}">${i18n.getText($i18nTitle)}</a>
+#end
+#end
+
+<div class="projectPanel" id="hudsonTabPanel">
+	<div class="header">
+		<h3 class="formtitle">
+			#if ($showRss)
+			<a href="${req.contextPath}/secure/ViewHudsonServerPanelContent!showRss.jspa?${querySection}" class="actionLinks"><img src="${req.contextPath}${baseResourceUrl}/images/rss.gif" alt="${i18n.getText('hudson.panel.title.rss.description')}" /></a>
+			#end
+			<a href="${hudsonServer.host}" class="actionLinks">${i18n.getText("hudson.panel.title.view.dashboard")}</a>
+			<img src="${req.contextPath}${baseResourceUrl}/images/hudson-icon-24.png" />
+			${i18n.getText("hudson.panel.title")}
+		</h3>
+		<p class="subText">
+			#set ($i18nDescription = "hudson.panel.${moduleKey}.$!{extraDescriptionKey}description")
+			${i18n.getText($i18nDescription)}
+        </p>
+		#if ($availableTabs && !$availableTabs.isEmpty())
+        <ul class="square">
+            <li>
+                <strong>${i18n.getText("common.concepts.view")}:</strong>
+                #foreach ($subTab in $availableTabs)
+                    #showLink(${selectedSubTab} ${subTab})  #if($velocityCount < $availableTabs.size()) | #end
+                #end
+            </li>
+        </ul>
+        #end
+	</div>
+	<div class="spaced" id="hudsonTabPanelBuilds">
+		<img src="${req.ContextPath}/images/icons/wait-large.gif" class="waitingImage" />
+	</div>
+	<script type="text/javascript" >
+		## dataType = 'html' will evaluate the included JS tags - http://docs.jquery.com/Ajax/jQuery.ajax#options
+		jQuery.ajax({
+			type : "GET",
+			dataType: "html",
+			url : "${req.contextPath}/secure/ViewHudsonServerPanelContent.jspa?${querySection}",
+			success : function(html) {
+				jQuery('#hudsonTabPanelBuilds').html(html);
+			}
+		});
+	</script>
+</div>

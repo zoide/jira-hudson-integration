@@ -17,7 +17,7 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<atlassian-plugin name="${pom.name}" key="com.marvelution.jira.plugins.hudson" system="false" pluginsVersion="2">
+<atlassian-plugin name="${pom.name}" key="${atlassian.jira.plugin.key}" system="false" pluginsVersion="2">
 	<plugin-info>
 		<description>${pom.description}</description>
 		<vendor name="${pom.organization.name}" url="${pom.organization.url}" />
@@ -26,33 +26,63 @@
 	</plugin-info>
 
 	<!-- I 1 8 N   R E S O U R C E S -->
-	<resource type="i18n" name="i18n-hudson-plugin" location="templates.plugins.hudson.hudson-plugin" />
-	<resource type="i18n" name="i18n-hudson-datetime" location="com.marvelution.jira.plugins.hudson.hudson-datetime" />
-	<resource type="i18n" name="i18n-hudson-error" location="com.marvelution.jira.plugins.hudson.hudson-error" />
-	<resource type="i18n" name="i18n-hudson-portlets" location="com.marvelution.jira.plugins.hudson.hudson-portlets" />
-	<resource type="i18n" name="i18n-hudson-trigger" location="com.marvelution.jira.plugins.hudson.hudson-trigger" />
-	<resource type="i18n" name="i18n-hudson-web-action" location="com.marvelution.jira.plugins.hudson.web.action.AbstractHudsonWebActionSupport" />
-	<resource type="i18n" name="i18n-hudson-panel-content" location="com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServerPanelContent" />
+	<resource type="i18n" name="i18n-hudson-plugin" location="i18n.hudson-plugin" />
+	<resource type="i18n" name="i18n-hudson-gadgets" location="i18n.hudson-gadgets" />
+	<resource type="i18n" name="i18n-hudson-datetime" location="i18n.hudson-datetime" />
+	<resource type="i18n" name="i18n-hudson-errors" location="i18n.hudson-errors" />
+	<resource type="i18n" name="i18n-hudson-portlets" location="i18n.hudson-portlets" />
+	<resource type="i18n" name="i18n-hudson-triggers" location="i18n.hudson-triggers" />
+	<resource type="i18n" name="i18n-hudson-config" location="i18n.hudson-config" />
+	<resource type="i18n" name="i18n-hudson-panels" location="i18n.hudson-panels" />
 
 	<!-- R E S O U R C E S -->
-	<resource type="download" name="images/" location="templates/plugins/hudson/images/" />
-	<web-resource key="tabpanel-css" name="Plugin Tab Panel CSS">
-		<resource type="download" name="hudsonTabPanels.css" location="templates/plugins/hudson/panels/hudsonTabPanel.css" />
+	<resource type="download" name="images/" location="images/" />
+	<web-resource key="common-css" name="Plugin Common CSS">
+		<resource type="download" name="common.css" location="styles/common.css" />
+	</web-resource>
+	<web-resource key="panel-css" name="Plugin Tab Panel CSS">
+		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
+		<resource type="download" name="panels.css" location="styles/panels.css" />
 	</web-resource>
 	<web-resource key="portlet-css" name="Plugin Portlet CSS">
-		<resource type="download" name="hudsonPortlets.css" location="templates/plugins/hudson/portlets/hudsonPortlet.css" />
+		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
+		<resource type="download" name="portlets.css" location="styles/portlets.css" />
+	</web-resource>
+	<web-resource key="gadget-common" name="Common Gadget Web Resources">
+		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
+		<dependency>com.atlassian.jira.gadgets:jira-global</dependency>
+		<resource type="download" name="gadgets.css" location="styles/gadgets.css" />
+		<resource type="download" name="hudson-common.js" location="scripts/hudson-common.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+		<resource type="download" name="hudson-gadget-fields.js" location="scripts/hudson-gadget-fields.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+	</web-resource>
+	<web-resource key="status-gadget" name="Status Gadgets Web Resources">
+		<dependency>${atlassian.jira.plugin.key}:gadget-common</dependency>
+		<resource type="download" name="hudson-status.js" location="scripts/hudson-status.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
 	</web-resource>
 
-	<!-- P O R T L E T S -->
+	<!-- G A D G E T S -->
+	<gadget key="hudson-status-gadget" name="Hudson Status" location="gadgets/hudson-status-gadget.xml" />
+
+	<!-- R E S T   R E S O U R C E S -->
+	<rest key="gadgetRestPoints" path="/hudson" version="1.0" system="false"
+		  description="Provides REST endpoints used to display Hudson gadget contents." />
+
+	<!-- P O R T L E T S  REMOVE BEFORE RELEASING AS PORTLETS WILL NO LONGER BE SUPPORTED IN FAVOR FOR GADGETS-->
 	<portlet key="hudson-status" name="Hudson Status"
 		class="com.marvelution.jira.plugins.hudson.portlets.HudsonStatusPortlet" lazy="true">
 		<objectdescriptor key="hudson.jira.portlet.status.name" />
 		<label key="hudson.jira.portlet.status.name" />
 		<description key="hudson.portlet.status.description" />
-		<resource type="velocity" name="loading" location="templates/plugins/hudson/portlets/loadingHudsonPortlet.vm" />
-		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonStatusPortlet.vm" />
+		<resource type="velocity" name="loading" location="templates/portlets/loadingHudsonPortlet.vm" />
+		<resource type="velocity" name="view" location="templates/portlets/hudsonStatusPortlet.vm" />
 		<permission>viewversioncontrol</permission>
-		<thumbnail>templates/plugins/hudson/portlets/thumbnails/hudsonstatus.png</thumbnail>
+		<thumbnail>images/thumbnails/hudsonstatus.png</thumbnail>
 		<properties />
 	</portlet>
 
@@ -61,10 +91,10 @@
 		<objectdescriptor key="hudson.jira.portlet.project.status.name" />
 		<label key="hudson.portlet.project.status.name" />
 		<description key="hudson.portlet.project.status.description" />
-		<resource type="velocity" name="loading" location="templates/plugins/hudson/portlets/loadingHudsonPortlet.vm" />
-		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonProjectStatusPortlet.vm" />
+		<resource type="velocity" name="loading" location="templates/portlets/loadingHudsonPortlet.vm" />
+		<resource type="velocity" name="view" location="templates/portlets/hudsonProjectStatusPortlet.vm" />
 		<permission>viewversioncontrol</permission>
-		<thumbnail>templates/plugins/hudson/portlets/thumbnails/hudsonprojectstatus.png</thumbnail>
+		<thumbnail>images/thumbnails/hudsonprojectstatus.png</thumbnail>
 		<properties>
 			<property>
 				<key>projectId</key>
@@ -88,8 +118,8 @@
 		<objectdescriptor key="hudson.jira.portlet.view.status.name" />
 		<label key="hudson.portlet.view.status.name" />
 		<description key="hudson.portlet.view.status.description" />
-		<resource type="velocity" name="loading" location="templates/plugins/hudson/portlets/loadingHudsonPortlet.vm" />
-		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonViewStatusPortlet.vm" />
+		<resource type="velocity" name="loading" location="templates/portlets/loadingHudsonPortlet.vm" />
+		<resource type="velocity" name="view" location="templates/portlets/hudsonViewStatusPortlet.vm" />
 		<permission>viewversioncontrol</permission>
 		<properties>
 			<property>
@@ -107,10 +137,10 @@
 		<objectdescriptor key="hudson.jira.portlet.project.build.trend.name" />
 		<label key="hudson.portlet.project.build.trend.name" />
 		<description key="hudson.portlet.project.build.trend.description" />
-		<resource type="velocity" name="loading" location="templates/plugins/hudson/portlets/loadingHudsonPortlet.vm" />
-		<resource type="velocity" name="view" location="templates/plugins/hudson/portlets/hudsonProjectBuildTrendPortlet.vm" />
+		<resource type="velocity" name="loading" location="templates/portlets/loadingHudsonPortlet.vm" />
+		<resource type="velocity" name="view" location="templates/portlets/hudsonProjectBuildTrendPortlet.vm" />
 		<permission>viewversioncontrol</permission>
-		<thumbnail>templates/plugins/hudson/portlets/thumbnails/buildtrend.png</thumbnail>
+		<thumbnail>images/thumbnails/buildtrend.png</thumbnail>
 		<properties>
 			<property>
 				<key>projectId</key>
@@ -128,7 +158,7 @@
 		<description key="hudson.panel.project.description" />
 		<label key="hudson.panel.label" />
 		<order>101</order>
-		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
+		<resource type="velocity" name="view" location="templates/panels/hudsonTabPanel.vm" />
 	</project-tabpanel>
 
 	<version-tabpanel key="hudson-version-tabpanel" name="Hudson Builds Project Version Panel"
@@ -136,7 +166,7 @@
 		<description key="hudson.panel.version.description" />
 		<label key="hudson.panel.label" />
 		<order>101</order>
-		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
+		<resource type="velocity" name="view" location="templates/panels/hudsonTabPanel.vm" />
 	</version-tabpanel>
 
 	<component-tabpanel key="hudson-component-tabpanel" name="Hudson Builds Project Component Panel"
@@ -144,7 +174,7 @@
 		<description key="hudson.panel.component.description" />
 		<label key="hudson.panel.label" />
 		<order>101</order>
-		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
+		<resource type="velocity" name="view" location="templates/panels/hudsonTabPanel.vm" />
 	</component-tabpanel>
 
 	<issue-tabpanel key="hudson-issue-tabpanel" name="Hudson Builds Issue Panel"
@@ -152,32 +182,32 @@
 		<description key="hudson.panel.issue.description" />
 		<label key="hudson.panel.label" />
 		<order>101</order>
-		<resource type="velocity" name="view" location="templates/plugins/hudson/panels/hudsonTabPanel.vm" />
+		<resource type="velocity" name="view" location="templates/panels/hudsonTabPanel.vm" />
 	</issue-tabpanel>
 
 	<!-- H U D S O N   S E R V E R S   C O N F I G U R A T I O N -->
 	<webwork1 key="hudson-server-config" name="Configure Your Hudson Server">
 		<actions>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServers" alias="ViewHudsonServers">
-				<view name="success">/templates/plugins/hudson/action/admin/viewHudsonServers.vm</view>
+				<view name="success">/templates/action/admin/viewHudsonServers.vm</view>
 			</action>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.AddHudsonServer" alias="AddHudsonServer">
-				<view name="input">/templates/plugins/hudson/action/admin/addHudsonServer.vm</view>
-				<view name="error">/templates/plugins/hudson/action/admin/addHudsonServer.vm</view>
+				<view name="input">/templates/action/admin/addHudsonServer.vm</view>
+				<view name="error">/templates/action/admin/addHudsonServer.vm</view>
 			</action>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.UpdateHudsonServer" alias="UpdateHudsonServer">
-				<view name="input">/templates/plugins/hudson/action/admin/updateHudsonServer.vm</view>
-				<view name="error">/templates/plugins/hudson/action/admin/updateHudsonServer.vm</view>
+				<view name="input">/templates/action/admin/updateHudsonServer.vm</view>
+				<view name="error">/templates/action/admin/updateHudsonServer.vm</view>
 			</action>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.DeleteHudsonServer" alias="DeleteHudsonServer">
-				<view name="input">/templates/plugins/hudson/action/admin/deleteHudsonServer.vm</view>
+				<view name="input">/templates/action/admin/deleteHudsonServer.vm</view>
 			</action>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.UpdateHudsonServerProjectAssociations" alias="UpdateHudsonServerProjectAssociations">
-				<view name="input">/templates/plugins/hudson/action/admin/updateHudsonServerProjectAssociations.vm</view>
+				<view name="input">/templates/action/admin/updateHudsonServerProjectAssociations.vm</view>
 			</action>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.AssociateSpecificHudsonServer" alias="AssociateSpecificHudsonServer">
-				<view name="input">/templates/plugins/hudson/action/admin/associateSpecificHudsonServer.vm</view>
-				<view name="error">/templates/plugins/hudson/action/admin/associateSpecificHudsonServer.vm</view>
+				<view name="input">/templates/action/admin/associateSpecificHudsonServer.vm</view>
+				<view name="error">/templates/action/admin/associateSpecificHudsonServer.vm</view>
 			</action>
 		</actions>
 	</webwork1>
@@ -185,8 +215,8 @@
 	<webwork1 key="hudson-panel-actions" name="Hudson Server TabPanel Actions">
 		<actions>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServerPanelContent" alias="ViewHudsonServerPanelContent">
-				<view name="success">/templates/plugins/hudson/action/buildList.vm</view>
-				<view name="error">/templates/plugins/hudson/action/panelError.vm</view>
+				<view name="success">/templates/action/buildList.vm</view>
+				<view name="error">/templates/action/panelError.vm</view>
 			</action>
 		</actions>
 	</webwork1>
@@ -197,6 +227,16 @@
 		</condition>
 		<label key="hudson.servers" />
 		<link linkId="hudson_servers">/secure/admin/jira/ViewHudsonServers.jspa</link>
+	</web-item>
+
+	<web-item key="project-hudson-server" name="Project Hudson Server" section="system.browse.project.operations" weight="50">
+		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+			<param name="permission">admin</param>
+		</condition>
+		<label key="hudson.project.associate.with.server">
+			<param name="param0">$textutils.htmlEncode($helper.project.get('name'))</param>
+		</label>
+		<link linkId="project_hudson_server">/secure/admin/jira/AssociateSpecificHudsonServer!default.jspa?projectKey=$helper.project.get('key')</link>
 	</web-item>
 
 	<!-- C O M P O N E N T S -->

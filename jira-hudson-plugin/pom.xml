@@ -68,6 +68,10 @@
 		</notifiers>
 	</ciManagement>
 
+	<properties>
+		<atlassian.jira.plugin.key>${project.groupId}.hudson</atlassian.jira.plugin.key>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.marvelution.jira.plugins</groupId>
@@ -88,6 +92,41 @@
 					<artifactId>xstream</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.plugins.rest</groupId>
+			<artifactId>atlassian-rest-common</artifactId>
+			<version>1.0.5</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.sal</groupId>
+			<artifactId>sal-api</artifactId>
+			<version>2.1.beta4</version>
+			<type>jar</type>
+			<scope>provied</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.3</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>jsr311-api</artifactId>
+			<version>1.0</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.1</version>
+			<type>jar</type>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
@@ -164,6 +203,7 @@
 				<directory>src/main/resources</directory>
 				<excludes>
 					<exclude>atlassian-plugin.xml</exclude>
+					<exclude>gadgets/*.xml</exclude>
 				</excludes>
 			</resource>
 			<resource>
@@ -171,6 +211,7 @@
 				<filtering>true</filtering>
 				<includes>
 					<include>atlassian-plugin.xml</include>
+					<include>gadgets/*.xml</include>
 					<include>**/*.properties</include>
 				</includes>
 			</resource>

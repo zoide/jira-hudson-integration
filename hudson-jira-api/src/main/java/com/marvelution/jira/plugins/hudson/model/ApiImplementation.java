@@ -45,6 +45,12 @@ public final class ApiImplementation {
 	private Set<String> compatibleVersions;
 
 	/**
+	 * Default Constructor for XStream
+	 */
+	public ApiImplementation() {
+	}
+
+	/**
 	 * Private constructor
 	 * 
 	 * @param version the Api version
