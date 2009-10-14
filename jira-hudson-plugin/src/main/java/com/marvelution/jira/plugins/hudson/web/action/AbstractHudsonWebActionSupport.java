@@ -118,4 +118,12 @@ public abstract class AbstractHudsonWebActionSupport extends JiraWebActionSuppor
 		return getI18nHelper().getText(i18nKey, value);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getText(String i18nKey, Object value) {
+		return getI18nHelper().getText(i18nKey, value);
+	}
+
 }

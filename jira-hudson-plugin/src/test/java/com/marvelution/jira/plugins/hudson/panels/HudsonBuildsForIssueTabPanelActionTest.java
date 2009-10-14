@@ -122,7 +122,7 @@ public class HudsonBuildsForIssueTabPanelActionTest {
 		assertEquals("/download/resources/" + HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN
 			+ ":hudson-issue-tabpanel", params.get("baseResourceUrl"));
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
-			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":tabpanel-css");
+			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":panel-css");
 	}
 
 }

@@ -76,8 +76,8 @@ public class DateTimeUtilsTest {
 		MockitoAnnotations.initMocks(this);
 		InputStream input = null;
 		try {
-			input = Thread.currentThread().getContextClassLoader().getResourceAsStream(
-					"com/marvelution/jira/plugins/hudson/hudson-datetime.properties");
+			input =
+				Thread.currentThread().getContextClassLoader().getResourceAsStream("i18n/hudson-datetime.properties");
 			i18nProps = new Properties();
 			i18nProps.load(input);
 		} finally {

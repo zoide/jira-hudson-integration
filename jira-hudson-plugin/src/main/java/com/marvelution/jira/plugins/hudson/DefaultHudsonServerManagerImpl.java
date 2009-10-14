@@ -249,7 +249,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 				LOGGER.debug("Mapped project " + project.getName() + " [" + projectKey + "] to Hudson Server: "
 					+ hudsonServer.getName());
 				projectMapping.put(projectKey, new Integer(hudsonServer.getServerId()));
-			} else {
+			} else if (StringUtils.isBlank(projectKey)) {
 				LOGGER.warn("Project key " + projectKey
 					+ " is not valid. Removing it from the project association list.");
 				iter.remove();

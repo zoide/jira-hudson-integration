@@ -126,7 +126,7 @@ public class HudsonBuildsForComponentTabPanelTest {
 		assertEquals("/download/resources/" + HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN
 			+ ":hudson-component-tabpanel", params.get("baseResourceUrl"));
 		verify(webResourceManager, VerificationModeFactory.times(1)).requireResource(
-			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":tabpanel-css");
+			HudsonBuildsTabPanelHelper.HUDSON_BUILD_PLUGIN + ":panel-css");
 	}
 
 	/**
