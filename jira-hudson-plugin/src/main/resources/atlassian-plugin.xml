@@ -36,7 +36,6 @@
 	<resource type="i18n" name="i18n-hudson-panels" location="i18n.hudson-panels" />
 
 	<!-- R E S O U R C E S -->
-	<resource type="download" name="images/" location="images/" />
 	<web-resource key="common-css" name="Plugin Common CSS">
 		<resource type="download" name="common.css" location="styles/common.css" />
 	</web-resource>
@@ -52,39 +51,36 @@
 		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
 		<dependency>com.atlassian.jira.gadgets:jira-global</dependency>
 		<resource type="download" name="gadgets.css" location="styles/gadgets.css" />
-		<resource type="download" name="hudson-common.js" location="scripts/hudson-common.js">
+		<resource type="download" name="common.js" location="scripts/common.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
-		<resource type="download" name="hudson-gadget-fields.js" location="scripts/hudson-gadget-fields.js">
+		<resource type="download" name="gadget-fields.js" location="scripts/gadget-fields.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
 	</web-resource>
 	<web-resource key="status-gadget" name="Status Gadgets Web Resources">
 		<dependency>${atlassian.jira.plugin.key}:gadget-common</dependency>
-		<resource type="download" name="hudson-status.js" location="scripts/hudson-status.js">
+		<resource type="download" name="status.js" location="scripts/status.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
 	</web-resource>
 
+	<!-- I M A G E   R E S O U R C E S -->
+	<resource type="download" name="images/" location="images/" />
+	<resource type="download" name="status-screenshot.png" location="images/gadgets/status-screenshot.png"/>
+	<resource type="download" name="status-thumb.png" location="images/gadgets/status-thumb.png"/>
+	<resource type="download" name="view-status-screenshot.png" location="images/gadgets/view-status-screenshot.png"/>
+	<resource type="download" name="view-status-thumb.png" location="images/gadgets/view-status-thumb.png"/>
+
 	<!-- G A D G E T S -->
 	<gadget key="hudson-status-gadget" name="Hudson Status" location="gadgets/hudson-status-gadget.xml" />
+	<gadget key="hudson-view-status-gadget" name="Hudson View Status" location="gadgets/hudson-view-status-gadget.xml" />
 
 	<!-- R E S T   R E S O U R C E S -->
 	<rest key="gadgetRestPoints" path="/hudson" version="1.0" system="false"
 		  description="Provides REST endpoints used to display Hudson gadget contents." />
 
 	<!-- P O R T L E T S  REMOVE BEFORE RELEASING AS PORTLETS WILL NO LONGER BE SUPPORTED IN FAVOR FOR GADGETS-->
-	<portlet key="hudson-status" name="Hudson Status"
-		class="com.marvelution.jira.plugins.hudson.portlets.HudsonStatusPortlet" lazy="true">
-		<objectdescriptor key="hudson.jira.portlet.status.name" />
-		<label key="hudson.jira.portlet.status.name" />
-		<description key="hudson.portlet.status.description" />
-		<resource type="velocity" name="loading" location="templates/portlets/loadingHudsonPortlet.vm" />
-		<resource type="velocity" name="view" location="templates/portlets/hudsonStatusPortlet.vm" />
-		<permission>viewversioncontrol</permission>
-		<thumbnail>images/thumbnails/hudsonstatus.png</thumbnail>
-		<properties />
-	</portlet>
 
 	<portlet key="hudson-project-status" name="Hudson Project Status"
 		class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet" lazy="true">
@@ -109,25 +105,6 @@
 				<description>hudson.portlet.configuration.project.status.show.builds.description</description>
 				<type>select</type>
 				<values class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusShowBuildsValuesGenerator" />
-			</property>
-		</properties>
-	</portlet>
-
-	<portlet key="hudson-view-status" name="Hudson View Status"
-		class="com.marvelution.jira.plugins.hudson.portlets.HudsonViewStatusPortlet" lazy="true">
-		<objectdescriptor key="hudson.jira.portlet.view.status.name" />
-		<label key="hudson.portlet.view.status.name" />
-		<description key="hudson.portlet.view.status.description" />
-		<resource type="velocity" name="loading" location="templates/portlets/loadingHudsonPortlet.vm" />
-		<resource type="velocity" name="view" location="templates/portlets/hudsonViewStatusPortlet.vm" />
-		<permission>viewversioncontrol</permission>
-		<properties>
-			<property>
-				<key>hudsonView</key>
-				<name>hudson.portlet.configuration.status.view.name</name>
-				<description>hudson.portlet.configuration.status.view.description</description>
-				<type>select</type>
-				<values class="com.marvelution.jira.plugins.hudson.portlets.HudsonViewStatusValuesGenerator" />
 			</property>
 		</properties>
 	</portlet>

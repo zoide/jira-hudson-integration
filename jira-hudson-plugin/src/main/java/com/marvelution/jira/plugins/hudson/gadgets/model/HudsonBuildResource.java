@@ -53,6 +53,9 @@ public class HudsonBuildResource {
 	private String result;
 
 	@XmlElement
+	private String icon;
+
+	@XmlElement
 	private String project;
 
 	@XmlElement
@@ -72,16 +75,38 @@ public class HudsonBuildResource {
 	 * @param timespan the formatted timespan string
 	 * @param trigger the formatted trigger
 	 * @param result the build result
-	 * @param project the project name
-	 * @param projectUrl the project url
+	 * @param icon the icon name
 	 */
 	public HudsonBuildResource(int number, String duration, String timespan, String trigger, String result,
-								String project, String projectUrl) {
+								String icon) {
 		this.number = number;
 		this.duration = duration;
 		this.timespan = timespan;
 		this.trigger = trigger;
 		this.result = result;
+		this.icon = icon;
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param number the build number
+	 * @param duration the formatted duration string
+	 * @param timespan the formatted timespan string
+	 * @param trigger the formatted trigger
+	 * @param result the build result
+	 * @param icon the icon name
+	 * @param project the project name
+	 * @param projectUrl the project url
+	 */
+	public HudsonBuildResource(int number, String duration, String timespan, String trigger, String result,
+								String icon, String project, String projectUrl) {
+		this.number = number;
+		this.duration = duration;
+		this.timespan = timespan;
+		this.trigger = trigger;
+		this.result = result;
+		this.icon = icon;
 		this.project = project;
 		this.projectUrl = projectUrl;
 	}
@@ -119,6 +144,13 @@ public class HudsonBuildResource {
 	 */
 	public String getResult() {
 		return result;
+	}
+	
+	/**
+	 * @return the icon
+	 */
+	public String getIcon() {
+		return icon;
 	}
 
 	/**

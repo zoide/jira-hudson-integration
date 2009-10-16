@@ -36,7 +36,10 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.log4j.Logger;
 
+import com.marvelution.jira.plugins.hudson.gadgets.model.GroupResource;
+import com.marvelution.jira.plugins.hudson.gadgets.model.OptionResource;
 import com.marvelution.jira.plugins.hudson.gadgets.utils.CacheControl;
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 import com.marvelution.jira.plugins.hudson.model.HudsonView;
@@ -57,6 +60,8 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 public class HudsonViewsResource {
 
 	private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.SIMPLE_STYLE;
+
+	private final Logger logger = Logger.getLogger(HudsonViewsResource.class);
 
 	private HudsonServerManager serverManager;
 
@@ -80,91 +85,21 @@ public class HudsonViewsResource {
 	 */
 	@GET
 	public Response generate() {
-		final List<Option> options = new ArrayList<Option>();
+		final List<GroupResource> groups = new ArrayList<GroupResource>();
 		for (HudsonServer server : serverManager.getServers()) {
 			try {
+				final List<OptionResource> options = new ArrayList<OptionResource>();
 				for (HudsonView view : serverAccessor.getViewsList(server)) {
-					options.add(new Option(server.getName() + " - " + view.getName(), server.getServerId() + ";view:"
-						+ view.getName()));
+					options.add(new OptionResource(view.getName(), Integer.toString(server.getServerId())));
 				}
+				groups.add(new GroupResource(server.getName(), options));
 			} catch (HudsonServerAccessorException e) {
-				// TODO LOG
+				logger.error("Failed to connect to Hudson server " + server.getName(), e);
 			} catch (HudsonServerAccessDeniedException e) {
-				// TODO LOG
+				logger.error("Hudson server " + server.getName() + " denied access to the API", e);
 			}
 		}
-		return Response.ok(new HudsonViews(options)).cacheControl(CacheControl.NO_CACHE).build();
-	}
-
-	/**
-	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
-	 */
-	@XmlType(namespace = "om.marvelution.jira.plugins.hudson.gadgets.HudsonViewsResource")
-	@XmlRootElement
-	public static class Option {
-
-		@XmlElement
-		private String label;
-
-		@XmlElement
-		private String value;
-
-		/**
-		 * Default constructor
-		 */
-		public Option() {
-		}
-
-		/**
-		 * Constructor
-		 * 
-		 * @param label the Label
-		 * @param value the Value
-		 */
-		Option(String label, String value) {
-			this.label = label;
-			this.value = value;
-		}
-
-		/**
-		 * Get the label
-		 * 
-		 * @return the label
-		 */
-		public String getLabel() {
-			return this.label;
-		}
-
-		/**
-		 * Get the value
-		 * 
-		 * @return the value
-		 */
-		public String getValue() {
-			return this.value;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public int hashCode() {
-			return HashCodeBuilder.reflectionHashCode(this);
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public boolean equals(Object object) {
-			return EqualsBuilder.reflectionEquals(this, object);
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public String toString() {
-			return ToStringBuilder.reflectionToString(this, HudsonViewsResource.TO_STRING_STYLE);
-		}
-
+		return Response.ok(new HudsonViews(groups)).cacheControl(CacheControl.NO_CACHE).build();
 	}
 
 	/**
@@ -175,7 +110,7 @@ public class HudsonViewsResource {
 	public static class HudsonViews {
 		
 		@XmlElement
-		private Collection<HudsonViewsResource.Option> servers;
+		private Collection<GroupResource> views;
 
 		/**
 		 * Default Constructor
@@ -186,19 +121,19 @@ public class HudsonViewsResource {
 		/**
 		 * Constructor
 		 * 
-		 * @param servers the {@link Collection} of {@link HudsonViewsResource.Option}
+		 * @param views the {@link Collection} of {@link GroupResource}
 		 */
-		public HudsonViews(Collection<HudsonViewsResource.Option> servers) {
-			this.servers = servers;
+		public HudsonViews(Collection<GroupResource> views) {
+			this.views = views;
 		}
 
 		/**
-		 * Get the {@link Collection} of {@link HudsonViewsResource.Option}
+		 * Get the {@link Collection} of {@link GroupResource}
 		 * 
-		 * @return {@link Collection} of {@link HudsonViewsResource.Option}
+		 * @return {@link Collection} of {@link GroupResource}
 		 */
-		public Collection<HudsonViewsResource.Option> getServers() {
-			return servers;
+		public Collection<GroupResource> getViews() {
+			return views;
 		}
 
 		/**

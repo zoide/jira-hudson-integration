@@ -17,22 +17,20 @@
  * under the License.
  */
 
+AJS.$.namespace("AJS.gadget.hudson.status");
+
 /**
  * Generate the Status Overview
  * 
  * @param gadget the Gadget to generate the status overview for
- * @param view the view on the Hudson server, may be null
  * @param server he server the builds are configured on
  * @param builds the builds on the server
- * @return the content of the gadget
  */
-function generateStatusOverview(gadget, view, server, builds) {
-	var content = AJS.$("<table/>").addClass("so");
+AJS.gadget.hudson.status.generateStatusOverview = function(gadget, server, builds) {
 	AJS.$.each(builds, function (i, build) {
-		content.append(AJS.$("<tr/>").append(AJS.$("<td/>").append(generateBuildOverview(gadget, server, build))));
+		gadget.getView().append(AJS.gadget.hudson.status.generateBuildOverview(gadget, server, build));
 	});
-	content.append(generateHudsonGadgetFooter(gadget, server));
-	return content;
+	gadget.getView().append(AJS.gadget.hudson.common.generateGadgetFooter(gadget, server));
 }
 
 /**
@@ -43,8 +41,28 @@ function generateStatusOverview(gadget, view, server, builds) {
  * @param build the build data
  * @return the build overview div
  */
-function generateBuildOverview(gadget, server, build) {
-	var div = AJS.$("<div/>").addClass(build.result);
-	
-	return div;
+AJS.gadget.hudson.status.generateBuildOverview = function(gadget, server, build) {
+	var buildResult = AJS.$("<div/>").addClass("build-result").addClass("build-result-" + build.result);
+	AJS.$("<div/>").addClass("build-info")
+		.append(
+			AJS.$("<a/>").attr({
+				href: server.url + "/" + build.projectUrl,
+				target: "_parent"
+			}).text(build.project)
+		).append(" #")
+		.append(
+			AJS.$("<a/>").attr({
+				href: server.url + "/" + build.projectUrl + build.number,
+				target: "_parent"
+			}).text(build.number)
+		).appendTo(buildResult);
+	AJS.$("<div/>").addClass("build-details")
+		.append(AJS.format(gadget.getMsg("hudson.gadget.common.ran"), build.timespan))
+		.append(" | ")
+		.append(build.trigger)
+		.appendTo(buildResult);
+	AJS.$("<div/>").addClass("build-details")
+		.append(AJS.format(gadget.getMsg("hudson.gadget.common.duration"), build.duration))
+		.appendTo(buildResult);
+	return buildResult;
 }

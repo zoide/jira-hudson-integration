@@ -123,43 +123,48 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 	@Path("generate")
 	public Response generate(@QueryParam("serverId") int serverId, @QueryParam("view") String view) {
 		final Set<String> errors = new HashSet<String>();
-		final List<HudsonBuildResource> builds = new ArrayList<HudsonBuildResource>();
-		HudsonServer hudsonServer = serverManager.getServer(serverId);
-		if (hudsonServer == null) {
-			hudsonServer = serverManager.getDefaultServer();
-		}
-		HudsonServerResource server = new HudsonServerResource();
-		if (hudsonServer != null) {
-			server = new HudsonServerResource(hudsonServer.getName(), hudsonServer.getName(), hudsonServer
-				.getSmallImageUrl());
-			buildTriggerParser.setServer(hudsonServer);
-			try {
-				List<Job> jobs;
-				if (StringUtils.isNotBlank(view)) {
-					jobs = serverAccessor.getView(hudsonServer, view).getJobs();
-				} else {
-					jobs = serverAccessor.getProjects(hudsonServer);
-				}
-				for (Job job : jobs) {
-					final Build build = job.getLastBuild();
-					final String trigger = (build.getTriggers().isEmpty() ? buildTriggerParser.parse(new Trigger() {
+		if (serverManager.isHudsonConfigured()) {
+			HudsonServer hudsonServer = serverManager.getServer(serverId);
+			if (hudsonServer == null) {
+				hudsonServer = serverManager.getDefaultServer();
+			}
+			if (hudsonServer != null) {
+				final HudsonServerResource server = new HudsonServerResource(hudsonServer.getName(), hudsonServer
+						.getHost(), hudsonServer.getSmallImageUrl());
+				final List<HudsonBuildResource> builds = new ArrayList<HudsonBuildResource>();
+				buildTriggerParser.setServer(hudsonServer);
+				try {
+					List<Job> jobs;
+					if (StringUtils.isNotBlank(view)) {
+						jobs = serverAccessor.getView(hudsonServer, view).getJobs();
+					} else {
+						jobs = serverAccessor.getProjects(hudsonServer);
+					}
+					for (Job job : jobs) {
+						final Build build = job.getLastBuild();
+						final String trigger = (build.getTriggers().isEmpty() ? buildTriggerParser.parse(new Trigger() {
 						}) : buildTriggerParser.parse(build.getTriggers().get(0)));
-					builds.add(new HudsonBuildResource(build.getNumber(), dateTimeUtils.getTimeSpanString(build
-						.getDuration()), dateTimeUtils.getPastTimeString(build.getTimestamp()), trigger, build
-						.getResult().name().toLowerCase(), build.getJobName(), build.getJobUrl()));
+						builds.add(new HudsonBuildResource(build.getNumber(), dateTimeUtils.getTimeSpanString(build
+							.getDuration()), dateTimeUtils.getPastTimeString(build.getTimestamp()), trigger, build
+							.getResult().name().toLowerCase(), build.getResult().getIcon(), build.getJobName(), build
+							.getJobUrl()));
+					}
+				} catch (HudsonServerAccessorException e) {
+					logger.error(e.getMessage(), e);
+					errors.add("hudson.error.cannot.connect");
+				} catch (HudsonServerAccessDeniedException e) {
+					logger.error(e.getMessage(), e);
+					errors.add("hudson.error.access.denied");
 				}
-			} catch (HudsonServerAccessorException e) {
-				logger.error(e.getMessage(), e);
-				errors.add("hudson.error.cannot.connect");
-			} catch (HudsonServerAccessDeniedException e) {
-				logger.error(e.getMessage(), e);
-				errors.add("hudson.error.access.denied");
+				return Response.ok(new HudsonStatusResource(server, builds, errors)).cacheControl(
+					CacheControl.NO_CACHE).build();
+			} else {
+				errors.add("gadget.hudson.common.server.none.selected");
 			}
 		} else {
-			errors.add("gadget.hudson.common.server.none.selected");
+			errors.add("hudson.error.not.configured");
 		}
-		return Response.ok(new HudsonStatusResource(server, builds, errors))
-			.cacheControl(CacheControl.NO_CACHE).build();
+		return Response.ok(new HudsonStatusResource(null, null, errors)).cacheControl(CacheControl.NO_CACHE).build();
 	}
 
 	/**

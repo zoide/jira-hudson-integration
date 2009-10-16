@@ -17,7 +17,7 @@
  * under the License.
 */
 
-.footer {
+.gadget-footer {
 	padding:0.5em;
 	text-align: center;
 	font-size: xx-small;
@@ -35,9 +35,6 @@ a:hover {
 .empty-results {
 	padding:0.5em;
 	text-align:left;
-}
-
-.error-messages-box {
 }
 
 .styleless-list {

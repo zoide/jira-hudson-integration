@@ -37,6 +37,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import com.marvelution.jira.plugins.hudson.gadgets.model.OptionResource;
 import com.marvelution.jira.plugins.hudson.gadgets.utils.CacheControl;
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
@@ -72,82 +73,11 @@ public class HudsonServersResource {
 	 */
 	@GET
 	public Response generate() {
-		final List<Option> options = new ArrayList<Option>();
+		final List<OptionResource> options = new ArrayList<OptionResource>();
 		for (HudsonServer server : serverManager.getServers()) {
-			options.add(new Option(server.getName(), Integer.toString(server.getServerId())));
+			options.add(new OptionResource(server.getName(), Integer.toString(server.getServerId())));
 		}
 		return Response.ok(new HudsonServers(options)).cacheControl(CacheControl.NO_CACHE).build();
-	}
-
-	/**
-	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
-	 */
-	@XmlType(namespace = "om.marvelution.jira.plugins.hudson.gadgets.HudsonServersResource")
-	@XmlRootElement
-	public static class Option {
-
-		@XmlElement
-		private String label;
-
-		@XmlElement
-		private String value;
-
-		/**
-		 * Default constructor
-		 */
-		public Option() {
-		}
-
-		/**
-		 * Constructor
-		 * 
-		 * @param label the Label
-		 * @param value the Value
-		 */
-		Option(String label, String value) {
-			this.label = label;
-			this.value = value;
-		}
-
-		/**
-		 * Get the label
-		 * 
-		 * @return the label
-		 */
-		public String getLabel() {
-			return this.label;
-		}
-
-		/**
-		 * Get the value
-		 * 
-		 * @return the value
-		 */
-		public String getValue() {
-			return this.value;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public int hashCode() {
-			return HashCodeBuilder.reflectionHashCode(this);
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public boolean equals(Object object) {
-			return EqualsBuilder.reflectionEquals(this, object);
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		public String toString() {
-			return ToStringBuilder.reflectionToString(this, HudsonServersResource.TO_STRING_STYLE);
-		}
-
 	}
 
 	/**
@@ -158,7 +88,7 @@ public class HudsonServersResource {
 	public static class HudsonServers {
 		
 		@XmlElement
-		private Collection<HudsonServersResource.Option> servers;
+		private Collection<OptionResource> servers;
 
 		/**
 		 * Default Constructor
@@ -169,18 +99,18 @@ public class HudsonServersResource {
 		/**
 		 * Constructor
 		 * 
-		 * @param servers the {@link Collection} of {@link HudsonServersResource.Option}
+		 * @param servers the {@link Collection} of {@link OptionResource}
 		 */
-		public HudsonServers(Collection<HudsonServersResource.Option> servers) {
+		public HudsonServers(Collection<OptionResource> servers) {
 			this.servers = servers;
 		}
 
 		/**
-		 * Get the {@link Collection} of {@link HudsonServersResource.Option}
+		 * Get the {@link Collection} of {@link OptionResource}
 		 * 
-		 * @return {@link Collection} of {@link HudsonServersResource.Option}
+		 * @return {@link Collection} of {@link OptionResource}
 		 */
-		public Collection<HudsonServersResource.Option> getServers() {
+		public Collection<OptionResource> getServers() {
 			return servers;
 		}
 

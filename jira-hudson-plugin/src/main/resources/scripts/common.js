@@ -17,6 +17,8 @@
  * under the License.
  */
 
+AJS.$.namespace("AJS.gadget.hudson.common");
+
 /**
  * Generate the Error messages box for the gadget and errors given
  * 
@@ -24,7 +26,7 @@
  * @param errors the array of i18n error keys
  * @return the error messages div
  */
-function generateErrorMessageBox(gadget, errors) {
+AJS.gadget.hudson.common.generateErrorMessageBox = function(gadget, errors) {
 	var errorDiv = AJS.$("<div/>").addClass("empty-results");
 	var errorList = AJS.$("<ul/>").addClass("styleless-list");
 	AJS.$.each(errors, function (i, error) {
@@ -41,9 +43,13 @@ function generateErrorMessageBox(gadget, errors) {
  * @param server the Hudson server used in the Gadget
  * @return the footer div
  */
-function generateHudsonGadgetFooter(gadget, server) {
-	return AJS.$("<div/>").addClass("footer")
+AJS.gadget.hudson.common.generateGadgetFooter = function(gadget, server) {
+	return AJS.$("<div/>").addClass("gadget-footer")
 		.append(gadget.getMsg("hudson.gadget.common.connected.to"))
 		.append(": ")
-		.append(AJS.$("<a/>").attr({href : server.url, target : "_parent", title : server.name}).text(server.url));
+		.append(AJS.$("<a/>").attr({
+			href: server.url,
+			target: "_parent",
+			title: server.name
+		}).text(server.url));
 }
