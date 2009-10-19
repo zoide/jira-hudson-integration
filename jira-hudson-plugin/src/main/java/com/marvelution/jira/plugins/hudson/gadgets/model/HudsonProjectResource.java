@@ -19,6 +19,9 @@
 
 package com.marvelution.jira.plugins.hudson.gadgets.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -28,99 +31,82 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
- * REST Resource for a {@link HudsonServer}
+ * Hudson Project Resource
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @XmlRootElement
-public class HudsonBuildResource {
+public class HudsonProjectResource {
 
-	private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.SHORT_PREFIX_STYLE;
-
-	@XmlElement
-	private int number;
+	private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.SIMPLE_STYLE;
 
 	@XmlElement
-	private String duration;
+	private String name;
 
 	@XmlElement
-	private String timespan;
+	private String url;
 
 	@XmlElement
-	private String trigger;
+	private String description;
 
 	@XmlElement
-	private String result;
-
-	@XmlElement
-	private String icon;
+	private Collection<HudsonBuildResource> builds;
 
 	/**
 	 * Default Constructor
 	 */
-	public HudsonBuildResource() {
+	public HudsonProjectResource() {
 	}
 
 	/**
 	 * Constructor
 	 * 
-	 * @param number the build number
-	 * @param duration the formatted duration string
-	 * @param timespan the formatted timespan string
-	 * @param trigger the formatted trigger
-	 * @param result the build result
-	 * @param icon the icon name
+	 * @param name the project name
+	 * @param url the project url
+	 * @param descrption the project description
 	 */
-	public HudsonBuildResource(int number, String duration, String timespan, String trigger, String result,
-								String icon) {
-		this.number = number;
-		this.duration = duration;
-		this.timespan = timespan;
-		this.trigger = trigger;
-		this.result = result;
-		this.icon = icon;
+	public HudsonProjectResource(String name, String url, String descrption) {
+		this.name = name;
+		this.url = url;
+		this.description = descrption;
+		builds = new ArrayList<HudsonBuildResource>();
 	}
 
 	/**
-	 * @return the number
+	 * @return the name
 	 */
-	public int getNumber() {
-		return number;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * @return the duration
+	 * @return the url
 	 */
-	public String getDuration() {
-		return duration;
+	public String getUrl() {
+		return url;
 	}
 
 	/**
-	 * @return the timespan
+	 * @return the description
 	 */
-	public String getTimespan() {
-		return timespan;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
-	 * @return the trigger
+	 * @return the builds
 	 */
-	public String getTrigger() {
-		return trigger;
+	public Collection<HudsonBuildResource> getBuilds() {
+		return builds;
 	}
 
 	/**
-	 * @return the result
+	 * Add a {@link HudsonBuildResource} to the project
+	 * 
+	 * @param build the {@link HudsonBuildResource}
 	 */
-	public String getResult() {
-		return result;
-	}
-	
-	/**
-	 * @return the icon
-	 */
-	public String getIcon() {
-		return icon;
+	public void addBuild(HudsonBuildResource build) {
+		builds.add(build);
 	}
 
 	/**
@@ -141,7 +127,7 @@ public class HudsonBuildResource {
 	 * {@inheritDoc}
 	 */
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this, HudsonBuildResource.TO_STRING_STYLE);
+		return ToStringBuilder.reflectionToString(this, HudsonProjectResource.TO_STRING_STYLE);
 	}
 
 }

@@ -109,3 +109,13 @@
 .build-result-not_build a:hover {
 	color: #666666;
 }
+
+/* Chart Gadgets */
+.chart-img {
+	padding: 0.5em;
+	text-align: center;
+}
+
+.chart-img img {
+	border: 0px;
+}

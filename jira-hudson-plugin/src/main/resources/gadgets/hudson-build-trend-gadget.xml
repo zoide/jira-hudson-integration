@@ -18,16 +18,17 @@
  ~ under the License.
  -->
 <Module>
-	<ModulePrefs title="__MSG_hudson.gadget.status.title__" directory_title="__MSG_hudson.gadget.status.title__"
-				 description="__MSG_hudson.gadget.status.description__"
+	<ModulePrefs title="__MSG_hudson.gadget.build.trend.title__" directory_title="__MSG_hudson.gadget.build.trend.title__"
+				 description="__MSG_hudson.gadget.build.trend.description__"
 				 author="Marvelution" author_email="info@marvelution.com" author_affiliation="Marvelution"
 				 author_location="Beverwijk, The Netherlands" title_url="http://www.marvelution.com/" height="100"
-				 screenshot='#staticResourceUrl("${atlassian.jira.plugin.key}:hudson-status-gadget", "status-screenshot.png")'
-				 thumbnail='#staticResourceUrl("${atlassian.jira.plugin.key}:hudson-status-gadget", "status-thumb.png")'>
+				 screenshot='#staticResourceUrl("${atlassian.jira.plugin.key}:hudson-build-trend-gadget", "build-trend-screenshot.png")'
+				 thumbnail='#staticResourceUrl("${atlassian.jira.plugin.key}:hudson-build-trend-gadget", "build-trend-thumb.png")'>
 		<Optional feature="gadget-directory">
 			<Param name="categories">
 				JIRA
 				Hudson
+				Charts
 				Other
 			</Param>
 		</Optional>
@@ -40,15 +41,15 @@
 		#oauth
 		#supportedLocales("gadget.common,hudson.gadget,hudson.error")
 	</ModulePrefs>
-	<UserPref name="serverId" datatype="hidden" default_value="1" />
+	<UserPref name="projectId" datatype="hidden" default_value="" />
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
 	<UserPref name="isConfigured" datatype="hidden" default_value="true" />
 	<Content type="html">
 		<![CDATA[
-		#requireResource("${atlassian.jira.plugin.key}:status-gadget")
+		#requireResource("${atlassian.jira.plugin.key}:charts-gadget")
         #includeResources()
 		<script type="text/javascript">
-		gadgets.window.setTitle("__MSG_hudson.gadget.status.title__");
+		gadgets.window.setTitle("__MSG_hudson.gadget.build.trend.title__");
 		(function () {
 			AJS.Gadget({
 				baseUrl: "__ATLASSIAN_BASE_URL__",
@@ -56,10 +57,10 @@
 				config: {
 					descriptor: function (args) {
 						var gadget = this;
-						gadgets.window.setTitle("__MSG_hudson.gadget.status.title__");
+						gadgets.window.setTitle("__MSG_hudson.gadget.build.trend.title__");
 						return  {
-							action: "/rest/hudson/1.0/hudsonStatus/validate",
-                            theme : function(){
+							action: "/rest/hudson/1.0/hudsonCharts/validate",
+                            theme : function() {
                                 if (gadgets.window.getViewportDimensions().width < 450) {
                                     return "gdt top-label";
                                 } else {
@@ -67,7 +68,7 @@
                                 }
                             }(),
 							fields: [
-								AJS.gadget.fields.hudsonServerPicker(gadget, "serverId", args.options),
+								AJS.gadget.fields.projectPicker(gadget, "projectId", args.options),
 								AJS.gadget.fields.nowConfigured()
 							]
 						};
@@ -75,7 +76,7 @@
 					args: function() {
 						return [ {
 								key: "options",
-								ajaxOptions: "/rest/hudson/1.0/hudsonServers"
+								ajaxOptions: "/rest/gadget/1.0/filtersAndProjects?showFilters=false"
 							}
 						];
 					}()
@@ -86,23 +87,21 @@
 					template: function (args) {
 						var gadget = this;
 						gadget.getView().empty();
-                        gadget.getView().attr("id", "hudson-status-content");
+                        gadget.getView().attr("id", "hudson-build-trend-content");
 						var baseUrl = AJS.$.ajaxSettings.baseUrl;
-						var server = args.data.server;
 						if (args.data.hasErrors) {
-							if (server.name !== "") {
-								gadgets.window.setTitle(AJS.format("__MSG_hudson.gadget.status.server.title__", server.name));
-							} else {
-								gadgets.window.setTitle("__MSG_hudson.gadget.status.title__");
-							}
+							gadgets.window.setTitle("__MSG_hudson.gadget.build.trend.title__");
 							gadget.getView().append(AJS.gadget.hudson.common.generateErrorMessageBox(gadget, args.data.errors));
 						} else {
-							gadgets.window.setTitle(AJS.format("__MSG_hudson.gadget.status.server.title__", server.name));
-							if (args.data.hasProjects) {
-								AJS.gadget.hudson.status.generateStatusOverview(gadget, server, args.data.projects);
+							var server = args.data.server;
+							var project = args.data.project;
+							var chart = args.data.chart;
+							gadgets.window.setTitle(AJS.format("__MSG_hudson.gadget.build.trend.project.title__", project.name));
+							if (chart.generated) {
+								AJS.gadget.hudson.charts.displayChartImage(gadget, baseUrl, server, project, chart);
 							} else {
 								gadget.getView().append(AJS.$("<div/>").addClass("empty-results").append(
-									AJS.format("__MSG_hudson.gadget.error.no.projects__", server.url, server.name)
+									"__MSG_hudson.gadget.error.chart.not.generated__"
 								));
 							}
 						}
@@ -113,10 +112,9 @@
 						ajaxOptions: function () {
 							var gadget = this;
 							return {
-								url: "/rest/hudson/1.0/hudsonStatus/generate",
+								url: "/rest/hudson/1.0/hudsonCharts/generateBuildTrend",
 								data: {
-									serverId: gadget.getPref("serverId"),
-									view: ""
+									projectId: gadget.getPref("projectId")
 								}
 							};
 						}

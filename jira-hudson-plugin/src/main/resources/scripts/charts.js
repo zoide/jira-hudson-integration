@@ -17,27 +17,21 @@
  * under the License.
  */
 
-package com.marvelution.jira.plugins.hudson.gadgets.utils;
+AJS.$.namespace("AJS.gadget.hudson.charts");
 
-/**
- * Utility class for REST CacheControl
- * 
- * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
- */
-public class CacheControl {
-
-	private static final int LONG_TIME = 2147483647;
-
-	public static final javax.ws.rs.core.CacheControl NO_CACHE = new javax.ws.rs.core.CacheControl();
-
-	public static final javax.ws.rs.core.CacheControl CACHE_FOREVER;
-
-	static {
-		NO_CACHE.setNoStore(true);
-		NO_CACHE.setNoCache(true);
-		CACHE_FOREVER = new javax.ws.rs.core.CacheControl();
-		CACHE_FOREVER.setPrivate(false);
-		CACHE_FOREVER.setMaxAge(LONG_TIME);
+AJS.gadget.hudson.charts.displayChartImage = function (gadget, baseUrl, server, project, chart) {
+	var chartDiv = AJS.$("<div/>").addClass("chart-img");
+	var chartAttrs = {
+		src: baseUrl + "/charts?filename=" + chart.location,
+		border: 0,
+		width: chart.width,
+		height: chart.height
+	};
+	if (chart.imageMap && chart.imageMapName) {
+		gadget.getView().append(chart.imageMap);
+		chartAttrs.usemap = "#" + chart.imageMapName;
 	}
-
+	chartDiv.append(AJS.$("<img/>").attr(chartAttrs));
+	gadget.getView().append(chartDiv);
+	gadget.getView().append(AJS.gadget.hudson.common.generateGadgetFooter(gadget, server));
 }

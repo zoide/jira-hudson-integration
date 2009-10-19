@@ -37,9 +37,9 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import com.marvelution.jira.plugins.hudson.gadgets.model.OptionResource;
-import com.marvelution.jira.plugins.hudson.gadgets.utils.CacheControl;
+import com.atlassian.jira.rest.v1.util.CacheControl;
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
+import com.marvelution.jira.plugins.hudson.gadgets.model.OptionResource;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 

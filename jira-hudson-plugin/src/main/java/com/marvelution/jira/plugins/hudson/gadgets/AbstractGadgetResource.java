@@ -19,6 +19,15 @@
 
 package com.marvelution.jira.plugins.hudson.gadgets;
 
+import java.util.Collection;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import com.atlassian.jira.rest.v1.model.errors.ErrorCollection;
+import com.atlassian.jira.rest.v1.model.errors.ValidationError;
+import com.atlassian.jira.rest.v1.util.CacheControl;
+
 /**
  * Abstract Gadget Resource implementation
  * 
@@ -26,28 +35,47 @@ package com.marvelution.jira.plugins.hudson.gadgets;
  */
 public abstract class AbstractGadgetResource {
 
+	public static final String FILTER_PREFIX = "filter-";
+
+	public static final String PROJECT_PREFIX = "project-";
+
 	/**
 	 * Create an Error Response
 	 * 
 	 * @param errors the collection of Errors to send in the {@link Response}
 	 * @return the {@link Response}
+	 */
 	protected Response createErrorResponse(Collection<ValidationError> errors) {
-		return Response.status(HttpStatus.SC_BAD_REQUEST).entity(ErrorCollection.Builder.newBuilder(errors).build())
+		return Response.status(Status.BAD_REQUEST).entity(ErrorCollection.Builder.newBuilder(errors).build())
 			.cacheControl(CacheControl.NO_CACHE).build();
 	}
-	 */
 
 	/**
 	 * Create Validation Response
 	 * 
 	 * @param errors the {@link Collection} of Errors, may be <code>null</code>
 	 * @return the {@link Response}
+	 */
 	protected Response createValidationResponse(Collection<ValidationError> errors) {
 		if (errors == null || errors.isEmpty()) {
 			return Response.ok().cacheControl(CacheControl.NO_CACHE).build();
 		}
 		return createErrorResponse(errors);
 	}
+
+	/**
+	 * Strip the filter prefix from the filterId to get the actual Id value as {@link Long}
+	 * 
+	 * @param filterId the Filter Id to strip the prefix from
+	 * @param prefix the prefix to be stripped
+	 * @return the {@link Long} value of the filterId after the prefix is stripped of
 	 */
+	protected Long stripFilterPrefix(String filterId, String prefix) {
+		if (filterId.startsWith(prefix)) {
+			final String numPart = filterId.substring(prefix.length());
+			return Long.valueOf(numPart);
+		}
+		return Long.valueOf(filterId);
+	}
 
 }

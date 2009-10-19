@@ -42,12 +42,13 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 
+import com.atlassian.jira.rest.v1.util.CacheControl;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonBuildResource;
+import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonProjectResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonServerResource;
-import com.marvelution.jira.plugins.hudson.gadgets.utils.CacheControl;
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.triggers.Trigger;
@@ -108,6 +109,7 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 	@GET
 	@Path("validate")
 	public Response validate(@QueryParam("serverId") int serverId, @QueryParam("view") String view) {
+		// TODO Validate Server Id and View name
 		return Response.ok().cacheControl(CacheControl.NO_CACHE).build();
 	}
 
@@ -128,43 +130,43 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 			if (hudsonServer == null) {
 				hudsonServer = serverManager.getDefaultServer();
 			}
-			if (hudsonServer != null) {
-				final HudsonServerResource server = new HudsonServerResource(hudsonServer.getName(), hudsonServer
-						.getHost(), hudsonServer.getSmallImageUrl());
-				final List<HudsonBuildResource> builds = new ArrayList<HudsonBuildResource>();
-				buildTriggerParser.setServer(hudsonServer);
-				try {
-					List<Job> jobs;
-					if (StringUtils.isNotBlank(view)) {
-						jobs = serverAccessor.getView(hudsonServer, view).getJobs();
-					} else {
-						jobs = serverAccessor.getProjects(hudsonServer);
-					}
-					for (Job job : jobs) {
-						final Build build = job.getLastBuild();
-						final String trigger = (build.getTriggers().isEmpty() ? buildTriggerParser.parse(new Trigger() {
-						}) : buildTriggerParser.parse(build.getTriggers().get(0)));
-						builds.add(new HudsonBuildResource(build.getNumber(), dateTimeUtils.getTimeSpanString(build
-							.getDuration()), dateTimeUtils.getPastTimeString(build.getTimestamp()), trigger, build
-							.getResult().name().toLowerCase(), build.getResult().getIcon(), build.getJobName(), build
-							.getJobUrl()));
-					}
-				} catch (HudsonServerAccessorException e) {
-					logger.error(e.getMessage(), e);
-					errors.add("hudson.error.cannot.connect");
-				} catch (HudsonServerAccessDeniedException e) {
-					logger.error(e.getMessage(), e);
-					errors.add("hudson.error.access.denied");
+			final HudsonServerResource server = new HudsonServerResource(hudsonServer.getName(), hudsonServer
+					.getHost(), hudsonServer.getSmallImageUrl());
+			final List<HudsonProjectResource> projects = new ArrayList<HudsonProjectResource>();
+			buildTriggerParser.setServer(hudsonServer);
+			try {
+				List<Job> jobs;
+				if (StringUtils.isNotBlank(view)) {
+					jobs = serverAccessor.getView(hudsonServer, view).getJobs();
+				} else {
+					jobs = serverAccessor.getProjects(hudsonServer);
 				}
-				return Response.ok(new HudsonStatusResource(server, builds, errors)).cacheControl(
-					CacheControl.NO_CACHE).build();
-			} else {
-				errors.add("gadget.hudson.common.server.none.selected");
+				for (Job job : jobs) {
+					final HudsonProjectResource project =
+						new HudsonProjectResource(job.getName(), job.getUrl(), job.getDescription());
+					final Build build = job.getLastBuild();
+					final String trigger =
+						(build.getTriggers().isEmpty() ? buildTriggerParser.parse(new Trigger() {
+						}) : buildTriggerParser.parse(build.getTriggers().get(0)));
+					project.addBuild(new HudsonBuildResource(build.getNumber(), dateTimeUtils
+						.getTimeSpanString(build.getDuration()), dateTimeUtils.getPastTimeString(build
+						.getTimestamp()), trigger, build.getResult().name().toLowerCase(), build.getResult()
+						.getIcon()));
+					projects.add(project);
+				}
+			} catch (HudsonServerAccessorException e) {
+				logger.error(e.getMessage(), e);
+				errors.add("hudson.error.cannot.connect");
+			} catch (HudsonServerAccessDeniedException e) {
+				logger.error(e.getMessage(), e);
+				errors.add("hudson.error.access.denied");
 			}
+			return Response.ok(new HudsonStatusResource(server, projects, errors)).cacheControl(
+				CacheControl.NO_CACHE).build();
 		} else {
 			errors.add("hudson.error.not.configured");
 		}
-		return Response.ok(new HudsonStatusResource(null, null, errors)).cacheControl(CacheControl.NO_CACHE).build();
+		return Response.ok(new HudsonStatusResource(errors)).cacheControl(CacheControl.NO_CACHE).build();
 	}
 
 	/**
@@ -178,10 +180,10 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 		private HudsonServerResource server;
 
 		@XmlElement
-		private Collection<HudsonBuildResource> builds;
+		private Collection<HudsonProjectResource> projects;
 
 		@XmlElement
-		private boolean hasBuilds;
+		private boolean hasProjects;
 
 		@XmlElement
 		private boolean hasErrors;
@@ -199,14 +201,25 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 		 * Constructor
 		 * 
 		 * @param server the {@link HudsonServerResource} where the builds are running on
-		 * @param builds the {@link HudsonBuildResource} the last builds of the projects on the Hudson Server
+		 * @param projects the {@link HudsonProjectResource} the projects on the Hudson Server
 		 * @param errors {@link Collection} of i18n error keys, may be <code>null</code>
 		 */
-		public HudsonStatusResource(HudsonServerResource server, Collection<HudsonBuildResource> builds,
+		public HudsonStatusResource(HudsonServerResource server, Collection<HudsonProjectResource> projects,
 									Collection<String> errors) {
 			this.server = server;
-			this.builds = builds;
-			hasBuilds = (this.builds != null ? !this.builds.isEmpty() : false);
+			this.projects = projects;
+			hasProjects = (this.projects != null ? !this.projects.isEmpty() : false);
+			this.errors = errors;
+			hasErrors = (this.errors != null ? !this.errors.isEmpty() : false);
+		}
+
+		/**
+		 * Constructor
+		 * 
+		 * @param errors {@link Collection} of i18n error keys, may be <code>null</code>
+		 */
+		public HudsonStatusResource(Collection<String> errors) {
+			hasProjects = false;
 			this.errors = errors;
 			hasErrors = (this.errors != null ? !this.errors.isEmpty() : false);
 		}
@@ -221,15 +234,15 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 		/**
 		 * @return the hasBuilds
 		 */
-		public boolean isHasBuilds() {
-			return hasBuilds;
+		public boolean isHasProjects() {
+			return hasProjects;
 		}
 
 		/**
 		 * @return the builds
 		 */
-		public Collection<HudsonBuildResource> getBuilds() {
-			return builds;
+		public Collection<HudsonProjectResource> getProjects() {
+			return projects;
 		}
 
 		/**

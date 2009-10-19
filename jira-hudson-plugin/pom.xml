@@ -94,6 +94,27 @@
 			</exclusions>
 		</dependency>
 		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-rest-plugin</artifactId>
+			<version>4.0.0-Beta5</version>
+			<type>jar</type>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>jsr311-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.xml.bind</groupId>
+					<artifactId>jaxb-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.atlassian.plugins.rest</groupId>
+					<artifactId>atlassian-rest-common</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
 			<groupId>com.atlassian.plugins.rest</groupId>
 			<artifactId>atlassian-rest-common</artifactId>
 			<version>1.0.5</version>

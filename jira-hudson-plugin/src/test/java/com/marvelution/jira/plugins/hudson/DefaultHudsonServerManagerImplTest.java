@@ -291,6 +291,7 @@ public class DefaultHudsonServerManagerImplTest {
 		server.setName("Addning New");
 		server.setHost("http://hudson.marvelution.com");
 		server.addAssociatedProjectKey("MARVADMIN");
+		server.addAssociatedProjectKey("");
 		serverManager.put(server);
 		verify(propertySet, VerificationModeFactory.times(1)).exists(
 			DefaultHudsonServerManagerImpl.CONFIG_NEXT_SERVER_ID);

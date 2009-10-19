@@ -18,7 +18,7 @@
 */
 
 .gadget-footer {
-	padding:0.5em;
+	padding: 0.5em;
 	text-align: center;
 	font-size: xx-small;
 	width: 100%
@@ -33,8 +33,8 @@ a:hover {
 }
 
 .empty-results {
-	padding:0.5em;
-	text-align:left;
+	padding: 0.5em;
+	text-align: left;
 }
 
 .styleless-list {

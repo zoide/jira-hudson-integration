@@ -26,6 +26,10 @@ img.waitingImage {
     margin: 10px auto;
 }
 
+#hudsonTabPanel {
+	pading: 5px;
+}
+
 #hudsonTabPanel .formtitle a,
 #hudsonTabPanel .formtitle a:hover img {
     text-decoration: none;

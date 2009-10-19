@@ -25,10 +25,13 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
+
 import org.junit.Test;
 
 import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
+import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 
 /**
@@ -143,6 +146,24 @@ public abstract class AbstractEditHudsonServerTest extends AbstractHudsonWebActi
 	}
 
 	/**
+	 * Test validation of incorrect Api Implementation version of the configured server
+	 * 
+	 * @throws Exception in case of test exception
+	 */
+	@Test
+	public void testDoValidationIncorrectApiImplementation() throws Exception {
+		final ApiImplementation api = new ApiImplementation();
+		final Field versionField = ApiImplementation.class.getDeclaredField("version");
+		versionField.setAccessible(true);
+		versionField.set(api, "999999.0.0");
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenReturn(api);
+		editHudsonServer.setName("Hudson CI");
+		editHudsonServer.setHost("http://hudson.marvelution.com/");
+		editHudsonServer.doValidation();
+		assertTrue(webworkAction.getHasErrors());
+	}
+
+	/**
 	 * Test validation of correct Api Implementation version of the configured server
 	 * 
 	 * @throws Exception in case of test exception
@@ -157,6 +178,23 @@ public abstract class AbstractEditHudsonServerTest extends AbstractHudsonWebActi
 		assertTrue(webworkAction.getHasErrors());
 		assertTrue(webworkAction.getErrors().containsKey("host"));
 		assertEquals("hudson.config.host.connection.error", webworkAction.getErrors().get("host"));
+	}
+
+	/**
+	 * Test validation of correct Api Implementation version of the configured server
+	 * 
+	 * @throws Exception in case of test exception
+	 */
+	@Test
+	public void testDoValidationServerAccessDeniedException() throws Exception {
+		when(serverAccessor.getApiImplementation(any(HudsonServer.class))).thenThrow(
+			new HudsonServerAccessDeniedException("Failed to connect to Hudson", new Exception()));
+		editHudsonServer.setName("Hudson CI");
+		editHudsonServer.setHost("http://hudson.marvelution.com/");
+		editHudsonServer.doValidation();
+		assertTrue(webworkAction.getHasErrors());
+		assertTrue(webworkAction.getErrors().containsKey("host"));
+		assertEquals("hudson.config.host.access.denied.error", webworkAction.getErrors().get("host"));
 	}
 
 	/**

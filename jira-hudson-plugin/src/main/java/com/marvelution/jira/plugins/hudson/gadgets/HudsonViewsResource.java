@@ -38,10 +38,10 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 
+import com.atlassian.jira.rest.v1.util.CacheControl;
+import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 import com.marvelution.jira.plugins.hudson.gadgets.model.GroupResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.OptionResource;
-import com.marvelution.jira.plugins.hudson.gadgets.utils.CacheControl;
-import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 import com.marvelution.jira.plugins.hudson.model.HudsonView;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;

@@ -26,9 +26,9 @@ AJS.$.namespace("AJS.gadget.hudson.status");
  * @param server he server the builds are configured on
  * @param builds the builds on the server
  */
-AJS.gadget.hudson.status.generateStatusOverview = function(gadget, server, builds) {
-	AJS.$.each(builds, function (i, build) {
-		gadget.getView().append(AJS.gadget.hudson.status.generateBuildOverview(gadget, server, build));
+AJS.gadget.hudson.status.generateStatusOverview = function(gadget, server, projects) {
+	AJS.$.each(projects, function (i, project) {
+		gadget.getView().append(AJS.gadget.hudson.status.generateBuildOverview(gadget, server, project));
 	});
 	gadget.getView().append(AJS.gadget.hudson.common.generateGadgetFooter(gadget, server));
 }
@@ -41,18 +41,19 @@ AJS.gadget.hudson.status.generateStatusOverview = function(gadget, server, build
  * @param build the build data
  * @return the build overview div
  */
-AJS.gadget.hudson.status.generateBuildOverview = function(gadget, server, build) {
+AJS.gadget.hudson.status.generateBuildOverview = function(gadget, server, project) {
+	var build = project.builds[0];
 	var buildResult = AJS.$("<div/>").addClass("build-result").addClass("build-result-" + build.result);
 	AJS.$("<div/>").addClass("build-info")
 		.append(
 			AJS.$("<a/>").attr({
-				href: server.url + "/" + build.projectUrl,
+				href: server.url + "/" + project.url,
 				target: "_parent"
-			}).text(build.project)
+			}).text(project.name)
 		).append(" #")
 		.append(
 			AJS.$("<a/>").attr({
-				href: server.url + "/" + build.projectUrl + build.number,
+				href: server.url + "/" + project.url + build.number,
 				target: "_parent"
 			}).text(build.number)
 		).appendTo(buildResult);

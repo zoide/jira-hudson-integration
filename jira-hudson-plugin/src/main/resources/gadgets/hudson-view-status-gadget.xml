@@ -99,8 +99,8 @@
 							gadget.getView().append(AJS.gadget.hudson.common.generateErrorMessageBox(gadget, args.data.errors));
 						} else {
 							gadgets.window.setTitle(AJS.format("__MSG_hudson.gadget.view.status.server.title__", server.name));
-							if (args.data.hasBuilds) {
-								AJS.gadget.hudson.status.generateStatusOverview(gadget, server, args.data.builds);
+							if (args.data.hasProjects) {
+								AJS.gadget.hudson.status.generateStatusOverview(gadget, server, args.data.projects);
 							} else {
 								gadget.getView().append(AJS.$("<div/>").addClass("empty-results").append(
 									AJS.format("__MSG_hudson.gadget.error.no.projects__", server.url, server.name)

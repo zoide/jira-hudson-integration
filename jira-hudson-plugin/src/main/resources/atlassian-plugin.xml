@@ -64,6 +64,12 @@
 			<property key="content-type" value="text/javascript"/>
 		</resource>
 	</web-resource>
+	<web-resource key="charts-gadget" name="Charts Gadgets Web Resources">
+		<dependency>${atlassian.jira.plugin.key}:gadget-common</dependency>
+		<resource type="download" name="charts.js" location="scripts/charts.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+	</web-resource>
 
 	<!-- I M A G E   R E S O U R C E S -->
 	<resource type="download" name="images/" location="images/" />
@@ -71,17 +77,19 @@
 	<resource type="download" name="status-thumb.png" location="images/gadgets/status-thumb.png"/>
 	<resource type="download" name="view-status-screenshot.png" location="images/gadgets/view-status-screenshot.png"/>
 	<resource type="download" name="view-status-thumb.png" location="images/gadgets/view-status-thumb.png"/>
+	<resource type="download" name="build-trend-screenshot.png" location="images/gadgets/build-trend-screenshot.png"/>
+	<resource type="download" name="build-trend-thumb.png" location="images/gadgets/build-trend-thumb.png"/>
 
 	<!-- G A D G E T S -->
 	<gadget key="hudson-status-gadget" name="Hudson Status" location="gadgets/hudson-status-gadget.xml" />
 	<gadget key="hudson-view-status-gadget" name="Hudson View Status" location="gadgets/hudson-view-status-gadget.xml" />
+	<gadget key="hudson-build-trend-gadget" name="Hudson Build Trend" location="gadgets/hudson-build-trend-gadget.xml" />
 
 	<!-- R E S T   R E S O U R C E S -->
 	<rest key="gadgetRestPoints" path="/hudson" version="1.0" system="false"
 		  description="Provides REST endpoints used to display Hudson gadget contents." />
 
 	<!-- P O R T L E T S  REMOVE BEFORE RELEASING AS PORTLETS WILL NO LONGER BE SUPPORTED IN FAVOR FOR GADGETS-->
-
 	<portlet key="hudson-project-status" name="Hudson Project Status"
 		class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet" lazy="true">
 		<objectdescriptor key="hudson.jira.portlet.project.status.name" />
@@ -105,26 +113,6 @@
 				<description>hudson.portlet.configuration.project.status.show.builds.description</description>
 				<type>select</type>
 				<values class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusShowBuildsValuesGenerator" />
-			</property>
-		</properties>
-	</portlet>
-
-	<portlet key="hudson-project-build-trend" name="Hudson Project Build Trend"
-		class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectBuildTrendPortlet" lazy="true">
-		<objectdescriptor key="hudson.jira.portlet.project.build.trend.name" />
-		<label key="hudson.portlet.project.build.trend.name" />
-		<description key="hudson.portlet.project.build.trend.description" />
-		<resource type="velocity" name="loading" location="templates/portlets/loadingHudsonPortlet.vm" />
-		<resource type="velocity" name="view" location="templates/portlets/hudsonProjectBuildTrendPortlet.vm" />
-		<permission>viewversioncontrol</permission>
-		<thumbnail>images/thumbnails/buildtrend.png</thumbnail>
-		<properties>
-			<property>
-				<key>projectId</key>
-				<name>hudson.portlet.configuration.project.status.project.name</name>
-				<description>hudson.portlet.configuration.project.status.project.description</description>
-				<type>select</type>
-				<values class="com.atlassian.jira.portal.ProjectValuesGenerator" />
 			</property>
 		</properties>
 	</portlet>

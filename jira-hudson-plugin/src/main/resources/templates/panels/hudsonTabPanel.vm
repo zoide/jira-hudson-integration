@@ -30,11 +30,10 @@
 			#if ($showRss)
 			<a href="${req.contextPath}/secure/ViewHudsonServerPanelContent!showRss.jspa?${querySection}" class="actionLinks"><img src="${req.contextPath}${baseResourceUrl}/images/rss.gif" alt="${i18n.getText('hudson.panel.title.rss.description')}" /></a>
 			#end
-			<a href="${hudsonServer.host}" class="actionLinks">${i18n.getText("hudson.panel.title.view.dashboard")}</a>
 			<img src="${req.contextPath}${baseResourceUrl}/images/hudson-icon-24.png" />
-			${i18n.getText("hudson.panel.title")}
+			<a href="${hudsonServer.host}">${hudsonServer.name}</a>
 		</h3>
-		<p class="subText">
+		<p>
 			#set ($i18nDescription = "hudson.panel.${moduleKey}.$!{extraDescriptionKey}description")
 			${i18n.getText($i18nDescription)}
         </p>

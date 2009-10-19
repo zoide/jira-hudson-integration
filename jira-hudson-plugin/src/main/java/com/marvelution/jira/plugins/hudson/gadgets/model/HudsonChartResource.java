@@ -27,100 +27,112 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import com.marvelution.jira.plugins.hudson.chart.HudsonChart;
+
 /**
- * REST Resource for a {@link HudsonServer}
+ * Chart Resource
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @XmlRootElement
-public class HudsonBuildResource {
+public class HudsonChartResource {
 
-	private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.SHORT_PREFIX_STYLE;
-
-	@XmlElement
-	private int number;
+	private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.SIMPLE_STYLE;
 
 	@XmlElement
-	private String duration;
+	private boolean generated;
 
 	@XmlElement
-	private String timespan;
+	private String location;
 
 	@XmlElement
-	private String trigger;
+	private String imageMap;
 
 	@XmlElement
-	private String result;
+	private String imageMapName;
 
 	@XmlElement
-	private String icon;
+	private int width;
+
+	@XmlElement
+	private int height;
 
 	/**
 	 * Default Constructor
 	 */
-	public HudsonBuildResource() {
+	public HudsonChartResource() {
 	}
 
 	/**
 	 * Constructor
 	 * 
-	 * @param number the build number
-	 * @param duration the formatted duration string
-	 * @param timespan the formatted timespan string
-	 * @param trigger the formatted trigger
-	 * @param result the build result
-	 * @param icon the icon name
+	 * @param chart the {@link HudsonChart}
 	 */
-	public HudsonBuildResource(int number, String duration, String timespan, String trigger, String result,
-								String icon) {
-		this.number = number;
-		this.duration = duration;
-		this.timespan = timespan;
-		this.trigger = trigger;
-		this.result = result;
-		this.icon = icon;
+	public HudsonChartResource(HudsonChart chart) {
+		this(chart.isGenerated(), chart.getLocation(), chart.getImageMap(), chart.getImageMapName(), chart
+			.getWidth(), chart.getHeight());
 	}
 
 	/**
-	 * @return the number
+	 * Constructor
+	 * 
+	 * @param generated flag if the {@link HudsonChart} is generated
+	 * @param location the location of the Chart
+	 * @param imageMap the image map of the chart
+	 * @param imageMapName the image map name
+	 * @param width the width of the chart
+	 * @param height the height of the chart
 	 */
-	public int getNumber() {
-		return number;
+	public HudsonChartResource(boolean generated, String location, String imageMap, String imageMapName,
+								int width, int height) {
+		this.generated = generated;
+		this.location = location;
+		this.imageMap = imageMap;
+		this.imageMapName = imageMapName;
+		this.width = width;
+		this.height = height;
 	}
 
 	/**
-	 * @return the duration
+	 * @return the generated
 	 */
-	public String getDuration() {
-		return duration;
+	public boolean isGenerated() {
+		return generated;
 	}
 
 	/**
-	 * @return the timespan
+	 * @return the location
 	 */
-	public String getTimespan() {
-		return timespan;
+	public String getLocation() {
+		return location;
 	}
 
 	/**
-	 * @return the trigger
+	 * @return the imageMap
 	 */
-	public String getTrigger() {
-		return trigger;
+	public String getImageMap() {
+		return imageMap;
 	}
 
 	/**
-	 * @return the result
+	 * @return the imageMapName
 	 */
-	public String getResult() {
-		return result;
+	public String getImageMapName() {
+		return imageMapName;
 	}
-	
+
 	/**
-	 * @return the icon
+	 * @return the width
 	 */
-	public String getIcon() {
-		return icon;
+	public int getWidth() {
+		return width;
+	}
+
+	/**
+	 * @return the height
+	 */
+	public int getHeight() {
+		return height;
 	}
 
 	/**
@@ -141,7 +153,7 @@ public class HudsonBuildResource {
 	 * {@inheritDoc}
 	 */
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this, HudsonBuildResource.TO_STRING_STYLE);
+		return ToStringBuilder.reflectionToString(this, HudsonChartResource.TO_STRING_STYLE);
 	}
 
 }
