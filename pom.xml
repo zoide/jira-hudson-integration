@@ -36,8 +36,8 @@
 		<module>jira-hudson-plugin</module>
 	</modules>
 	
-	<name>Marvelution Jira Hudson Integration</name>
-	<description>project to integrate Jira with Hudson by use of Portlets and Tab Panels</description>
+	<name>Jira Hudson Integration</name>
+	<description>Project to integrate Jira with Hudson by use of Gadgets and Tab Panels</description>
 	<url>http://www.marvelution.com/atlassian/jira-hudson-integration/</url>
 	<inceptionYear>2009</inceptionYear>
 	<organization>

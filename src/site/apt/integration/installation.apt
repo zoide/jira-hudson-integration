@@ -66,6 +66,9 @@ Installation
   [[2]] Start your Jira instance.
   
   []
+  
+  <<NOTE:>> Be sure to uninstall any previous versions of the Jira plugin from the <<<WEB-INF/lib>>> directory before
+            restating the Jira instance.
 
 
 * Jira 3.13.x Installation
