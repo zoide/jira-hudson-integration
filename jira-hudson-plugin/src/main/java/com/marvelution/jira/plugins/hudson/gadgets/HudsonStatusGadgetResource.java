@@ -42,6 +42,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 
+import com.atlassian.jira.rest.v1.model.errors.ValidationError;
 import com.atlassian.jira.rest.v1.util.CacheControl;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.user.util.UserUtil;
@@ -50,6 +51,7 @@ import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonBuildResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonProjectResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonServerResource;
 import com.marvelution.jira.plugins.hudson.model.Build;
+import com.marvelution.jira.plugins.hudson.model.HudsonView;
 import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.model.triggers.Trigger;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
@@ -109,8 +111,27 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 	@GET
 	@Path("validate")
 	public Response validate(@QueryParam("serverId") int serverId, @QueryParam("view") String view) {
-		// TODO Validate Server Id and View name
-		return Response.ok().cacheControl(CacheControl.NO_CACHE).build();
+		final Collection<ValidationError> errors = new ArrayList<ValidationError>();
+		if (serverManager.isHudsonConfigured()) {
+			final HudsonServer hudsonServer = serverManager.getServer(serverId);
+			if (hudsonServer != null) {
+				try {
+					if (StringUtils.isNotBlank(view)) {
+						final List<HudsonView> views = serverAccessor.getViewsList(hudsonServer);
+						if (!views.contains(new HudsonView(view, ""))) {
+							errors.add(new ValidationError("view", "hudson.error.invalid.server.view.selected"));
+						}
+					}
+				} catch (HudsonServerAccessorException e) {
+					errors.add(new ValidationError("serverId", "hudson.error.cannot.connect"));
+				} catch (HudsonServerAccessDeniedException e) {
+					errors.add(new ValidationError("serverId", "hudson.error.access.denied"));
+				}
+			} else {
+				errors.add(new ValidationError("serverId", "hudson.error.invalid.server.selected"));
+			}
+		}
+		return createValidationResponse(errors);
 	}
 
 	/**

@@ -20,6 +20,7 @@
 package com.marvelution.jira.plugins.hudson.gadgets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,6 +42,7 @@ import org.apache.log4j.Logger;
 
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
+import com.atlassian.jira.rest.v1.model.errors.ValidationError;
 import com.atlassian.jira.rest.v1.util.CacheControl;
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 import com.marvelution.jira.plugins.hudson.chart.ChartUtils;
@@ -98,8 +100,16 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 	@GET
 	@Path("validate")
 	public Response validate(@QueryParam("projectId") String projectId) {
-		// TODO Validate Project ID
-		return Response.ok().cacheControl(CacheControl.NO_CACHE).build();
+		final Collection<ValidationError> errors = new ArrayList<ValidationError>();
+		if (serverManager.isHudsonConfigured()) {
+			final Project project = projectManager.getProjectObj(stripFilterPrefix(projectId, PROJECT_PREFIX));
+			if (project == null) {
+				errors.add(new ValidationError("projectId", "hudson.error.invalid.project.selected"));
+			}
+		} else {
+			errors.add(new ValidationError("projectId", "hudson.error.not.configured"));
+		}
+		return createValidationResponse(errors);
 	}
 
 	/**
@@ -119,7 +129,7 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 				final HudsonServerResource serverResource =
 					new HudsonServerResource(server.getName(), server.getHost(), "");
 				try {
-					final Job job = serverAccessor.getProject(project);
+					final Job job = serverAccessor.getProject(server, project);
 					if (job != null) {
 						final HudsonProjectResource projectResource =
 							new HudsonProjectResource(job.getName(), job.getUrl(), job.getDescription());
