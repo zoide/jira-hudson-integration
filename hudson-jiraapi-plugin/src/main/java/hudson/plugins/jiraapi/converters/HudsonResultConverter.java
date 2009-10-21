@@ -19,7 +19,7 @@
 
 package hudson.plugins.jiraapi.converters;
 
-import com.marvelution.jira.plugins.hudson.model.Result;
+import com.marvelution.jira.plugins.hudson.api.model.Result;
 
 /**
  * Converter class to convert a Hudson Result into a Jira Integration Model Result

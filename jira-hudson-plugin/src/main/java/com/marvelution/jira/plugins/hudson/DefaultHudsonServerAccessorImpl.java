@@ -45,21 +45,21 @@ import org.apache.log4j.Logger;
 
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
-import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.BuildsList;
-import com.marvelution.jira.plugins.hudson.model.HudsonServerAware;
-import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
-import com.marvelution.jira.plugins.hudson.model.HudsonView;
-import com.marvelution.jira.plugins.hudson.model.HudsonViewsList;
-import com.marvelution.jira.plugins.hudson.model.Job;
-import com.marvelution.jira.plugins.hudson.model.JobsList;
+import com.marvelution.jira.plugins.hudson.api.model.ApiImplementation;
+import com.marvelution.jira.plugins.hudson.api.model.Build;
+import com.marvelution.jira.plugins.hudson.api.model.BuildsList;
+import com.marvelution.jira.plugins.hudson.api.model.HudsonServerAware;
+import com.marvelution.jira.plugins.hudson.api.model.HudsonView;
+import com.marvelution.jira.plugins.hudson.api.model.HudsonViewsList;
+import com.marvelution.jira.plugins.hudson.api.model.Job;
+import com.marvelution.jira.plugins.hudson.api.model.JobsList;
+import com.marvelution.jira.plugins.hudson.api.xstream.XStreamMarshaller;
+import com.marvelution.jira.plugins.hudson.api.xstream.XStreamMarshallerException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
-import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
-import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshallerException;
 
 /**
  * Implementation of the {@link HudsonServerAccessor} interface

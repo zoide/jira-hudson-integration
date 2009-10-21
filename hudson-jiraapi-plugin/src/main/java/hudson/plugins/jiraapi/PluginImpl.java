@@ -32,10 +32,10 @@ import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
-import com.marvelution.jira.plugins.hudson.model.JobsList;
-import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
-import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshallerException;
+import com.marvelution.jira.plugins.hudson.api.model.ApiImplementation;
+import com.marvelution.jira.plugins.hudson.api.model.JobsList;
+import com.marvelution.jira.plugins.hudson.api.xstream.XStreamMarshaller;
+import com.marvelution.jira.plugins.hudson.api.xstream.XStreamMarshallerException;
 
 import hudson.Plugin;
 import hudson.model.Hudson;

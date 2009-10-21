@@ -34,7 +34,7 @@ import org.mockito.internal.verification.VerificationModeFactory;
 
 import com.atlassian.jira.security.Permissions;
 import com.marvelution.jira.plugins.hudson.DefaultHudsonServerFactoryImpl;
-import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
+import com.marvelution.jira.plugins.hudson.api.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.opensymphony.user.User;
 

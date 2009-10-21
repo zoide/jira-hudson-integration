@@ -46,9 +46,9 @@ import org.mockito.internal.verification.VerificationModeFactory;
 
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
-import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
-import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.Job;
+import com.marvelution.jira.plugins.hudson.api.model.ApiImplementation;
+import com.marvelution.jira.plugins.hudson.api.model.Build;
+import com.marvelution.jira.plugins.hudson.api.model.Job;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;

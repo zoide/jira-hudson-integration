@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.jira.security.PermissionManager;
-import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
+import com.marvelution.jira.plugins.hudson.api.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;

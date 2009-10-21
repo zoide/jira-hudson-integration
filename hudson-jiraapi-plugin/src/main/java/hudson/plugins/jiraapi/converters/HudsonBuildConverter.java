@@ -44,17 +44,17 @@ import hudson.tasks.test.AbstractTestResultAction;
 import hudson.triggers.SCMTrigger.SCMTriggerCause;
 import hudson.triggers.TimerTrigger.TimerTriggerCause;
 
-import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.BuildArtifact;
-import com.marvelution.jira.plugins.hudson.model.State;
-import com.marvelution.jira.plugins.hudson.model.TestResult;
-import com.marvelution.jira.plugins.hudson.model.triggers.LegacyCodeTrigger;
-import com.marvelution.jira.plugins.hudson.model.triggers.ProjectTrigger;
-import com.marvelution.jira.plugins.hudson.model.triggers.RemoteTrigger;
-import com.marvelution.jira.plugins.hudson.model.triggers.SCMTrigger;
-import com.marvelution.jira.plugins.hudson.model.triggers.TimeTrigger;
-import com.marvelution.jira.plugins.hudson.model.triggers.Trigger;
-import com.marvelution.jira.plugins.hudson.model.triggers.UserTrigger;
+import com.marvelution.jira.plugins.hudson.api.model.Build;
+import com.marvelution.jira.plugins.hudson.api.model.BuildArtifact;
+import com.marvelution.jira.plugins.hudson.api.model.State;
+import com.marvelution.jira.plugins.hudson.api.model.TestResult;
+import com.marvelution.jira.plugins.hudson.api.model.triggers.LegacyCodeTrigger;
+import com.marvelution.jira.plugins.hudson.api.model.triggers.ProjectTrigger;
+import com.marvelution.jira.plugins.hudson.api.model.triggers.RemoteTrigger;
+import com.marvelution.jira.plugins.hudson.api.model.triggers.SCMTrigger;
+import com.marvelution.jira.plugins.hudson.api.model.triggers.TimeTrigger;
+import com.marvelution.jira.plugins.hudson.api.model.triggers.Trigger;
+import com.marvelution.jira.plugins.hudson.api.model.triggers.UserTrigger;
 
 /**
  * Converter class to convert a Hudson Build into a Jira Integration Model Build

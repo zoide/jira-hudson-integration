@@ -19,7 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson.utils;
 
-import com.marvelution.jira.plugins.hudson.model.Job;
+import com.marvelution.jira.plugins.hudson.api.model.Job;
 
 /**
  * {@link Job} Model helper class

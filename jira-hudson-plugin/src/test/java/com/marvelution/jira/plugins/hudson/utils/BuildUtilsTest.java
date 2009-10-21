@@ -26,8 +26,8 @@ import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.Result;
+import com.marvelution.jira.plugins.hudson.api.model.Build;
+import com.marvelution.jira.plugins.hudson.api.model.Result;
 
 /**
  * TestCase for {@link BuildUtils}

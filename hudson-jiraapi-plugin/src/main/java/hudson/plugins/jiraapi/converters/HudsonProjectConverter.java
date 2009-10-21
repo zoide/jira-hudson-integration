@@ -27,12 +27,12 @@ import hudson.model.AbstractProject;
 import hudson.model.ItemGroup;
 import hudson.plugins.jiraapi.JiraProjectKeyJobProperty;
 
-import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.BuildsList;
-import com.marvelution.jira.plugins.hudson.model.HealthReport;
-import com.marvelution.jira.plugins.hudson.model.Job;
-import com.marvelution.jira.plugins.hudson.model.JobsList;
-import com.marvelution.jira.plugins.hudson.model.Result;
+import com.marvelution.jira.plugins.hudson.api.model.Build;
+import com.marvelution.jira.plugins.hudson.api.model.BuildsList;
+import com.marvelution.jira.plugins.hudson.api.model.HealthReport;
+import com.marvelution.jira.plugins.hudson.api.model.Job;
+import com.marvelution.jira.plugins.hudson.api.model.JobsList;
+import com.marvelution.jira.plugins.hudson.api.model.Result;
 
 /**
  * Converter class to convert a Hudson Job into a Jira Integration Model Job

@@ -41,18 +41,18 @@ import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.rest.v1.model.errors.ErrorCollection;
 import com.atlassian.jira.rest.v1.model.errors.ValidationError;
+import com.marvelution.jira.plugins.hudson.api.model.Job;
+import com.marvelution.jira.plugins.hudson.api.xstream.XStreamMarshaller;
 import com.marvelution.jira.plugins.hudson.chart.ChartUtils;
 import com.marvelution.jira.plugins.hudson.gadgets.HudsonChartsGadgetResource.HudsonChartsResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonChartResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonProjectResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonServerResource;
-import com.marvelution.jira.plugins.hudson.model.Job;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
-import com.marvelution.jira.plugins.hudson.xstream.XStreamMarshaller;
 
 /**
  * Testcase for {@link HudsonChartsGadgetResource}

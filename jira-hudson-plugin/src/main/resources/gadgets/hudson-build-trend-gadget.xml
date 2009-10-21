@@ -100,9 +100,9 @@
 							if (chart.generated) {
 								AJS.gadget.hudson.charts.displayChartImage(gadget, baseUrl, server, project, chart);
 							} else {
-								gadget.getView().append(AJS.$("<div/>").addClass("empty-results").append(
-									"__MSG_hudson.gadget.error.chart.not.generated__"
-								));
+								gadget.getView().append(
+									AJS.gadget.hudson.common.generateErrorMessageBox(["__MSG_hudson.gadget.error.chart.not.generated__"])
+								);
 							}
 						}
 						gadget.resize();

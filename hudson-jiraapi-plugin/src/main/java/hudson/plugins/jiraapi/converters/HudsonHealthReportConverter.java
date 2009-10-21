@@ -19,7 +19,7 @@
 
 package hudson.plugins.jiraapi.converters;
 
-import com.marvelution.jira.plugins.hudson.model.HealthReport;
+import com.marvelution.jira.plugins.hudson.api.model.HealthReport;
 
 /**
  * Converter class to convert a Hudson HealthReport into a Jira Integration Model HealthReport

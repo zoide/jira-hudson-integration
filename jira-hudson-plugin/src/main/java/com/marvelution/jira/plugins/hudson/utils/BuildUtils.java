@@ -19,8 +19,8 @@
 
 package com.marvelution.jira.plugins.hudson.utils;
 
-import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.Result;
+import com.marvelution.jira.plugins.hudson.api.model.Build;
+import com.marvelution.jira.plugins.hudson.api.model.Result;
 
 /**
  * {@link Build} Model helper class

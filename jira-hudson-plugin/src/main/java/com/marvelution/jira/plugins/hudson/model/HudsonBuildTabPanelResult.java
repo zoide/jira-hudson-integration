@@ -21,6 +21,7 @@ package com.marvelution.jira.plugins.hudson.model;
 
 import java.util.List;
 
+import com.marvelution.jira.plugins.hudson.api.model.Build;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 
 /**

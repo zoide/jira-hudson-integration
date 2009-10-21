@@ -20,6 +20,7 @@
 package com.marvelution.jira.plugins.hudson.model;
 
 import com.atlassian.jira.project.Project;
+import com.marvelution.jira.plugins.hudson.api.model.Job;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 
 /**

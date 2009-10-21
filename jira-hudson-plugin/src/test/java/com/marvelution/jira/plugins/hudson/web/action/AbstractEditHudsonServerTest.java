@@ -29,7 +29,7 @@ import java.lang.reflect.Field;
 
 import org.junit.Test;
 
-import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
+import com.marvelution.jira.plugins.hudson.api.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessorException;

@@ -24,10 +24,10 @@ import java.util.List;
 
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
-import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
-import com.marvelution.jira.plugins.hudson.model.HudsonView;
-import com.marvelution.jira.plugins.hudson.model.Job;
+import com.marvelution.jira.plugins.hudson.api.model.ApiImplementation;
+import com.marvelution.jira.plugins.hudson.api.model.Build;
+import com.marvelution.jira.plugins.hudson.api.model.HudsonView;
+import com.marvelution.jira.plugins.hudson.api.model.Job;
 
 /**
  * Interface for Hudson Server Accessor

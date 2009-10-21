@@ -36,10 +36,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.verification.VerificationModeFactory;
 
+import com.marvelution.jira.plugins.hudson.api.model.HudsonView;
 import com.marvelution.jira.plugins.hudson.gadgets.HudsonViewsResource.HudsonViews;
 import com.marvelution.jira.plugins.hudson.gadgets.model.GroupResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.OptionResource;
-import com.marvelution.jira.plugins.hudson.model.HudsonView;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;

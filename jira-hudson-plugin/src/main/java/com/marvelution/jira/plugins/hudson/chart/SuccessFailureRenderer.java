@@ -27,8 +27,8 @@ import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.data.xy.XYDataset;
 
-import com.marvelution.jira.plugins.hudson.model.Build;
-import com.marvelution.jira.plugins.hudson.model.Result;
+import com.marvelution.jira.plugins.hudson.api.model.Build;
+import com.marvelution.jira.plugins.hudson.api.model.Result;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 
 /**

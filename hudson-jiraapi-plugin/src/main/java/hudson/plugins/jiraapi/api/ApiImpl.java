@@ -21,11 +21,11 @@ package hudson.plugins.jiraapi.api;
 
 import java.util.SortedMap;
 
-import com.marvelution.jira.plugins.hudson.model.BuildsList;
-import com.marvelution.jira.plugins.hudson.model.HudsonView;
-import com.marvelution.jira.plugins.hudson.model.HudsonViewsList;
-import com.marvelution.jira.plugins.hudson.model.Job;
-import com.marvelution.jira.plugins.hudson.model.JobsList;
+import com.marvelution.jira.plugins.hudson.api.model.BuildsList;
+import com.marvelution.jira.plugins.hudson.api.model.HudsonView;
+import com.marvelution.jira.plugins.hudson.api.model.HudsonViewsList;
+import com.marvelution.jira.plugins.hudson.api.model.Job;
+import com.marvelution.jira.plugins.hudson.api.model.JobsList;
 
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;

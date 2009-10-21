@@ -32,7 +32,7 @@ import org.mockito.Mock;
 import org.mockito.internal.verification.VerificationModeFactory;
 
 import com.marvelution.jira.plugins.hudson.DefaultHudsonServerFactoryImpl;
-import com.marvelution.jira.plugins.hudson.model.ApiImplementation;
+import com.marvelution.jira.plugins.hudson.api.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerFactory;
 
