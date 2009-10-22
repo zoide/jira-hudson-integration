@@ -1,0 +1,15 @@
+<builds>
+  <build>
+    <number>58</number>
+    <url>job/Marvelution-utils/58/</url>
+    <jobName>Marvelution-utils</jobName>
+    <jobUrl>job/Marvelution-utils/</jobUrl>
+    <trigger class="userTrigger">
+      <userName>markrekveld</userName>
+    </trigger>
+    <duration>0</duration>
+    <timestamp>0</timestamp>
+    <result>SUCCESS</result>
+    <state>NOT_STARTED</state>
+  </build>
+</builds>
