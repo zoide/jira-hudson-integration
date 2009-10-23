@@ -65,6 +65,16 @@ public class XStreamMarshallerTest {
 	}
 
 	/**
+	 * Test Legacy marshaling a <code>null</code>
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyMarshalNull() throws Exception {
+		assertEquals("", legacyMarshal(null));
+	}
+
+	/**
 	 * Test unmarshaling a empty string
 	 * 
 	 * @throws Exception in case of Exceptions that always fail the test
@@ -72,6 +82,16 @@ public class XStreamMarshallerTest {
 	@Test
 	public void testUnmarshalEmptyString() throws Exception {
 		assertNull(XStreamMarshaller.unmarshal("", ApiImplementation.class));
+	}
+
+	/**
+	 * Test Legacy unmarshaling a empty string
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyUnmarshalEmptyString() throws Exception {
+		assertNull(legacyUnmashal("", ApiImplementation.class));
 	}
 
 	/**
@@ -83,6 +103,17 @@ public class XStreamMarshallerTest {
 	public void testUnmarshalJiraApi() throws Exception {
 		final String xml = getXML("JiraApi.xml");
 		final ApiImplementation api = XStreamMarshaller.unmarshal(xml, ApiImplementation.class);
+		assertEquals("1.0", api.getVersion());
+	}
+
+	/**
+	 * Test Legacy unmarshaling a XML into a {@link ApiImplementation} object
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyUnmarshalJiraApi() throws Exception {
+		final ApiImplementation api = legacyUnmashal("JiraApi.xml", ApiImplementation.class);
 		assertEquals("1.0", api.getVersion());
 	}
 
@@ -99,6 +130,17 @@ public class XStreamMarshallerTest {
 	}
 
 	/**
+	 * Test Legacy marshaling a {@link Job} object into XML
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyMarshalJob() throws Exception {
+		final Job job = XStreamMarshaller.unmarshal(getXML("Job.xml"), Job.class);
+		assertEquals(getXML("Job.xml"), legacyMarshal(job));
+	}
+
+	/**
 	 * Test unmarshaling a XML into a {@link Job} object
 	 * 
 	 * @throws Exception in case of Exceptions that always fail the test
@@ -107,6 +149,46 @@ public class XStreamMarshallerTest {
 	public void testUnmarshalJob() throws Exception {
 		final String xml = getXML("Job.xml");
 		final Job job = XStreamMarshaller.unmarshal(xml, Job.class);
+		assertEquals(0, job.getHudsonServerId());
+		assertEquals("Marvelution", job.getName());
+		assertEquals("Marvelution".hashCode(), job.hashCode());
+		assertEquals("Marvelution", job.toString());
+		assertEquals("job/Marvelution/", job.getUrl());
+		assertEquals("Marvelution organization Project Object Model", job.getDescription());
+		assertEquals("MARVADMIN", job.getJiraKey());
+		assertTrue(job.isBuildable());
+		assertEquals(41, job.getNextBuildNumber());
+		assertFalse(job.getHealthReports().isEmpty());
+		final HealthReport report = job.getHealthReports().get(0);
+		assertEquals("Build stability: 1 out of the last 5 builds failed.", report.getDescription());
+		assertEquals("health-60to79.gif", report.getIcon());
+		assertEquals(79, report.getScore());
+		assertEquals(Result.SUCCESS, job.getResult());
+		assertEquals(5, job.getBuilds().size());
+		assertFalse(job.getModules().isEmpty());
+		final Job module = job.getModules().get(0);
+		assertEquals("com.marvelution:marvelution", module.getName());
+		assertTrue(module.getUrl().startsWith(job.getUrl()));
+		assertEquals("job/Marvelution/com.marvelution$marvelution/", module.getUrl());
+		assertEquals(job.getFirstBuild().getNumber(), module.getFirstBuild().getNumber());
+		assertEquals(job.getLastBuild().getNumber(), module.getLastBuild().getNumber());
+		assertEquals(job.getLastCompletedBuild().getNumber(), module.getLastCompletedBuild().getNumber());
+		assertEquals(job.getLastFailedBuild().getNumber(), module.getLastFailedBuild().getNumber());
+		assertEquals(job.getLastStableBuild().getNumber(), module.getLastStableBuild().getNumber());
+		assertEquals(job.getLastUnstableBuild().getNumber(), module.getLastUnstableBuild().getNumber());
+		assertEquals(job.getLastSuccessfulBuild().getNumber(), module.getLastSuccessfulBuild().getNumber());
+		assertEquals(job.getHealthReports().get(0), module.getHealthReports().get(0));
+		assertEquals(job.getResult(), module.getResult());
+	}
+
+	/**
+	 * Test Legacy unmarshaling a XML into a {@link Job} object
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyUnmarshalJob() throws Exception {
+		final Job job = legacyUnmashal("Job.xml", Job.class);
 		assertEquals(0, job.getHudsonServerId());
 		assertEquals("Marvelution", job.getName());
 		assertEquals("Marvelution".hashCode(), job.hashCode());
@@ -152,6 +234,18 @@ public class XStreamMarshallerTest {
 	}
 
 	/**
+	 * Test Legacy marshaling a {@link JobsList} object into XML
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyMarshalJobsList() throws Exception {
+		final String xml = getXML("JobsList.xml");
+		final JobsList jobsList = XStreamMarshaller.unmarshal(xml, JobsList.class);
+		assertEquals(xml, legacyMarshal(jobsList));
+	}
+
+	/**
 	 * Test unmarshaling a XML into a {@link JobsList} object
 	 * 
 	 * @throws Exception in case of Exceptions that always fail the test
@@ -160,6 +254,29 @@ public class XStreamMarshallerTest {
 	public void testUnmarshalJobsList() throws Exception {
 		final String xml = getXML("JobsList.xml");
 		final JobsList jobsList = XStreamMarshaller.unmarshal(xml, JobsList.class);
+		assertFalse(jobsList.getJobs().isEmpty());
+		Job job = jobsList.getJobs().get(0);
+		assertEquals("Marvelution", job.getName());
+		assertEquals("job/Marvelution/", job.getUrl());
+		assertTrue(job.isBuildable());
+		assertEquals(1, job.getNextBuildNumber());
+		assertEquals(Result.SUCCESS, job.getResult());
+		job = jobsList.getJobs().get(1);
+		assertEquals("Marvelution-utils", job.getName());
+		assertEquals("job/Marvelution-utils/", job.getUrl());
+		assertFalse(job.isBuildable());
+		assertEquals(1, job.getNextBuildNumber());
+		assertEquals(Result.SUCCESS, job.getResult());
+	}
+
+	/**
+	 * Test Legacy unmarshaling a XML into a {@link JobsList} object
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyUnmarshalJobsList() throws Exception {
+		final JobsList jobsList = legacyUnmashal("JobsList.xml", JobsList.class);
 		assertFalse(jobsList.getJobs().isEmpty());
 		Job job = jobsList.getJobs().get(0);
 		assertEquals("Marvelution", job.getName());
@@ -194,6 +311,24 @@ public class XStreamMarshallerTest {
 	}
 
 	/**
+	 * Test Legacy marshaling a {@link BuildsList} object into XML
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyMarshalBuildsList() throws Exception {
+		final BuildsList builds = new BuildsList();
+		final Build build = new Build(58, "Marvelution-utils");
+		build.setUrl("job/Marvelution-utils/58/");
+		build.setJobUrl("job/Marvelution-utils/");
+		build.setResult(Result.SUCCESS);
+		build.setState(State.NOT_STARTED);
+		build.getTriggers().add(new UserTrigger("markrekveld"));
+		builds.getBuilds().add(build);
+		assertEquals(getXML("BuildsList.xml"), legacyMarshal(builds));
+	}
+
+	/**
 	 * Test unmarshaling a XML into a {@link BuildsList} object
 	 * 
 	 * @throws Exception in case of Exceptions that always fail the test
@@ -202,6 +337,30 @@ public class XStreamMarshallerTest {
 	public void testUnmarshalBuildsList() throws Exception {
 		final String xml = getXML("BuildsList.xml");
 		final BuildsList buildsList = XStreamMarshaller.unmarshal(xml, BuildsList.class);
+		assertEquals(1, buildsList.getBuilds().size());
+		final Build build = buildsList.getBuilds().get(0);
+		assertEquals(0, build.getHudsonServerId());
+		assertEquals(58, build.getNumber());
+		assertEquals("job/Marvelution-utils/58/", build.getUrl());
+		assertEquals("Marvelution-utils", build.getJobName());
+		assertEquals("Marvelution-utils #58", build.toString());
+		assertEquals(Integer.valueOf(build.getNumber()).hashCode(), build.hashCode());
+		assertEquals("job/Marvelution-utils/", build.getJobUrl());
+		assertTrue(build.getTriggers().get(0) instanceof UserTrigger);
+		assertEquals("markrekveld", ((UserTrigger) build.getTriggers().get(0)).getUserName());
+		assertEquals(Result.SUCCESS, build.getResult());
+		assertEquals(State.NOT_STARTED, build.getState());
+		assertTrue(build.getRelatedIssueKeys().isEmpty());
+	}
+
+	/**
+	 * Test Legacy unmarshaling a XML into a {@link BuildsList} object
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyUnmarshalBuildsList() throws Exception {
+		final BuildsList buildsList = legacyUnmashal("BuildsList.xml", BuildsList.class);
 		assertEquals(1, buildsList.getBuilds().size());
 		final Build build = buildsList.getBuilds().get(0);
 		assertEquals(0, build.getHudsonServerId());
@@ -253,6 +412,40 @@ public class XStreamMarshallerTest {
 	}
 
 	/**
+	 * Test Legacy marshaling a {@link Build} object into XML
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyMarshalBuild() throws Exception {
+		final Build build = new Build(58, "Marvelution-utils");
+		build.setHudsonServerId(1);
+		build.setUrl("job/Marvelution-utils/58/");
+		build.setJobUrl("job/Marvelution-utils/");
+		final List<Trigger> triggers = new ArrayList<Trigger>();
+		triggers.add(new SCMTrigger());
+		build.setTriggers(triggers);
+		build.setDuration(114554L);
+		build.setTimestamp(1241906926000L);
+		build.setResult(Result.SUCCESS);
+		final TestResult testResult = new TestResult();
+		testResult.setFailed(0);
+		testResult.setSkipped(0);
+		testResult.setTotal(30);
+		testResult.getFailedTests().add("TestCase.java");
+		build.setTestResult(testResult);
+		build.setState(State.COMPLETED);
+		final Set<String> relatedIssueKeys = new HashSet<String>();
+		relatedIssueKeys.add("ISSUE-1");
+		relatedIssueKeys.add("ISSUE-2");
+		build.setRelatedIssueKeys(relatedIssueKeys);
+		final List<BuildArtifact> artifacts = new ArrayList<BuildArtifact>();
+		artifacts.add(new BuildArtifact("pom.xml", "pom.xml"));
+		build.setArtifacts(artifacts);
+		assertEquals(getXML("Build.xml"), legacyMarshal(build));
+	}
+
+	/**
 	 * Test unmarshaling a XML into a {@link Build} object
 	 * 
 	 * @throws Exception in case of Exceptions that always fail the test
@@ -261,6 +454,38 @@ public class XStreamMarshallerTest {
 	public void testUnmarshalBuild() throws Exception {
 		final String xml = getXML("Build.xml");
 		final Build build = XStreamMarshaller.unmarshal(xml, Build.class);
+		assertEquals(0, build.getHudsonServerId());
+		assertEquals(58, build.getNumber());
+		assertEquals("job/Marvelution-utils/58/", build.getUrl());
+		assertEquals("Marvelution-utils", build.getJobName());
+		assertEquals("job/Marvelution-utils/", build.getJobUrl());
+		assertTrue(build.getTriggers().get(0) instanceof SCMTrigger);
+		assertTrue(build.getArtifacts().size() == 1);
+		assertEquals("pom.xml", build.getArtifacts().get(0).getName());
+		assertEquals("pom.xml", build.getArtifacts().get(0).getUrl());
+		assertEquals(114554L, build.getDuration());
+		assertEquals(1241906926000L, build.getTimestamp());
+		assertEquals(Result.SUCCESS, build.getResult());
+		final TestResult testResult = build.getTestResult();
+		assertEquals(0, testResult.getFailed());
+		assertEquals(0, testResult.getSkipped());
+		assertEquals(30, testResult.getTotal());
+		assertEquals(30, testResult.getSuccessful());
+		assertEquals(30, testResult.getPassed());
+		assertEquals(State.COMPLETED, build.getState());
+		assertTrue(build.getRelatedIssueKeys().contains("ISSUE-1"));
+		assertTrue(build.getRelatedIssueKeys().contains("ISSUE-2"));
+		assertTrue(testResult.getFailedTests().contains("TestCase.java"));
+	}
+
+	/**
+	 * Test Legacy unmarshaling a XML into a {@link Build} object
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyUnmarshalBuild() throws Exception {
+		final Build build = legacyUnmashal("Build.xml", Build.class);
 		assertEquals(0, build.getHudsonServerId());
 		assertEquals(58, build.getNumber());
 		assertEquals("job/Marvelution-utils/58/", build.getUrl());
@@ -300,6 +525,20 @@ public class XStreamMarshallerTest {
 	}
 
 	/**
+	 * Test Legacy marshaling a {@link HudsonViewsList} into XML
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyMarshalViews() throws Exception {
+		final HudsonViewsList viewsList = new HudsonViewsList();
+		viewsList.getViews().add(new HudsonView("All", ""));
+		viewsList.getViews().add(new HudsonView("Atlassian", ""));
+		viewsList.getViews().add(new HudsonView("Marvelution", ""));
+		assertEquals(getXML("views.xml"), legacyMarshal(viewsList));
+	}
+
+	/**
 	 * Test unmarshaling a XML into {@link HudsonViewsList}
 	 * 
 	 * @throws Exception in case of Exceptions that always fail the test
@@ -308,6 +547,19 @@ public class XStreamMarshallerTest {
 	public void testUnmarshalViews() throws Exception {
 		final String xml = getXML("views.xml");
 		final HudsonViewsList viewsList = XStreamMarshaller.unmarshal(xml, HudsonViewsList.class);
+		assertTrue(viewsList.getViews().contains(new HudsonView("All", "")));
+		assertTrue(viewsList.getViews().contains(new HudsonView("Atlassian", "")));
+		assertTrue(viewsList.getViews().contains(new HudsonView("Marvelution", "")));
+	}
+
+	/**
+	 * Test Legacy unmarshaling a XML into {@link HudsonViewsList}
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyUnmarshalViews() throws Exception {
+		final HudsonViewsList viewsList = legacyUnmashal("views.xml", HudsonViewsList.class);
 		assertTrue(viewsList.getViews().contains(new HudsonView("All", "")));
 		assertTrue(viewsList.getViews().contains(new HudsonView("Atlassian", "")));
 		assertTrue(viewsList.getViews().contains(new HudsonView("Marvelution", "")));
@@ -333,6 +585,25 @@ public class XStreamMarshallerTest {
 	}
 
 	/**
+	 * Test Legacy marshalling a {@link HudsonView} into XML
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyMarshalView() throws Exception {
+		final HudsonView view = new HudsonView("Test View", "View Description");
+		Job job = new Job("Testcase", "");
+		job.setUrl("/job/Testcase");
+		job.setJiraKey("TESTCASE");
+		view.getJobs().add(job);
+		job = new Job("Test Job", "");
+		job.setUrl("/job/Test");
+		job.setJiraKey("TEST");
+		view.getJobs().add(job);
+		assertEquals(getXML("view.xml"), legacyMarshal(view));
+	}
+
+	/**
 	 * Test unmarshalling a XML into {@link HudsonView}
 	 * 
 	 * @throws Exception in case of Exceptions that always fail the test
@@ -347,6 +618,53 @@ public class XStreamMarshallerTest {
 		assertEquals("Testcase", view.getJobs().get(0).getName());
 		assertEquals("TEST", view.getJobs().get(1).getJiraKey());
 		assertEquals("Test Job", view.getJobs().get(1).getName());
+	}
+
+	/**
+	 * Test Legacy unmarshalling a XML into {@link HudsonView}
+	 * 
+	 * @throws Exception in case of Exceptions that always fail the test
+	 */
+	@Test
+	public void testLegacyUnmarshalView() throws Exception {
+		final HudsonView view = legacyUnmashal("view.xml", HudsonView.class);
+		assertEquals("Test View", view.getName());
+		assertEquals("View Description", view.getDescription());
+		assertEquals(2, view.getJobs().size());
+		assertEquals("TESTCASE", view.getJobs().get(0).getJiraKey());
+		assertEquals("Testcase", view.getJobs().get(0).getName());
+		assertEquals("TEST", view.getJobs().get(1).getJiraKey());
+		assertEquals("Test Job", view.getJobs().get(1).getName());
+	}
+
+	/**
+	 * Marshal the given Source object to XML using the legacy marshaller
+	 * 
+	 * @param <T> Class Type of the Source object to marshal
+	 * @param source the source object to marshal
+	 * @return the marshaled source object as {@link String}
+	 */
+	private <T> String legacyMarshal(T source) {
+		if (source == null) {
+			return "";
+		}
+		return XStreamMarshaller.getLegacyConfiguredXStreamMarshaller().toXML(source);
+	}
+
+	/**
+	 * Unmarshal a given XML using the legacy marshaller
+	 * 
+	 * @param <T> the type of the object being unmarshalled
+	 * @param xml the XML name
+	 * @param type the type of the object being returned
+	 * @return the unmarshalled XML
+	 * @throws IOException in case of errors
+	 */
+	private <T> T legacyUnmashal(String xml, Class<T> type) throws IOException {
+		if ("".equals(xml) || "".equals(getXML(xml))) {
+			return null;
+		}
+		return type.cast(XStreamMarshaller.getLegacyConfiguredXStreamMarshaller().fromXML(getXML(xml)));
 	}
 
 	/**

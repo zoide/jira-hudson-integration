@@ -19,12 +19,15 @@
 
 package com.marvelution.jira.plugins.hudson.model.triggers;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 
 /**
  * Remote {@link Trigger}. {@link Trigger} that indicates that a remote server triggered the build
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
+@XStreamAlias("remoteTrigger")
 public class RemoteTrigger implements Trigger {
 
 	private String host;

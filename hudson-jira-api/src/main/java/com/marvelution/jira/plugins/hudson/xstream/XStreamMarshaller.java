@@ -19,8 +19,6 @@
 
 package com.marvelution.jira.plugins.hudson.xstream;
 
-import org.apache.log4j.Logger;
-
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.BuildArtifact;
 import com.marvelution.jira.plugins.hudson.model.BuildsList;
@@ -36,7 +34,10 @@ import com.marvelution.jira.plugins.hudson.model.triggers.ProjectTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.RemoteTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.SCMTrigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.TimeTrigger;
+import com.marvelution.jira.plugins.hudson.model.triggers.Trigger;
 import com.marvelution.jira.plugins.hudson.model.triggers.UserTrigger;
+import com.marvelution.jira.plugins.hudson.xstream.converters.ResultConverter;
+import com.marvelution.jira.plugins.hudson.xstream.converters.StateConverter;
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -45,8 +46,6 @@ import com.thoughtworks.xstream.XStream;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class XStreamMarshaller {
-
-	private static final Logger LOGGER = Logger.getLogger(XStreamMarshaller.class);
 
 	private static XStream xstream;
 
@@ -62,13 +61,7 @@ public class XStreamMarshaller {
 		if (source == null) {
 			return "";
 		}
-		try {
-			XStream.class.getMethod("autodetectAnnotations", boolean.class);
-			return xstream.toXML(source);
-		} catch (Exception e) {
-			LOGGER.debug("Cannot use Automatic Annotation Detecting XStream. Reason: " + e.getMessage(), e);
-			throw new XStreamMarshallerException("Cannot get XStream object for marshalling", e);
-		}
+		return xstream.toXML(source);
 	}
 
 	/**
@@ -84,17 +77,25 @@ public class XStreamMarshaller {
 		if ("".equals(xml)) {
 			return null;
 		}
-		try {
-			XStream.class.getMethod("autodetectAnnotations", boolean.class);
-			return clazz.cast(xstream.fromXML(xml));
-		} catch (Exception e) {
-			LOGGER.debug("Cannot use Automatic Annotation Detecting XStream. Reason: " + e.getMessage(), e);
-			throw new XStreamMarshallerException("Cannot get XStream object for marshalling", e);
-		}
+		return clazz.cast(xstream.fromXML(xml));
 	}
 
 	static {
-		xstream = new XStream();
+		try {
+			XStream.class.getMethod("autodetectAnnotations", boolean.class);
+			xstream = getAutoDetectingXStreamMarshaller();
+		} catch (Exception e) {
+			xstream = getLegacyConfiguredXStreamMarshaller();
+		}
+	}
+
+	/**
+	 * Get an {@link XStream} marshaller that is automatically configured using annotations
+	 * 
+	 * @return the {@link XStream} marshaller
+	 */
+	public static XStream getAutoDetectingXStreamMarshaller() {
+		XStream xstream = new XStream();
 		xstream.autodetectAnnotations(true);
 		xstream.processAnnotations(ApiImplementation.class);
 		xstream.processAnnotations(JobsList.class);
@@ -112,6 +113,52 @@ public class XStreamMarshaller {
 		xstream.processAnnotations(HudsonView.class);
 		xstream.processAnnotations(HudsonViewsList.class);
 		xstream.processAnnotations(BuildArtifact.class);
+		return xstream;
+	}
+
+	/**
+	 * Get an {@link XStream} marshaller that is configured manually
+	 * 
+	 * @return the {@link XStream} marshaller
+	 */
+	public static XStream getLegacyConfiguredXStreamMarshaller() {
+		XStream xstream = new XStream();
+		xstream.alias("jiraApi", ApiImplementation.class);
+		xstream.omitField(ApiImplementation.class, "api");
+		xstream.omitField(ApiImplementation.class, "compatibleVersions");
+		xstream.alias("build", Build.class);
+		xstream.omitField(Build.class, "hudsonServerId");
+		xstream.addImplicitCollection(Build.class, "triggers", "trigger", Trigger.class);
+		xstream.addImplicitCollection(Build.class, "relatedIssueKeys", "relatedIssueKey", String.class);
+		xstream.addImplicitCollection(Build.class, "artifacts", "artifact", BuildArtifact.class);
+		xstream.aliasField("testResult", Build.class, "testResult");
+		xstream.aliasField("result", Build.class, "result");
+		xstream.registerConverter(new ResultConverter());
+		xstream.aliasField("state", Build.class, "state");
+		xstream.registerConverter(new StateConverter());
+		xstream.alias("artifact", BuildArtifact.class);
+		xstream.alias("builds", BuildsList.class);
+		xstream.addImplicitCollection(BuildsList.class, "builds", "build", Build.class);
+		xstream.alias("healthReport", HealthReport.class);
+		xstream.alias("view", HudsonView.class);
+		xstream.aliasField("jobs", HudsonView.class, "jobs");
+		xstream.alias("views", HudsonViewsList.class);
+		xstream.addImplicitCollection(HudsonViewsList.class, "views", "view", HudsonView.class);
+		xstream.alias("job", Job.class);
+		xstream.omitField(Job.class, "hudsonServerId");
+		xstream.addImplicitCollection(Job.class, "healthReports", "healthReport", HealthReport.class);
+		xstream.aliasField("result", Job.class, "result");
+		xstream.aliasField("modules", Job.class, "modules");
+		xstream.alias("jobs", JobsList.class);
+		xstream.addImplicitCollection(JobsList.class, "jobs", "job", Job.class);
+		xstream.alias("testResult", TestResult.class);
+		xstream.alias("legacyTrigger", LegacyCodeTrigger.class);
+		xstream.alias("projectTrigger", ProjectTrigger.class);
+		xstream.alias("remoteTrigger", RemoteTrigger.class);
+		xstream.alias("scmTrigger", SCMTrigger.class);
+		xstream.alias("timeTrigger", TimeTrigger.class);
+		xstream.alias("userTrigger", UserTrigger.class);
+		return xstream;
 	}
 
 }
