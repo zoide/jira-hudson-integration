@@ -24,6 +24,14 @@
 	</properties>
 
 	<body>
+		<section name="Release Notes - Version 3.0.0">
+		</section>
+		<section name="Release Notes - Version 2.1.1">
+			<h3>Bug</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-48">MARVJIRAHUDSON-48</a>] - Responses from Hudson cannot be Unmarshalled by Jira Studio</li>
+			</ul>
+		</section>
 		<section name="Release Notes - Version 2.1">
 			<h3>Improvement</h3>
 			<ul>
