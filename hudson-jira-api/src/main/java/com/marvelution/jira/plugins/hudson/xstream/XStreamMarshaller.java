@@ -19,6 +19,8 @@
 
 package com.marvelution.jira.plugins.hudson.xstream;
 
+import org.apache.log4j.Logger;
+
 import com.marvelution.jira.plugins.hudson.model.Build;
 import com.marvelution.jira.plugins.hudson.model.BuildArtifact;
 import com.marvelution.jira.plugins.hudson.model.BuildsList;
@@ -39,6 +41,7 @@ import com.marvelution.jira.plugins.hudson.model.triggers.UserTrigger;
 import com.marvelution.jira.plugins.hudson.xstream.converters.ResultConverter;
 import com.marvelution.jira.plugins.hudson.xstream.converters.StateConverter;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
 
 /**
  * Helper class to marshal Objects to and from XML usng {@link XStream}
@@ -46,6 +49,8 @@ import com.thoughtworks.xstream.XStream;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class XStreamMarshaller {
+
+	private static final Logger LOGGER = Logger.getLogger(XStreamMarshaller.class);
 
 	private static XStream xstream;
 
@@ -61,7 +66,13 @@ public class XStreamMarshaller {
 		if (source == null) {
 			return "";
 		}
-		return xstream.toXML(source);
+		try {
+			return xstream.toXML(source);
+		} catch (XStreamException e) {
+			LOGGER.error("Failed to marshal object of type: " + source.getClass().getName(), e);
+			throw new XStreamMarshallerException("Failed to marshal object of type: "
+							+ source.getClass().getName(), e);
+		}
 	}
 
 	/**
@@ -77,7 +88,12 @@ public class XStreamMarshaller {
 		if ("".equals(xml)) {
 			return null;
 		}
-		return clazz.cast(xstream.fromXML(xml));
+		try {
+			return clazz.cast(xstream.fromXML(xml));
+		} catch (XStreamException e) {
+			LOGGER.error("Failed to unmarshal xml to type: " + clazz.getName(), e);
+			throw new XStreamMarshallerException("Failed to unmarshal xml to type: " + clazz.getName(), e);
+		}
 	}
 
 	static {
