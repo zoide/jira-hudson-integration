@@ -114,7 +114,7 @@ public class HudsonStatusGadgetResourceTest {
 		when(server.getName()).thenReturn("Hudson CI");
 		when(server.getHost()).thenReturn("http://localhost:8080/");
 		when(server.getSmallImageUrl()).thenReturn("images/");
-		jobs = XStreamMarshaller.unmarshal(getXmlAsInputStream("jobs.xml"), JobsList.class).getJobs();
+		jobs = XStreamMarshaller.unmarshal(getXml("Jobs.xml"), JobsList.class).getJobs();
 		gadgetResource =
 			new HudsonStatusGadgetResource(authenticationContext, userUtil, serverManager, serverAccessor);
 	}
@@ -471,7 +471,7 @@ public class HudsonStatusGadgetResourceTest {
 	 * @return the {@link String} content for the classpath resource
 	 * @throws IOException in case of errors
 	 */
-	private String getXmlAsInputStream(String filename) throws IOException {
+	private String getXml(String filename) throws IOException {
 		final InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
 		return IOUtil.toString(input);
 	}
