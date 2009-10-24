@@ -1,0 +1,120 @@
+<jobs>
+  <job>
+    <jiraKey>MARVADMIN</jiraKey>
+    <name>Marvelution</name>
+    <url>job/Marvelution/</url>
+    <description>Marvelution organization Project Object Model</description>
+    <buildable>true</buildable>
+    <builds>
+      <build>
+        <number>40</number>
+        <jobName>Marvelution</jobName>
+        <duration>1000</duration>
+        <timestamp>0</timestamp>
+        <result>UNSTABLE</result>
+        <state>BUILDING</state>
+      </build>
+      <build>
+        <number>39</number>
+        <jobName>Marvelution</jobName>
+        <duration>1000</duration>
+        <timestamp>0</timestamp>
+        <result>NOT_BUILT</result>
+      </build>
+      <build>
+        <number>38</number>
+        <jobName>Marvelution</jobName>
+        <duration>1000</duration>
+        <timestamp>0</timestamp>
+        <result>ABORTED</result>
+      </build>
+      <build>
+        <number>37</number>
+        <jobName>Marvelution</jobName>
+        <duration>1000</duration>
+        <timestamp>0</timestamp>
+        <result>UNSTABLE</result>
+      </build>
+      <build>
+        <number>36</number>
+        <jobName>Marvelution</jobName>
+        <duration>1000</duration>
+        <timestamp>0</timestamp>
+        <result>FAILURE</result>
+      </build>
+    </builds>
+    <firstBuild reference="../builds/build[4]"/>
+    <lastBuild reference="../builds/build"/>
+    <lastCompletedBuild reference="../builds/build"/>
+    <lastFailedBuild reference="../builds/build[4]"/>
+    <lastStableBuild reference="../builds/build"/>
+    <lastUnstableBuild reference="../builds/build[3]"/>
+    <lastSuccessfulBuild reference="../builds/build"/>
+    <nextBuildNumber>41</nextBuildNumber>
+    <healthReport>
+      <description>Build stability: 1 out of the last 5 builds failed.</description>
+      <icon>health-60to79.gif</icon>
+      <score>79</score>
+    </healthReport>
+    <result>SUCCESS</result>
+    <modules>
+      <job>
+        <name>com.marvelution:marvelution</name>
+        <url>job/Marvelution/com.marvelution$marvelution/</url>
+        <buildable>true</buildable>
+        <builds>
+          <build>
+            <number>40</number>
+            <jobName>Marvelution</jobName>
+            <duration>1000</duration>
+            <timestamp>0</timestamp>
+            <result>SUCCESS</result>
+            <state>BUILDING</state>
+          </build>
+          <build>
+            <number>39</number>
+            <jobName>Marvelution</jobName>
+            <duration>1000</duration>
+            <timestamp>0</timestamp>
+            <result>NOT_BUILT</result>
+          </build>
+          <build>
+            <number>38</number>
+            <jobName>Marvelution</jobName>
+            <duration>1000</duration>
+            <timestamp>0</timestamp>
+            <result>ABORTED</result>
+          </build>
+          <build>
+            <number>37</number>
+            <jobName>Marvelution</jobName>
+            <duration>1000</duration>
+            <timestamp>0</timestamp>
+            <result>UNSTABLE</result>
+          </build>
+          <build>
+            <number>36</number>
+            <jobName>Marvelution</jobName>
+            <duration>0</duration>
+            <timestamp>0</timestamp>
+            <result>FAILURE</result>
+          </build>
+        </builds>
+        <firstBuild reference="../builds/build[4]"/>
+        <lastBuild reference="../builds/build"/>
+        <lastCompletedBuild reference="../builds/build"/>
+        <lastFailedBuild reference="../builds/build[4]"/>
+        <lastStableBuild reference="../builds/build"/>
+        <lastUnstableBuild reference="../builds/build[3]"/>
+        <lastSuccessfulBuild reference="../builds/build"/>
+        <nextBuildNumber>41</nextBuildNumber>
+        <healthReport>
+          <description>Build stability: 1 out of the last 5 builds failed.</description>
+          <icon>health-60to79.gif</icon>
+          <score>79</score>
+        </healthReport>
+        <result>SUCCESS</result>
+      </job>
+    </modules>
+  </job>
+</jobs>

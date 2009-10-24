@@ -48,6 +48,7 @@ import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
 import com.marvelution.jira.plugins.hudson.api.model.Job;
 import com.marvelution.jira.plugins.hudson.chart.ChartUtils;
 import com.marvelution.jira.plugins.hudson.chart.HudsonChart;
+import com.marvelution.jira.plugins.hudson.gadgets.model.AbstractResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonChartResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonProjectResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonServerResource;
@@ -165,7 +166,7 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
 	 */
 	@XmlRootElement
-	public static class HudsonChartsResource {
+	public static class HudsonChartsResource extends AbstractResource {
 
 		@XmlElement
 		private HudsonServerResource server;
@@ -175,12 +176,6 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 
 		@XmlElement
 		private HudsonChartResource chart;
-
-		@XmlElement
-		private boolean hasErrors;
-
-		@XmlElement
-		private Collection<String> errors;
 
 		/**
 		 * Default Constructor
@@ -200,7 +195,6 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 			this.server = server;
 			this.chart = chart;
 			this.project = project;
-			hasErrors = false;
 		}
 
 		/**
@@ -209,8 +203,7 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 		 * @param errors the {@link Collection} of Error i18n keys
 		 */
 		public HudsonChartsResource(Collection<String> errors) {
-			hasErrors = true;
-			this.errors = errors;
+			super(errors);
 		}
 
 		/**
@@ -232,20 +225,6 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 		 */
 		public HudsonChartResource getChart() {
 			return chart;
-		}
-
-		/**
-		 * @return the hasErrors
-		 */
-		public boolean isHasErrors() {
-			return hasErrors;
-		}
-
-		/**
-		 * @return the errors
-		 */
-		public Collection<String> getErrors() {
-			return errors;
 		}
 
 		/**

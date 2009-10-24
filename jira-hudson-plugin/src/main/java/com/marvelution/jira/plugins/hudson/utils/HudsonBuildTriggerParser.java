@@ -50,7 +50,7 @@ public final class HudsonBuildTriggerParser {
 	/**
 	 * Constructor
 	 * 
-	 * @param authenticationContext the {@link JiraAuthenticationContext} implementation to get the {@link I18nBean}
+	 * @param authenticationContext the {@link JiraAuthenticationContext} implementation to get the {@link I18nHelper}
 	 *            from for the current user
 	 * @param userUtil the {@link UserUtil} implementation
 	 */
@@ -62,7 +62,7 @@ public final class HudsonBuildTriggerParser {
 	/**
 	 * Constructor
 	 * 
-	 * @param authenticationContext the {@link JiraAuthenticationContext} implementation to get the {@link I18nBean}
+	 * @param authenticationContext the {@link JiraAuthenticationContext} implementation to get the {@link I18nHelper}
 	 *            from for the current user
 	 * @param userUtil the {@link UserUtil} implementation
 	 * @param server the {@link HudsonServer} where the triggers originated from

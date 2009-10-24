@@ -35,17 +35,13 @@
 	<resource type="i18n" name="i18n-hudson-config" location="i18n.hudson-config" />
 	<resource type="i18n" name="i18n-hudson-panels" location="i18n.hudson-panels" />
 
-	<!-- R E S O U R C E S -->
+	<!-- W E B   R E S O U R C E S -->
 	<web-resource key="common-css" name="Plugin Common CSS">
 		<resource type="download" name="common.css" location="styles/common.css" />
 	</web-resource>
 	<web-resource key="panel-css" name="Plugin Tab Panel CSS">
 		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
 		<resource type="download" name="panels.css" location="styles/panels.css" />
-	</web-resource>
-	<web-resource key="portlet-css" name="Plugin Portlet CSS">
-		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
-		<resource type="download" name="portlets.css" location="styles/portlets.css" />
 	</web-resource>
 	<web-resource key="gadget-common" name="Common Gadget Web Resources">
 		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
@@ -88,34 +84,6 @@
 	<!-- R E S T   R E S O U R C E S -->
 	<rest key="gadgetRestPoints" path="/hudson" version="1.0" system="false"
 		  description="Provides REST endpoints used to display Hudson gadget contents." />
-
-	<!-- P O R T L E T S  REMOVE BEFORE RELEASING AS PORTLETS WILL NO LONGER BE SUPPORTED IN FAVOR FOR GADGETS-->
-	<portlet key="hudson-project-status" name="Hudson Project Status"
-		class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusPortlet" lazy="true">
-		<objectdescriptor key="hudson.jira.portlet.project.status.name" />
-		<label key="hudson.portlet.project.status.name" />
-		<description key="hudson.portlet.project.status.description" />
-		<resource type="velocity" name="loading" location="templates/portlets/loadingHudsonPortlet.vm" />
-		<resource type="velocity" name="view" location="templates/portlets/hudsonProjectStatusPortlet.vm" />
-		<permission>viewversioncontrol</permission>
-		<thumbnail>images/thumbnails/hudsonprojectstatus.png</thumbnail>
-		<properties>
-			<property>
-				<key>projectId</key>
-				<name>hudson.portlet.configuration.project.status.project.name</name>
-				<description>hudson.portlet.configuration.project.status.project.description</description>
-				<type>select</type>
-				<values class="com.atlassian.jira.portal.ProjectValuesGenerator" />
-			</property>
-			<property>
-				<key>showBuilds</key>
-				<name>hudson.portlet.configuration.project.status.show.builds.name</name>
-				<description>hudson.portlet.configuration.project.status.show.builds.description</description>
-				<type>select</type>
-				<values class="com.marvelution.jira.plugins.hudson.portlets.HudsonProjectStatusShowBuildsValuesGenerator" />
-			</property>
-		</properties>
-	</portlet>
 
 	<!-- T A B   P A N E L S -->
 	<project-tabpanel key="hudson-project-tabpanel" name="Hudson Builds Project Panel"

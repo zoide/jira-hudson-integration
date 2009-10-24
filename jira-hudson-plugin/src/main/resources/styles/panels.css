@@ -27,7 +27,8 @@ img.waitingImage {
 }
 
 #hudsonTabPanel {
-	pading: 5px;
+	margin: 10px 8px;
+	width: 99%;
 }
 
 #hudsonTabPanel .formtitle a,
@@ -44,6 +45,20 @@ img.waitingImage {
 }
 #hudsonTabPanel h3.formtitle * {
     vertical-align: middle;
+}
+
+#hudsonTabPanelHeader {
+	background-color: #F0F0F0;
+	border-top: 1px solid #BBBBBB !important;
+	color: #003366;
+	font-size: 1.1em;
+	margin: 0 0 0.5em;
+	padding: 3px 3px;
+}
+
+#hudsonTabPanelDescription {
+	padding-bottom: 5px;
+	border-bottom:1px solid #F0F0F0;
 }
 
 .hudsonBuildTable a,
@@ -88,6 +103,6 @@ img.waitingImage {
 	color: #F0F0F0;
 	background-color: #F0F0F0;
 	border: 0px solid #F0F0F0;
-	height: 2px;
+	height: 1px;
 	width: 100%;
 }

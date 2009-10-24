@@ -103,7 +103,9 @@
 								AJS.gadget.hudson.status.generateStatusOverview(gadget, server, args.data.projects);
 							} else {
 								gadget.getView().append(
-									AJS.gadget.hudson.common.generateErrorMessageBox([AJS.format("__MSG_hudson.gadget.error.no.projects__", server.url, server.name)])
+									AJS.gadget.hudson.common.generateErrorMessageBox([
+										AJS.format("__MSG_hudson.gadget.error.no.projects__", server.url, server.name)
+									])
 								);
 							}
 						}

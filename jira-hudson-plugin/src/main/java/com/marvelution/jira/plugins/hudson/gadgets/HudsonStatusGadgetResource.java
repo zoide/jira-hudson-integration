@@ -51,6 +51,7 @@ import com.marvelution.jira.plugins.hudson.api.model.Build;
 import com.marvelution.jira.plugins.hudson.api.model.HudsonView;
 import com.marvelution.jira.plugins.hudson.api.model.Job;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.Trigger;
+import com.marvelution.jira.plugins.hudson.gadgets.model.AbstractResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonBuildResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonProjectResource;
 import com.marvelution.jira.plugins.hudson.gadgets.model.HudsonServerResource;
@@ -130,6 +131,8 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 			} else {
 				errors.add(new ValidationError("serverId", "hudson.error.invalid.server.selected"));
 			}
+		} else {
+			errors.add(new ValidationError("serverId", "hudson.gadget.error.not.configured"));
 		}
 		return createValidationResponse(errors);
 	}
@@ -195,7 +198,7 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 	 */
 	@XmlType(namespace = "com.marvelution.jira.plugins.hudson.gadgets.HudsonStatusGadgetResource")
 	@XmlRootElement
-	public static class HudsonStatusResource {
+	public static class HudsonStatusResource extends AbstractResource {
 
 		@XmlElement
 		private HudsonServerResource server;
@@ -205,12 +208,6 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 
 		@XmlElement
 		private boolean hasProjects;
-
-		@XmlElement
-		private boolean hasErrors;
-
-		@XmlElement
-		private Collection<String> errors;
 
 		/**
 		 * Default constructor
@@ -227,11 +224,10 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 		 */
 		public HudsonStatusResource(HudsonServerResource server, Collection<HudsonProjectResource> projects,
 									Collection<String> errors) {
+			super(errors);
 			this.server = server;
 			this.projects = projects;
 			hasProjects = (this.projects != null ? !this.projects.isEmpty() : false);
-			this.errors = errors;
-			hasErrors = (this.errors != null ? !this.errors.isEmpty() : false);
 		}
 
 		/**
@@ -240,9 +236,8 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 		 * @param errors {@link Collection} of i18n error keys, may be <code>null</code>
 		 */
 		public HudsonStatusResource(Collection<String> errors) {
+			super(errors);
 			hasProjects = false;
-			this.errors = errors;
-			hasErrors = (this.errors != null ? !this.errors.isEmpty() : false);
 		}
 
 		/**
@@ -264,20 +259,6 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 		 */
 		public Collection<HudsonProjectResource> getProjects() {
 			return projects;
-		}
-
-		/**
-		 * @return the hasErrors
-		 */
-		public boolean isHasErrors() {
-			return hasErrors;
-		}
-
-		/**
-		 * @return the errors
-		 */
-		public Collection<String> getErrors() {
-			return errors;
 		}
 
 		/**
