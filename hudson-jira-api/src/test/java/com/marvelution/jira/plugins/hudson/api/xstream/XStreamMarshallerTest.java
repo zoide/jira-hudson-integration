@@ -46,7 +46,6 @@ import com.marvelution.jira.plugins.hudson.api.model.TestResult;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.SCMTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.Trigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.UserTrigger;
-import com.marvelution.jira.plugins.hudson.api.xstream.XStreamMarshaller;
 
 /**
  * TestCase for {@link XStreamMarshaller}

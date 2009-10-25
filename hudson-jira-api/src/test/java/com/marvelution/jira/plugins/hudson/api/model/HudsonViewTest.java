@@ -23,8 +23,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.marvelution.jira.plugins.hudson.api.model.HudsonView;
-
 /**
  * TestCase for {@link HudsonView}
  * 

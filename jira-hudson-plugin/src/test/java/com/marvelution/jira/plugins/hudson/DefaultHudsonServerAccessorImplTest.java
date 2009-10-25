@@ -48,6 +48,7 @@ import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.version.Version;
 import com.marvelution.jira.plugins.hudson.api.model.ApiImplementation;
 import com.marvelution.jira.plugins.hudson.api.model.Build;
+import com.marvelution.jira.plugins.hudson.api.model.HudsonView;
 import com.marvelution.jira.plugins.hudson.api.model.Job;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
@@ -441,6 +442,91 @@ public class DefaultHudsonServerAccessorImplTest {
 		} catch (HudsonServerAccessorException e) {
 			assertTrue(e.getMessage().startsWith(
 				"Failed to unmarshal the Hudson server response to a Builds object. Reason: "));
+		}
+		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
+		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();
+		verify(postMethod, VerificationModeFactory.times(1)).getResponseBodyAsStream();
+		verify(postMethod, VerificationModeFactory.times(1)).releaseConnection();
+	}
+
+	/**
+	 * Test gets views list
+	 * 
+	 * @throws Exception in case of test failures
+	 */
+	@Test
+	public void testGetViewsList() throws Exception {
+		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
+		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("views.xml"));
+		final List<HudsonView> views = hudsonServerAccessor.getViewsList(hudsonServer);
+		assertNotNull(views);
+		assertEquals(views.size(), 3);
+		assertTrue(views.contains(new HudsonView("All", "")));
+		assertTrue(views.contains(new HudsonView("Atlassian", "")));
+		assertTrue(views.contains(new HudsonView("Marvelution", "")));
+		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
+		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();
+		verify(postMethod, VerificationModeFactory.times(1)).getResponseBodyAsStream();
+		verify(postMethod, VerificationModeFactory.times(1)).releaseConnection();
+	}
+
+	/**
+	 * Test gets views list unmarshal exception
+	 * 
+	 * @throws Exception in case of test failures
+	 */
+	@Test
+	public void testGetViewsListUnmarshalException() throws Exception {
+		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
+		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("OOPS!".getBytes()));
+		try {
+			hudsonServerAccessor.getViewsList(hudsonServer);
+			fail("This test should fail");
+		} catch (HudsonServerAccessorException e) {
+			assertTrue(e.getMessage().startsWith(
+				"Failed to unmarshal the Hudson server response to a Views object. Reason: "));
+		}
+		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
+		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();
+		verify(postMethod, VerificationModeFactory.times(1)).getResponseBodyAsStream();
+		verify(postMethod, VerificationModeFactory.times(1)).releaseConnection();
+	}
+
+	/**
+	 * Test gets view
+	 * 
+	 * @throws Exception in case of test failures
+	 */
+	@Test
+	public void testGetView() throws Exception {
+		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
+		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("view.xml"));
+		final HudsonView view = hudsonServerAccessor.getView(hudsonServer, "All");
+		assertNotNull(view);
+		assertEquals(view.getName(), "Test View");
+		assertEquals(view.getDescription(), "View Description");
+		assertEquals(view.getJobs().size(), 2);
+		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
+		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();
+		verify(postMethod, VerificationModeFactory.times(1)).getResponseBodyAsStream();
+		verify(postMethod, VerificationModeFactory.times(1)).releaseConnection();
+	}
+
+	/**
+	 * Test gets view unmarshal exception
+	 * 
+	 * @throws Exception in case of test failures
+	 */
+	@Test
+	public void testGetViewUnmarshalException() throws Exception {
+		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
+		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("OOPS!".getBytes()));
+		try {
+			hudsonServerAccessor.getView(hudsonServer, "All");
+			fail("This test should fail");
+		} catch (HudsonServerAccessorException e) {
+			assertTrue(e.getMessage().startsWith(
+				"Failed to unmarshal the Hudson server response to a Views object. Reason: "));
 		}
 		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
 		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();

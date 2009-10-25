@@ -27,8 +27,6 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.marvelution.jira.plugins.hudson.api.model.ApiImplementation;
-
 /**
  * TestCase for {@link ApiImplementation}
  * 

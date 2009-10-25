@@ -310,10 +310,10 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 			final HudsonViewsList viewsList = XStreamMarshaller.unmarshal(response, HudsonViewsList.class);
 			return viewsList.getViews();
 		} catch (XStreamMarshallerException e) {
-			LOGGER.error("Failed to unmarshal the Hudson server response to a Builds object. Reason: "
+			LOGGER.error("Failed to unmarshal the Hudson server response to a Views object. Reason: "
 				+ e.getMessage(), e);
 			throw new HudsonServerAccessorException(
-				"Failed to unmarshal the Hudson server response to a Builds object. Reason: " + e.getMessage(), e);
+				"Failed to unmarshal the Hudson server response to a Views object. Reason: " + e.getMessage(), e);
 		}
 	}
 
@@ -328,10 +328,10 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 		try {
 			return XStreamMarshaller.unmarshal(response, HudsonView.class);
 		} catch (XStreamMarshallerException e) {
-			LOGGER.error("Failed to unmarshal the Hudson server response to a Builds object. Reason: "
+			LOGGER.error("Failed to unmarshal the Hudson server response to a Views object. Reason: "
 				+ e.getMessage(), e);
 			throw new HudsonServerAccessorException(
-				"Failed to unmarshal the Hudson server response to a Builds object. Reason: " + e.getMessage(), e);
+				"Failed to unmarshal the Hudson server response to a Views object. Reason: " + e.getMessage(), e);
 		}
 	}
 
