@@ -102,9 +102,11 @@ public final class IssueIndexer {
 	 * 
 	 * @throws IOException in case the cache file cannot be loaded
 	 */
-	public synchronized void load() throws IOException {
+	public void load() throws IOException {
 		LOGGER.log(Level.FINE, "Loading index from file: " + indexFile.getName());
-		index = (IssueIndex) xstream.fromXML(new FileInputStream(this.indexFile));
+		synchronized (index) {
+			index = (IssueIndex) xstream.fromXML(new FileInputStream(this.indexFile));
+		}
 	}
 
 	/**
@@ -112,9 +114,11 @@ public final class IssueIndexer {
 	 * 
 	 * @throws IOException in case of write errors to the cache file
 	 */
-	public synchronized void save() throws IOException {
+	public void save() throws IOException {
 		LOGGER.log(Level.FINE, "Saving index to file: " + indexFile.getName());
-		xstream.toXML(index, new FileOutputStream(indexFile));
+		synchronized (indexFile) {
+			xstream.toXML(index, new FileOutputStream(indexFile));
+		}
 	}
 
 	/**
@@ -122,7 +126,7 @@ public final class IssueIndexer {
 	 * 
 	 * @throws IOException in case the validated index cannot be saved to the file system
 	 */
-	public synchronized void validateIssueIndex() throws IOException {
+	public void validateIssueIndex() throws IOException {
 		LOGGER.log(Level.FINE,
 			"Validating the Issue Index to make sure only valid Jobs and Builds are related to Issue Keys");
 		if (index == null || index.getIndex() == null || index.getIndex().isEmpty()) {
@@ -151,7 +155,9 @@ public final class IssueIndexer {
 				issueIter.remove();
 			}
 		}
-		save();
+		synchronized (this) {
+			save();
+		}
 	}
 
 	/**
@@ -159,7 +165,7 @@ public final class IssueIndexer {
 	 * 
 	 * @throws IOException in case of write errors to the cache file
 	 */
-	public synchronized void fullIndex() throws IOException {
+	public void fullIndex() throws IOException {
 		final IssueIndex newIndex = new IssueIndex();
 		LOGGER.log(Level.FINE, "Starting full scan");
 		for (AbstractProject<?, ?> project : ProjectUtils.getAllProjects()) {
