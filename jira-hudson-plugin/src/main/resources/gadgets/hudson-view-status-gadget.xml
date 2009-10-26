@@ -22,8 +22,8 @@
 				 description="__MSG_hudson.gadget.view.status.description__"
 				 author="Marvelution" author_email="info@marvelution.com" author_affiliation="Marvelution"
 				 author_location="Beverwijk, The Netherlands" title_url="http://www.marvelution.com/" height="100"
-				 screenshot='#staticResourceUrl("${atlassian.jira.plugin.key}:hudson-view-status-gadget", "view-status-screenshot.png")'
-				 thumbnail='#staticResourceUrl("${atlassian.jira.plugin.key}:hudson-view-status-gadget", "view-status-thumb.png")'>
+				 screenshot='#staticResourceUrl("${atlassian.plugin.key}:hudson-view-status-gadget", "view-status-screenshot.png")'
+				 thumbnail='#staticResourceUrl("${atlassian.plugin.key}:hudson-view-status-gadget", "view-status-thumb.png")'>
 		<Optional feature="gadget-directory">
 			<Param name="categories">
 				JIRA
@@ -46,7 +46,7 @@
 	<UserPref name="isConfigured" datatype="hidden" default_value="true" />
 	<Content type="html">
 		<![CDATA[
-		#requireResource("${atlassian.jira.plugin.key}:status-gadget")
+		#requireResource("${atlassian.plugin.key}:status-gadget")
         #includeResources()
 		<script type="text/javascript">
 		gadgets.window.setTitle("__MSG_hudson.gadget.view.status.title__");

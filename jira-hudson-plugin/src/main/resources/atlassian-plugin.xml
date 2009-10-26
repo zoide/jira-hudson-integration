@@ -17,7 +17,7 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<atlassian-plugin name="${pom.name}" key="${atlassian.jira.plugin.key}" system="false" pluginsVersion="2">
+<atlassian-plugin name="${pom.name}" key="${atlassian.plugin.key}" system="false" pluginsVersion="2">
 	<plugin-info>
 		<description>${pom.description}</description>
 		<vendor name="${pom.organization.name}" url="${pom.organization.url}" />
@@ -40,11 +40,11 @@
 		<resource type="download" name="common.css" location="styles/common.css" />
 	</web-resource>
 	<web-resource key="panel-css" name="Plugin Tab Panel CSS">
-		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
+		<dependency>${atlassian.plugin.key}:common-css</dependency>
 		<resource type="download" name="panels.css" location="styles/panels.css" />
 	</web-resource>
 	<web-resource key="gadget-common" name="Common Gadget Web Resources">
-		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
+		<dependency>${atlassian.plugin.key}:common-css</dependency>
 		<dependency>com.atlassian.jira.gadgets:jira-global</dependency>
 		<resource type="download" name="gadgets.css" location="styles/gadgets.css" />
 		<resource type="download" name="common.js" location="scripts/common.js">
@@ -55,13 +55,13 @@
 		</resource>
 	</web-resource>
 	<web-resource key="status-gadget" name="Status Gadgets Web Resources">
-		<dependency>${atlassian.jira.plugin.key}:gadget-common</dependency>
+		<dependency>${atlassian.plugin.key}:gadget-common</dependency>
 		<resource type="download" name="status.js" location="scripts/status.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
 	</web-resource>
 	<web-resource key="charts-gadget" name="Charts Gadgets Web Resources">
-		<dependency>${atlassian.jira.plugin.key}:gadget-common</dependency>
+		<dependency>${atlassian.plugin.key}:gadget-common</dependency>
 		<resource type="download" name="charts.js" location="scripts/charts.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>

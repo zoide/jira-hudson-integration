@@ -69,7 +69,7 @@
 	</ciManagement>
 
 	<properties>
-		<atlassian.jira.plugin.key>${project.groupId}.hudson</atlassian.jira.plugin.key>
+		<atlassian.plugin.key>${project.groupId}.hudson</atlassian.plugin.key>
 	</properties>
 
 	<dependencies>
@@ -201,8 +201,8 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Atlassian-Plugin-Key>${atlassian.jira.plugin.key}</Atlassian-Plugin-Key>
-						<Bundle-SymbolicName>${atlassian.jira.plugin.key}</Bundle-SymbolicName>
+						<Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
+						<Bundle-SymbolicName>${atlassian.plugin.key}</Bundle-SymbolicName>
 						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
 						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
