@@ -19,6 +19,15 @@
 
 AJS.$.namespace("AJS.gadget.hudson.charts");
 
+/**
+ * Display a chart in a div element
+ * 
+ * @param gadget the Gadget where the chart will be displayed in
+ * @param baseUrl the baseUrl of the Jira instance
+ * @param server the Hudson server where the data came from
+ * @param project the Hudson project where the chart was generated for
+ * @param chart the JSON chart object
+ */
 AJS.gadget.hudson.charts.displayChartImage = function (gadget, baseUrl, server, project, chart) {
 	var chartDiv = AJS.$("<div/>").addClass("chart-img");
 	var chartAttrs = {
