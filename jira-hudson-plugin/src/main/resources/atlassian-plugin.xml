@@ -37,32 +37,32 @@
 
 	<!-- W E B   R E S O U R C E S -->
 	<web-resource key="common-css" name="Plugin Common CSS">
-		<resource type="download" name="common.css" location="styles/common.css" />
+		<resource type="download" name="common-min.css" location="styles/common-min.css" />
 	</web-resource>
 	<web-resource key="panel-css" name="Plugin Tab Panel CSS">
 		<dependency>${atlassian.plugin.key}:common-css</dependency>
-		<resource type="download" name="panels.css" location="styles/panels.css" />
+		<resource type="download" name="panels-min.css" location="styles/panels-min.css" />
 	</web-resource>
 	<web-resource key="gadget-common" name="Common Gadget Web Resources">
 		<dependency>${atlassian.plugin.key}:common-css</dependency>
 		<dependency>com.atlassian.jira.gadgets:jira-global</dependency>
-		<resource type="download" name="gadgets.css" location="styles/gadgets.css" />
-		<resource type="download" name="common.js" location="scripts/common.js">
+		<resource type="download" name="gadgets-min.css" location="styles/gadgets-min.css" />
+		<resource type="download" name="common-min.js" location="scripts/common-min.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
-		<resource type="download" name="gadget-fields.js" location="scripts/gadget-fields.js">
+		<resource type="download" name="gadget-fields-min.js" location="scripts/gadget-fields-min.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
 	</web-resource>
 	<web-resource key="status-gadget" name="Status Gadgets Web Resources">
 		<dependency>${atlassian.plugin.key}:gadget-common</dependency>
-		<resource type="download" name="status.js" location="scripts/status.js">
+		<resource type="download" name="status-min.js" location="scripts/status-min.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
 	</web-resource>
 	<web-resource key="charts-gadget" name="Charts Gadgets Web Resources">
 		<dependency>${atlassian.plugin.key}:gadget-common</dependency>
-		<resource type="download" name="charts.js" location="scripts/charts.js">
+		<resource type="download" name="charts.js" location="scripts/charts-min.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
 	</web-resource>
