@@ -162,16 +162,6 @@
 		<link linkId="hudson_servers">/secure/admin/jira/ViewHudsonServers.jspa</link>
 	</web-item>
 
-	<web-item key="project-hudson-server" name="Project Hudson Server" section="system.browse.project.operations" weight="50">
-		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
-			<param name="permission">admin</param>
-		</condition>
-		<label key="hudson.project.associate.with.server">
-			<param name="param0">$textutils.htmlEncode($helper.project.get('name'))</param>
-		</label>
-		<link linkId="project_hudson_server">/secure/admin/jira/AssociateSpecificHudsonServer!default.jspa?projectKey=$helper.project.get('key')</link>
-	</web-item>
-
 	<!-- C O M P O N E N T S -->
 	<component key="hudsonPropertyManager" name="Default Hudson Property Manager"
 			class="com.marvelution.jira.plugins.hudson.DefaultHudsonPropertyManagerImpl">

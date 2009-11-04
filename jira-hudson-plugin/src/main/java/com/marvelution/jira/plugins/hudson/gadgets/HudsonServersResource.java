@@ -83,7 +83,7 @@ public class HudsonServersResource {
 	/**
 	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
 	 */
-	@XmlType(namespace = "om.marvelution.jira.plugins.hudson.gadgets.HudsonServersResource")
+	@XmlType(namespace = "com.marvelution.jira.plugins.hudson.gadgets.HudsonServersResource")
 	@XmlRootElement
 	public static class HudsonServers {
 		

@@ -86,15 +86,21 @@ Configure Jira
         Using the four arrow buttons (Add Project, Add All Projects, Remove All Projects, Remove Project) associate a
         project with a specific Hudson server.
   
-  [[2]] Associate a single project to a specific Hudson server
+  [[2]] Associate a single project to a specific Hudson server (Version 2.x)
   
         When browsing specific Jira project, you will get the following options:
         
 [../images/jira/browse-project-admin-option.png] Browsing a Jira project
 
-        Click on the <<Associate project Marvelution with a specific Hudson Server>> to associate the project to a
+        Click on the <<Associate project X with a specific Hudson Server>> to associate the project to a
         specific Hudson server.
         
 [../images/jira/associate-single-project.png] Associate a single project
+
+
+  [[2]] Associate a single project to a specific Hudson server (Version 3.x)
+  
+        When browsing specific Jira project, selected the Hudson Builds tab and click the button 'Edit Association' to
+        update the Hudson Association for that project.
   
   []

@@ -37,7 +37,17 @@ Jira Features
     
     []
     
-  * {{{./portlets.html}Portlets}}
+  * {{{./gadgets.html}Gadgets}} (Only available in version 3.x) (<<NEW>>)
+  
+    * Hudson Status Gadget
+    
+    * Hudson View Status Gadget
+    
+    * Hudson Project Build Trend Gadget
+    
+    []
+    
+  * {{{./portlets.html}Portlets}} (Only available in version 2.x)
   
     * Hudson Status Portlet
     

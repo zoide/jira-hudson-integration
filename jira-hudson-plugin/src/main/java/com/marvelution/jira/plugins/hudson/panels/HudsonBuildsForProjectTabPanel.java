@@ -67,8 +67,12 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 		final Project project = browseContext.getProject();
 		final Map<String, Object> velocityParams = new HashMap<String, Object>();
 		velocityParams.put("showRss", Boolean.TRUE);
-		tabPanelHelper.prepareVelocityParameters(velocityParams, project, "/browse/" + project.getKey() + "?report=",
-			HudsonBuildsTabPanelHelper.SUB_TABS);
+		tabPanelHelper.prepareVelocityParameters(velocityParams, project, "/browse/" + project.getKey()
+			+ "?selectedTab=", HudsonBuildsTabPanelHelper.SUB_TABS);
+		velocityParams.put("isAdmin", permissionManager.hasPermission(Permissions.PROJECT_ADMIN, browseContext
+			.getProject(), browseContext.getUser()));
+		velocityParams.put("isAssociated", (serverManager.getServerByJiraProject(project) != null));
+		velocityParams.put("projectKey", project.getKey());
 		return descriptor.getHtml("view", velocityParams);
 	}
 

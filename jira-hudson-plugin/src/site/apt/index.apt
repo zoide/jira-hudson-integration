@@ -41,10 +41,10 @@ Introduction
   
   * view builds related to a project issue, in a issue tab panel.
   
-  * a portlet to view all projects statuses on a Hudson server.
+  * a gadget to view all projects statuses on a Hudson server.
   
-  * a portlet to view detailed Hudson project build information.
-  
-  * a portlet to view all projects related to a Hudson View.
+  * a gadget to view all projects related to a Hudson View.
+
+  * a gadget to view the build trend chart of a Hudson Project.
   
   []

@@ -1,9 +1,9 @@
  												------
- 												Introduction
+ 												Jira Features - Gadgets
  												------
  												Mark Rekveld
  												------
- 												June 13 2009
+ 												July 27 2009
  												------
 
 ~~ Licensed to Marvelution under one or more contributor license 
@@ -24,15 +24,22 @@
 ~~ under the License.
 
 
-Introduction
-~~~~~~~~~~~~
+Jira Features - Gadgets (Only avialable in version 3.x)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  The Hudson plugin provides:
-  
-  * a new Remote API to expose Job and Build data.
-  
-  * a Job property to configure the Jira project key for a Hudson job.
-  
-  * a Jira issue key indexer to index all the issue keys and the builds they linked to.
-  
-  []
+* Hudson Status Gadget
+~~~~~~~~~~~~~~~~~~~~~~
+
+[../../images/jira/hudson-status-gadget.png] Hudson status gadget
+
+
+* Hudson View Status Gadget
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[../../images/jira/hudson-view-status-gadget.png] Hudson view status gadget
+
+
+* Hudson Project Build Trend Gadget
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[../../images/jira/build-trend-gadget.png] Hudson project build trend gadget

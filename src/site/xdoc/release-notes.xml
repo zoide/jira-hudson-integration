@@ -25,6 +25,17 @@
 
 	<body>
 		<section name="Release Notes - Version 3.0.0">
+			<h3>Documentation</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-47">MARVJIRAHUDSON-47</a>] - Update documentation to reflect the upgrade of the Jira plugin</li>
+			</ul>
+			<h3>Refactoring</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-39">MARVJIRAHUDSON-39</a>] - Upgrade Jira plugin to work with Jira 4.0</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-41">MARVJIRAHUDSON-41</a>] - Refactor all the Portlets to Gadgets</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-42">MARVJIRAHUDSON-42</a>] - Move common Jira classes to separate artifact</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-46">MARVJIRAHUDSON-46</a>] - Refactor i18n property files</li>
+			</ul>
 		</section>
 		<section name="Release Notes - Version 2.1.1">
 			<h3>Bug</h3>

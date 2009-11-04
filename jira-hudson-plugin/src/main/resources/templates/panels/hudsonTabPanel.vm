@@ -24,6 +24,21 @@
 #end
 #end
 
+#if ($isAdmin)
+	#if ($isAssociated)
+		#set($type = 'edit')
+	#else
+		#set($type = 'add')
+	#end
+	<div id="quicklinks">
+		<ul class="operations">
+			<li class="aui-dd-parent">
+				<a href="${req.contextPath}/secure/admin/jira/AssociateSpecificHudsonServer!default.jspa?projectKey=${projectKey}" class="lnk icon-${type}"><span>$i18n.getText("hudson.panel.${type}.association")</span></a>
+			</li>
+		</ul>
+	</div>
+#end
+
 <div class="projectPanel" id="hudsonTabPanel">
 	<div id="hudsonTabPanelHeader">
 		<h3 class="formtitle">

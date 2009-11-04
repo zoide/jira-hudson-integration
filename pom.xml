@@ -84,7 +84,7 @@
 		<project.jdk.revision>1.5</project.jdk.revision>
 		<hudsonVersion>1.319</hudsonVersion>
 		<atlassianJiraVersion>4.0</atlassianJiraVersion>
-		<stagingSiteURL>scp://marvelution.com/home/markrekveld/staging.marvelution.com/atlassian/jira-hudson-integration/</stagingSiteURL>
+		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/site-staging/atlassian/jira-hudson-integration/</stagingSiteURL>
 		<jiraDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/jira-hudson-plugin</jiraDownloadBaseUrl>
 		<hudsonDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/hudson-jiraapi-plugin</hudsonDownloadBaseUrl>
 		<pmd.ruleset.location>http://svn.marvelution.com/resources/pmd/marvelution-atlassian-related-pmd-ruleset.xml</pmd.ruleset.location>
