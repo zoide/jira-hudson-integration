@@ -76,7 +76,7 @@
 	<distributionManagement>
 		<site>
 			<id>marvelution.website</id>
-			<url>scp://marvelution.com/home/markrekveld/marvelution.com/atlassian/jira-hudson-integration/</url>
+			<url>dav:http://repository.marvelution.com/content/sites/site/atlassian/jira-hudson-integration/</url>
 		</site>
 	</distributionManagement>
 	
