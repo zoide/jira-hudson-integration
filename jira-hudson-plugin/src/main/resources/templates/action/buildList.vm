@@ -83,10 +83,16 @@
 		</td>
 	</tr>
 </table>
+<script type="text/javascript" >
+AJS.$("#showRssLink").show();
+</script>
 <br>
 #end
 #else
 <ul class="errorList">
 	<li>${i18n.getText("hudson.panel.no.builds.found")}</li>
 </ul>
+<script type="text/javascript" >
+AJS.$("#showRssLink").hide();
+</script>
 #end

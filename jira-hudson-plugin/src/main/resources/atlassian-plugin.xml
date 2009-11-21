@@ -138,10 +138,6 @@
 			<action name="com.marvelution.jira.plugins.hudson.web.action.UpdateHudsonServerProjectAssociations" alias="UpdateHudsonServerProjectAssociations">
 				<view name="input">/templates/action/admin/updateHudsonServerProjectAssociations.vm</view>
 			</action>
-			<action name="com.marvelution.jira.plugins.hudson.web.action.AssociateSpecificHudsonServer" alias="AssociateSpecificHudsonServer">
-				<view name="input">/templates/action/admin/associateSpecificHudsonServer.vm</view>
-				<view name="error">/templates/action/admin/associateSpecificHudsonServer.vm</view>
-			</action>
 		</actions>
 	</webwork1>
 
