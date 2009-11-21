@@ -305,7 +305,9 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 		server.setPassword(ENCRYPTER.decrypt(encryptedPassword));
 		final String projects =
 			propertySet.getString(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_PROJECTS_KEY_SUFFIX);
-		server.setAssociatedProjectKeys(Arrays.asList(projects.split(CONFIG_PROJECT_KEY_SEPARATORS)));
+		if (projects != null) {
+			server.setAssociatedProjectKeys(Arrays.asList(projects.split(CONFIG_PROJECT_KEY_SEPARATORS)));
+		}
 		server.setCrumb(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + serverId + CONFIG_SERVER_CRUMB_KEY_SUFFIX));
 		server.setCrumbField(propertySet.getString(CONFIG_SERVER_KEY_PREFIX + serverId
 			+ CONFIG_SERVER_CRUMB_FIELD_KEY_SUFFIX));

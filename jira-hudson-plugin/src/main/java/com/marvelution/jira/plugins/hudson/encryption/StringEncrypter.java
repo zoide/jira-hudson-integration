@@ -19,9 +19,8 @@
 
 package com.marvelution.jira.plugins.hudson.encryption;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -78,8 +77,7 @@ public class StringEncrypter {
 		}
 		try {
 			initiliseCipher(Cipher.ENCRYPT_MODE);
-			final BASE64Encoder base64Encoder = new BASE64Encoder();
-			return base64Encoder.encode(cipher.doFinal(stringToEncrypt.getBytes(UNICODE_FORMAT)));
+			return new String(Base64.encodeBase64(cipher.doFinal(stringToEncrypt.getBytes(UNICODE_FORMAT))));
 		} catch (Exception e) {
 			LOGGER.error("Failed to encrypt provided String. Reason: " + e.getMessage(), e);
 			throw new StringEncryptionException("Failed to encrypt provided String. Reason: " + e.getMessage(), e);
@@ -98,8 +96,7 @@ public class StringEncrypter {
 		}
 		try {
 			initiliseCipher(Cipher.DECRYPT_MODE);
-			final BASE64Decoder base64Decoder = new BASE64Decoder();
-			return new String(cipher.doFinal(base64Decoder.decodeBuffer(stringToDecrypt)));
+			return new String(cipher.doFinal(Base64.decodeBase64(stringToDecrypt.getBytes())));
 		} catch (Exception e) {
 			LOGGER.error("Failed to decrypt provided String. Reason: " + e.getMessage(), e);
 			throw new StringEncryptionException("Failed to decrypt provided String. Reason: " + e.getMessage(), e);
