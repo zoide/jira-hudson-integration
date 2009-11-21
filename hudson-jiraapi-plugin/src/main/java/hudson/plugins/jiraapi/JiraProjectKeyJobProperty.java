@@ -19,13 +19,11 @@
 
 package hudson.plugins.jiraapi;
 
-import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import hudson.Extension;
 import hudson.model.AbstractProject;
-import hudson.model.Hudson;
 import hudson.model.Job;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
@@ -75,7 +73,6 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 	 * 
 	 * @param key the JIRA Project Key
 	 */
-	@SuppressWarnings("unchecked")
 	public void setKey(String key) {
 		if (StringUtils.isEmpty(key)) {
 			return;
@@ -85,14 +82,6 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 		} else {
 			throw new IllegalArgumentException(key + " is not a valid JIRA Project Key ("
 				+ getProjectKeyPattern().pattern() + ")");
-		}
-		final List<AbstractProject> projects = Hudson.getInstance().getAllItems(AbstractProject.class);
-		for (AbstractProject<?, ?> project : projects) {
-			if (project.getProperty(JiraProjectKeyJobProperty.class) != null
-				&& project.getProperty(JiraProjectKeyJobProperty.class).equals(this)) {
-				throw new IllegalArgumentException("No key duplicates allowed. Key " + key
-					+ " is already used by project: " + project.getName());
-			}
 		}
 	}
 
