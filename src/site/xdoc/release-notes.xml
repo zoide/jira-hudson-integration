@@ -24,6 +24,23 @@
 	</properties>
 
 	<body>
+		<section name="Release Notes - Version 3.1.0">
+			<h3>Bug</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-51">MARVJIRAHUDSON-51</a>] - Jira Hudson plugin gives 404: java.lang.NoClassDefFoundError: sun/misc/Base64Encoder</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-55">MARVJIRAHUDSON-55</a>] - NPE is thrown when clicking on the RSS link and the project is not found on any Hudson server</li>
+			</ul>
+			<h3>Documentation</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-56">MARVJIRAHUDSON-56</a>] - Update documentation</li>
+			</ul>
+			<h3>Improvement</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-50">MARVJIRAHUDSON-50</a>] - Improve Project to Hudson sever association from tab panels</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-52">MARVJIRAHUDSON-52</a>] - Jira Hudson Integration to support multiple Hudson projects per JIRA project</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-54">MARVJIRAHUDSON-54</a>] - Remove dependency on BASE64Encoder class</li>
+			</ul>
+		</section>
 		<section name="Release Notes - Version 3.0.0">
 			<h3>Documentation</h3>
 			<ul>
@@ -35,6 +52,16 @@
 				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-41">MARVJIRAHUDSON-41</a>] - Refactor all the Portlets to Gadgets</li>
 				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-42">MARVJIRAHUDSON-42</a>] - Move common Jira classes to separate artifact</li>
 				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-46">MARVJIRAHUDSON-46</a>] - Refactor i18n property files</li>
+			</ul>
+		</section>
+		<section name="Release Notes - Version 2.1.2">
+			<h3>Bug</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-53">MARVJIRAHUDSON-53</a>] - java.lang.NullPointerException - when selecting View:  Related builds by date</li>
+			</ul>
+			<h3>Documentation</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-56">MARVJIRAHUDSON-56</a>] - Update documentation</li>
 			</ul>
 		</section>
 		<section name="Release Notes - Version 2.1.1">
@@ -64,7 +91,7 @@
 				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-43">MARVJIRAHUDSON-43</a>] - Refactor the ApiImplementation compatibility check</li>
 			</ul>
 		</section>
-        <section name="Release Notes - Version 2.0">
+		<section name="Release Notes - Version 2.0">
 			<h3>Bug</h3>
 			<ul>
 				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-24">MARVJIRAHUDSON-24</a>] - User authentication and authorization failes when configurating a Secured Hudson Instance</li>
@@ -88,7 +115,7 @@
 				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-32">MARVJIRAHUDSON-32</a>] - RSS links in Tab Panels</li>
 			</ul>
 		</section>	
-        <section name="Release Notes - Version Jira Plugin 1.1.2">
+		<section name="Release Notes - Version Jira Plugin 1.1.2">
 			<h3>Bug</h3>
 			<ul>
 				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-27">MARVJIRAHUDSON-27</a>] - The Project Builds Tab panel brakes the Projects portlet</li>
@@ -100,7 +127,7 @@
 				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-23">MARVJIRAHUDSON-23</a>] - Maven build brakes velocity templates</li>
 			</ul>
 		</section>
-        <section name="Release Notes - Version 1.1">
+		<section name="Release Notes - Version 1.1">
 			<h3>Bug</h3>
 			<ul>
 				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-17">MARVJIRAHUDSON-17</a>] - &quot;Prevent Cross Site Request Forgery exploits&quot; setting in Hudson prevents Jira from getting data</li>

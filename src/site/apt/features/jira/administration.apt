@@ -36,10 +36,16 @@ Jira Features - Administration
 * Manage Jira Project to Hudson Server associations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-** Associate a specific Hudson server to a Jira project
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+** Associate a specific Hudson server to a Jira project (Version 2.x)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [../../images/jira/associate-single-project.png] Associate single project
+
+
+** Associate a specific Hudson server to a Jira project (Version 3.x)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[../../images/jira/associate-single-project-popup.png] Associate single project
 
 
 ** Associate multiple projects to one Hudson server at a time

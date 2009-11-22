@@ -103,7 +103,7 @@
 
 <script type="text/javascript">
 jQuery("#associationButton").click(function(event) {
-	var popup = new AJS.Dialog(500, 300);
+	var popup = new AJS.Dialog(400, 200);
 	popup.addHeader("${i18n.getText("hudson.panel.${type}.association")}");
 	popup.addPanel("Panel 1", "panel1");
 	popup.getCurrentPanel().body.append(AJS.$("#associationDialog"));

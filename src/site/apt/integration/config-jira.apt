@@ -98,9 +98,14 @@ Configure Jira
 [../images/jira/associate-single-project.png] Associate a single project
 
 
-  [[2]] Associate a single project to a specific Hudson server (Version 3.x)
+  [[3]] Associate a single project to a specific Hudson server (Version 3.x)
   
-        When browsing specific Jira project, selected the Hudson Builds tab and click the button 'Edit Association' to
-        update the Hudson Association for that project.
+        When browsing specific Jira project, selected the Hudson Builds tab.
+        
+[../images/jira/browse-project-admin-option2.png] Browsing a Jira project
+
+        Click the button 'Edit Association' to update the Hudson Association for that project.
+        
+[../images/jira/associate-single-project-popup.png] Associate a single project
   
   []

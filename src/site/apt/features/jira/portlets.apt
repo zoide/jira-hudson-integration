@@ -45,7 +45,7 @@ Jira Features - Portlets (Only avialable in version 2.x)
 [../../images/jira/hudson-project-status-portlet.png] Hudson project status portlet
 
 
-* Hudson Project Build Trend Portlet (<<NEW>>)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Hudson Project Build Trend Portlet
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [../../images/jira/build-trend-portlet.png] Hudson project build trend portlet

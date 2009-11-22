@@ -35,7 +35,7 @@ Configure Hudson
 ~~~~~~~~~~~~~~~~~~~~
 
   The Jira project key job property is a required property that needs to be configured for every Hudson Job you want
-  to integrate with Jira. And can be configured using the Jira Prject key field on the job configuration page.
+  to integrate with Jira. And can be configured using the Jira Project key field on the job configuration page.
 
 [../images/hudson/config-jira-key-property.png] Configure Jira project key Job property
 
