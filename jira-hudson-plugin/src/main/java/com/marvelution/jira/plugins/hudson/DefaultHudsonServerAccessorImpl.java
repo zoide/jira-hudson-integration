@@ -245,7 +245,8 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 		if (versions.size() > 1) {
 			for (int i = (int) (version.getSequence().longValue() - 1); i >= 0; i--) {
 				final Version prevVersion = (Version) versions.get(i);
-				if (prevVersion.getSequence() < version.getSequence() && prevVersion.isReleased()) {
+				if (prevVersion != null && prevVersion.getSequence() < version.getSequence()
+					&& prevVersion.isReleased()) {
 					startDate = prevVersion.getReleaseDate().getTime();
 				}
 			}
