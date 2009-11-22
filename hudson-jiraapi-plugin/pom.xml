@@ -25,10 +25,8 @@
 		<artifactId>jira-hudson-integration</artifactId>
 		<version>2.1.2-SNAPSHOT</version>
 	</parent>
-	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>hudson-jiraapi-plugin</artifactId>
 	<packaging>hpi</packaging>
-	<version>2.1.2-SNAPSHOT</version>
 
 	<name>Hudson Jira Plugin</name>
 	<description>This plugin features a Job property, Issue indexer and a new REST API to integration Hudson with Portlets and Tab Atlassian Jira.</description>
