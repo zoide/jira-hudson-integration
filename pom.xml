@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>jira-hudson-integration</artifactId>
-	<version>3.1.0</version>
+	<version>3.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<modules>
@@ -53,9 +53,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/tags/jira-hudson-integration-3.1.0</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/tags/jira-hudson-integration-3.1.0</developerConnection>
-		<url>http://svn.marvelution.com/atlassian/jira-hudson-integration/tags/jira-hudson-integration-3.1.0</url>
+		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk</developerConnection>
+		<url>http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
