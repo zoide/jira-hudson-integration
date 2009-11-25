@@ -142,57 +142,27 @@
 		<section name="Release Notes - Version 1.0">
 			<h3>Documentation</h3>
 			<ul>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-14">MARVJIRAHUDSON-14</a>] - Document the Installation, configuration and usage of the Hudson Plugin
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-15">MARVJIRAHUDSON-15</a>] - Document the Installation, configuration and usage of the Jira Plugin
-				</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-14">MARVJIRAHUDSON-14</a>] - Document the Installation, configuration and usage of the Hudson Plugin</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-15">MARVJIRAHUDSON-15</a>] - Document the Installation, configuration and usage of the Jira Plugin</li>
 			</ul>
 			<h3>Requirement</h3>
 			<ul>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-1">MARVJIRAHUDSON-1</a>] - Configurable Jira project key in Hudson
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-2">MARVJIRAHUDSON-2</a>] - New Hudson Remote API for Jira
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-3">MARVJIRAHUDSON-3</a>] - Jira Portlet to show Hudson Job Statuses
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-4">MARVJIRAHUDSON-4</a>] - Configure Hudson Server
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-5">MARVJIRAHUDSON-5</a>] - Issue builds tabpanel
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-6">MARVJIRAHUDSON-6</a>] - Project builds tabpanel
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-7">MARVJIRAHUDSON-7</a>] - Project version builds tabpanel
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-8">MARVJIRAHUDSON-8</a>] - Check Hudson when configuring Hudson Server in Jira
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-9">MARVJIRAHUDSON-9</a>] - Issue to Builds mapping
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-10">MARVJIRAHUDSON-10</a>] - Plugin configuration store
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-11">MARVJIRAHUDSON-11</a>] - Component builds tab panel
-				</li>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-12">MARVJIRAHUDSON-12</a>] - Jira Portlet to show specific Hudson Project status information
-				</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-1">MARVJIRAHUDSON-1</a>] - Configurable Jira project key in Hudson</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-2">MARVJIRAHUDSON-2</a>] - New Hudson Remote API for Jira</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-3">MARVJIRAHUDSON-3</a>] - Jira Portlet to show Hudson Job Statuses</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-4">MARVJIRAHUDSON-4</a>] - Configure Hudson Server</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-5">MARVJIRAHUDSON-5</a>] - Issue builds tabpanel</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-6">MARVJIRAHUDSON-6</a>] - Project builds tabpanel</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-7">MARVJIRAHUDSON-7</a>] - Project version builds tabpanel</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-8">MARVJIRAHUDSON-8</a>] - Check Hudson when configuring Hudson Server in Jira</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-9">MARVJIRAHUDSON-9</a>] - Issue to Builds mapping</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-10">MARVJIRAHUDSON-10</a>] - Plugin configuration store</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-11">MARVJIRAHUDSON-11</a>] - Component builds tab panel</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-12">MARVJIRAHUDSON-12</a>] - Jira Portlet to show specific Hudson Project status information</li>
 			</ul>
 			<h3>Task</h3>
 			<ul>
-				<li>
-					[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-13">MARVJIRAHUDSON-13</a>] - Get test coverage up to atleast 80%
-				</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-13">MARVJIRAHUDSON-13</a>] - Get test coverage up to atleast 80%</li>
 			</ul>
 		</section>
 	</body>

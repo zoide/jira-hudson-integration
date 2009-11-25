@@ -22,7 +22,7 @@
 		<menu ref="parent" />
 
 		<menu name="Overview">
-			<item name="Introduction" href="index.html" />
+			<item name="Introduction" href="./index.html" />
 		</menu>
 
 	</body>
