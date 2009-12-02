@@ -416,6 +416,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	 */
 	@Test
 	public void testGetBuildsForIssueKeys() throws Exception {
+		when(hudsonServerManager.getDefaultServer()).thenReturn(hudsonServer);
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("BuildsList.xml"));
 		final List<Build> builds = hudsonServerAccessor.getBuilds(Collections.singletonList("MARVADMIN-1"));
@@ -434,6 +435,7 @@ public class DefaultHudsonServerAccessorImplTest {
 	 */
 	@Test
 	public void testGetBuildsForIssueKeysUnmarshalException() throws Exception {
+		when(hudsonServerManager.getDefaultServer()).thenReturn(hudsonServer);
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(new ByteArrayInputStream("OOPS!".getBytes()));
 		try {
