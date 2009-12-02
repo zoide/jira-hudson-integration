@@ -35,7 +35,7 @@ import hudson.plugins.jiraapi.index.IssueIndexer;
 @Extension
 public class IssueIndexerThread extends PeriodicWork {
 
-	public static final long DEFAULT_THREAD_DELAY = 3600000L;
+	public static final long DEFAULT_THREAD_DELAY = 3600000L * 24;
 
 	public static final long START_THREAD_DELAY = 10000L;
 

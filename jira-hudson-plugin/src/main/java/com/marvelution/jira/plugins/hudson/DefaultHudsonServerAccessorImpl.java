@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.HashMap;
@@ -270,11 +269,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 */
 	public List<Build> getBuilds(Collection<String> issueKeys) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
-		final List<Build> builds = new ArrayList<Build>();
-		for (HudsonServer server : serverManager.getServers()) {
-			builds.addAll(getBuilds(server, issueKeys));
-		}
-		return builds;
+		return getBuilds(serverManager.getDefaultServer(), issueKeys);
 	}
 
 	/**
@@ -545,13 +540,21 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	 * Handle responses that don't return a 200 status code
 	 * 
 	 * @param method the {@link HttpMethod} to handle the response for
-	 * @throws HudsonServerAccessDeniedException in case of unrecoverable errors
+	 * @throws HudsonServerAccessorException in case of unrecoverable errors
+	 * @throws HudsonServerAccessDeniedException in case of unrecoverable errors caused by authorisation issues
 	 * @throws IOException in case the response body cannot be read
 	 */
-	private void handleNotOKResponse(HttpMethod method) throws HudsonServerAccessDeniedException, IOException {
+	private void handleNotOKResponse(HttpMethod method) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException, IOException {
 		switch (method.getStatusCode()) {
 			case HttpStatus.SC_FORBIDDEN:
 				throw new HudsonServerAccessDeniedException("Hudson denied access to the plugin API.");
+			case HttpStatus.SC_UNAUTHORIZED:
+				throw new HudsonServerAccessDeniedException("Hudson denied access to the plugin API.");
+			case HttpStatus.SC_INTERNAL_SERVER_ERROR:
+				throw new HudsonServerAccessorException("Hudson experienced an internal server error.");
+			case HttpStatus.SC_SERVICE_UNAVAILABLE:
+				throw new HudsonServerAccessorException("Hudson service was unavailable.");
 			default:
 				break;
 		}

@@ -71,6 +71,9 @@ public final class Issue {
 	 * @return the {@link Set} of related {@link Project} objects
 	 */
 	public Set<Project> getProjects() {
+		if (projects == null) {
+			projects = new HashSet<Project>();
+		}
 		return projects;
 	}
 

@@ -82,7 +82,9 @@ public abstract class AbstractEditHudsonServer extends AbstractHudsonWebActionSu
 				try {
 					hudsonServerAccessor.getCrumb(hudsonServer);
 					final ApiImplementation remoteApi = hudsonServerAccessor.getApiImplementation(hudsonServer);
-					if (!current.isCompatibleWith(remoteApi)) {
+					if (remoteApi == null) {
+						addError("host", getText("hudson.config.host.failed.to.get.api.version"));
+					} else if (!current.isCompatibleWith(remoteApi)) {
 						addError("host", getText("hudson.config.host.incompatible.api.version", current));
 					}
 				} catch (HudsonServerAccessorException e) {

@@ -51,7 +51,9 @@ public class IssueIndex {
 	 * @param index {@link Set} of {@link Issue} objects
 	 */
 	public void setIndex(Set<Issue> index) {
-		this.index = index;
+		if (index != null) {
+			this.index = index;
+		}
 	}
 
 	/**

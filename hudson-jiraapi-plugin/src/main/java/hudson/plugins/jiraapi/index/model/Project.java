@@ -102,6 +102,9 @@ public final class Project {
 	 * @return the {@link Set} of build numbers
 	 */
 	public Set<Integer> getBuildNumbers() {
+		if (buildNumbers == null) {
+			buildNumbers = new HashSet<Integer>();
+		}
 		return buildNumbers;
 	}
 

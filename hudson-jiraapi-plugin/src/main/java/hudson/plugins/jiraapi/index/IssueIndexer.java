@@ -22,6 +22,7 @@ package hudson.plugins.jiraapi.index;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Hudson;
+import hudson.plugins.jiraapi.JiraProjectKeyJobProperty;
 import hudson.plugins.jiraapi.index.model.IssueIndex;
 import hudson.plugins.jiraapi.index.model.Issue;
 import hudson.plugins.jiraapi.index.model.Project;
@@ -39,6 +40,9 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -208,13 +212,22 @@ public final class IssueIndexer {
 	 * Find all related Jira Issue keys in the changeset of the given Build
 	 * 
 	 * @param build the Build to find the related Jira Issue keys in
-	 * @return the {@link List} of Jira issue leys
+	 * @return the {@link List} of Jira issue keys
 	 */
 	private List<String> findBuildRelatedIssues(AbstractBuild<?, ?> build) {
 		final List<String> keys = new ArrayList<String>();
-		for (Entry entry : build.getChangeSet()) {
-			keys.addAll(JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg(), ProjectUtils
-				.getJiraProjectKeyPropertyOfProject(build.getProject()).getIssueKeyPattern()));
+		final JiraProjectKeyJobProperty jobProperty =
+			ProjectUtils.getJiraProjectKeyPropertyOfProject(build.getProject());
+		if (jobProperty != null) {
+			final Pattern issueKeyPattern = jobProperty.getIssueKeyPattern();
+			for (Entry entry : build.getChangeSet()) {
+				if (entry != null && StringUtils.isNotBlank(entry.getMsg())) {
+					keys.addAll(JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg(), issueKeyPattern));
+				}
+			}
+		} else {
+			LOGGER.warning("No JiraProjectKeyJobProperty is configured for Job '" + build.getProject().getName()
+				+ "'.");
 		}
 		return keys;
 	}
