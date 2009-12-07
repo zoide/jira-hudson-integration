@@ -71,9 +71,9 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 
 	private static final int TIMEOUT_MS = 30000;
 
-	private static final int MAX_TOTAL_CONNECTIONS = 40;
+	private static final int MAX_TOTAL_CONNECTIONS = 80;
 
-	private static final int MAX_HOST_CONNECTIONS = 4;
+	private static final int MAX_HOST_CONNECTIONS = 10;
 
 	private HudsonServerManager serverManager;
 
@@ -390,6 +390,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 						break;
 					}
 					loginAction = loginMethod.getResponseHeader("Location").getValue();
+					loginMethod.releaseConnection();
 				}
 				getHttpClient().executeMethod(actionMethod);
 				if (actionMethod.getStatusCode() == HttpStatus.SC_OK) {
