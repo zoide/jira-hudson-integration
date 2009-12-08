@@ -24,6 +24,16 @@
 	</properties>
 
 	<body>
+		<section name="Release Notes - Version 3.2.0">
+			<h3>Bug</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-58">MARVJIRAHUDSON-58</a>] - Plugin doesn't work or is very very slow</li>
+			</ul>
+			<h3>Improvement</h3>
+			<ul>
+			<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-57">MARVJIRAHUDSON-57</a>] - Create a check for a null getApiVersion response</li>
+			</ul>
+		</section>
 		<section name="Release Notes - Version 3.1.0">
 			<h3>Bug</h3>
 			<ul>
