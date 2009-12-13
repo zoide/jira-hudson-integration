@@ -25,9 +25,7 @@
 		<artifactId>jira-hudson-integration</artifactId>
 		<version>3.3.0-SNAPSHOT</version>
 	</parent>
-	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>hudson-jiraapi-plugin</artifactId>
-	<version>3.3.0-SNAPSHOT</version>
 	<packaging>hpi</packaging>
 
 	<name>Hudson Jira Plugin</name>
