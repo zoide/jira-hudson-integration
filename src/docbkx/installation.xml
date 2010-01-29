@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.	See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~	http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<chapter id="installation">
+	<title>Installing the Plugin</title>
+	<section>
+		<title>Download the Plugin</title>
+		<para>
+			
+		</para>
+	</section>
+	<section>
+		<title>Installing the Plugin</title>
+		<para>
+			The following sections details the installation process of the jira-sonar-plugin. 
+		</para>
+		<section>
+			<title>Plugin Prerequisites</title>
+			<para>
+				The plugin has the following prerequisites;
+				<itemizedlist>
+					<listitem>
+						<para>a Java 5 or higher JDK,</para>
+						<para>
+							To download the latest release of the Sun JDK, go to
+							<ulink url="http://developers.sun.com/downloads/"/>, and download the latest Java 6 JDK or
+							an older Java 5 JDK, either will work but Java 6 is recommended.
+						</para>
+					</listitem>
+					<listitem>
+						<para>a <trademark class="registered">Atlassian JIRA</trademark> 4.0 or higher installation,</para>
+						<para>
+							Please refer to <ulink url="http://www.atlassian.com/software/jira"/> for details on
+							obtaining a copy of Atlassian Jira for your project/community or business.
+						</para>
+					</listitem>
+					<listitem>
+						<para>a Hudson installation.</para>
+						<para>
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+		</section>
+		<section>
+			<title>Installation Process</title>
+			<para>
+			</para>
+		</section>
+	</section>
+	<section>
+		<title>Upgrading the Plugin</title>
+		<para>
+			To upgrade the plugin follow the followling steps:
+		</para>
+	</section>
+</chapter>
