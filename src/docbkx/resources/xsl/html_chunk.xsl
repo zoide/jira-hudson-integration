@@ -65,7 +65,7 @@
 	</xsl:template>
 	<xsl:template name="user.header.navigation">
 		<div style="background-color:#114070;border:none;height:60px;border:1px solid black;">
-			<a style="border:none;" href="http://www.marvelution.com/atlassian/jira-sonar-plugin/"
+			<a style="border:none;" href="http://www.marvelution.com/atlassian/jira-hudson-integration/"
 			   title="Marvelution">
 				<img style="border:none;" src="images/marvelution-logo.jpg"/>
 			</a>

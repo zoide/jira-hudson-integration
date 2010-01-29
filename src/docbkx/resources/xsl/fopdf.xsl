@@ -92,7 +92,7 @@
 		<xsl:param name="gentext-key" select="''"/>
 		<xsl:variable name="Version">
 			<xsl:if test="//releaseinfo">
-				<xsl:text>Jira Sonar Plugin Reference (</xsl:text>
+				<xsl:text>Jira Hudson Integration Reference (</xsl:text>
 				<xsl:value-of select="//releaseinfo"/>
 				<xsl:text>)</xsl:text>
 			</xsl:if>
