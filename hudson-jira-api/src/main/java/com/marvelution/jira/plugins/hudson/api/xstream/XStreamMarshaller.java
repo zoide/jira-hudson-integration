@@ -31,7 +31,6 @@ import com.marvelution.jira.plugins.hudson.api.model.HudsonViewsList;
 import com.marvelution.jira.plugins.hudson.api.model.Job;
 import com.marvelution.jira.plugins.hudson.api.model.JobsList;
 import com.marvelution.jira.plugins.hudson.api.model.TestResult;
-import com.marvelution.jira.plugins.hudson.api.model.triggers.LegacyCodeTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.ProjectTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.RemoteTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.SCMTrigger;
@@ -106,7 +105,6 @@ public class XStreamMarshaller {
 		xstream.processAnnotations(UserTrigger.class);
 		xstream.processAnnotations(RemoteTrigger.class);
 		xstream.processAnnotations(ProjectTrigger.class);
-		xstream.processAnnotations(LegacyCodeTrigger.class);
 		xstream.processAnnotations(SCMTrigger.class);
 		xstream.processAnnotations(TimeTrigger.class);
 		xstream.processAnnotations(HudsonView.class);

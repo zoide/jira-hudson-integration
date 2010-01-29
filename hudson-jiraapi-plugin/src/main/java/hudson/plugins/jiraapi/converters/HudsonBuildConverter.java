@@ -32,7 +32,6 @@ import hudson.model.Cause;
 import hudson.model.CauseAction;
 import hudson.model.Item;
 import hudson.model.ItemGroup;
-import hudson.model.Cause.LegacyCodeCause;
 import hudson.model.Cause.RemoteCause;
 import hudson.model.Cause.UpstreamCause;
 import hudson.model.Cause.UserCause;
@@ -48,7 +47,6 @@ import com.marvelution.jira.plugins.hudson.api.model.Build;
 import com.marvelution.jira.plugins.hudson.api.model.BuildArtifact;
 import com.marvelution.jira.plugins.hudson.api.model.State;
 import com.marvelution.jira.plugins.hudson.api.model.TestResult;
-import com.marvelution.jira.plugins.hudson.api.model.triggers.LegacyCodeTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.ProjectTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.RemoteTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.SCMTrigger;
@@ -120,8 +118,6 @@ public class HudsonBuildConverter {
 					} catch (Exception e) {
 						triggers.add(new RemoteTrigger());
 					}
-				} else if (cause instanceof LegacyCodeCause) {
-					triggers.add(new LegacyCodeTrigger());
 				} else if (cause instanceof TimerTriggerCause) {
 					triggers.add(new TimeTrigger());
 				} else if (cause instanceof SCMTriggerCause) {

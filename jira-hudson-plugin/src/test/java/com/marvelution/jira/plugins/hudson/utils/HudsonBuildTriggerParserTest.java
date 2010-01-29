@@ -35,7 +35,6 @@ import org.mockito.stubbing.Answer;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.jira.util.I18nHelper;
-import com.marvelution.jira.plugins.hudson.api.model.triggers.LegacyCodeTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.ProjectTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.RemoteTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.SCMTrigger;
@@ -109,14 +108,6 @@ public class HudsonBuildTriggerParserTest {
 	public void testProjectTrigger() {
 		final Trigger trigger = new ProjectTrigger("Marvelution", "job/Marvelution/", 1);
 		assertEquals("hudson.trigger.project", triggerParser.parse(trigger));
-	}
-
-	/**
-	 * Test formatting a {@link LegacyCodeTrigger}
-	 */
-	@Test
-	public void testLegacyCodeTrigger() {
-		assertEquals("hudson.trigger.legacy", triggerParser.parse(new LegacyCodeTrigger()));
 	}
 
 	/**

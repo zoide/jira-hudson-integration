@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>com.marvelution</groupId>
 		<artifactId>marvelution</artifactId>
-		<version>5-SNAPSHOT</version>
+		<version>5</version>
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>jira-hudson-integration</artifactId>
@@ -82,7 +82,7 @@
 	
 	<properties>
 		<project.jdk.revision>1.5</project.jdk.revision>
-		<hudsonVersion>1.319</hudsonVersion>
+		<hudsonVersion>1.342</hudsonVersion>
 		<atlassianJiraVersion>4.0</atlassianJiraVersion>
 		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/site-staging/atlassian/jira-hudson-integration/</stagingSiteURL>
 		<jiraDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/jira-hudson-plugin</jiraDownloadBaseUrl>

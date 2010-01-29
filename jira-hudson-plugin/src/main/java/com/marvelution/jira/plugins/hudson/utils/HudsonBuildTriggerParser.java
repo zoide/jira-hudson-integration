@@ -24,7 +24,6 @@ import org.apache.commons.lang.StringUtils;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.jira.util.I18nHelper;
-import com.marvelution.jira.plugins.hudson.api.model.triggers.LegacyCodeTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.ProjectTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.RemoteTrigger;
 import com.marvelution.jira.plugins.hudson.api.model.triggers.SCMTrigger;
@@ -102,8 +101,6 @@ public final class HudsonBuildTriggerParser {
 			return i18n.getText("hudson.trigger.project", server.getHost(), ((ProjectTrigger) trigger)
 				.getProjectUrl(), ((ProjectTrigger) trigger).getProjectName(), Integer
 				.toString(((ProjectTrigger) trigger).getBuildNumber()));
-		} else if (trigger instanceof LegacyCodeTrigger) {
-			return i18n.getText("hudson.trigger.legacy");
 		} else if (trigger instanceof RemoteTrigger) {
 			if (StringUtils.isNotEmpty(((RemoteTrigger) trigger).getHost())
 				&& StringUtils.isNotEmpty(((RemoteTrigger) trigger).getNote())) {
