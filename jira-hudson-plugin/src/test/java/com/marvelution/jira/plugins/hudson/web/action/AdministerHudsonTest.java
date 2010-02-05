@@ -39,16 +39,16 @@ import webwork.action.ActionSupport;
  *  
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class ViewHudsonServersTest extends AbstractHudsonWebActionSupportTest {
+public class AdministerHudsonTest extends AbstractHudsonWebActionSupportTest {
 
-	private ViewHudsonServers viewHudsonServers;
+	private AdministerHudson viewHudsonServers;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected ActionSupport createWebworkAction() {
-		viewHudsonServers = new ViewHudsonServers(permissionManager, serverManager);
+		viewHudsonServers = new AdministerHudson(permissionManager, serverManager);
 		return viewHudsonServers;
 	}
 

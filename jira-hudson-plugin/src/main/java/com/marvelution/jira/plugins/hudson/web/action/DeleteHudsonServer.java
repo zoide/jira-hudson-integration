@@ -59,7 +59,7 @@ public class DeleteHudsonServer extends AbstractHudsonWebActionSupport {
 	 */
 	public String doExecute() throws Exception {
 		hudsonServerManager.remove(getHudsonServerId());
-		return getRedirect("ViewHudsonServers.jspa");
+		return getRedirect("AdministerHudson.jspa");
 	}
 
 	/**

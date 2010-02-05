@@ -23,7 +23,7 @@
 		<tr>
 			<td colspan="2" class="jiraformheader">
 				<h3 class="formtitle">
-					<img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/hudson-icon-24.png" align="absmiddle" border="0" height="24" width="24" />
+					<img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson/images/hudson-icon-24.png" align="absmiddle" border="0" height="24" width="24" />
 					$i18n.getText("hudson.config.server.add.title")
 				</h3>
 			</td>
@@ -88,8 +88,8 @@
 					<input type="submit" id=" Add " name=" $i18n.getText("common.forms.add") " value=" $i18n.getText("common.forms.add") "
 						   accesskey="S" title="Press Alt+S to submit form" class="spaced" />
 					<input type="button" id="cancelButton" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt + `)"
-						name="ViewHudsonServers.jspa" value="$i18n.getText("common.forms.cancel")"
-						onclick="location.href='ViewHudsonServers.jspa'" />
+						name="AdministerHudson.jspa" value="$i18n.getText("common.forms.cancel")"
+						onclick="location.href='AdministerHudson.jspa'" />
 				</td>
 			</tr>
 		</tr>

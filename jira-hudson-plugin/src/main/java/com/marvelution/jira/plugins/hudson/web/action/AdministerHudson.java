@@ -30,7 +30,7 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class ViewHudsonServers extends AbstractHudsonWebActionSupport {
+public class AdministerHudson extends AbstractHudsonWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
 
@@ -40,7 +40,7 @@ public class ViewHudsonServers extends AbstractHudsonWebActionSupport {
 	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
 	 */
-	public ViewHudsonServers(PermissionManager permissionManager, HudsonServerManager hudsonServerManager) {
+	public AdministerHudson(PermissionManager permissionManager, HudsonServerManager hudsonServerManager) {
 		super(permissionManager, hudsonServerManager);
 	}
 

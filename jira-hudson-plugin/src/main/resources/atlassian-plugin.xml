@@ -121,8 +121,8 @@
 	<!-- H U D S O N   S E R V E R S   C O N F I G U R A T I O N -->
 	<webwork1 key="hudson-server-config" name="Configure Your Hudson Server">
 		<actions>
-			<action name="com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServers" alias="ViewHudsonServers">
-				<view name="success">/templates/action/admin/viewHudsonServers.vm</view>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.AdministerHudson" alias="AdministerHudson">
+				<view name="success">/templates/action/admin/administerHudson.vm</view>
 			</action>
 			<action name="com.marvelution.jira.plugins.hudson.web.action.AddHudsonServer" alias="AddHudsonServer">
 				<view name="input">/templates/action/admin/addHudsonServer.vm</view>
@@ -150,12 +150,12 @@
 		</actions>
 	</webwork1>
 
-	<web-item key="hudson-servers" name="Hudson Servers" section="system.admin/globalsettings" weight="1002">
+	<web-item key="hudson" name="Hudson" section="system.admin/globalsettings" weight="1002">
 		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
 			<param name="permission">admin</param>
 		</condition>
-		<label key="hudson.servers" />
-		<link linkId="hudson_servers">/secure/admin/jira/ViewHudsonServers.jspa</link>
+		<label key="hudson" />
+		<link linkId="hudson">/secure/admin/jira/AdministerHudson.jspa</link>
 	</web-item>
 
 	<!-- C O M P O N E N T S -->

@@ -64,7 +64,7 @@ public class AddHudsonServer extends AbstractEditHudsonServer {
 			return "input";
 		}
 		getHudsonServerManager().put(hudsonServer);
-		return getRedirect("ViewHudsonServers.jspa");
+		return getRedirect("AdministerHudson.jspa");
 	}
 
 }

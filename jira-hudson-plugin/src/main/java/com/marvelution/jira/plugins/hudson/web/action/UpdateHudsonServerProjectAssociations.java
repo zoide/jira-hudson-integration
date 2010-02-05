@@ -68,7 +68,7 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 	public String doDefault() throws Exception {
 		hudsonServer = getServer();
 		if (hudsonServer == null) {
-			return getRedirect("ViewHudsonServers.jspa");
+			return getRedirect("AdministerHudson.jspa");
 		}
 		return super.doDefault();
 	}

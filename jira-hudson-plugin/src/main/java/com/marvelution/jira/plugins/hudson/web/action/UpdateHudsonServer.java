@@ -68,7 +68,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 	public String doDefault() throws Exception {
 		final HudsonServer serverToEdit = hudsonServerManager.getServer(getHudsonServerId());
 		if (serverToEdit == null) {
-			return getRedirect("ViewHudsonServers.jspa");
+			return getRedirect("AdministerHudson.jspa");
 		}
 		hudsonServer = hudsonServerFactory.createHudsonServer(serverToEdit);
 		return super.doDefault();
@@ -82,7 +82,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 			return "input";
 		}
 		hudsonServerManager.put(hudsonServer);
-		return getRedirect("ViewHudsonServers.jspa");
+		return getRedirect("AdministerHudson.jspa");
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 		if (defaultServer != null) {
 			hudsonServerManager.setDefaultServer(defaultServer);
 		}
-		return getRedirect("ViewHudsonServers.jspa");
+		return getRedirect("AdministerHudson.jspa");
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 		if (server != null) {
 			hudsonServerAccessor.getCrumb(server);
 		}
-		return getRedirect("ViewHudsonServers.jspa");
+		return getRedirect("AdministerHudson.jspa");
 	}
 
 	/**

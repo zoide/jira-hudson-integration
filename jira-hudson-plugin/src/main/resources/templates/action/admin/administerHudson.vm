@@ -1,0 +1,91 @@
+## Licensed to Marvelution under one or more contributor license 
+## agreements.  See the NOTICE file distributed with this work 
+## for additional information regarding copyright ownership.
+## Marvelution licenses this file to you under the Apache License,
+## Version 2.0 (the "License"); you may not use this file except
+## in compliance with the License.
+## You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied. See the License for the
+## specific language governing permissions and limitations
+## under the License.
+
+#set($i18n=$action)
+
+<div class="jiraform maxWidth">
+	<div class="jiraformheader">
+		<h3 class="formtitle">
+			<img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson/images/hudson-icon-24.png" align="absmiddle" border="0" height="24" width="24" />
+			$i18n.getText("hudson.config.title")
+		</h3>
+		<br/>
+		$i18n.getText("hudson.config.description")<br />
+		<img src="${req.contextPath}/images/icons/bullet_creme.gif" align="absmiddle" border="0" height="8" width="8">
+		<b><a id="add_hudson_server" href="AddHudsonServer!default.jspa">$i18n.getText("hudson.config.server.add.link")</a></b>
+	</div>
+	<div class="jiraformcontents">
+		<table class="grid maxWidth">
+			<tr>
+				<th>$i18n.getText("common.words.name")</th>
+				<th>$i18n.getText("common.words.details")</th>
+				<th>$i18n.getText("hudson.config.associated-projects-keys.label")</th>
+				<th>$i18n.getText("common.words.operations")</th>
+			</tr>
+			#if( ${servers.isEmpty()} )
+				<tr bgcolor="#FFF">
+					<td colspan="4">
+						$i18n.getText("hudson.config.no-servers-configured")
+					</td>
+				</tr>
+			#else
+				#foreach( $server in $sorter.sort($servers, "name") )
+					#if ($velocityCount % 2 == 1)
+						#set ($rowbgcolor = "#FFFFFF")
+					#else
+						#set ($rowbgcolor = "#FFFFF0")
+					#end
+					<tr bgcolor="$rowbgcolor">
+						<td valign="top">
+							<b>${server.name}</b>
+							#if (${hudsonServerManager.isDefaultServer(${server})}) (${i18n.getText("common.words.default")}) #end
+							<br>
+							<font size="1">$!{server.description}</font>
+						</td>
+						<td valign="top">
+							<b>$i18n.getText("hudson.config.host")</b>: ${server.host}
+							#if (${server.isSecuredHudsonServer()})
+							<br><b>$i18n.getText("common.words.username")</b>: ${server.username}<br>
+							#else
+							<br><b>$i18n.getText("hudson.config.server.anonymous")</b>
+							#end
+						</td>
+						<td valign="top">
+							#if ($server.associatedProjectKeys.isEmpty())
+								<em>$i18n.getText("hudson.config.no-associated-projects")</em>
+							#end
+							#foreach( $projectKey in $server.associatedProjectKeys )
+								#set( $project = ${projectManager.getProjectObjByKey(${projectKey})} )
+								<a href="/secure/project/ViewProject.jspa?pid=${project.id}">${project.name}</a><br>
+							#end
+						</td>
+						<td align="left" valign="top">
+							<a href="UpdateHudsonServer!default.jspa?hudsonServerId=${server.serverId}">$i18n.getText("common.forms.edit")</a>
+							| <a href="DeleteHudsonServer!default.jspa?hudsonServerId=${server.serverId}">$i18n.getText("common.words.delete")</a>
+							| <a href="UpdateHudsonServerProjectAssociations!default.jspa?hudsonServerId=${server.serverId}">$i18n.getText("hudson.associate.projects")</a>
+							| <a href="UpdateHudsonServer!updateCrumb.jspa?hudsonServerId=${server.serverId}">$i18n.getText("hudson.update-crumb")</a>
+							#if (!${hudsonServerManager.isDefaultServer(${server})})
+							| <a href="UpdateHudsonServer!setAsDefault.jspa?hudsonServerId=${server.serverId}">$i18n.getText("hudson.set-as-default")</a>
+							#end
+						</td>
+					</tr>
+				#end
+			#end
+		</table>
+	</div>
+</div>
+<br />
