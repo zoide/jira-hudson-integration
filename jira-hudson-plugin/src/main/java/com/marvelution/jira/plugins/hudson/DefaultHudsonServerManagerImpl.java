@@ -177,10 +177,17 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	 * {@inheritDoc}
 	 */
 	public HudsonServer getServerByJiraProject(Project project) {
-		if (project != null && projectMapping.containsKey(project.getKey())) {
+		if (hasServerAssociation(project)) {
 			return getServer(projectMapping.get(project.getKey()));
 		}
 		return getDefaultServer();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean hasServerAssociation(Project project) {
+		return (project != null && projectMapping.containsKey(project.getKey()));
 	}
 
 	/**

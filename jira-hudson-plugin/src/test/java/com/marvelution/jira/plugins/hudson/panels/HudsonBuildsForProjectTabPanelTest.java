@@ -40,6 +40,7 @@ import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
 import com.atlassian.plugin.webresource.WebResourceManager;
 import com.marvelution.jira.plugins.hudson.DefaultHudsonServerImpl;
+import com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 import com.opensymphony.user.User;
@@ -80,6 +81,9 @@ public class HudsonBuildsForProjectTabPanelTest {
 
 	private Map<String, Object> velocityParams;
 
+	@Mock
+	private HudsonConfigurationManager configurationManager;
+
 	/**
 	 * Setup test variables
 	 * 
@@ -90,7 +94,7 @@ public class HudsonBuildsForProjectTabPanelTest {
 		MockitoAnnotations.initMocks(this);
 		tabPanelHelper = new HudsonBuildsTabPanelHelper(projectManager, serverManager, webResourceManager);
 		panel = new HudsonBuildsForProjectTabPanel(authenticationContext, permissionManager, serverManager,
-				tabPanelHelper);
+				tabPanelHelper, configurationManager);
 		panel.init(new ProjectTabPanelModuleDescriptor(authenticationContext) {
 
 			@SuppressWarnings("unchecked")

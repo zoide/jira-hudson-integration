@@ -33,6 +33,7 @@ import org.mockito.MockitoAnnotations;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
+import com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 import com.opensymphony.user.User;
 
@@ -56,6 +57,9 @@ public class HudsonBuildsForIssueTabPanelTest {
 	@Mock
 	private Issue issue;
 
+	@Mock
+	private HudsonConfigurationManager configurationManager;
+
 	/**
 	 * Setup the test variables
 	 * 
@@ -64,7 +68,8 @@ public class HudsonBuildsForIssueTabPanelTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		panel = new HudsonBuildsForIssueTabPanel(permissionManager, serverManager, tabPanelHelper);
+		panel =
+			new HudsonBuildsForIssueTabPanel(permissionManager, serverManager, tabPanelHelper, configurationManager);
 		when(serverManager.isHudsonConfigured()).thenReturn(true);
 	}
 

@@ -66,13 +66,13 @@ function unselectList(list) {
 				</select>
 			</td>
 			<td bgcolor="#ffffff" class="fieldValueArea" valign="middle" align="center">
-				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/add-one.png"
+				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson/images/add-one.png"
 					name="addButton" value=" < " title="Add Project" style="margin: 5px; padding: 5px;"><br />
-				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/add-all.png"
+				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson/images/add-all.png"
 					name="addAllButton" value=" << " title="Add All Projects" style="margin: 5px; padding: 5px;"><br />
-				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/remove-all.png" 
+				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson/images/remove-all.png" 
 					name="removeAllButton" value=" >> " title="Remove All Projects" style="margin: 5px; padding: 5px;"><br />
-				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson-servers/images/remove-one.png" 
+				<input type="image" src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson/images/remove-one.png" 
 					name="removeButton" value=" > " title="Remove Project" style="margin: 5px; padding: 5px;"><br />
 			</td>
 			<td bgcolor="#ffffff" class="fieldValueArea" valign="middle" align="center">

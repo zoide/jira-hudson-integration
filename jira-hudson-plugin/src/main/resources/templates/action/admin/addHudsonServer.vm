@@ -83,15 +83,13 @@
 			</td>
 		</tr>
 		<tr>
-			<tr>
-				<td colspan="2" class="fullyCentered jiraformfooter">
-					<input type="submit" id=" Add " name=" $i18n.getText("common.forms.add") " value=" $i18n.getText("common.forms.add") "
-						   accesskey="S" title="Press Alt+S to submit form" class="spaced" />
-					<input type="button" id="cancelButton" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt + `)"
-						name="AdministerHudson.jspa" value="$i18n.getText("common.forms.cancel")"
-						onclick="location.href='AdministerHudson.jspa'" />
-				</td>
-			</tr>
+			<td colspan="2" class="fullyCentered jiraformfooter">
+				<input type="submit" id=" Add " name=" $i18n.getText("common.forms.add") " value=" $i18n.getText("common.forms.add") "
+					   accesskey="S" title="Press Alt+S to submit form" class="spaced" />
+				<input type="button" id="cancelButton" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt + `)"
+					name="AdministerHudson.jspa" value="$i18n.getText("common.forms.cancel")"
+					onclick="location.href='AdministerHudson.jspa'" />
+			</td>
 		</tr>
 	</tbody>
 </table>

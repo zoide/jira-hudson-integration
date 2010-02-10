@@ -87,6 +87,16 @@ public interface HudsonServerManager {
 	HudsonServer getServerByJiraProject(Project project);
 
 	/**
+	 * Check if there is a Hudson Server association for the given {@link Project}
+	 * 
+	 * @param project the {@link Project} to check if an association is configured
+	 * @return <code>true</code> if the {@link Project} is associated with a specific {@link HudsonServer},
+	 *         <code>false</code> otherwise
+	 * @since 3.3.0
+	 */
+	boolean hasServerAssociation(Project project);
+
+	/**
 	 * Gets the default {@link HudsonServer}
 	 * 
 	 * @return the default {@link HudsonServer}

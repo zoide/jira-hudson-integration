@@ -27,8 +27,10 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.internal.verification.VerificationModeFactory;
 
+import com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 
 import webwork.action.ActionSupport;
@@ -43,12 +45,15 @@ public class AdministerHudsonTest extends AbstractHudsonWebActionSupportTest {
 
 	private AdministerHudson viewHudsonServers;
 
+	@Mock
+	private HudsonConfigurationManager configurationManager;
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected ActionSupport createWebworkAction() {
-		viewHudsonServers = new AdministerHudson(permissionManager, serverManager);
+		viewHudsonServers = new AdministerHudson(permissionManager, serverManager, configurationManager);
 		return viewHudsonServers;
 	}
 

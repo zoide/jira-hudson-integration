@@ -28,6 +28,7 @@ import com.atlassian.jira.project.browse.BrowseContext;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
+import com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
 /**
@@ -43,6 +44,8 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 
 	private final HudsonBuildsTabPanelHelper tabPanelHelper;
 
+	private final HudsonConfigurationManager configurationManager;
+
 	/**
 	 * Constructor
 	 * 
@@ -50,14 +53,17 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param serverManager the {@link HudsonServerManager} implementation
 	 * @param tabPanelHelper the {@link HudsonBuildsTabPanelHelper} class
+	 * @param configurationManager the {@link HudsonConfigurationManager} implementation
 	 */
 	public HudsonBuildsForProjectTabPanel(JiraAuthenticationContext authenticationContext,
 											PermissionManager permissionManager, HudsonServerManager serverManager,
-											HudsonBuildsTabPanelHelper tabPanelHelper) {
+											HudsonBuildsTabPanelHelper tabPanelHelper,
+											HudsonConfigurationManager configurationManager) {
 		super(authenticationContext);
 		this.permissionManager = permissionManager;
 		this.serverManager = serverManager;
 		this.tabPanelHelper = tabPanelHelper;
+		this.configurationManager = configurationManager;
 	}
 
 	/**
@@ -86,8 +92,14 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 	 * {@inheritDoc}
 	 */
 	public boolean showPanel(BrowseContext browseContext) {
-		return (serverManager.isHudsonConfigured() && permissionManager.hasPermission(
-			Permissions.VIEW_VERSION_CONTROL, browseContext.getProject(), browseContext.getUser()));
+		if (configurationManager.getBooleanProperty(HudsonConfigurationManager.HIDE_UNASSOCIATED_HUDSON_TAB)) {
+			return (serverManager.isHudsonConfigured()
+				&& serverManager.hasServerAssociation(browseContext.getProject()) && permissionManager.hasPermission(
+				Permissions.VIEW_VERSION_CONTROL, browseContext.getProject(), browseContext.getUser()));
+		} else {
+			return (serverManager.isHudsonConfigured() && permissionManager.hasPermission(
+				Permissions.VIEW_VERSION_CONTROL, browseContext.getProject(), browseContext.getUser()));
+		}
 	}
 
 }

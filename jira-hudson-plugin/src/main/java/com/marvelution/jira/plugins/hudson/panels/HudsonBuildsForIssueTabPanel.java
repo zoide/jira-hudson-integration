@@ -26,6 +26,7 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.plugin.issuetabpanel.AbstractIssueTabPanel;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
+import com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 import com.opensymphony.user.User;
 
@@ -42,18 +43,23 @@ public class HudsonBuildsForIssueTabPanel extends AbstractIssueTabPanel {
 
 	private final HudsonBuildsTabPanelHelper tabPanelHelper;
 
+	private final HudsonConfigurationManager configurationManager;
+
 	/**
 	 * Constructor
 	 * 
 	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param serverManager the {@link HudsonServerManager} implementation
 	 * @param tabPanelHelper the {@link HudsonBuildsTabPanelHelper} implementation
+	 * @param configurationManager the {@link HudsonConfigurationManager} implementation
 	 */
 	public HudsonBuildsForIssueTabPanel(PermissionManager permissionManager, HudsonServerManager serverManager,
-										HudsonBuildsTabPanelHelper tabPanelHelper) {
+										HudsonBuildsTabPanelHelper tabPanelHelper,
+										HudsonConfigurationManager configurationManager) {
 		this.permissionManager = permissionManager;
 		this.serverManager = serverManager;
 		this.tabPanelHelper = tabPanelHelper;
+		this.configurationManager = configurationManager;
 	}
 
 	/**
@@ -67,8 +73,14 @@ public class HudsonBuildsForIssueTabPanel extends AbstractIssueTabPanel {
 	 * {@inheritDoc}
 	 */
 	public boolean showPanel(Issue issue, User user) {
-		return (serverManager.isHudsonConfigured() && permissionManager.hasPermission(
-			Permissions.VIEW_VERSION_CONTROL, issue, user));
+		if (configurationManager.getBooleanProperty(HudsonConfigurationManager.HIDE_UNASSOCIATED_HUDSON_TAB)) {
+			return (serverManager.isHudsonConfigured()
+				&& serverManager.hasServerAssociation(issue.getProjectObject()) && permissionManager.hasPermission(
+				Permissions.VIEW_VERSION_CONTROL, issue, user));
+		} else {
+			return (serverManager.isHudsonConfigured() && permissionManager.hasPermission(
+				Permissions.VIEW_VERSION_CONTROL, issue, user));
+		}
 	}
 
 }

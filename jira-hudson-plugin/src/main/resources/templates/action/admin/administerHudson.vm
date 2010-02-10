@@ -89,3 +89,36 @@
 	</div>
 </div>
 <br />
+<form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="AdministerHudson.jspa">
+<div class="jiraform maxWidth">
+	<div class="jiraformheader">
+		<h3 class="formtitle">
+			<img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson:hudson/images/hudson-icon-24.png" align="absmiddle" border="0" height="24" width="24" />
+			$i18n.getText("hudson.config.settings.title")
+		</h3>
+		<br/>
+		$i18n.getText("hudson.config.settings.description")<br />
+	</div>
+	<div class="jiraformcontents">
+		<table class="grid maxWidth">
+			<tr>
+				<td class="fieldLabelArea">$i18n.getText("hudson.config.settings.hide.unassociated.hudson.tabs"):</td>
+				<td bgcolor="#ffffff" class="fieldValueArea">
+					<input type="radio" value="true" name="hideUnassociatedHudsonTabs" #if (${hideUnassociatedHudsonTabs}) checked #end> $i18n.getText("hudson.config.hide")
+					&nbsp;
+					<input type="radio" value="false" name="hideUnassociatedHudsonTabs" #if (!${hideUnassociatedHudsonTabs}) checked #end> $i18n.getText("hudson.config.always.show")
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="fullyCentered jiraformfooter">
+					<input type="submit" id=" Update " name=" $i18n.getText("common.forms.update") " value=" $i18n.getText("common.forms.update") "
+						   accesskey="S" title="Press Alt+S to submit form" class="spaced" />
+					<input type="button" id="cancelButton" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt + `)"
+						name="AdministerHudson.jspa" value="$i18n.getText("common.forms.cancel")"
+						onclick="location.href='AdministerHudson.jspa'" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+</form>

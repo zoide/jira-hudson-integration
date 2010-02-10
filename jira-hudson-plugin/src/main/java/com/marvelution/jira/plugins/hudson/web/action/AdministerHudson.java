@@ -22,6 +22,7 @@ package com.marvelution.jira.plugins.hudson.web.action;
 import java.util.Collection;
 
 import com.atlassian.jira.security.PermissionManager;
+import com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 
@@ -34,14 +35,19 @@ public class AdministerHudson extends AbstractHudsonWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
 
+	private final HudsonConfigurationManager hudsonConfigurationManager;
+
 	/**
 	 * Constructor
 	 * 
 	 * @param permissionManager the {@link PermissionManager} implementation
 	 * @param hudsonServerManager the {@link HudsonServerManager} implementation
+	 * @param hudsonConfigurationManager the {@link HudsonConfigurationManager} implementation
 	 */
-	public AdministerHudson(PermissionManager permissionManager, HudsonServerManager hudsonServerManager) {
+	public AdministerHudson(PermissionManager permissionManager, HudsonServerManager hudsonServerManager,
+							HudsonConfigurationManager hudsonConfigurationManager) {
 		super(permissionManager, hudsonServerManager);
+		this.hudsonConfigurationManager = hudsonConfigurationManager;
 	}
 
 	/**
@@ -51,6 +57,25 @@ public class AdministerHudson extends AbstractHudsonWebActionSupport {
 	 */
 	public Collection<HudsonServer> getServers() {
 		return hudsonServerManager.getServers();
+	}
+
+	/**
+	 * Get the hideUnassociatedHudsonTabs setting
+	 * 
+	 * @return setting value
+	 */
+	public boolean isHideUnassociatedHudsonTabs() {
+		return hudsonConfigurationManager.getBooleanProperty(HudsonConfigurationManager.HIDE_UNASSOCIATED_HUDSON_TAB);
+	}
+
+	/**
+	 * Set the hideUnassociatedHudsonTabs setting
+	 * 
+	 * @param hideUnassociatedHudsonTabs the new setting value
+	 */
+	public void setHideUnassociatedHudsonTabs(boolean hideUnassociatedHudsonTabs) {
+		hudsonConfigurationManager.setProperty(HudsonConfigurationManager.HIDE_UNASSOCIATED_HUDSON_TAB,
+			hideUnassociatedHudsonTabs);
 	}
 
 }

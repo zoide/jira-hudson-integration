@@ -41,6 +41,7 @@ import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
 import com.atlassian.plugin.webresource.WebResourceManager;
 import com.marvelution.jira.plugins.hudson.DefaultHudsonServerImpl;
+import com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
 import com.opensymphony.user.User;
@@ -85,6 +86,9 @@ public class HudsonBuildsForVersionTabPanelTest {
 	@Mock
 	private WebResourceManager webResourceManager;
 
+	@Mock
+	private HudsonConfigurationManager configurationManager;
+
 	/**
 	 * Setup the test variables
 	 * 
@@ -96,7 +100,7 @@ public class HudsonBuildsForVersionTabPanelTest {
 		tabPanelHelper = new HudsonBuildsTabPanelHelper(projectManager, serverManager, webResourceManager);
 		panel =
 			new HudsonBuildsForVersionTabPanel(authenticationContext, searchProvider, permissionManager,
-				serverManager, tabPanelHelper);
+				serverManager, tabPanelHelper, configurationManager);
 		when(versionContext.getVersion()).thenReturn(version);
 		when(versionContext.getProject()).thenReturn(project);
 		when(version.getProjectObject()).thenReturn(project);
