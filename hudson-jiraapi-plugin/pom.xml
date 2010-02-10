@@ -106,7 +106,7 @@
 			<plugin>
 				<groupId>org.jvnet.hudson.tools</groupId>
 				<artifactId>maven-hpi-plugin</artifactId>
-				<version>1.9</version>
+				<version>1.48</version>
 				<extensions>true</extensions>
 			</plugin>
 		</plugins>
