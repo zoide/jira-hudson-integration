@@ -55,6 +55,7 @@ import com.marvelution.jira.plugins.hudson.api.model.Build;
 import com.marvelution.jira.plugins.hudson.api.model.Job;
 import com.marvelution.jira.plugins.hudson.model.HudsonBuildTabPanelResult;
 import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
+import com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.service.HudsonServer;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessDeniedException;
 import com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor;
@@ -89,11 +90,15 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 
 	private final HudsonServerManager serverManager;
 
+	private final HudsonConfigurationManager configurationManager;
+
 	private final SearchProvider searchProvider;
 
 	private final I18nHelper i18n;
 
 	private final UserUtil userUtil;
+
+	private Project project;
 
 	private String projectKey;
 
@@ -116,6 +121,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 * @param versionManager the {@link VersionManager} implementation
 	 * @param userUtil the {@link UserUtil} implementation
 	 * @param serverAccessor the {@link HudsonServerAccessor} implementation
+	 * @param configurationManager the {@link HudsonConfigurationManager} implementation
 	 * @param serverManager the {@link HudsonServerManager} implementation
 	 * @param searchProvider the {@link SearchProvider} implementation
 	 */
@@ -123,8 +129,9 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 										PermissionManager permissionManager, ProjectManager projectManager,
 										ProjectComponentManager componentManager, IssueManager issueManager,
 										VersionManager versionManager, UserUtil userUtil,
-										HudsonServerAccessor serverAccessor, HudsonServerManager serverManager,
-										SearchProvider searchProvider) {
+										HudsonServerAccessor serverAccessor,
+										HudsonConfigurationManager configurationManager,
+										HudsonServerManager serverManager, SearchProvider searchProvider) {
 		this.authenticationContext = authenticationContext;
 		this.permissionManager = permissionManager;
 		this.projectManager = projectManager;
@@ -135,6 +142,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 		this.serverAccessor = serverAccessor;
 		this.serverManager = serverManager;
 		this.searchProvider = searchProvider;
+		this.configurationManager = configurationManager;
 		i18n = authenticationContext.getI18nHelper();
 	}
 
@@ -156,7 +164,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 		try {
 			List<Build> builds = new ArrayList<Build>();
 			if (!StringUtils.isEmpty(getProjectKey())) {
-				final Project project = projectManager.getProjectObjByKey(getProjectKey());
+				project = projectManager.getProjectObjByKey(getProjectKey());
 				if (project != null
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, project, authenticationContext
 						.getUser())) {
@@ -175,6 +183,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 				if (version != null
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, version.getProjectObject(),
 						authenticationContext.getUser())) {
+					project = version.getProjectObject();
 					server = serverManager.getServerByJiraProject(version.getProjectObject());
 					if (HudsonBuildsTabPanelHelper.SUB_TAB_BUILD_BY_ISSUE.equals(selectedSubTab)) {
 						builds = serverAccessor.getBuilds(server, getIssueKeys(version));
@@ -187,7 +196,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 				}
 			} else if (getComponentId() != null && getComponentId() > 0L) {
 				final ProjectComponent component = componentManager.find(getComponentId());
-				final Project project = projectManager.getProjectObj(component.getProjectId());
+				project = projectManager.getProjectObj(component.getProjectId());
 				if (component != null && project != null
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, project, authenticationContext
 						.getUser())) {
@@ -202,6 +211,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 				if (issue != null
 					&& permissionManager.hasPermission(Permissions.VIEW_VERSION_CONTROL, issue, authenticationContext
 						.getUser())) {
+					project = issue.getProjectObject();
 					server = serverManager.getServerByJiraProject(issue.getProjectObject());
 					builds = serverAccessor.getBuilds(server, Collections.singletonList(issue.getKey()));
 				} else {
@@ -234,7 +244,7 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	 * @throws Exception in case the request is unsupported
 	 */
 	public String doShowRss() throws Exception {
-		Project project = null;
+		project = null;
 		if (StringUtils.isNotEmpty(getProjectKey())) {
 			project = projectManager.getProjectObjByKey(getProjectKey());
 		} else if (getVersionId() != null && getVersionId() > 0L) {
@@ -255,17 +265,17 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 	/**
 	 * Get the issue keys that relate to the given {@link Project}
 	 * 
-	 * @param project the {@link Project} to get the related issues for
+	 * @param projectObj the {@link Project} to get the related issues for
 	 * @return {@link Collection} of issue keys
 	 */
-	private Collection<String> getIssueKeys(final Project project) {
+	private Collection<String> getIssueKeys(final Project projectObj) {
 		try {
 			final JqlQueryBuilder queryBuilder =
-				JqlQueryBuilder.newBuilder().where().project(new Long[] {project.getId()}).endWhere();
-			return getIssueKeys(queryBuilder, project.getId());
+				JqlQueryBuilder.newBuilder().where().project(new Long[] {projectObj.getId()}).endWhere();
+			return getIssueKeys(queryBuilder, projectObj.getId());
 		} catch (SearchException e) {
 			log.warn(
-				"Unable to get all issues from project " + project.getName() + ". Reason: " + e.getMessage(), e);
+				"Unable to get all issues from project " + projectObj.getName() + ". Reason: " + e.getMessage(), e);
 		}
 		return null;
 	}
@@ -347,6 +357,14 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 				final String key = iter.next();
 				final MutableIssue issue = issueManager.getIssueObject(key);
 				if (issue == null) {
+					iter.remove();
+				}
+			}
+		}
+		if (configurationManager.getBooleanProperty(HudsonConfigurationManager.FILTER_HUDSON_BUILDS)) {
+			for (final Iterator<Build> iter = builds.iterator(); iter.hasNext();) {
+				final Build build = iter.next();
+				if (!project.getKey().equalsIgnoreCase(build.getJobKey())) {
 					iter.remove();
 				}
 			}

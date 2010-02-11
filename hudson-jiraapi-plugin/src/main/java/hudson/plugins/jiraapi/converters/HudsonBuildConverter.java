@@ -36,6 +36,7 @@ import hudson.model.Cause.RemoteCause;
 import hudson.model.Cause.UpstreamCause;
 import hudson.model.Cause.UserCause;
 import hudson.model.Run.Artifact;
+import hudson.plugins.jiraapi.JiraProjectKeyJobProperty;
 import hudson.plugins.jiraapi.utils.JiraKeyUtils;
 import hudson.plugins.jiraapi.utils.ProjectUtils;
 import hudson.scm.ChangeLogSet.Entry;
@@ -72,6 +73,9 @@ public class HudsonBuildConverter {
 		final Build build = new Build(hudsonBuild.getNumber(), hudsonBuild.getProject().getName());
 		build.setUrl(hudsonBuild.getUrl());
 		build.setJobUrl(hudsonBuild.getProject().getUrl());
+		if (hudsonBuild.getProject().getProperty(JiraProjectKeyJobProperty.class) != null) {
+			build.setJobKey(hudsonBuild.getProject().getProperty(JiraProjectKeyJobProperty.class).getKey());
+		}
 		build.setDuration(hudsonBuild.getDuration());
 		build.setTimestamp(hudsonBuild.getTimestamp().getTimeInMillis());
 		build.setResult(HudsonResultConverter.convertHudsonResult(hudsonBuild.getResult()));

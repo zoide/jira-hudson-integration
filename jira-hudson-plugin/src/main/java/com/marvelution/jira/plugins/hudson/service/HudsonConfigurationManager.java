@@ -30,6 +30,8 @@ public interface HudsonConfigurationManager {
 
 	String HIDE_UNASSOCIATED_HUDSON_TAB = "hide.unassociated.hudson.tab";
 
+	String FILTER_HUDSON_BUILDS = "filter.hudson.builds";
+
 	/**
 	 * Get the {@link String} value of the property key given
 	 * 

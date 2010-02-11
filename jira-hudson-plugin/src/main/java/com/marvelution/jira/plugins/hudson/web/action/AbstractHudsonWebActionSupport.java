@@ -72,7 +72,7 @@ public abstract class AbstractHudsonWebActionSupport extends JiraWebActionSuppor
 	 * {@inheritDoc}
 	 */
 	public String doDefault() throws Exception {
-		return ((hasPermissions()) ? "input" : "permissionviolation");
+		return ((hasPermissions()) ? INPUT : PERMISSION_VIOLATION_RESULT);
 	}
 
 	/**

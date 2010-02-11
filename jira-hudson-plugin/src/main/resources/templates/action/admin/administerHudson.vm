@@ -102,11 +102,19 @@
 	<div class="jiraformcontents">
 		<table class="grid maxWidth">
 			<tr>
-				<td class="fieldLabelArea">$i18n.getText("hudson.config.settings.hide.unassociated.hudson.tabs"):</td>
+				<td class="fieldLabelArea" width="34%">$i18n.getText("hudson.config.settings.hide.unassociated.hudson.tabs"):</td>
 				<td bgcolor="#ffffff" class="fieldValueArea">
 					<input type="radio" value="true" name="hideUnassociatedHudsonTabs" #if (${hideUnassociatedHudsonTabs}) checked #end> $i18n.getText("hudson.config.hide")
 					&nbsp;
 					<input type="radio" value="false" name="hideUnassociatedHudsonTabs" #if (!${hideUnassociatedHudsonTabs}) checked #end> $i18n.getText("hudson.config.always.show")
+				</td>
+			</tr>
+			<tr>
+				<td class="fieldLabelArea" width="34%">$i18n.getText("hudson.config.settings.filter.hudson.builds"):</td>
+				<td bgcolor="#ffffff" class="fieldValueArea">
+					<input type="radio" value="true" name="filterHudsonBuilds" #if (${filterHudsonBuilds}) checked #end> $i18n.getText("common.words.on")
+					&nbsp;
+					<input type="radio" value="false" name="filterHudsonBuilds" #if (!${filterHudsonBuilds}) checked #end> $i18n.getText("common.words.off")
 				</td>
 			</tr>
 			<tr>

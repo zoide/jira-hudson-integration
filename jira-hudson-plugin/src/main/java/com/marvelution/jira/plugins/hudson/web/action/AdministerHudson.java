@@ -78,4 +78,22 @@ public class AdministerHudson extends AbstractHudsonWebActionSupport {
 			hideUnassociatedHudsonTabs);
 	}
 
+	/**
+	 * Get the filterHudsonBuilds setting
+	 * 
+	 * @return setting value
+	 */
+	public boolean isFilterHudsonBuilds() {
+		return hudsonConfigurationManager.getBooleanProperty(HudsonConfigurationManager.FILTER_HUDSON_BUILDS);
+	}
+
+	/**
+	 * Set the filterHudsonBuilds setting
+	 * 
+	 * @param filterHudsonBuilds the new setting value
+	 */
+	public void setFilterHudsonBuilds(boolean filterHudsonBuilds) {
+		hudsonConfigurationManager.setProperty(HudsonConfigurationManager.FILTER_HUDSON_BUILDS, filterHudsonBuilds);
+	}
+
 }

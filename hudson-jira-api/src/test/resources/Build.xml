@@ -3,6 +3,7 @@
   <url>job/Marvelution-utils/58/</url>
   <jobName>Marvelution-utils</jobName>
   <jobUrl>job/Marvelution-utils/</jobUrl>
+  <jobKey>MARVUTIL</jobKey>
   <trigger class="scmTrigger"/>
   <relatedIssueKey>ISSUE-1</relatedIssueKey>
   <relatedIssueKey>ISSUE-2</relatedIssueKey>

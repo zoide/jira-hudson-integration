@@ -229,6 +229,7 @@ public class XStreamMarshallerTest {
 		build.setHudsonServerId(1);
 		build.setUrl("job/Marvelution-utils/58/");
 		build.setJobUrl("job/Marvelution-utils/");
+		build.setJobKey("MARVUTIL");
 		final List<Trigger> triggers = new ArrayList<Trigger>();
 		triggers.add(new SCMTrigger());
 		build.setTriggers(triggers);
@@ -266,6 +267,7 @@ public class XStreamMarshallerTest {
 		assertEquals("job/Marvelution-utils/58/", build.getUrl());
 		assertEquals("Marvelution-utils", build.getJobName());
 		assertEquals("job/Marvelution-utils/", build.getJobUrl());
+		assertEquals("MARVUTIL", build.getJobKey());
 		assertTrue(build.getTriggers().get(0) instanceof SCMTrigger);
 		assertTrue(build.getArtifacts().size() == 1);
 		assertEquals("pom.xml", build.getArtifacts().get(0).getName());

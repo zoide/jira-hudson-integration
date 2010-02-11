@@ -49,6 +49,8 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 
 	private String jobName;
 
+	private String jobKey;
+
 	private String jobUrl;
 
 	@XStreamImplicit(itemFieldName = "trigger")
@@ -162,6 +164,24 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	 */
 	public void setJobName(String jobName) {
 		this.jobName = jobName;
+	}
+
+	/**
+	 * Gets the job key of this build
+	 * 
+	 * @return the job key of this build
+	 */
+	public String getJobKey() {
+		return jobKey;
+	}
+
+	/**
+	 * Sets the job key of this build
+	 * 
+	 * @param jobKey the job key of this build
+	 */
+	public void setJobKey(String jobKey) {
+		this.jobKey = jobKey;
 	}
 
 	/**
