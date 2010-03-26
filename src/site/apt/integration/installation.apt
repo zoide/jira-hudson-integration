@@ -36,7 +36,7 @@ Installation
 * Hudson Plugin
 ~~~~~~~~~~~~~~~
 
-  To install the Hudson Plugin, {{{../hudson-jiraapi-plugin/download.html}download}} the plugin and install it using
+  To install the Hudson Plugin, {{{./download.html}download}} the plugin and install it using
   the Plugin Manager 'Advanced' tab. 
   
 [../images/hudson/install-hudson-plugin.png] Upload Hudson plugin
@@ -51,7 +51,7 @@ Installation
 * Jira Plugin
 ~~~~~~~~~~~~~
 
-  To install the Jira Plugin, {{{../jira-hudson-plugin/download.html}download}} the plugin.
+  To install the Jira Plugin, {{{./download.html}download}} the plugin.
   Once you have the jar artifact, shutdown Jira and install it using the directions for your Jira installation.
 
   <<NOTE:>> Version 3.x and above are only supported on Jira 4. If you are running Jira 3.13.x be sure to download
