@@ -47,7 +47,7 @@
 	<scm>
 		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson-plugin</connection>
 		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson-plugin</developerConnection>
-		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson-plugin</url>
+		<url>http://fisheye.marvelution.com/browse/public/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson-plugin</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>

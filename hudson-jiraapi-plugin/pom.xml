@@ -47,7 +47,7 @@
 	<scm>
 		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/hudson-jiraapi-plugin</connection>
 		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/hudson-jiraapi-plugin</developerConnection>
-		<url>http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/hudson-jiraapi-plugin</url>
+		<url>http://fisheye.marvelution.com/browse/public/marvelution/marvelution-jira-hudson-integration/trunk/hudson-jiraapi-plugin</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
@@ -76,6 +76,13 @@
 			<groupId>org.jvnet.hudson.main</groupId>
 			<artifactId>hudson-core</artifactId>
 			<version>${hudsonVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.4</version>
+			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -113,7 +120,7 @@
 			<plugin>
 				<groupId>org.jvnet.hudson.tools</groupId>
 				<artifactId>maven-hpi-plugin</artifactId>
-				<version>1.48</version>
+				<version>1.50</version>
 				<extensions>true</extensions>
 			</plugin>
 		</plugins>
