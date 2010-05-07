@@ -19,6 +19,7 @@
 
 package hudson.plugins.jiraapi.api;
 
+import java.util.Set;
 import java.util.SortedMap;
 
 import com.marvelution.jira.plugins.hudson.api.model.BuildsList;
@@ -101,15 +102,16 @@ public class ApiImpl {
 	 * Gets the Hudson project by Jira key
 	 * 
 	 * @param projectKey the Jira key of the project to get
-	 * @return the {@link Job}, may be <code>null</code> if no Hudson project is found with the Jira Key configured
+	 * @return {@link List} {@link Job}, may be <code>empty</code> if no Hudson project is found with the Jira Key
+	 *         configured
 	 */
-	public Job getProjectByJiraKey(String projectKey) {
-		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
-		if (project != null) {
-			return HudsonProjectConverter.convertHudsonProject(project);
-		} else {
-			return null;
+	public JobsList getProjectByJiraKey(String projectKey) {
+		final Set<AbstractProject<?, ?>> projects = ProjectUtils.getProjectByJiraProjectKey(projectKey);
+		final JobsList jobs = new JobsList();
+		for (AbstractProject<?, ?> project : projects) {
+			jobs.getJobs().add(HudsonProjectConverter.convertHudsonProject(project));
 		}
+		return jobs;
 	}
 
 	/**
@@ -120,8 +122,8 @@ public class ApiImpl {
 	 */
 	public BuildsList getBuildsByJiraProject(final String projectKey) {
 		final BuildsList builds = new BuildsList();
-		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
-		if (project != null) {
+		final Set<AbstractProject<?, ?>> projects = ProjectUtils.getProjectByJiraProjectKey(projectKey);
+		for (AbstractProject<?, ?> project : projects) {
 			for (AbstractBuild<?, ?> build : project.getBuilds()) {
 				builds.getBuilds().add(HudsonBuildConverter.convertHudsonBuild(build));
 			}
@@ -139,8 +141,8 @@ public class ApiImpl {
 	 */
 	public BuildsList getBuildsByJiraVersion(final String projectKey, final long startDate, final long releaseDate) {
 		final BuildsList builds = new BuildsList();
-		final AbstractProject<?, ?> project = ProjectUtils.getProjectByJiraProjectKey(projectKey);
-		if (project != null) {
+		final Set<AbstractProject<?, ?>> projects = ProjectUtils.getProjectByJiraProjectKey(projectKey);
+		for (AbstractProject<?, ?> project : projects) {
 			for (AbstractBuild<?, ?> build : project.getBuilds()) {
 				if (releaseDate > 0L) {
 					if (build.getTimestamp().getTimeInMillis() >= startDate

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -130,15 +131,18 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 				final HudsonServerResource serverResource =
 					new HudsonServerResource(server.getName(), server.getHost(), "");
 				try {
-					final Job job = serverAccessor.getProject(server, project);
-					if (job != null) {
-						final HudsonProjectResource projectResource =
-							new HudsonProjectResource(job.getName(), job.getUrl(), job.getDescription());
-						final HudsonChart chart = ChartUtils.generateSuccessFailedRatioChart(server, job);
-						chart.generate(ChartUtils.PORTLET_CHART_WIDTH, ChartUtils.PORTLET_CHART_HEIGHT);
-						final HudsonChartResource chartResource = new HudsonChartResource(chart);
-						return Response.ok(new HudsonChartsResource(serverResource, projectResource, chartResource))
-							.cacheControl(CacheControl.NO_CACHE).build();
+					final List<Job> jobs = serverAccessor.getProject(server, project);
+					if (jobs != null && !jobs.isEmpty()) {
+						final HudsonChartsResource response = new HudsonChartsResource(serverResource);
+						for (Job job : jobs) {
+							final HudsonProjectResource projectResource =
+								new HudsonProjectResource(job.getName(), job.getUrl(), job.getDescription());
+							final HudsonChart chart = ChartUtils.generateSuccessFailedRatioChart(server, job);
+							chart.generate(ChartUtils.PORTLET_CHART_WIDTH, ChartUtils.PORTLET_CHART_HEIGHT);
+							final HudsonChartResource chartResource = new HudsonChartResource(projectResource, chart);
+							response.getCharts().add(chartResource);
+						}
+						return Response.ok(response).cacheControl(CacheControl.NO_CACHE).build();
 					} else {
 						errors.add("hudson.error.project.not.on.hudson");
 					}
@@ -172,10 +176,7 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 		private HudsonServerResource server;
 
 		@XmlElement
-		private HudsonProjectResource project;
-
-		@XmlElement
-		private HudsonChartResource chart;
+		private Collection<HudsonChartResource> charts;
 
 		/**
 		 * Default Constructor
@@ -187,14 +188,9 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 		 * Constructor
 		 * 
 		 * @param server the {@link HudsonServerResource}
-		 * @param project the {@link HudsonProjectResource}
-		 * @param chart the {@link HudsonChartResource}
 		 */
-		public HudsonChartsResource(HudsonServerResource server, HudsonProjectResource project,
-									HudsonChartResource chart) {
+		public HudsonChartsResource(HudsonServerResource server) {
 			this.server = server;
-			this.chart = chart;
-			this.project = project;
 		}
 
 		/**
@@ -214,17 +210,13 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 		}
 
 		/**
-		 * @return the project
-		 */
-		public HudsonProjectResource getProject() {
-			return project;
-		}
-
-		/**
 		 * @return the chart
 		 */
-		public HudsonChartResource getChart() {
-			return chart;
+		public Collection<HudsonChartResource> getCharts() {
+			if (charts == null) {
+				charts = new ArrayList<HudsonChartResource>();
+			}
+			return charts;
 		}
 
 		/**

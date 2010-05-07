@@ -52,7 +52,6 @@ import com.atlassian.jira.util.I18nHelper;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
 import com.atlassian.jira.web.bean.PagerFilter;
 import com.marvelution.jira.plugins.hudson.api.model.Build;
-import com.marvelution.jira.plugins.hudson.api.model.Job;
 import com.marvelution.jira.plugins.hudson.model.HudsonBuildTabPanelResult;
 import com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper;
 import com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager;
@@ -235,31 +234,6 @@ public class ViewHudsonServerPanelContent extends JiraWebActionSupport {
 			return ERROR;
 		}
 		return super.doExecute();
-	}
-
-	/**
-	 * Get the redirect to the RSS feed of the project
-	 * 
-	 * @return the RSS feed link
-	 * @throws Exception in case the request is unsupported
-	 */
-	public String doShowRss() throws Exception {
-		project = null;
-		if (StringUtils.isNotEmpty(getProjectKey())) {
-			project = projectManager.getProjectObjByKey(getProjectKey());
-		} else if (getVersionId() != null && getVersionId() > 0L) {
-			project = versionManager.getVersion(getVersionId()).getProjectObject();
-		} else if (getComponentId() != null && getComponentId() > 0L) {
-			final ProjectComponent component = componentManager.find(getComponentId());
-			project = projectManager.getProjectObj(component.getProjectId());
-		}
-		if (project != null) {
-			final HudsonServer server = serverManager.getServerByJiraProject(project);
-			final Job job = serverAccessor.getProject(server, project);
-			return getRedirect(server.getHost() + "/" + job.getUrl() + "rssAll");
-		} else {
-			throw new UnsupportedOperationException(getText("hudson.panel.error.unsupport.rss.action"));
-		}
 	}
 
 	/**

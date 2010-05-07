@@ -104,22 +104,22 @@ public interface HudsonServerAccessor {
 	 * Get a Project that are configured in a specific Hudson Server
 	 * 
 	 * @param project the Jira {@link Project} to get from the {@link HudsonServer}
-	 * @return {@link Job}
+	 * @return {@link List} of {@link Job} objects
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
 	 * @throws HudsonServerAccessDeniedException in case Hudson denies access to the Remote API
 	 */
-	Job getProject(Project project) throws HudsonServerAccessorException, HudsonServerAccessDeniedException;
+	List<Job> getProject(Project project) throws HudsonServerAccessorException, HudsonServerAccessDeniedException;
 
 	/**
 	 * Get a Project that are configured in a specific Hudson Server
 	 * 
 	 * @param hudsonServer the {@link HudsonServer} to get the projects from
 	 * @param project the Jira {@link Project} to get from the {@link HudsonServer}
-	 * @return {@link Job}
+	 * @return {@link List} of {@link Job} objects
 	 * @throws HudsonServerAccessorException in case of communication exceptions with the Hudson server
 	 * @throws HudsonServerAccessDeniedException in case Hudson denies access to the Remote API
 	 */
-	Job getProject(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException,
+	List<Job> getProject(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException;
 
 	/**

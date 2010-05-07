@@ -42,9 +42,6 @@
 <div class="projectPanel" id="hudsonTabPanel">
 	<div id="hudsonTabPanelHeader">
 		<h3 class="formtitle">
-			#if ($showRss)
-			<a id="showRssLink" href="${req.contextPath}/secure/ViewHudsonServerPanelContent!showRss.jspa?${querySection}" class="actionLinks" style="display: none;"><img src="${req.contextPath}${baseResourceUrl}/images/rss.gif" alt="${i18n.getText('hudson.panel.title.rss.description')}" /></a>
-			#end
 			<img src="${req.contextPath}${baseResourceUrl}/images/hudson-icon-24.png" />
 			<a href="${hudsonServer.host}">${hudsonServer.name}</a>
 		</h3>

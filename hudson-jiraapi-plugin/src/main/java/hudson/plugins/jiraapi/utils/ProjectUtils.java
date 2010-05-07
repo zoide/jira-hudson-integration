@@ -78,24 +78,27 @@ public class ProjectUtils {
 	 * Get the Hudson Project by Jira Project Key
 	 * 
 	 * @param key the Jira project key
-	 * @return the {@link AbstractProject}, may be <code>null</code> if no {@link AbstractProject} can be found
+	 * @return {@link List} {@link AbstractProject}, may be <code>empty</code> if no {@link AbstractProject} can be
+	 *         found
 	 */
-	public static AbstractProject<?, ?> getProjectByJiraProjectKey(final String key) {
+	public static Set<AbstractProject<?, ?>> getProjectByJiraProjectKey(final String key) {
 		final Set<AbstractProject<?, ?>> projects = getAllProjectsIncludingModules();
+		final Set<AbstractProject<?, ?>> foundProjects = new HashSet<AbstractProject<?, ?>>();
 		for (AbstractProject<?, ?> project : projects) {
 			if (project.getProperty(JiraProjectKeyJobProperty.class) != null) {
 				final JiraProjectKeyJobProperty jiraProperty =
 					(JiraProjectKeyJobProperty) project.getProperty(JiraProjectKeyJobProperty.class);
-				if (key.equals(jiraProperty.getKey())) {
+				if (jiraProperty.getKey() != null && !"".equals(jiraProperty.getKey())
+					&& jiraProperty.getKey().contains(key)) {
 					if (isSupportedProjectType(project)) {
-						return project;
+						foundProjects.add(project);
 					} else {
-						return (AbstractProject<?, ?>) project.getParent();
+						foundProjects.add((AbstractProject<?, ?>) project.getParent());
 					}
 				}
 			}
 		}
-		return null;
+		return foundProjects;
 	}
 
 	/**

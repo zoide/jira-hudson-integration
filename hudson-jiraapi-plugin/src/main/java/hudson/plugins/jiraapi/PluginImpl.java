@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
@@ -332,7 +333,7 @@ public class PluginImpl extends Plugin {
 		response.setHeader("Content-type", contentType);
 		Writer writer = null;
 		try {
-			writer = response.getCompressedWriter(request);
+			writer = response.getCompressedWriter((HttpServletRequest) request);
 			writer.write(content);
 			writer.flush();
 		} catch (IOException e) {

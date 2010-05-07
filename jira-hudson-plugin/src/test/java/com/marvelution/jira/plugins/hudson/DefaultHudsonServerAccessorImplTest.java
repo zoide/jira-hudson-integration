@@ -297,10 +297,10 @@ public class DefaultHudsonServerAccessorImplTest {
 	public void testGetProject() throws Exception {
 		when(postMethod.getStatusCode()).thenReturn(HttpStatus.SC_OK);
 		when(postMethod.getResponseBodyAsStream()).thenReturn(getXMLAsInputStream("GetProject.xml"));
-		final Job job = hudsonServerAccessor.getProject(project);
+		final List<Job> job = hudsonServerAccessor.getProject(project);
 		assertNotNull(job);
-		assertEquals("MARVADMIN", job.getJiraKey());
-		assertEquals("Marvelution", job.getName());
+		assertEquals("MARVADMIN", job.get(0).getJiraKey());
+		assertEquals("Marvelution", job.get(0).getName());
 		verify(httpClient, VerificationModeFactory.times(1)).executeMethod(postMethod);
 		verify(postMethod, VerificationModeFactory.times(1)).getStatusCode();
 		verify(postMethod, VerificationModeFactory.times(1)).getResponseBodyAsStream();

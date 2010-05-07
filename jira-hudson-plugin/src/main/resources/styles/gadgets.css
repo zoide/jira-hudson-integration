@@ -119,3 +119,35 @@
 .chart-img img {
 	border: 0px;
 }
+
+.view-container {
+	margin: 5px;
+	padding: 0;
+	background-color: #FFF;
+}
+
+#tabs {
+	
+}
+
+#tabs .tab {
+	padding: 2px 10px;
+	border: 1px solid #CCC;
+	background-color: #CCC;
+	cursor: pointer;
+}
+
+#tabs .selected {
+	background-color: #FFF;
+	border-bottom: 1px solid #FFF;
+}
+
+#charts {
+	padding: 5px;
+	border: 1px solid #CCC;
+	background-color: #FFF;
+}
+
+#charts .chart {
+	text-align: center;
+}

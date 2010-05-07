@@ -43,7 +43,7 @@
 	</ModulePrefs>
 	<UserPref name="projectId" datatype="hidden" default_value="" />
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
-	<UserPref name="isConfigured" datatype="hidden" default_value="true" />
+	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
 	<Content type="html">
 		<![CDATA[
 		#requireResource("${atlassian.plugin.key}:charts-gadget")
@@ -94,16 +94,9 @@
 							gadget.getView().append(AJS.gadget.hudson.common.generateErrorMessageBox(gadget, args.data.errors));
 						} else {
 							var server = args.data.server;
-							var project = args.data.project;
-							var chart = args.data.chart;
-							gadgets.window.setTitle(AJS.format("__MSG_hudson.gadget.build.trend.project.title__", project.name));
-							if (chart.generated) {
-								AJS.gadget.hudson.charts.displayChartImage(gadget, baseUrl, server, project, chart);
-							} else {
-								gadget.getView().append(
-									AJS.gadget.hudson.common.generateErrorMessageBox(["__MSG_hudson.gadget.error.chart.not.generated__"])
-								);
-							}
+							var charts = args.data.charts;
+							gadgets.window.setTitle("__MSG_hudson.gadget.build.trend.title__");
+							AJS.gadget.hudson.charts.displayChartImage(gadget, baseUrl, server, charts);
 						}
 						gadget.resize();
 					},

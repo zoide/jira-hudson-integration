@@ -40,6 +40,9 @@ public class HudsonChartResource {
 	private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.SIMPLE_STYLE;
 
 	@XmlElement
+	private HudsonProjectResource project;
+
+	@XmlElement
 	private boolean generated;
 
 	@XmlElement
@@ -66,16 +69,18 @@ public class HudsonChartResource {
 	/**
 	 * Constructor
 	 * 
+	 * @param project the {@link HudsonProjectResource} where this chart was generated for
 	 * @param chart the {@link HudsonChart}
 	 */
-	public HudsonChartResource(HudsonChart chart) {
-		this(chart.isGenerated(), chart.getLocation(), chart.getImageMap(), chart.getImageMapName(), chart
+	public HudsonChartResource(HudsonProjectResource project, HudsonChart chart) {
+		this(project, chart.isGenerated(), chart.getLocation(), chart.getImageMap(), chart.getImageMapName(), chart
 			.getWidth(), chart.getHeight());
 	}
 
 	/**
 	 * Constructor
 	 * 
+	 * @param project the {@link HudsonProjectResource} where this chart was generated for
 	 * @param generated flag if the {@link HudsonChart} is generated
 	 * @param location the location of the Chart
 	 * @param imageMap the image map of the chart
@@ -83,14 +88,22 @@ public class HudsonChartResource {
 	 * @param width the width of the chart
 	 * @param height the height of the chart
 	 */
-	public HudsonChartResource(boolean generated, String location, String imageMap, String imageMapName,
-								int width, int height) {
+	public HudsonChartResource(HudsonProjectResource project, boolean generated, String location, String imageMap,
+								String imageMapName, int width, int height) {
+		this.project = project;
 		this.generated = generated;
 		this.location = location;
 		this.imageMap = imageMap;
 		this.imageMapName = imageMapName;
 		this.width = width;
 		this.height = height;
+	}
+
+	/**
+	 * @return the {@link HudsonProjectResource}
+	 */
+	public HudsonProjectResource getProject() {
+		return project;
 	}
 
 	/**

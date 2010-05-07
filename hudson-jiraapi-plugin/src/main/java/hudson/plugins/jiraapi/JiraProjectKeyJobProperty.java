@@ -77,12 +77,14 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 		if (StringUtils.isEmpty(key)) {
 			return;
 		}
-		if (JiraKeyUtils.isValidProjectKey(key, getProjectKeyPattern())) {
-			this.key = key;
-		} else {
-			throw new IllegalArgumentException(key + " is not a valid JIRA Project Key ("
-				+ getProjectKeyPattern().pattern() + ")");
+		final String[] keys = key.split(", ");
+		for (String subKey : keys) {
+			if (!JiraKeyUtils.isValidProjectKey(subKey, getProjectKeyPattern())) {
+				throw new IllegalArgumentException(subKey + " is not a valid JIRA Project Key ("
+					+ getProjectKeyPattern().pattern() + ")");
+			}
 		}
+		this.key = key;
 	}
 
 	/**

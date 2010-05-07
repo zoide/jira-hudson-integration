@@ -40,9 +40,9 @@
 		#oauth
 		#supportedLocales("gadget.common,hudson.gadget,hudson.error")
 	</ModulePrefs>
-	<UserPref name="serverId" datatype="hidden" default_value="1" />
+	<UserPref name="serverId" datatype="hidden" default_value="" />
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
-	<UserPref name="isConfigured" datatype="hidden" default_value="true" />
+	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
 	<Content type="html">
 		<![CDATA[
 		#requireResource("${atlassian.plugin.key}:status-gadget")

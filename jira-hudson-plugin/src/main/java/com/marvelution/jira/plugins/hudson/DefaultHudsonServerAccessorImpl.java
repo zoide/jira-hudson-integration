@@ -170,20 +170,22 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Job getProject(Project project) throws HudsonServerAccessorException, HudsonServerAccessDeniedException {
+	public List<Job> getProject(Project project) throws HudsonServerAccessorException,
+					HudsonServerAccessDeniedException {
 		return getProject(serverManager.getServerByJiraProject(project), project);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public Job getProject(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException,
+	public List<Job> getProject(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();
 		params.put("projectKey", project.getKey());
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_PROJECT_ACTION, params);
 		try {
-			return XStreamMarshaller.unmarshal(response, Job.class);
+			final JobsList jobs = XStreamMarshaller.unmarshal(response, JobsList.class);
+			return jobs.getJobs();
 		} catch (XStreamMarshallerException e) {
 			LOGGER.error("Failed to unmarshal the Hudson server response to a Job object. Reason: " + e.getMessage(),
 				e);

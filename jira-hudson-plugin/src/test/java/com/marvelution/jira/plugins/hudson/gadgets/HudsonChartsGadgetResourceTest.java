@@ -41,7 +41,7 @@ import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.rest.v1.model.errors.ErrorCollection;
 import com.atlassian.jira.rest.v1.model.errors.ValidationError;
-import com.marvelution.jira.plugins.hudson.api.model.Job;
+import com.marvelution.jira.plugins.hudson.api.model.JobsList;
 import com.marvelution.jira.plugins.hudson.api.xstream.XStreamMarshaller;
 import com.marvelution.jira.plugins.hudson.chart.ChartUtils;
 import com.marvelution.jira.plugins.hudson.gadgets.HudsonChartsGadgetResource.HudsonChartsResource;
@@ -161,7 +161,7 @@ public class HudsonChartsGadgetResourceTest {
 		when(projectManager.getProjectObj(1L)).thenReturn(project);
 		when(serverManager.getServerByJiraProject(project)).thenReturn(server);
 		when(serverAccessor.getProject(server, project)).thenReturn(
-			XStreamMarshaller.unmarshal(getXmlFromClasspath("job.xml"), Job.class));
+			XStreamMarshaller.unmarshal(getXmlFromClasspath("jobs.xml"), JobsList.class).getJobs());
 		final Response response = gadgetResource.generateBuildTrend("1");
 		assertThat(response.getEntity(), is(HudsonChartsResource.class));
 		final HudsonChartsResource resource = (HudsonChartsResource) response.getEntity();
@@ -170,11 +170,7 @@ public class HudsonChartsGadgetResourceTest {
 		assertThat(serverResource.getName(), is("Hudson CI"));
 		assertThat(serverResource.getUrl(), is("http://localhost:8080"));
 		assertThat(serverResource.getImageUrl(), is(""));
-		final HudsonProjectResource projectResource = resource.getProject();
-		assertThat(projectResource.getName(), is("Marvelution"));
-		assertThat(projectResource.getUrl(), is("job/Marvelution/"));
-		assertThat(projectResource.getDescription(), is("Marvelution organization Project Object Model"));
-		final HudsonChartResource chartResource = resource.getChart();
+		final HudsonChartResource chartResource = ((List<HudsonChartResource>) resource.getCharts()).get(0);
 		assertThat(chartResource.isGenerated(), is(true));
 		assertThat(chartResource.getLocation().startsWith("jfreechart-onetime-"), is(true));
 		assertThat(chartResource.getLocation().endsWith(".png"), is(true));
@@ -182,6 +178,10 @@ public class HudsonChartsGadgetResourceTest {
 		assertThat(chartResource.getImageMap().isEmpty(), is(false));
 		assertThat(chartResource.getWidth(), is(ChartUtils.PORTLET_CHART_WIDTH));
 		assertThat(chartResource.getHeight(), is(ChartUtils.PORTLET_CHART_HEIGHT));
+		final HudsonProjectResource projectResource = chartResource.getProject();
+		assertThat(projectResource.getName(), is("Marvelution"));
+		assertThat(projectResource.getUrl(), is("job/Marvelution/"));
+		assertThat(projectResource.getDescription(), is("Marvelution organization Project Object Model"));
 		verify(serverAccessor, VerificationModeFactory.times(1)).getProject(server, project);
 		verify(serverManager, VerificationModeFactory.times(1)).getServerByJiraProject(project);
 		verify(projectManager, VerificationModeFactory.times(1)).getProjectObj(1L);
