@@ -161,7 +161,7 @@ public class HudsonChartsGadgetResourceTest {
 		when(projectManager.getProjectObj(1L)).thenReturn(project);
 		when(serverManager.getServerByJiraProject(project)).thenReturn(server);
 		when(serverAccessor.getProject(server, project)).thenReturn(
-			XStreamMarshaller.unmarshal(getXmlFromClasspath("jobs.xml"), JobsList.class).getJobs());
+			XStreamMarshaller.unmarshal(getXmlFromClasspath("Jobs.xml"), JobsList.class).getJobs());
 		final Response response = gadgetResource.generateBuildTrend("1");
 		assertThat(response.getEntity(), is(HudsonChartsResource.class));
 		final HudsonChartsResource resource = (HudsonChartsResource) response.getEntity();
