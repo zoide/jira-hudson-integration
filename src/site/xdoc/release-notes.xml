@@ -24,6 +24,36 @@
 	</properties>
 
 	<body>
+		<section name="Release Notes - Version 3.3.0">
+			<h3>Bug</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-65">MARVJIRAHUDSON-65</a>] - Hudson View Status gadget always displays all</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-70">MARVJIRAHUDSON-70</a>] - Error marshalling JAXB object of type HudsonChartsGadgetResource$HudsonChartsResource</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-71">MARVJIRAHUDSON-71</a>] - Hudson Status JIRA Gadget cannot connect to Hudson server / error message</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-73">MARVJIRAHUDSON-73</a>] - Jira Tab Panel does not mix the builds from multiple hudson jobs with same refferenced &quot;jira project key&quot;</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-75">MARVJIRAHUDSON-75</a>] - Documentation in Hudson refers to a non-existing page on the marvelution site</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-78">MARVJIRAHUDSON-78</a>] - Receive NPE in Hudson logs when accessing Hudson Panels from Jira</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-79">MARVJIRAHUDSON-79</a>] - Type error in HudsonChartsGadgetResourceTest testcase</li>
+			</ul>
+			<h3>Documentation</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-74">MARVJIRAHUDSON-74</a>] - Link on page to download Jira Plugin goes to a non existant page.</li>
+			</ul>
+			<h3>Improvement</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-68">MARVJIRAHUDSON-68</a>] - Jira Hudson Integration to support multiple JIRA projects per Hudson job.</li>
+			</ul>
+			<h3>Story</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-61">MARVJIRAHUDSON-61</a>] - possibility to select the displayed hudson jobs in jira</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-62">MARVJIRAHUDSON-62</a>] - not assigned projects have a hudson build tab</li>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-67">MARVJIRAHUDSON-67</a>] - Upgrade Hudson plugin to work with version 1.342</li>
+			</ul>
+			<h3>Technical task</h3>
+			<ul>
+				<li>[<a href="http://issues.marvelution.com/browse/MARVJIRAHUDSON-69">MARVJIRAHUDSON-69</a>] - Refactor ViewHudsonServers administration section to AdministerHudson</li>
+			</ul>
+		</section>
 		<section name="Release Notes - Version 3.2.0">
 			<h3>Bug</h3>
 			<ul>
