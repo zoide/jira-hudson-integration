@@ -122,14 +122,14 @@
 
 	<build>
 		<plugins>
-			<!-- preparation goals need to be at least install otherwise the release process fails -->
+			<!-- preparation goals need to be clean because of Maven Release plugin issue MRELEASE-285 -->
 			<plugin>
 				<inherited>true</inherited>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<preparationGoals>clean install</preparationGoals>
+					<preparationGoals>clean</preparationGoals>
 				</configuration>
 			</plugin>
 		</plugins>
