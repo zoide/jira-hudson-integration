@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>com.marvelution</groupId>
 		<artifactId>marvelution</artifactId>
-		<version>6</version>
+		<version>7</version>
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>jira-hudson-integration</artifactId>
