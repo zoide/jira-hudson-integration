@@ -81,6 +81,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getServerId() {
 		return serverId;
 	}
@@ -88,6 +89,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setServerId(int serverId) {
 		this.serverId = serverId;
 	}
@@ -95,6 +97,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -102,6 +105,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -109,6 +113,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -116,6 +121,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -123,6 +129,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getHost() {
 		return host;
 	}
@@ -130,6 +137,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setHost(String host) {
 		this.host = host;
 	}
@@ -137,6 +145,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getUsername() {
 		return username;
 	}
@@ -144,6 +153,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -151,6 +161,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPassword() {
 		return password;
 	}
@@ -158,6 +169,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -165,6 +177,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Collection<String> getAssociatedProjectKeys() {
 		return associatedProjectKeys;
 	}
@@ -172,6 +185,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setAssociatedProjectKeys(Collection<String> projectKeys) {
 		associatedProjectKeys = new HashSet<String>();
 		associatedProjectKeys.addAll(projectKeys);
@@ -180,6 +194,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void removeAssociatedProjectKey(String projectKey) {
 		if (associatedProjectKeys.contains(projectKey)) {
 			associatedProjectKeys.remove(projectKey);
@@ -189,6 +204,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void addAssociatedProjectKey(String projectKey) {
 		getAssociatedProjectKeys().add(projectKey);
 	}
@@ -196,6 +212,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isSecuredHudsonServer() {
 		return (StringUtils.isNotEmpty(getUsername()) && StringUtils.isNotEmpty(getPassword()));
 	}
@@ -203,6 +220,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getLargeImageUrl() {
 		return getImageUrl(HudsonServer.LARGE_IMAGE_SIZE);
 	}
@@ -210,6 +228,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getMediumImageUrl() {
 		return getImageUrl(HudsonServer.MEDIUM_IMAGE_SIZE);
 	}
@@ -217,6 +236,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getSmallImageUrl() {
 		return getImageUrl(HudsonServer.SMALL_IMAGE_SIZE);
 	}
@@ -234,6 +254,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getCrumb() {
 		return crumb;
 	}
@@ -241,6 +262,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setCrumb(String crumb) {
 		this.crumb = crumb;
 	}
@@ -248,6 +270,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getCrumbField() {
 		return crumbField;
 	}
@@ -255,6 +278,7 @@ public abstract class AbstractHudsonServer implements HudsonServer, Comparable<H
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setCrumbField(String crumbField) {
 		this.crumbField = crumbField;
 	}

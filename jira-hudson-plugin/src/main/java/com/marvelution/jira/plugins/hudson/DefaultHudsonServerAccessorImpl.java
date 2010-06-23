@@ -98,6 +98,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void getCrumb(HudsonServer hudsonServer) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		try {
@@ -118,6 +119,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ApiImplementation getApiImplementation(HudsonServer hudsonServer)
 					throws HudsonServerAccessorException, HudsonServerAccessDeniedException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_API_VERSION_ACTION, null);
@@ -136,6 +138,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Job> getProjectsList(HudsonServer hudsonServer) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		final String response = getHudsonServerActionResponse(hudsonServer, LIST_ALL_PROJECTS_ACTION, null);
@@ -153,6 +156,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Job> getProjects(HudsonServer hudsonServer) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		final String response = getHudsonServerActionResponse(hudsonServer, GET_ALL_PROJECTS_ACTION, null);
@@ -170,6 +174,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Job> getProject(Project project) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		return getProject(serverManager.getServerByJiraProject(project), project);
@@ -178,6 +183,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Job> getProject(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();
@@ -197,6 +203,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Build> getBuilds(Project project) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		return getBuilds(serverManager.getServerByJiraProject(project), project);
@@ -205,6 +212,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Build> getBuilds(HudsonServer hudsonServer, Project project) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();
@@ -225,6 +233,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Build> getBuilds(Version version) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		return getBuilds(serverManager.getServerByJiraProject(version.getProjectObject()), version);
@@ -233,6 +242,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Build> getBuilds(HudsonServer hudsonServer, Version version) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();
@@ -269,6 +279,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Build> getBuilds(Collection<String> issueKeys) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		return getBuilds(serverManager.getDefaultServer(), issueKeys);
@@ -277,6 +288,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Build> getBuilds(HudsonServer hudsonServer, Collection<String> issueKeys)
 					throws HudsonServerAccessorException, HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();
@@ -301,6 +313,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<HudsonView> getViewsList(HudsonServer hudsonServer) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		final String response = getHudsonServerActionResponse(hudsonServer, LIST_ALL_VIEWS_ACTION, null);
@@ -318,6 +331,7 @@ public class DefaultHudsonServerAccessorImpl implements HudsonServerAccessor {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public HudsonView getView(HudsonServer hudsonServer, String name) throws HudsonServerAccessorException,
 					HudsonServerAccessDeniedException {
 		final Map<String, String> params = new HashMap<String, String>();

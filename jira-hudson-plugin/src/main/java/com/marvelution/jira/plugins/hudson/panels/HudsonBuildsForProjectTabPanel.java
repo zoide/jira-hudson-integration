@@ -69,6 +69,7 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getHtml(BrowseContext browseContext) {
 		final Project project = browseContext.getProject();
 		final Map<String, Object> velocityParams = new HashMap<String, Object>();
@@ -91,6 +92,7 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean showPanel(BrowseContext browseContext) {
 		if (configurationManager.getBooleanProperty(HudsonConfigurationManager.HIDE_UNASSOCIATED_HUDSON_TAB)) {
 			return (serverManager.isHudsonConfigured()

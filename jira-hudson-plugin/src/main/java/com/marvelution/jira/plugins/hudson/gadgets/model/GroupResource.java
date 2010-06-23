@@ -81,6 +81,7 @@ public class GroupResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
@@ -88,6 +89,7 @@ public class GroupResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean equals(Object object) {
 		return EqualsBuilder.reflectionEquals(this, object);
 	}
@@ -95,6 +97,7 @@ public class GroupResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, GroupResource.TO_STRING_STYLE);
 	}

@@ -222,6 +222,7 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public int hashCode() {
 			return HashCodeBuilder.reflectionHashCode(this);
 		}
@@ -229,6 +230,7 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean equals(Object object) {
 			return EqualsBuilder.reflectionEquals(this, object);
 		}
@@ -236,6 +238,7 @@ public class HudsonChartsGadgetResource extends AbstractGadgetResource {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public String toString() {
 			return ToStringBuilder.reflectionToString(this, HudsonChartsGadgetResource.TO_STRING_STYLE);
 		}

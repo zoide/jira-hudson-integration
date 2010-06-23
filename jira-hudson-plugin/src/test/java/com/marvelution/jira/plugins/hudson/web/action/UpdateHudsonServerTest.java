@@ -51,9 +51,10 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 	private UpdateHudsonServer updateHudsonServer;
 
 	/**
-	 * {@inheritDoc}
+	 * Create the Web Action for the Tests
+	 * 
+	 * @return {@link ActionSupport}
 	 */
-	@Override
 	protected ActionSupport createWebworkAction() {
 		updateHudsonServer =
 			new UpdateHudsonServer(permissionManager, serverManager, new DefaultHudsonServerFactoryImpl(),
@@ -94,7 +95,9 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Test do default with no server
+	 * 
+	 * @throws Exception in case of test exceptions
 	 */
 	@Test
 	public void testDoDefaultNoServerId() throws Exception {
@@ -154,7 +157,9 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Test do set default
+	 * 
+	 * @throws Exception in case of test exceptions
 	 */
 	@Test
 	public void testDoSetAsDefault() throws Exception {
@@ -166,7 +171,9 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Test do set default no server id
+	 * 
+	 * @throws Exception in case of test exceptions
 	 */
 	@Test
 	public void testDoSetAsDefaultNoServerId() throws Exception {
@@ -176,7 +183,9 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Test do update crumb
+	 * 
+	 * @throws Exception in case of test exceptions
 	 */
 	@Test
 	public void testDoUpdateCrumb() throws Exception {
@@ -189,7 +198,9 @@ public class UpdateHudsonServerTest extends AbstractEditHudsonServerTest {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Test do update crumb no server
+	 * 
+	 * @throws Exception in case of test exceptions
 	 */
 	@Test
 	public void testDoUpdateCrumbNoServerId() throws Exception {

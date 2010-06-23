@@ -51,9 +51,10 @@ public class DeleteHudsonServerTest extends AbstractHudsonWebActionSupportTest {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Create the Web Action for the Tests
+	 * 
+	 * @return {@link ActionSupport}
 	 */
-	@Override
 	protected ActionSupport createWebworkAction() {
 		deleteHudsonServer = new DeleteHudsonServer(permissionManager, serverManager) {
 
@@ -90,7 +91,9 @@ public class DeleteHudsonServerTest extends AbstractHudsonWebActionSupportTest {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Test doExecute
+	 * 
+	 * @throws Exception in case of test exceptions
 	 */
 	@Test
 	public void testDoExecute() throws Exception {

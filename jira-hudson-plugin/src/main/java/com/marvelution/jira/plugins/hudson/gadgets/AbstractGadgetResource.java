@@ -35,8 +35,14 @@ import com.atlassian.jira.rest.v1.util.CacheControl;
  */
 public abstract class AbstractGadgetResource {
 
+	/**
+	 * Filter prefix value
+	 */
 	public static final String FILTER_PREFIX = "filter-";
 
+	/**
+	 * Project prefix value
+	 */
 	public static final String PROJECT_PREFIX = "project-";
 
 	/**

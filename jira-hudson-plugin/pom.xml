@@ -214,8 +214,8 @@
 						<Embed-StripGroup>false</Embed-StripGroup>
 						<Embed-StripVersion>false</Embed-StripVersion>
 						<Export-Package>
-							com.marvelution.jira.plugins.hudson.service*;version="${pom.version}",
-							com.marvelution.jira.plugins.hudson.api*;version="${pom.version}"
+							com.marvelution.jira.plugins.hudson.service*;version="${project.version}",
+							com.marvelution.jira.plugins.hudson.api*;version="${project.version}"
 						</Export-Package>
 						<!-- Make all the depended packages optional -->
 						<Import-Package>

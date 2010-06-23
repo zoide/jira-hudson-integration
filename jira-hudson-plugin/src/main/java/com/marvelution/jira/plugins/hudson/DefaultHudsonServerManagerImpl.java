@@ -127,6 +127,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isHudsonConfigured() {
 		return defaultServerId > 0 && servers.containsKey(defaultServerId);
 	}
@@ -134,6 +135,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean hasServers() {
 		return !servers.isEmpty();
 	}
@@ -141,6 +143,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean hasServer(String serverName) {
 		return (!StringUtils.isEmpty(serverName) && nameMapping.containsKey(serverName) && servers
 			.containsKey(nameMapping.get(serverName)));
@@ -149,6 +152,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Collection<HudsonServer> getServers() {
 		return Collections.unmodifiableCollection(servers.values());
 	}
@@ -156,6 +160,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public HudsonServer getServer(int serverId) {
 		if (serverId <= 0) {
 			return null;
@@ -166,6 +171,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public HudsonServer getServer(String serverName) {
 		if (StringUtils.isEmpty(serverName) || !nameMapping.containsKey(serverName)) {
 			return null;
@@ -176,6 +182,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public HudsonServer getServerByJiraProject(Project project) {
 		if (hasServerAssociation(project)) {
 			return getServer(projectMapping.get(project.getKey()));
@@ -186,6 +193,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean hasServerAssociation(Project project) {
 		return (project != null && projectMapping.containsKey(project.getKey()));
 	}
@@ -193,6 +201,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public HudsonServer getDefaultServer() {
 		if (defaultServerId == 0) {
 			return null;
@@ -203,6 +212,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDefaultServer(HudsonServer hudsonServer) {
 		if (hudsonServer == null) {
 			throw new IllegalArgumentException("hudsonServer may not be null");
@@ -217,6 +227,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isDefaultServer(HudsonServer hudsonServer) {
 		return hudsonServer.getServerId() == defaultServerId;
 	}
@@ -224,6 +235,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void put(HudsonServer hudsonServer) {
 		add(hudsonServer);
 		store(hudsonServer);
@@ -272,6 +284,7 @@ public class DefaultHudsonServerManagerImpl implements HudsonServerManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void remove(int serverId) {
 		if (serverId <= 0) {
 			throw new IllegalArgumentException("serverId may not be less then or equal to 0 (zero)");

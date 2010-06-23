@@ -48,6 +48,7 @@ public class DefaultHudsonServerImpl extends AbstractHudsonServer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int compareTo(HudsonServer otherServer) {
 		if (otherServer == null) {
 			throw new IllegalArgumentException("otherServer may not be null");

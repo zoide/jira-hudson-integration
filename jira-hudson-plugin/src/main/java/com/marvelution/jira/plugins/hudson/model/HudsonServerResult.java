@@ -31,11 +31,11 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServer;
  */
 public class HudsonServerResult<T> {
 
+	protected T results;
+
 	private HudsonServer server;
 
 	private String error;
-
-	protected T results;
 
 	/**
 	 * Constructor

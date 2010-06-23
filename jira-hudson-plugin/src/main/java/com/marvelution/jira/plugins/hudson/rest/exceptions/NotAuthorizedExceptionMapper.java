@@ -36,6 +36,7 @@ public class NotAuthorizedExceptionMapper implements ExceptionMapper<NotAuthoriz
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Response toResponse(NotAuthorizedException exception) {
 		return Status.forbidden().message(exception.getMessage()).response();
 	}

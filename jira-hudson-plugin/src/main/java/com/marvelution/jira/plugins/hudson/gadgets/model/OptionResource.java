@@ -79,6 +79,7 @@ public class OptionResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
@@ -86,6 +87,7 @@ public class OptionResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean equals(Object object) {
 		return EqualsBuilder.reflectionEquals(this, object);
 	}
@@ -93,6 +95,7 @@ public class OptionResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, OptionResource.TO_STRING_STYLE);
 	}

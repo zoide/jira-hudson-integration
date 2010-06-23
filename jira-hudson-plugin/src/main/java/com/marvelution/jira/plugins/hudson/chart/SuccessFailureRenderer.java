@@ -58,6 +58,7 @@ public class SuccessFailureRenderer extends XYBarRenderer implements XYToolTipGe
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Paint getItemPaint(int row, int column) {
 		final Integer columnKey = new Integer(new Double(getPlot().getDataset().getXValue(0, column)).intValue());
 		final Build build = buildsMap.get(columnKey);
@@ -72,6 +73,7 @@ public class SuccessFailureRenderer extends XYBarRenderer implements XYToolTipGe
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Paint getItemOutlinePaint(int row, int column) {
 		final Integer columnKey = new Integer(new Double(getPlot().getDataset().getXValue(0, column)).intValue());
 		final Build build = buildsMap.get(columnKey);
@@ -86,6 +88,7 @@ public class SuccessFailureRenderer extends XYBarRenderer implements XYToolTipGe
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String generateToolTip(XYDataset dataset, int row, int column) {
 		final Integer buildNumber = new Integer(new Double(dataset.getXValue(0, column)).intValue());
 	    final Build build = buildsMap.get(buildNumber);
@@ -95,6 +98,7 @@ public class SuccessFailureRenderer extends XYBarRenderer implements XYToolTipGe
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String generateURL(XYDataset dataset, int row, int column) {
 		final Integer buildNumber = new Integer(new Double(dataset.getXValue(0, column)).intValue());
 	    final Build build = buildsMap.get(buildNumber);

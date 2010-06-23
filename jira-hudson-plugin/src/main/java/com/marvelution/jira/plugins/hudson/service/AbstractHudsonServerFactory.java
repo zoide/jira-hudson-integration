@@ -36,6 +36,7 @@ public abstract class AbstractHudsonServerFactory implements HudsonServerFactory
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public HudsonServer createHudsonServer() {
 		return new DefaultHudsonServerImpl();
 	}

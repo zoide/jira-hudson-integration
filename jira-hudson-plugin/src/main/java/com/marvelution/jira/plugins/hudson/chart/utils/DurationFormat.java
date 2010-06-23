@@ -35,6 +35,20 @@ public class DurationFormat extends DateFormat {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final long MILLISECONDS_IN_ONE_MINUTE = 60000L;
+
+	private static final long MILLISECONDS_IN_ONE_HOUR = 3600000L;
+
+	private static final long MILLISECONDS_IN_ONE_DAY = 24L * MILLISECONDS_IN_ONE_HOUR;
+
+	private static NumberFormat defaultDayFormat = new DecimalFormat("#d ");
+
+	private static NumberFormat defaultHourFormat = new DecimalFormat("#h ");
+
+	private static NumberFormat defaultMinuteFormat = new DecimalFormat("#m ");
+
+	private static NumberFormat defaultSecondFormat = new DecimalFormat("#.#s");
+
 	private NumberFormat dayFormat;
 
 	private NumberFormat hourFormat;
@@ -52,20 +66,6 @@ public class DurationFormat extends DateFormat {
 	private boolean showZeroSecond;
 
 	private boolean timeInSeconds;
-
-	private static final long MILLISECONDS_IN_ONE_MINUTE = 60000L;
-
-	private static final long MILLISECONDS_IN_ONE_HOUR = 3600000L;
-
-	private static final long MILLISECONDS_IN_ONE_DAY = 24L * MILLISECONDS_IN_ONE_HOUR;
-
-	private static NumberFormat defaultDayFormat = new DecimalFormat("#d ");
-
-	private static NumberFormat defaultHourFormat = new DecimalFormat("#h ");
-
-	private static NumberFormat defaultMinuteFormat = new DecimalFormat("#m ");
-
-	private static NumberFormat defaultSecondFormat = new DecimalFormat("#.#s");
 
 	/**
 	 * Default constructor
@@ -107,6 +107,7 @@ public class DurationFormat extends DateFormat {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public StringBuffer format(Date date, StringBuffer stringBuffer, FieldPosition fieldPosition) {
 		long time = date.getTime();
 		if (this.timeInSeconds) {
@@ -138,6 +139,7 @@ public class DurationFormat extends DateFormat {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Date parse(String string, ParsePosition parsePosition) {
 		return null;
 	}

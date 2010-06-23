@@ -80,8 +80,6 @@ import webwork.action.ActionSupport;
  */
 public class ViewHudsonServerPanelContentTest {
 
-	private ViewHudsonServerPanelContent panelContent;
-
 	@Mock
 	protected HudsonServer server;
 
@@ -101,6 +99,8 @@ public class ViewHudsonServerPanelContentTest {
 	protected HttpServletResponse httpResponse;
 
 	protected ActionSupport webworkAction;
+
+	private ViewHudsonServerPanelContent panelContent;
 
 	@Mock
 	private JiraAuthenticationContext authenticationContext;

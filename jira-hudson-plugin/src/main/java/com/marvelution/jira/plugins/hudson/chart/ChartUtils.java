@@ -46,20 +46,44 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServer;
  */
 public class ChartUtils {
 
+	/**
+	 * Default chart height value
+	 */
 	public static final int PORTLET_CHART_HEIGHT = 300;
 
+	/**
+	 * Default chart width value
+	 */
 	public static final int PORTLET_CHART_WIDTH = 450;
 
+	/**
+	 * Chart outline red color
+	 */
 	public static final Color RED_OUTLINE = new Color(204, 0, 0);
 
+	/**
+	 * Chart paint red color
+	 */
 	public static final Color RED_PAINT = new Color(255, 204, 204);
 
+	/**
+	 * Chart outline green color
+	 */
 	public static final Color GREEN_OUTLINE = new Color(0, 204, 0);
 
+	/**
+	 * Chart paint green paint
+	 */
 	public static final Color GREEN_PAINT = new Color(204, 255, 204);
 
+	/**
+	 * Chart outline yellow color
+	 */
 	public static final Color YELLOW_OUTLINE = new Color(204, 204, 0);
 
+	/**
+	 * Chart paint yellow color
+	 */
 	public static final Color YELLOW_PAINT = new Color(255, 255, 204);
 
 	/**

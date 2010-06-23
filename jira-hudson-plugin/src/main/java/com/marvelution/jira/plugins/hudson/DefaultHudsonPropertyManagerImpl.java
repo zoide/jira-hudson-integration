@@ -69,6 +69,7 @@ public final class DefaultHudsonPropertyManagerImpl implements HudsonPropertyMan
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public PropertySet getPropertySet() {
 		return propertySet;
 	}

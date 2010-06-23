@@ -51,9 +51,10 @@ public class AddHudsonServerTest extends AbstractEditHudsonServerTest {
 	private HudsonServerFactory serverFactory;
 
 	/**
-	 * {@inheritDoc}
+	 * Create the Web Action for the tests
+	 * 
+	 * @return {@link ActionSupport}
 	 */
-	@Override
 	protected ActionSupport createWebworkAction() {
 		addHudsonServer = new AddHudsonServer(permissionManager, serverManager, new DefaultHudsonServerFactoryImpl(),
 			serverAccessor) {

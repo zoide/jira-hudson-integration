@@ -151,6 +151,7 @@ public class HudsonChartResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
@@ -158,6 +159,7 @@ public class HudsonChartResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean equals(Object object) {
 		return EqualsBuilder.reflectionEquals(this, object);
 	}
@@ -165,6 +167,7 @@ public class HudsonChartResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, HudsonChartResource.TO_STRING_STYLE);
 	}

@@ -65,6 +65,7 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String doDefault() throws Exception {
 		hudsonServer = getServer();
 		if (hudsonServer == null) {
@@ -76,6 +77,7 @@ public class UpdateHudsonServerProjectAssociations extends AbstractHudsonWebActi
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String doExecute() throws Exception {
 		hudsonServer = getServer();
 		if (buttonClicked("addButton")) {

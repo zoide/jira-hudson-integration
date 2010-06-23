@@ -36,9 +36,9 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
  */
 public abstract class AbstractHudsonWebActionSupport extends JiraWebActionSupport {
 
-	private static final long serialVersionUID = 1L;
-
 	protected static final Logger LOGGER = Logger.getLogger(AbstractHudsonWebActionSupport.class);
+
+	private static final long serialVersionUID = 1L;
 
 	protected final PermissionManager permissionManager;
 
@@ -71,6 +71,7 @@ public abstract class AbstractHudsonWebActionSupport extends JiraWebActionSuppor
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String doDefault() throws Exception {
 		return ((hasPermissions()) ? INPUT : PERMISSION_VIOLATION_RESULT);
 	}

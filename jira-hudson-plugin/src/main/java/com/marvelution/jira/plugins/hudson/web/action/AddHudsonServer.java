@@ -49,6 +49,7 @@ public class AddHudsonServer extends AbstractEditHudsonServer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void doValidation() {
 		super.doValidation();
 		if (getHudsonServerManager().hasServer(getName())) {
@@ -59,6 +60,7 @@ public class AddHudsonServer extends AbstractEditHudsonServer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String doExecute() throws Exception {
 		if (hasAnyErrors()) {
 			return "input";

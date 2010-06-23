@@ -54,6 +54,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void doValidation() {
 		super.doValidation();
 		final HudsonServer server = hudsonServerManager.getServer(getName());
@@ -65,6 +66,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String doDefault() throws Exception {
 		final HudsonServer serverToEdit = hudsonServerManager.getServer(getHudsonServerId());
 		if (serverToEdit == null) {
@@ -77,6 +79,7 @@ public class UpdateHudsonServer extends AbstractEditHudsonServer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String doExecute() throws Exception {
 		if (hasAnyErrors()) {
 			return "input";

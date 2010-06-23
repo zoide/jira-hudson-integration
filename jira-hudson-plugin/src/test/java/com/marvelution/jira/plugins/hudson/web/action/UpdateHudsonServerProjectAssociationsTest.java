@@ -93,7 +93,9 @@ public class UpdateHudsonServerProjectAssociationsTest extends AbstractHudsonWeb
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Test do default without a server id
+	 * 
+	 * @throws Exception in case of test exceptions
 	 */
 	@Test
 	public void testDoDefaultWithoutServerId() throws Exception {

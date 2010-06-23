@@ -108,6 +108,7 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int compareTo(JiraProjectKeyJobProperty other) {
 		return getKey().compareTo(other.getKey());
 	}
@@ -162,6 +163,7 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public String getDisplayName() {
 			return Messages.getJiraKeyPropertyDisplayName();
 		}

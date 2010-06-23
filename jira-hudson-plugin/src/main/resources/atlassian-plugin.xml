@@ -21,7 +21,7 @@
 	<plugin-info>
 		<description>${pom.description}</description>
 		<vendor name="${pom.organization.name}" url="${pom.organization.url}" />
-		<version>${pom.version}</version>
+		<version>${project.version}</version>
 		<application-version min="4.0" max="4.0"/>
 	</plugin-info>
 

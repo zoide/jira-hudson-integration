@@ -32,6 +32,7 @@ public class DefaultHudsonServerFactoryImpl extends AbstractHudsonServerFactory 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public HudsonServer createHudsonServer(HudsonServer server) {
 		return new DefaultHudsonServerImpl(server);
 	}

@@ -143,6 +143,7 @@ public class HudsonView implements Comparable<HudsonView> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int compareTo(HudsonView other) {
 		return getName().compareTo(other.getName());
 	}

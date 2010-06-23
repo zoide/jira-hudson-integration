@@ -49,6 +49,7 @@ public class DeleteHudsonServer extends AbstractHudsonWebActionSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String doDefault() throws Exception {
 		hudsonServer = hudsonServerManager.getServer(getHudsonServerId());
 		return super.doDefault();
@@ -57,6 +58,7 @@ public class DeleteHudsonServer extends AbstractHudsonWebActionSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String doExecute() throws Exception {
 		hudsonServerManager.remove(getHudsonServerId());
 		return getRedirect("AdministerHudson.jspa");

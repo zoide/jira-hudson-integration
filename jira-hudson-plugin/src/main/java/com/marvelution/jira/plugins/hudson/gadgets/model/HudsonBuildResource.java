@@ -126,6 +126,7 @@ public class HudsonBuildResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
@@ -133,6 +134,7 @@ public class HudsonBuildResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean equals(Object object) {
 		return EqualsBuilder.reflectionEquals(this, object);
 	}
@@ -140,6 +142,7 @@ public class HudsonBuildResource {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, HudsonBuildResource.TO_STRING_STYLE);
 	}
