@@ -43,5 +43,20 @@
 			<outputDirectory>/</outputDirectory>
 			<filtered>true</filtered>
 		</file>
+		<file>
+			<source>${project.build.directory}/maven-shared-archive-resources/META-INF/LICENSE</source>
+			<outputDirectory>/</outputDirectory>
+			<filtered>false</filtered>
+		</file>
+		<file>
+			<source>${project.build.directory}/maven-shared-archive-resources/META-INF/DEPENDENCIES</source>
+			<outputDirectory>/</outputDirectory>
+			<filtered>false</filtered>
+		</file>
+		<file>
+			<source>${project.build.directory}/maven-shared-archive-resources/META-INF/NOTICE</source>
+			<outputDirectory>/</outputDirectory>
+			<filtered>false</filtered>
+		</file>
 	</files>
 </assembly>
