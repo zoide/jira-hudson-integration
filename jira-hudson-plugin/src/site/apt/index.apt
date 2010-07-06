@@ -23,28 +23,9 @@
 ~~ specific language governing permissions and limitations
 ~~ under the License.
 
-
 Introduction
 ~~~~~~~~~~~~
 
-  The Jira plugin provides:
-  
-  * the ability to configure multiple Hudson servers.
-  
-  * associate a Jira project with a specific Hudson server.
-  
-  * view builds related to a project, in a project tab panel.
-  
-  * view builds related to a project version, in a version tab panel.
-  
-  * view builds related to a project component, in a component tab panel.
-  
-  * view builds related to a project issue, in a issue tab panel.
-  
-  * a gadget to view all projects statuses on a Hudson server.
-  
-  * a gadget to view all projects related to a Hudson View.
-
-  * a gadget to view the build trend chart of a Hudson Project.
-  
-  []
+  This generated project site only includes the technical documentation.
+  For the complete documentation please refer to the 
+  {{{http://docs.marvelution.com/display/MARVJIRAHUDSON}project wiki space}}.

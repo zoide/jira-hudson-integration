@@ -23,11 +23,9 @@
 ~~ specific language governing permissions and limitations
 ~~ under the License.
 
-
 Introduction
 ~~~~~~~~~~~~
 
-  This project holds all the API model classes and XStream marshallers and unmarshallers that are used by both the
-  Hudson and the Jira plugin.
-  
-  For more information on the model and marshaller class, please refer to the {{{./apidocs/index.html}Javadoc}}.
+  This generated project site only includes the technical documentation.
+  For the complete documentation please refer to the 
+  {{{http://docs.marvelution.com/display/MARVJIRAHUDSON}project wiki space}}.

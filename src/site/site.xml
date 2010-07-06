@@ -25,37 +25,19 @@
 		</links>
 
 		<breadcrumbs>
-			<item name="JIRA Hudson Integration" href="http://www.marvelution.com/atlassian/jira-hudson-integration/" />
+			<item name="${project.name}" href="${project.url}" />
 		</breadcrumbs>
 
 		<menu name="Overview">
 			<item name="Introduction" href="./index.html" />
-			<item name="Release Notes" href="./release-notes.html" />
-			<item name="Features" href="./features/index.html">
-				<item name="Jira" href="./features/jira/index.html" collapse="true">
-					<item name="Administration" href="./features/jira/administration.html" />
-					<item name="Gadgets" href="./features/jira/gadgets.html" />
-					<item name="Portlets" href="./features/jira/portlets.html" />
-					<item name="Tab Panels" href="./features/jira/tabpanels.html" />
-				</item>
-				<item name="Hudson" href="./features/hudson/index.html" collapse="true">
-					<item name="Jira project key Job property" href="./features/hudson/jira-job-property.html" />
-					<item name="Issue Indexer" href="./features/hudson/issue-indexer.html" />
-					<item name="New Remote API" href="./features/hudson/remote-api.html" />
-				</item>
-			</item>
+			<item name="Release Notes" href="http://docs.marvelution.com/display/MARVJIRAHUDSON/${project.version}+Release+Notes" />
+			<item name="Features" href="http://docs.marvelution.com/display/MARVJIRAHUDSON" />
 		</menu>
 
 		<menu name="Documentation">
-			<item name="Integration" href="./integration/index.html">
-				<item name="Download" href="./integration/download.html" />
-				<item name="Installation" href="./integration/installation.html" />
-				<item name="Configuring Hudson" href="./integration/config-hudson.html" />
-				<item name="Configuring Jira" href="./integration/config-jira.html" />
-			</item>
+			<item name="Download" href="./download.html" />
+			<item name="Installation Guide" href="http://docs.marvelution.com/display/MARVJIRAHUDSON/Installation+Guide" />
+			<item name="Configuration Guide" href="http://docs.marvelution.com/display/MARVJIRAHUDSON/Administrators+Guide" />
 		</menu>
-
-		<menu ref="modules" />
-
 	</body>
 </project>

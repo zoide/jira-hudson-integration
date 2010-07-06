@@ -19,7 +19,7 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>com.marvelution</groupId>
 		<artifactId>marvelution</artifactId>
@@ -29,14 +29,14 @@
 	<artifactId>jira-hudson-integration</artifactId>
 	<version>3.3.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<modules>
 		<module>hudson-jira-api</module>
 		<module>hudson-jiraapi-plugin</module>
 		<module>jira-hudson-plugin</module>
 		<module>jira-hudson</module>
 	</modules>
-	
+
 	<name>Jira Hudson Integration</name>
 	<description>Project to integrate Jira with Hudson by use of Gadgets and Tab Panels</description>
 	<url>http://www.marvelution.com/atlassian/jira-hudson-integration/</url>
@@ -52,7 +52,7 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
 	<scm>
 		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk</connection>
 		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk</developerConnection>
@@ -80,16 +80,17 @@
 			<url>dav:http://repository.marvelution.com/content/sites/site/atlassian/jira-hudson-integration/</url>
 		</site>
 	</distributionManagement>
-	
+
 	<properties>
 		<project.jdk.revision>1.5</project.jdk.revision>
 		<hudsonVersion>1.353</hudsonVersion>
 		<atlassianJiraVersion>4.0</atlassianJiraVersion>
 		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/site-staging/atlassian/jira-hudson-integration/</stagingSiteURL>
+		<downloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/jira-hudson/${project.version}/jira-hudson-${project.version}-distribution</downloadBaseUrl>
 		<jiraDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/jira-hudson-plugin</jiraDownloadBaseUrl>
 		<hudsonDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/hudson-jiraapi-plugin</hudsonDownloadBaseUrl>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.powermock.modules</groupId>

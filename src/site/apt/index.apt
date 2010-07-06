@@ -23,68 +23,25 @@
 ~~ specific language governing permissions and limitations
 ~~ under the License.
 
-
 Introduction
 ~~~~~~~~~~~~
 
   This project features two plugins to integrate {{{http://www.atlassian.com/software/jira}Jira}} with
   {{{https://hudson.dev.java.net}Hudson}}.
   
-  Please refer to the {{{./release-notes.html}Release Notes}} for a complete overview of new features and bug fixes.
+  For the complete documentation please refer to the 
+  {{{http://docs.marvelution.com/display/MARVJIRAHUDSON}project wiki space}}.
 
 
-* {{{./hudson-jiraapi-plugin/index.html}Hudson Plugin}}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Installation
+~~~~~~~~~~~~~~
 
-  The Hudson plugin {{{./features/hudson/index.html}features}}:
-  
-  * a new Remote API to expose Job and Build data.
-  
-  * a Job property to configure the Jira project key.
-  
-  * a Jira issue key indexer to index all the issue keys and the builds they are linked to.
-  
-  * support for non-standard Jira project and issue keys.
-  
-  []
+  Please refer to the {{{http://docs.marvelution.com/display/MARVJIRAHUDSON/Installation+Guide}installation}}
+  documentation on how to install this Jira and Hudson plugin.
 
 
-* {{{./jira-hudson-plugin/index.html}Jira Plugin}}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Configuration
+~~~~~~~~~~~~~~~
 
-  The Jira plugin {{{./features/jira/index.html}features}}:
-  
-  * the ability to configure multiple Hudson servers.
-  
-  * associate a Jira project with a specific Hudson server.
-  
-  * view builds related to a project, in a project tab panel.
-  
-  * view builds related to a project version, in a version tab panel.
-  
-  * view builds related to a project component, in a component tab panel.
-  
-  * view builds related to a project issue, in a issue tab panel.
-  
-  * a portlet to view all projects statuses on a Hudson server. (Only available in version 2.x)
-  
-  * a portlet to view detailed Hudson project build information. (Only available in version 2.x)
-  
-  * a portlet to view all projects related to a Hudson View. (Only available in version 2.x)
-  
-  * a portlet to view the build trend graph of a project. (Only available in version 2.x)
-  
-  * a gadget to view all projects statuses on a Hudson server. (Only available in version 3.x)
-  
-  * a gadget to view all projects related to a Hudson View. (Only available in version 3.x)
-  
-  * a gadget to view the build trend graph of a project. (Only available in version 3.x)
-  
-  []
-
-
-Installation and Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  Please refer to the {{{./integration/index.html}Integration documentation}} for installation and configuration
-  guides.
+  Please refer to the {{{http://docs.marvelution.com/display/MARVJIRAHUDSON/Administrators+Guide}configuration}}
+  documentation on how to configure this Jira and Hudson plugin.

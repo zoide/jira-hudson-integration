@@ -23,16 +23,9 @@
 ~~ specific language governing permissions and limitations
 ~~ under the License.
 
-
 Introduction
 ~~~~~~~~~~~~
 
-  The Hudson plugin provides:
-  
-  * a new Remote API to expose Job and Build data.
-  
-  * a Job property to configure the Jira project key for a Hudson job.
-  
-  * a Jira issue key indexer to index all the issue keys and the builds they linked to.
-  
-  []
+  This generated project site only includes the technical documentation.
+  For the complete documentation please refer to the 
+  {{{http://docs.marvelution.com/display/MARVJIRAHUDSON}project wiki space}}.
