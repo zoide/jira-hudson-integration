@@ -28,10 +28,19 @@ import java.util.Collection;
  */
 public interface HudsonServer {
 
+	/**
+	 * Small image size
+	 */
 	int SMALL_IMAGE_SIZE = 16;
 
+	/**
+	 * Medium image size
+	 */
 	int MEDIUM_IMAGE_SIZE = 24;
 
+	/**
+	 * Large image size
+	 */
 	int LARGE_IMAGE_SIZE = 32;
 
 	/**

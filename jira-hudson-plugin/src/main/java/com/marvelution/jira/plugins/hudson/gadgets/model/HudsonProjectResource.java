@@ -22,6 +22,8 @@ package com.marvelution.jira.plugins.hudson.gadgets.model;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -36,6 +38,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class HudsonProjectResource {
 
 	private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.SIMPLE_STYLE;
@@ -52,10 +55,13 @@ public class HudsonProjectResource {
 	@XmlElement
 	private Collection<HudsonBuildResource> builds;
 
+	private boolean notYetBuild = true;
+
 	/**
 	 * Default Constructor
 	 */
 	public HudsonProjectResource() {
+		// Default constructor required for the REST framework
 	}
 
 	/**
@@ -106,7 +112,22 @@ public class HudsonProjectResource {
 	 * @param build the {@link HudsonBuildResource}
 	 */
 	public void addBuild(HudsonBuildResource build) {
+		notYetBuild = false;
 		builds.add(build);
+	}
+
+	/**
+	 * @return flag to indicate whether the project has been build befor
+	 */
+	public boolean isNotYetBuild() {
+		return notYetBuild;
+	}
+
+	/**
+	 * @param notYetBuild flag to indicate whether the project has been build befor
+	 */
+	public void setNotYetBuild(boolean notYetBuild) {
+		this.notYetBuild = notYetBuild;
 	}
 
 	/**

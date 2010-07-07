@@ -36,26 +36,59 @@ import com.marvelution.jira.plugins.hudson.api.model.Job;
  */
 public interface HudsonServerAccessor {
 
+	/**
+	 * The Hudson plugin base url
+	 */
 	String BASE_ACTION_URL = "/plugin/hudson-jiraapi-plugin";
 
+	/**
+	 * The getCrumb API endpoint url
+	 */
 	String GET_CRUMB_ACTION = BASE_ACTION_URL + "/getCrumb";
 
+	/**
+	 * The getApiVersion endpoint url
+	 */
 	String GET_API_VERSION_ACTION = BASE_ACTION_URL + "/getApiVersion";
 
+	/**
+	 * The listAllProjects endpoint url
+	 */
 	String LIST_ALL_PROJECTS_ACTION = BASE_ACTION_URL + "/listAllProjects";
 
+	/**
+	 * The getAllProjects endpoint url
+	 */
 	String GET_ALL_PROJECTS_ACTION = BASE_ACTION_URL + "/getAllProjects";
 
+	/**
+	 * The getProject endpoint url
+	 */
 	String GET_PROJECT_ACTION = BASE_ACTION_URL + "/getProject";
 
+	/**
+	 * The getProjectBuilds endpoint url
+	 */
 	String GET_PROJECT_BUILDS_ACTION = BASE_ACTION_URL + "/getProjectBuilds";
 
+	/**
+	 * The getVersionBuilds endpoint url
+	 */
 	String GET_VERSION_BUILDS_ACTION = BASE_ACTION_URL + "/getVersionBuilds";
 
+	/**
+	 * The getIssueBuilds endpoint url
+	 */
 	String GET_ISSUE_BUILDS_ACTION = BASE_ACTION_URL + "/getIssueBuilds";
 
+	/**
+	 * The listAllViews endpoint url
+	 */
 	String LIST_ALL_VIEWS_ACTION = BASE_ACTION_URL + "/listAllViews";
 
+	/**
+	 * The getView endpoint url
+	 */
 	String GET_VIEW_ACTION = BASE_ACTION_URL + "/getView";
 
 	/**

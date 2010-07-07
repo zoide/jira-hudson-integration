@@ -28,8 +28,14 @@ package com.marvelution.jira.plugins.hudson.service;
  */
 public interface HudsonConfigurationManager {
 
+	/**
+	 * Hide unassociated Hudson tabs property key
+	 */
 	String HIDE_UNASSOCIATED_HUDSON_TAB = "hide.unassociated.hudson.tab";
 
+	/**
+	 * Filter Hudson builds property key
+	 */
 	String FILTER_HUDSON_BUILDS = "filter.hudson.builds";
 
 	/**

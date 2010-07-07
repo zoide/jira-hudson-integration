@@ -43,14 +43,29 @@ import com.marvelution.jira.plugins.hudson.service.HudsonServerManager;
  */
 public class HudsonBuildsTabPanelHelper {
 
+	/**
+	 * Atlassian Plugin Key
+	 */
 	public static final String HUDSON_BUILD_PLUGIN = "com.marvelution.jira.plugins.hudson";
 
+	/**
+	 * Selected SubTab session/request variable name
+	 */
 	public static final String SELECTED_SUB_TAB_KEY = "selectedSubTab";
 
+	/**
+	 * Build by Plan SubTab key value
+	 */
 	public static final String SUB_TAB_BUILD_BY_PLAN = "buildByPlan";
 
+	/**
+	 * Build by Issue SubTab key value
+	 */
 	public static final String SUB_TAB_BUILD_BY_ISSUE = "buildByIssue";
 
+	/**
+	 * Available SubTabs
+	 */
 	public static final List<?> SUB_TABS = EasyList.build(SUB_TAB_BUILD_BY_PLAN, SUB_TAB_BUILD_BY_ISSUE);
 
 	private final HudsonServerManager serverManager;

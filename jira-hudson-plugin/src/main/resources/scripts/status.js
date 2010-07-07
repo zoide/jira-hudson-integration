@@ -28,7 +28,11 @@ AJS.$.namespace("AJS.gadget.hudson.status");
  */
 AJS.gadget.hudson.status.generateStatusOverview = function(gadget, server, projects) {
 	AJS.$.each(projects, function (i, project) {
-		gadget.getView().append(AJS.gadget.hudson.status.generateBuildOverview(gadget, server, project));
+		if (project.notYetBuild) {
+			gadget.getView().append(AJS.gadget.hudson.status.generateNotYetBuildOverview(gadget, server, project));
+		} else {
+			gadget.getView().append(AJS.gadget.hudson.status.generateBuildOverview(gadget, server, project));
+		}
 	});
 	gadget.getView().append(AJS.gadget.hudson.common.generateGadgetFooter(gadget, server));
 }
@@ -38,7 +42,7 @@ AJS.gadget.hudson.status.generateStatusOverview = function(gadget, server, proje
  * 
  * @param gadget the Gadget the div will be added to
  * @param server the server that executed the build
- * @param build the build data
+ * @param project the project data
  * @return the build overview div
  */
 AJS.gadget.hudson.status.generateBuildOverview = function(gadget, server, project) {
@@ -64,6 +68,29 @@ AJS.gadget.hudson.status.generateBuildOverview = function(gadget, server, projec
 		.appendTo(buildResult);
 	AJS.$("<div/>").addClass("build-details")
 		.append(AJS.format(gadget.getMsg("hudson.gadget.common.duration"), build.duration))
+		.appendTo(buildResult);
+	return buildResult;
+}
+
+/**
+ * Generate a Not Yet Build Overview div
+ * 
+ * @param gadget the Gadget the div will be added to
+ * @param server the server that executed the build
+ * @param project the project data
+ * @return the not yet build overview div
+ */
+AJS.gadget.hudson.status.generateNotYetBuildOverview = function(gadget, server, project) {
+	var buildResult = AJS.$("<div/>").addClass("build-result").addClass("build-result-not_build");
+	AJS.$("<div/>").addClass("build-info")
+		.append(
+			AJS.$("<a/>").attr({
+				href: server.url + "/" + project.url,
+				target: "_parent"
+			}).text(project.name)
+		).appendTo(buildResult);
+	AJS.$("<div/>").addClass("build-details")
+		.append(gadget.getMsg("hudson.gadget.common.not_build"))
 		.appendTo(buildResult);
 	return buildResult;
 }

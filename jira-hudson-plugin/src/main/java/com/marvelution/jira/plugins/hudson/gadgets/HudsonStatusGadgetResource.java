@@ -169,13 +169,15 @@ public class HudsonStatusGadgetResource extends AbstractGadgetResource {
 					final HudsonProjectResource project =
 						new HudsonProjectResource(job.getName(), job.getUrl(), job.getDescription());
 					final Build build = job.getLastBuild();
-					final String trigger =
-						(build.getTriggers().isEmpty() ? buildTriggerParser.parse(new Trigger() {
-						}) : buildTriggerParser.parse(build.getTriggers().get(0)));
-					project.addBuild(new HudsonBuildResource(build.getNumber(), dateTimeUtils
-						.getTimeSpanString(build.getDuration()), dateTimeUtils.getPastTimeString(build
-						.getTimestamp()), trigger, build.getResult().name().toLowerCase(), build.getResult()
-						.getIcon()));
+					if (build != null) {
+						final String trigger =
+							(build.getTriggers().isEmpty() ? buildTriggerParser.parse(new Trigger() {
+							}) : buildTriggerParser.parse(build.getTriggers().get(0)));
+						project.addBuild(new HudsonBuildResource(build.getNumber(), dateTimeUtils
+							.getTimeSpanString(build.getDuration()), dateTimeUtils.getPastTimeString(build
+							.getTimestamp()), trigger, build.getResult().name().toLowerCase(), build.getResult()
+							.getIcon()));
+					}
 					projects.add(project);
 				}
 			} catch (HudsonServerAccessorException e) {
