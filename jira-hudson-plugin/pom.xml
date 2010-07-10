@@ -177,8 +177,9 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<groupId>net.sf.alchim</groupId>
+				<groupId>net.alchim31.maven</groupId>
 				<artifactId>yuicompressor-maven-plugin</artifactId>
+				<version>0.9</version>
 				<executions>
 					<execution>
 						<goals>
