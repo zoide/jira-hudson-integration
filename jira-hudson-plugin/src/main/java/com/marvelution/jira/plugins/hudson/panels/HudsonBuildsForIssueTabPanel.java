@@ -65,7 +65,6 @@ public class HudsonBuildsForIssueTabPanel extends AbstractIssueTabPanel {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public List<?> getActions(Issue issue, User user) {
 		return EasyList.build(new HudsonBuildsForIssueTabPanelAction(issue, descriptor, tabPanelHelper));
 	}
@@ -73,7 +72,6 @@ public class HudsonBuildsForIssueTabPanel extends AbstractIssueTabPanel {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean showPanel(Issue issue, User user) {
 		if (configurationManager.getBooleanProperty(HudsonConfigurationManager.HIDE_UNASSOCIATED_HUDSON_TAB)) {
 			return (serverManager.isHudsonConfigured()

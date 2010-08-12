@@ -31,6 +31,7 @@ import java.util.List;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -175,7 +176,7 @@ public class HudsonChartsGadgetResourceTest {
 		assertThat(chartResource.getLocation().startsWith("jfreechart-onetime-"), is(true));
 		assertThat(chartResource.getLocation().endsWith(".png"), is(true));
 		assertThat(chartResource.getImageMapName().startsWith("chart-"), is(true));
-		assertThat(chartResource.getImageMap().isEmpty(), is(false));
+		assertThat(StringUtils.isBlank(chartResource.getImageMap()), is(false));
 		assertThat(chartResource.getWidth(), is(ChartUtils.PORTLET_CHART_WIDTH));
 		assertThat(chartResource.getHeight(), is(ChartUtils.PORTLET_CHART_HEIGHT));
 		final HudsonProjectResource projectResource = chartResource.getProject();

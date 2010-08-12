@@ -358,7 +358,6 @@ public class Build implements HudsonServerAware, Comparable<Build> {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int compareTo(Build other) {
 		return Long.valueOf(getTimestamp()).compareTo(Long.valueOf(other.getTimestamp()));
 	}

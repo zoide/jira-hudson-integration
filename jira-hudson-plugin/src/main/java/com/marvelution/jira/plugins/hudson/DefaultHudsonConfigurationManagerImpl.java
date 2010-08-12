@@ -56,7 +56,6 @@ public class DefaultHudsonConfigurationManagerImpl implements HudsonConfiguratio
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean getBooleanProperty(String key) {
 		return Boolean.parseBoolean(getProperty(key));
 	}
@@ -64,7 +63,6 @@ public class DefaultHudsonConfigurationManagerImpl implements HudsonConfiguratio
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public String getProperty(String key) {
 		return properties.getProperty(key, "");
 	}
@@ -72,7 +70,6 @@ public class DefaultHudsonConfigurationManagerImpl implements HudsonConfiguratio
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void setProperty(String key, Object value) {
 		properties.setProperty(key, String.valueOf(value));
 		store(key, String.valueOf(value));

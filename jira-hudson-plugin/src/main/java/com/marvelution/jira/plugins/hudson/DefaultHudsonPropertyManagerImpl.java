@@ -69,7 +69,6 @@ public final class DefaultHudsonPropertyManagerImpl implements HudsonPropertyMan
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public PropertySet getPropertySet() {
 		return propertySet;
 	}
@@ -84,12 +83,12 @@ public final class DefaultHudsonPropertyManagerImpl implements HudsonPropertyMan
 	/**
 	 * Locate PropertySet using PropertyStore for this sequenceName/sequenceId mapping.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	protected void loadPropertySet() {
 		final HashMap psArgs = new HashMap();
 		psArgs.put("delegator.name", "default");
 		psArgs.put("entityName", "HudsonServerProperties");
-		psArgs.put("entityId", new Long(PROPERTIES_ID));
+		psArgs.put("entityId", Long.valueOf(PROPERTIES_ID));
 		propertySet = PropertySetManager.getInstance("ofbiz", psArgs);
 	}
 

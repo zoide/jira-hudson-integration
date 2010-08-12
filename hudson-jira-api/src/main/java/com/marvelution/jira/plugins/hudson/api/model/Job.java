@@ -452,7 +452,6 @@ public class Job implements HudsonServerAware, Comparable<Job> {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int compareTo(Job other) {
 		return getName().compareTo(other.getName());
 	}

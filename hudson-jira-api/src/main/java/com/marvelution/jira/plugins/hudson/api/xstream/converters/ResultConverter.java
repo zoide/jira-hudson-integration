@@ -37,16 +37,14 @@ public class ResultConverter implements Converter, ConverterMatcher {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public boolean canConvert(Class clazz) {
-		return (Result.class.equals(clazz));
+		return Result.class.equals(clazz);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
 		final Result result = (Result) source;
 		writer.setValue(result.name());
@@ -55,7 +53,6 @@ public class ResultConverter implements Converter, ConverterMatcher {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 		if (Result.SUCCESS.name().equals(reader.getValue())) {
 			return Result.SUCCESS;

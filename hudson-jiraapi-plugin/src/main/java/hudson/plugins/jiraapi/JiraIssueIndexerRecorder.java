@@ -76,7 +76,6 @@ public class JiraIssueIndexerRecorder extends Recorder {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public BuildStepMonitor getRequiredMonitorService() {
 		return BuildStepMonitor.NONE;
 	}

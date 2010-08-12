@@ -97,7 +97,7 @@ public class HudsonBuildsForProjectTabPanelTest {
 				tabPanelHelper, configurationManager);
 		panel.init(new ProjectTabPanelModuleDescriptor(authenticationContext) {
 
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
 			public String getHtml(String resourceName, Map startingParams) {
 				velocityParams = startingParams;

@@ -92,7 +92,6 @@ public class HudsonBuildsForProjectTabPanel extends AbstractProjectTabPanel {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public boolean showPanel(BrowseContext browseContext) {
 		if (configurationManager.getBooleanProperty(HudsonConfigurationManager.HIDE_UNASSOCIATED_HUDSON_TAB)) {
 			return (serverManager.isHudsonConfigured()

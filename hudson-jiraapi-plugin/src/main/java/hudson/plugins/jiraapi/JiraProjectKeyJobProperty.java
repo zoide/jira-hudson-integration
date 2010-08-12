@@ -108,7 +108,6 @@ public class JiraProjectKeyJobProperty extends JobProperty<AbstractProject<?, ?>
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public int compareTo(JiraProjectKeyJobProperty other) {
 		return getKey().compareTo(other.getKey());
 	}

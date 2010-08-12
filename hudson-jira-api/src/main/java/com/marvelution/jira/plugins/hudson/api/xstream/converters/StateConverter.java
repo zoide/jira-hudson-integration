@@ -37,16 +37,14 @@ public class StateConverter implements Converter, ConverterMatcher {
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
+	@SuppressWarnings("rawtypes")
 	public boolean canConvert(Class clazz) {
-		return (State.class.equals(clazz));
+		return State.class.equals(clazz);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
 		final State result = (State) source;
 		writer.setValue(result.name());
@@ -55,7 +53,6 @@ public class StateConverter implements Converter, ConverterMatcher {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 		if (State.NOT_STARTED.name().equals(reader.getValue())) {
 			return State.NOT_STARTED;

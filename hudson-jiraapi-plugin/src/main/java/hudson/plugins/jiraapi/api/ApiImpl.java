@@ -165,7 +165,6 @@ public class ApiImpl {
 	 * @param issueKeys {@link String} array of Jira issue keys
 	 * @return {@link BuildsList}
 	 */
-	@SuppressWarnings("unchecked")
 	public BuildsList getBuildsByJiraIssueKeys(final String[] issueKeys) {
 		final BuildsList builds = new BuildsList();
 		for (String issueKey : issueKeys) {
@@ -206,7 +205,6 @@ public class ApiImpl {
 	 * @param viewName the name of the View to get
 	 * @return the {@link HudsonView}
 	 */
-	@SuppressWarnings("unchecked")
 	public HudsonView getView(String viewName) {
 		final View view = Hudson.getInstance().getView(viewName);
 		if (view != null) {
