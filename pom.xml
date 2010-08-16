@@ -82,7 +82,7 @@
 	</distributionManagement>
 
 	<properties>
-		<project.jdk.revision>1.5</project.jdk.revision>
+		<project.jdk.revision>1.6</project.jdk.revision>
 		<hudsonVersion>1.353</hudsonVersion>
 		<atlassianJiraVersion>4.0</atlassianJiraVersion>
 		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/site-staging/atlassian/jira-hudson-integration/</stagingSiteURL>
