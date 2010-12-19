@@ -83,7 +83,7 @@
 	<properties>
 		<project.jdk.revision>1.6</project.jdk.revision>
 		<hudson.version>1.386</hudson.version>
-		<atlassian.jira.version>4.2.1</atlassian.jira.version>
+		<atlassian.jira.version>4.2</atlassian.jira.version>
 		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/apidocs-staging/jira-hudson-integration/${project.version}/</stagingSiteURL>
 	</properties>
 

@@ -69,7 +69,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.marvelution.jira.plugins</groupId>
-			<artifactId>hudson-restv2-plugin</artifactId>
+			<artifactId>hudson-apiv2-plugin</artifactId>
 			<version>${project.version}</version>
 			<type>hpi</type>
 			<scope>compile</scope>
