@@ -21,7 +21,7 @@
 	<body>
 		<links>
 			<item name="Atlassian Jira" href="http://www.atlassian.com/software/jira" />
-			<item name="Hudson CI" href="http://hudson.dev.java.net" />
+			<item name="Hudson CI" href="http://hudson-ci.org" />
 		</links>
 
 		<breadcrumbs>
@@ -35,7 +35,7 @@
 		</menu>
 
 		<menu name="Documentation">
-			<item name="Download" href="./download.html" />
+			<item name="Download" href="http://docs.marvelution.com/display/REPO/Jira+Hudson+Integration+Repository+Directory" />
 			<item name="Installation Guide" href="http://docs.marvelution.com/display/MARVJIRAHUDSON/Installation+Guide" />
 			<item name="Configuration Guide" href="http://docs.marvelution.com/display/MARVJIRAHUDSON/Administrators+Guide" />
 		</menu>

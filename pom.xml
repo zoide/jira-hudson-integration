@@ -27,19 +27,18 @@
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>jira-hudson-integration</artifactId>
-	<version>3.3.1-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>hudson-jira-api</module>
-		<module>hudson-jiraapi-plugin</module>
+		<module>hudson-apiv2-plugin</module>
 		<module>jira-hudson-plugin</module>
 		<module>jira-hudson</module>
 	</modules>
 
 	<name>Jira Hudson Integration</name>
 	<description>Project to integrate Jira with Hudson by use of Gadgets and Tab Panels</description>
-	<url>http://www.marvelution.com/atlassian/jira-hudson-integration/</url>
+	<url>http://apidocs.marvelution.com/${project.artifactId}/${project.version}</url>
 	<inceptionYear>2009</inceptionYear>
 	<organization>
 		<name>Marvelution</name>
@@ -77,18 +76,15 @@
 	<distributionManagement>
 		<site>
 			<id>marvelution.website</id>
-			<url>dav:http://repository.marvelution.com/content/sites/site/atlassian/jira-hudson-integration/</url>
+			<url>dav:http://repository.marvelution.com/content/sites/apidocs/jira-hudson-integration/${project.version}/</url>
 		</site>
 	</distributionManagement>
 
 	<properties>
 		<project.jdk.revision>1.6</project.jdk.revision>
-		<hudsonVersion>1.353</hudsonVersion>
-		<atlassianJiraVersion>4.0</atlassianJiraVersion>
-		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/site-staging/atlassian/jira-hudson-integration/</stagingSiteURL>
-		<downloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/jira-hudson/${project.version}/jira-hudson-${project.version}-distribution</downloadBaseUrl>
-		<jiraDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/jira-hudson-plugin</jiraDownloadBaseUrl>
-		<hudsonDownloadBaseUrl>http://repository.marvelution.com/content/groups/marvelution/com/marvelution/jira/plugins/hudson-jiraapi-plugin</hudsonDownloadBaseUrl>
+		<hudson.version>1.386</hudson.version>
+		<atlassian.jira.version>4.2.1</atlassian.jira.version>
+		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/apidocs-staging/jira-hudson-integration/${project.version}/</stagingSiteURL>
 	</properties>
 
 	<dependencies>

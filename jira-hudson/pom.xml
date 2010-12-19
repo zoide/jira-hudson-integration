@@ -23,14 +23,14 @@
 	<parent>
 		<groupId>com.marvelution.jira.plugins</groupId>
 		<artifactId>jira-hudson-integration</artifactId>
-		<version>3.3.1-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>jira-hudson</artifactId>
 	<packaging>pom</packaging>
 	
 	<name>Jira Hudson Distribution</name>
 	<description>Combination of a Jira and a Hudson CI plugin to integrate Hudson CI into Jira like is done with the Bamboo plugin</description>
-	<url>http://www.marvelution.com/atlassian/jira-hudson-integration/</url>
+	<url>http://apidocs.marvelution.com/${project.parent.artifactId}/${project.version}</url>
 	<inceptionYear>2009</inceptionYear>
 	<organization>
 		<name>Marvelution</name>
@@ -66,14 +66,10 @@
 		</notifiers>
 	</ciManagement>
 
-	<properties>
-		<atlassian.plugin.key>${project.groupId}.hudson</atlassian.plugin.key>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.marvelution.jira.plugins</groupId>
-			<artifactId>hudson-jiraapi-plugin</artifactId>
+			<artifactId>hudson-restv2-plugin</artifactId>
 			<version>${project.version}</version>
 			<type>hpi</type>
 			<scope>compile</scope>
@@ -92,7 +88,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2-beta-4</version>
+				<version>2.2-beta-5</version>
 				<executions>
 					<execution>
 						<id>create-main-distribution</id>

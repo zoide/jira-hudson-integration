@@ -27,7 +27,7 @@
 		<dependencySet>
 			<outputDirectory>hudson-plugin</outputDirectory>
 			<includes>
-				<include>com.marvelution.jira.plugins:hudson-jiraapi-plugin</include>
+				<include>com.marvelution.jira.plugins:hudson-restv2-plugin</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>

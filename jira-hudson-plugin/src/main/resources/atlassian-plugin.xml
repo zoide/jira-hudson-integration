@@ -17,170 +17,28 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<atlassian-plugin name="${pom.name}" key="${atlassian.plugin.key}" system="false" pluginsVersion="2">
+<atlassian-plugin name="${project.name}" key="${atlassian.plugin.key}" system="false" pluginsVersion="2">
 	<plugin-info>
-		<description>${pom.description}</description>
-		<vendor name="${pom.organization.name}" url="${pom.organization.url}" />
+		<description>${project.description}</description>
+		<vendor name="${project.organization.name}" url="${project.organization.url}" />
 		<version>${project.version}</version>
-		<application-version min="4.0" max="4.0"/>
+		<application-version min="${atlassian.jira.version}" max="${atlassian.jira.version}"/>
 	</plugin-info>
 
 	<!-- I 1 8 N   R E S O U R C E S -->
-	<resource type="i18n" name="i18n-hudson-plugin" location="i18n.hudson-plugin" />
-	<resource type="i18n" name="i18n-hudson-gadgets" location="i18n.hudson-gadgets" />
-	<resource type="i18n" name="i18n-hudson-datetime" location="i18n.hudson-datetime" />
-	<resource type="i18n" name="i18n-hudson-errors" location="i18n.hudson-errors" />
-	<resource type="i18n" name="i18n-hudson-portlets" location="i18n.hudson-portlets" />
-	<resource type="i18n" name="i18n-hudson-triggers" location="i18n.hudson-triggers" />
-	<resource type="i18n" name="i18n-hudson-config" location="i18n.hudson-config" />
-	<resource type="i18n" name="i18n-hudson-panels" location="i18n.hudson-panels" />
 
 	<!-- W E B   R E S O U R C E S -->
-	<web-resource key="common-css" name="Plugin Common CSS">
-		<resource type="download" name="common-min.css" location="styles/common-min.css" />
-	</web-resource>
-	<web-resource key="panel-css" name="Plugin Tab Panel CSS">
-		<dependency>${atlassian.plugin.key}:common-css</dependency>
-		<resource type="download" name="panels-min.css" location="styles/panels-min.css" />
-	</web-resource>
-	<web-resource key="gadget-common" name="Common Gadget Web Resources">
-		<dependency>${atlassian.plugin.key}:common-css</dependency>
-		<dependency>com.atlassian.jira.gadgets:jira-global</dependency>
-		<resource type="download" name="gadgets-min.css" location="styles/gadgets-min.css" />
-		<resource type="download" name="common-min.js" location="scripts/common-min.js">
-			<property key="content-type" value="text/javascript"/>
-		</resource>
-		<resource type="download" name="gadget-fields-min.js" location="scripts/gadget-fields-min.js">
-			<property key="content-type" value="text/javascript"/>
-		</resource>
-	</web-resource>
-	<web-resource key="status-gadget" name="Status Gadgets Web Resources">
-		<dependency>${atlassian.plugin.key}:gadget-common</dependency>
-		<resource type="download" name="status-min.js" location="scripts/status-min.js">
-			<property key="content-type" value="text/javascript"/>
-		</resource>
-	</web-resource>
-	<web-resource key="charts-gadget" name="Charts Gadgets Web Resources">
-		<dependency>${atlassian.plugin.key}:gadget-common</dependency>
-		<resource type="download" name="charts-min.js" location="scripts/charts-min.js">
-			<property key="content-type" value="text/javascript"/>
-		</resource>
-	</web-resource>
 
 	<!-- I M A G E   R E S O U R C E S -->
-	<resource type="download" name="images/" location="images/" />
-	<resource type="download" name="status-screenshot.png" location="images/gadgets/status-screenshot.png"/>
-	<resource type="download" name="status-thumb.png" location="images/gadgets/status-thumb.png"/>
-	<resource type="download" name="view-status-screenshot.png" location="images/gadgets/view-status-screenshot.png"/>
-	<resource type="download" name="view-status-thumb.png" location="images/gadgets/view-status-thumb.png"/>
-	<resource type="download" name="build-trend-screenshot.png" location="images/gadgets/build-trend-screenshot.png"/>
-	<resource type="download" name="build-trend-thumb.png" location="images/gadgets/build-trend-thumb.png"/>
 
 	<!-- G A D G E T S -->
-	<gadget key="hudson-status-gadget" name="Hudson Status" location="gadgets/hudson-status-gadget.xml" />
-	<gadget key="hudson-view-status-gadget" name="Hudson View Status" location="gadgets/hudson-view-status-gadget.xml" />
-	<gadget key="hudson-build-trend-gadget" name="Hudson Build Trend" location="gadgets/hudson-build-trend-gadget.xml" />
 
 	<!-- R E S T   R E S O U R C E S -->
-	<rest key="gadgetRestPoints" path="/hudson" version="1.0" system="false"
-		  description="Provides REST endpoints used to display Hudson gadget contents." />
 
 	<!-- T A B   P A N E L S -->
-	<project-tabpanel key="hudson-project-tabpanel" name="Hudson Builds Project Panel"
-		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForProjectTabPanel">
-		<description key="hudson.panel.project.description" />
-		<label key="hudson.panel.label" />
-		<order>101</order>
-		<resource type="velocity" name="view" location="templates/panels/hudsonTabPanel.vm" />
-	</project-tabpanel>
-
-	<version-tabpanel key="hudson-version-tabpanel" name="Hudson Builds Project Version Panel"
-		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForVersionTabPanel">
-		<description key="hudson.panel.version.description" />
-		<label key="hudson.panel.label" />
-		<order>101</order>
-		<resource type="velocity" name="view" location="templates/panels/hudsonTabPanel.vm" />
-	</version-tabpanel>
-
-	<component-tabpanel key="hudson-component-tabpanel" name="Hudson Builds Project Component Panel"
-		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForComponentTabPanel">
-		<description key="hudson.panel.component.description" />
-		<label key="hudson.panel.label" />
-		<order>101</order>
-		<resource type="velocity" name="view" location="templates/panels/hudsonTabPanel.vm" />
-	</component-tabpanel>
-
-	<issue-tabpanel key="hudson-issue-tabpanel" name="Hudson Builds Issue Panel"
-		class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsForIssueTabPanel">
-		<description key="hudson.panel.issue.description" />
-		<label key="hudson.panel.label" />
-		<order>101</order>
-		<resource type="velocity" name="view" location="templates/panels/hudsonTabPanel.vm" />
-	</issue-tabpanel>
 
 	<!-- H U D S O N   S E R V E R S   C O N F I G U R A T I O N -->
-	<webwork1 key="hudson-server-config" name="Configure Your Hudson Server">
-		<actions>
-			<action name="com.marvelution.jira.plugins.hudson.web.action.AdministerHudson" alias="AdministerHudson">
-				<view name="success">/templates/action/admin/administerHudson.vm</view>
-			</action>
-			<action name="com.marvelution.jira.plugins.hudson.web.action.AddHudsonServer" alias="AddHudsonServer">
-				<view name="input">/templates/action/admin/addHudsonServer.vm</view>
-				<view name="error">/templates/action/admin/addHudsonServer.vm</view>
-			</action>
-			<action name="com.marvelution.jira.plugins.hudson.web.action.UpdateHudsonServer" alias="UpdateHudsonServer">
-				<view name="input">/templates/action/admin/updateHudsonServer.vm</view>
-				<view name="error">/templates/action/admin/updateHudsonServer.vm</view>
-			</action>
-			<action name="com.marvelution.jira.plugins.hudson.web.action.DeleteHudsonServer" alias="DeleteHudsonServer">
-				<view name="input">/templates/action/admin/deleteHudsonServer.vm</view>
-			</action>
-			<action name="com.marvelution.jira.plugins.hudson.web.action.UpdateHudsonServerProjectAssociations" alias="UpdateHudsonServerProjectAssociations">
-				<view name="input">/templates/action/admin/updateHudsonServerProjectAssociations.vm</view>
-			</action>
-		</actions>
-	</webwork1>
-
-	<webwork1 key="hudson-panel-actions" name="Hudson Server TabPanel Actions">
-		<actions>
-			<action name="com.marvelution.jira.plugins.hudson.web.action.ViewHudsonServerPanelContent" alias="ViewHudsonServerPanelContent">
-				<view name="success">/templates/action/buildList.vm</view>
-				<view name="error">/templates/action/panelError.vm</view>
-			</action>
-		</actions>
-	</webwork1>
-
-	<web-item key="hudson" name="Hudson" section="system.admin/globalsettings" weight="1002">
-		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
-			<param name="permission">admin</param>
-		</condition>
-		<label key="hudson" />
-		<link linkId="hudson">/secure/admin/jira/AdministerHudson.jspa</link>
-	</web-item>
 
 	<!-- C O M P O N E N T S -->
-	<component key="hudsonPropertyManager" name="Default Hudson Property Manager"
-			class="com.marvelution.jira.plugins.hudson.DefaultHudsonPropertyManagerImpl">
-		<interface>com.marvelution.jira.plugins.hudson.service.HudsonPropertyManager</interface>
-	</component>
-	<component key="hudsonServerManagerImpl" name="Default Hudson Server Manager" public="true"
-			class="com.marvelution.jira.plugins.hudson.DefaultHudsonServerManagerImpl">
-		<interface>com.marvelution.jira.plugins.hudson.service.HudsonServerManager</interface>
-	</component>
-	<component key="hudsonConfigurationManagerImpl" name="Default Hudson Configuration Manager" public="true"
-			class="com.marvelution.jira.plugins.hudson.DefaultHudsonConfigurationManagerImpl">
-		<interface>com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager</interface>
-	</component>
-	<component key="hudsonServerFactoryImpl" name="Default Hudson Server Factory" public="true"
-			class="com.marvelution.jira.plugins.hudson.DefaultHudsonServerFactoryImpl">
-		<interface>com.marvelution.jira.plugins.hudson.service.HudsonServerFactory</interface>
-	</component>
-	<component key="hudsonServerAccessorImpl" name="Default Hudson Server Accessor" public="true"
-			class="com.marvelution.jira.plugins.hudson.DefaultHudsonServerAccessorImpl">
-		<interface>com.marvelution.jira.plugins.hudson.service.HudsonServerAccessor</interface>
-	</component>
-	<component key="hudsonBuildsTabPanelHelper" name="Default Hudson Builds Tabpanel Helper"
-			class="com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper">
-		<interface>com.marvelution.jira.plugins.hudson.panels.HudsonBuildsTabPanelHelper</interface>
-	</component>
+
 </atlassian-plugin>

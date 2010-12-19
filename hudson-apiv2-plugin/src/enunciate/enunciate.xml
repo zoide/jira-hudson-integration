@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<enunciate label="${artifactId}" xsi:noNamespaceSchemaLocation="http://enunciate.codehaus.org/schemas/enunciate-1.21.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<namespaces>
+		<namespace id="apiv2" uri="http://hudson.marvelution.com/apiv2" />
+	</namespaces>
+	<services>
+		<rest defaultRestSubcontext="/apiv2" />
+	</services>
+	<modules>
+		<docs forceExampleJson="true" title="${artifactId} API" copyright="Marvelution.com" docsDir="">
+		</docs>
+		<java-client generateJsonJar="true" />
+		<xml prettyPrint="true">
+			<schema namespace="http://hudson.marvelution.com/apiv2" file="api.xsd" />
+		</xml>
+		<jaxws-client generateJsonJar="true" />
+		<jaxws />
+		<jaxws-ri />
+	</modules>
+	<api-classes>
+		<exclude pattern="com.marvelution.hudson.plugins.apiv2.servlet.*"/>
+	</api-classes>
+</enunciate>
