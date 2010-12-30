@@ -32,39 +32,12 @@
 	<description>Combination of a Jira and a Hudson CI plugin to integrate Hudson CI into Jira like is done with the Bamboo plugin</description>
 	<url>http://apidocs.marvelution.com/${project.parent.artifactId}/${project.version}</url>
 	<inceptionYear>2009</inceptionYear>
-	<organization>
-		<name>Marvelution</name>
-		<url>http://www.marvelution.com/</url>
-	</organization>
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
 	
 	<scm>
 		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson</connection>
 		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson</developerConnection>
 		<url>http://fisheye.marvelution.com/browse/public/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson</url>
 	</scm>
-	<issueManagement>
-		<system>JIRA</system>
-		<url>http://issues.marvelution.com/browse/MARVJIRAHUDSON</url>
-	</issueManagement>
-	<ciManagement>
-		<system>Bamboo</system>
-		<url>http://builds.marvelution.com/browse/MARVJIRAHUDSON</url>
-		<notifiers>
-			<notifier>
-				<type>mail</type>
-				<configuration>
-					<address>ci@lists.marvelution.com</address>
-				</configuration>
-			</notifier>
-		</notifiers>
-	</ciManagement>
 
 	<dependencies>
 		<dependency>
@@ -107,19 +80,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<developers>
-		<developer>
-			<id>markrekveld</id>
-			<name>Mark Rekveld</name>
-			<url>http://www.marvelution.com</url>
-			<organization>Marvelution</organization>
-			<email>markrekveld@marvelution.com</email>
-			<organizationUrl>http://www.marvelution.com</organizationUrl>
-			<timezone>+1</timezone>
-			<roles>
-				<role>Marvelution Member</role>
-			</roles>
-		</developer>
-	</developers>
 </project>

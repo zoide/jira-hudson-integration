@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>com.marvelution</groupId>
 		<artifactId>marvelution</artifactId>
-		<version>7</version>
+		<version>8</version>
 	</parent>
 	<groupId>com.marvelution.jira.plugins</groupId>
 	<artifactId>jira-hudson-integration</artifactId>
@@ -32,6 +32,7 @@
 
 	<modules>
 		<module>hudson-apiv2-plugin</module>
+		<module>hudson-apiv2-wsclient</module>
 		<module>jira-hudson-plugin</module>
 		<module>jira-hudson</module>
 	</modules>
@@ -84,6 +85,7 @@
 		<project.jdk.revision>1.6</project.jdk.revision>
 		<hudson.version>1.386</hudson.version>
 		<atlassian.jira.version>4.2</atlassian.jira.version>
+		<javax.xml.bind.version>2.2</javax.xml.bind.version>
 		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/apidocs-staging/jira-hudson-integration/${project.version}/</stagingSiteURL>
 	</properties>
 
