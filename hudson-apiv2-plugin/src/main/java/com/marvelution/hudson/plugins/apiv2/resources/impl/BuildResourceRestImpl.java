@@ -21,25 +21,32 @@ package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
 import java.util.List;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 
-import com.marvelution.hudson.plugins.apiv2.resources.BaseRestResource;
+import org.apache.wink.common.annotations.Parent;
+
 import com.marvelution.hudson.plugins.apiv2.resources.BuildResource;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
 
 /**
- * The {@link BuildResource} implementation
+ * The {@link BuildResource} REST implementation
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
+@Parent(BaseRestResource.class)
 @Path("/build")
-public class BuildResourceImpl extends BaseRestResource implements BuildResource {
+public class BuildResourceRestImpl extends BaseRestResource implements BuildResource {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Build getBuild(String jobName, Integer buildNumber) {
+	@GET
+	@Path("{jobName}")
+	public Build getBuild(@PathParam("jobName") String jobName, @QueryParam("buildNumber") Integer buildNumber) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -48,7 +55,9 @@ public class BuildResourceImpl extends BaseRestResource implements BuildResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Build> getBuilds(String jobName) {
+	@GET
+	@Path("{jobName}/all")
+	public List<Build> getBuilds(@PathParam("jobName") String jobName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -57,7 +66,9 @@ public class BuildResourceImpl extends BaseRestResource implements BuildResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Build getFirstBuild(String jobName) {
+	@GET
+	@Path("{jobName}/firstbuild")
+	public Build getFirstBuild(@PathParam("jobName") String jobName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +77,9 @@ public class BuildResourceImpl extends BaseRestResource implements BuildResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Build getLastBuild(String jobName) {
+	@GET
+	@Path("{jobName}/lastbuild")
+	public Build getLastBuild(@PathParam("jobName") String jobName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -75,7 +88,9 @@ public class BuildResourceImpl extends BaseRestResource implements BuildResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Build getLastSuccessfulBuild(String jobName) {
+	@GET
+	@Path("{jobName}/lastSuccessfulBuild")
+	public Build getLastSuccessfulBuild(@PathParam("jobName") String jobName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -84,7 +99,9 @@ public class BuildResourceImpl extends BaseRestResource implements BuildResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Build getLastCompletedBuild(String jobName) {
+	@GET
+	@Path("{jobName}/lastCompletedBuild")
+	public Build getLastCompletedBuild(@PathParam("jobName") String jobName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -93,7 +110,9 @@ public class BuildResourceImpl extends BaseRestResource implements BuildResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Build getLastFailedBuild(String jobName) {
+	@GET
+	@Path("{jobName}/lastFailedBuild")
+	public Build getLastFailedBuild(@PathParam("jobName") String jobName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -102,7 +121,9 @@ public class BuildResourceImpl extends BaseRestResource implements BuildResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Build getLastUnstableBuild(String jobName) {
+	@GET
+	@Path("{jobName}/lastUnstableBuild")
+	public Build getLastUnstableBuild(@PathParam("jobName") String jobName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -111,7 +132,9 @@ public class BuildResourceImpl extends BaseRestResource implements BuildResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Build getLastStableBuild(String jobName) {
+	@GET
+	@Path("{jobName}/lastStableBuild")
+	public Build getLastStableBuild(@PathParam("jobName") String jobName) {
 		// TODO Auto-generated method stub
 		return null;
 	}

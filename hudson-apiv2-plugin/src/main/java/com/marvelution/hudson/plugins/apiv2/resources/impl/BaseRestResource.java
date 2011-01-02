@@ -19,38 +19,24 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
-import java.util.List;
-
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
-
-import com.marvelution.hudson.plugins.apiv2.resources.BaseRestResource;
-import com.marvelution.hudson.plugins.apiv2.resources.ViewResource;
-import com.marvelution.hudson.plugins.apiv2.resources.model.View;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
- * The {@link View} implementation
+ * Parent (Base) REST resource for all REST implementations for Hudson
  * 
- * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
+ * @author <a href="mailto:markrekveld@marvelution.com">Mark rekveld</a>
  */
-@Path("/view")
-public class ViewResourceImpl extends BaseRestResource implements ViewResource {
+@Path(BaseRestResource.BASE_REST_URI)
+@Consumes( { MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+@Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+public abstract class BaseRestResource {
 
 	/**
-	 * {@inheritDoc}
+	 * The base url for all the rest endpoints
 	 */
-	@Override
-	public View getView(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<View> getViews() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public static final String BASE_REST_URI = "apiv2";
 
 }

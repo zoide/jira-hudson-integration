@@ -17,41 +17,47 @@
  * under the License.
  */
 
-package com.marvelution.hudson.plugins.apiv2.resources;
+package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
 import java.util.List;
 
-import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+
+import org.apache.wink.common.annotations.Parent;
+
+import com.marvelution.hudson.plugins.apiv2.resources.ViewResource;
+import com.marvelution.hudson.plugins.apiv2.resources.model.View;
 
 /**
- * Job Resource Endpoint interface
+ * The {@link View} REST implementation
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
-public interface JobResource {
+@Parent(BaseRestResource.class)
+@Path("/view")
+public class ViewResourceRestImpl extends BaseRestResource implements ViewResource {
 
 	/**
-	 * Get the {@link Job} identified by the given name
-	 * 
-	 * @param name the name of the {@link Job} to get
-	 * @return the {@link Job}
-	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
+	 * {@inheritDoc}
 	 */
-	Job getJob(String name) throws NoSuchJobException;
+	@Override
+	@GET
+	public View getView(@QueryParam("name") String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**
-	 * Get all the {@link Job} objects on the Hudson server
-	 * 
-	 * @return {@link List} of all the {@link Job} objects
+	 * {@inheritDoc}
 	 */
-	List<Job> getJobs();
-
-	/**
-	 * Get all {@link Job} objects on the Hudson server, but with minimal data
-	 * 
-	 * @return {@link List} of all the {@link Job} objects with minimal data
-	 */
-	List<Job> listJobs();
+	@Override
+	@GET
+	@Path("/all")
+	public List<View> getViews() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

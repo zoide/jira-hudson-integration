@@ -40,7 +40,6 @@ public class PluginImpl extends Plugin {
 	 * {@inheritDoc}
 	 */
 	public void start() throws Exception {
-		super.start();
 		filter = new HudsonAPIV2ServletFilter();
 		PluginServletFilter.addFilter(filter);
 	}
@@ -49,7 +48,6 @@ public class PluginImpl extends Plugin {
 	 * {@inheritDoc}
 	 */
 	public void stop() throws Exception {
-		super.stop();
 		if (filter != null) {
 			PluginServletFilter.removeFilter(filter);
 		}

@@ -17,40 +17,34 @@
  * under the License.
  */
 
-package com.marvelution.hudson.plugins.apiv2.resources.impl;
+package com.marvelution.hudson.plugins.apiv2.resources.exceptions;
 
-import java.util.List;
-
-import javax.ws.rs.Path;
-
-import com.marvelution.hudson.plugins.apiv2.resources.BaseRestResource;
-import com.marvelution.hudson.plugins.apiv2.resources.JobResource;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Response.Status.Family;
 
 /**
- * The {@link JobResource} implementation
+ * Forbidden exception thrown to return a {@link Status#FORBIDDEN} error back to the client
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
-@Path("/job")
-public class JobResourceImpl extends BaseRestResource implements JobResource {
+public class ForbiddenException extends AbstractStatusTypeException {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Job getJob(String jobName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Family getFamily() {
+		return Family.CLIENT_ERROR;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Job> getJobs() {
-		// TODO Auto-generated method stub
-		return null;
+	public Status getStatus() {
+		return Status.FORBIDDEN;
 	}
 
 }

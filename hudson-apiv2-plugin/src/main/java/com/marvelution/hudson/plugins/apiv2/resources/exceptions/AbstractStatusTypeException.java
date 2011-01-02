@@ -17,47 +17,46 @@
  * under the License.
  */
 
-package com.marvelution.hudson.plugins.apiv2.resources.exceptions.mappers;
+package com.marvelution.hudson.plugins.apiv2.resources.exceptions;
 
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
 
-import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.mappers.StatusTypeExceptionMapper;
 
 /**
- * {@link ExceptionMapper} to map a {@link NoSuchJobException} to a {@link Response}
+ * Abstract {@link StatusType} {@link RuntimeException}.
+ * This case needs to be subclassed in order for the exception to be handled by the {@link StatusTypeExceptionMapper}
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
-@Provider
-public class NoSuchJobExceptionMapper implements ExceptionMapper<NoSuchJobException> {
+public abstract class AbstractStatusTypeException extends RuntimeException {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * {@inheritDoc}
+	 * Get the {@link Family} type of the exception
+	 * 
+	 * @return the {@link Family}
 	 */
-	@Override
-	public Response toResponse(final NoSuchJobException exception) {
-		return Response.status(new StatusType() {
-			
-			@Override
-			public int getStatusCode() {
-				return Status.NOT_FOUND.getStatusCode();
-			}
-			
-			@Override
-			public String getReasonPhrase() {
-				return exception.getMessage();
-			}
-			
-			@Override
-			public Family getFamily() {
-				return Family.CLIENT_ERROR;
-			}
-		}).build();
+	public abstract Family getFamily();
+
+	/**
+	 * Get the {@link Status} type of the exception
+	 * 
+	 * @return the {@link Status} type
+	 */
+	public abstract Status getStatus();
+
+	/**
+	 * Get the Reason Phrase of the exception
+	 * 
+	 * @return the Reason Phrase
+	 * @see AbstractStatusTypeException#getMessage()
+	 */
+	public String getReasonPhrase() {
+		return getMessage();
 	}
 
 }

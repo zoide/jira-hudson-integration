@@ -34,7 +34,7 @@ import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollect
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 import org.apache.wink.common.internal.utils.FileLoader;
 
-import com.marvelution.hudson.plugins.apiv2.resources.BaseRestResource;
+import com.marvelution.hudson.plugins.apiv2.resources.impl.BaseRestResource;
 import com.marvelution.hudson.plugins.apiv2.servlet.filter.HudsonAPIV2ServletFilter;
 
 /**
@@ -46,11 +46,9 @@ import com.marvelution.hudson.plugins.apiv2.servlet.filter.HudsonAPIV2ServletFil
  */
 public class HudsonWinkApplication extends WinkApplication {
 
-	public static final String[] DEFAULT_APPLICATION_RESOURCE_PACKAGES =
-		{"com.marvelution.hudson.plugins.apiv2.resources", "com.marvelution.hudson.plugins.apiv2.resources.exceptions",
-			"com.marvelution.hudson.plugins.apiv2.resources.exceptions.mappers",
-			"com.marvelution.hudson.plugins.apiv2.resources.impl",
-			"com.marvelution.hudson.plugins.apiv2.resources.model"};
+	public static final String[] DEFAULT_APPLICATION_RESOURCE_PACKAGES = {
+		"com.marvelution.hudson.plugins.apiv2.resources",
+	};
 
 	private static final Logger logger = Logger.getLogger(HudsonAPIV2ServletFilter.class.getName());
 
@@ -65,32 +63,48 @@ public class HudsonWinkApplication extends WinkApplication {
 			jaxRSClasses = new HashSet<Class<?>>();
 			final Set<Class<?>> classes = new HashSet<Class<?>>();
 			for (String resourcePackageName : DEFAULT_APPLICATION_RESOURCE_PACKAGES) {
-				try {
-					final URL resourcePackage = FileLoader.loadFile(resourcePackageName.replace(".", "/"));
-					for (String filename : new File(resourcePackage.toURI()).list()) {
-						if (filename.endsWith(".class")) {
-							final String className = filename.replace(".class", "");
-							classes.add(Class.forName(resourcePackageName + "." + className));
-						} else {
-							logger.log(Level.FINE, "Ignoring [" + filename + "]; Its not a class file");
-						}
-					}
-				} catch (FileNotFoundException e) {
-					logger.log(Level.SEVERE, "Failed to load REST Resources in package: " + resourcePackageName, e);
-				} catch (URISyntaxException e) {
-					logger.log(Level.SEVERE, "Failed to load REST Resources in package: " + resourcePackageName, e);
-				} catch (ClassNotFoundException e) {
-					logger.log(Level.SEVERE, "Failed to load REST Resources in package: " + resourcePackageName, e);
-				}
+				classes.addAll(getClassesFromPackage(resourcePackageName));
 			}
 			processClasses(classes);
-			// TODO Load all JAX-RS classes from the plugins
 		}
 		return jaxRSClasses;
 	}
 
 	/**
-	 * Process the given {@link Set} of {@link Class} objects and add them to the JAX-RS Class List if they are valid JAX_RS Classes
+	 * Get all the classes that are located in a source package.
+	 * All sub packages are also processed.
+	 * 
+	 * @param resourcePackageName the source package to get all the classes for
+	 * @return {@link Set} of {@link Class} objects that are located in the source package or one of its sub packages
+	 */
+	private Set<Class<?>> getClassesFromPackage(String resourcePackageName) {
+		Set<Class<?>> classes = new HashSet<Class<?>>();
+		try {
+			final URL resourcePackage = FileLoader.loadFile(resourcePackageName.replace(".", "/"));
+			for (String filename : new File(resourcePackage.toURI()).list()) {
+				if (filename.endsWith(".class")) {
+					final String className = filename.replace(".class", "");
+					try {
+						classes.add(Class.forName(resourcePackageName + "." + className));
+					} catch (ClassNotFoundException e) {
+						logger.log(Level.SEVERE, "Failed to load REST Resources in package: " + resourcePackageName
+							+ "." + className, e);
+					}
+				} else {
+					classes.addAll(getClassesFromPackage(resourcePackageName + "." + filename));
+				}
+			}
+		} catch (FileNotFoundException e) {
+			logger.log(Level.SEVERE, "Failed to load REST Resources in package: " + resourcePackageName, e);
+		} catch (URISyntaxException e) {
+			logger.log(Level.SEVERE, "Failed to load REST Resources in package: " + resourcePackageName, e);
+		}
+		return classes;
+	}
+
+	/**
+	 * Process the given {@link Set} of {@link Class} objects and add them to the JAX-RS Class List if they are valid
+	 * JAX-RS Classes
 	 * 
 	 * @param classes {@link Set} of {@link Class} objects to process
 	 */

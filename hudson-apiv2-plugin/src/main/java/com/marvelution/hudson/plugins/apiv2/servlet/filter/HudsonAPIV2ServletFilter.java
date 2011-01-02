@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import org.apache.wink.server.internal.servlet.RestFilter;
 import org.apache.wink.server.internal.servlet.RestServlet;
 
-import com.marvelution.hudson.plugins.apiv2.resources.BaseRestResource;
+import com.marvelution.hudson.plugins.apiv2.resources.impl.BaseRestResource;
 import com.marvelution.hudson.plugins.apiv2.servlet.HudsonAPIV2ServletConfig;
 
 /**
@@ -86,11 +86,12 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 			final HttpServletRequest servletRequest = (HttpServletRequest) request;
 			// Get the requestUri without the context path and the leading slash
 			final String requestUri = servletRequest.getRequestURI().substring(servletRequest.getContextPath().length() + 1);
+			logger.log(Level.FINE, "Got a request from URI + " + requestUri);
 			// Make sure it is a REST call
 			if (requestUri.startsWith(BaseRestResource.BASE_REST_URI)) {
 				logger.log(Level.FINE, "Got a REST request, forwarding it to the Wink RestFilter");
 				FilteredHttpServletResponse servletResponse = new FilteredHttpServletResponse((HttpServletResponse) response);
-				restServlet.service((HttpServletRequest) servletRequest, servletResponse);
+				restServlet.service(servletRequest, servletResponse);
 				if ((!(servletResponse.isCommitted())) && (servletResponse.getStatusCode() == 404)) {
 					logger.log(Level.FINE, "Filter " + this.getClass().getName() + " did not match a resource so letting request continue on FilterChain");
 					servletResponse.setStatus(200);
@@ -160,7 +161,7 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 		public void setStatus(int statusCode) {
 			super.setStatus(statusCode);
 			this.statusCode = statusCode;
-			logger.log(Level.FINE, "FilteredHttpServletResponse set status code to {}", Integer.valueOf(statusCode));
+			logger.log(Level.FINE, "FilteredHttpServletResponse set status code to " + Integer.valueOf(statusCode));
 		}
 
 		/**
@@ -170,13 +171,13 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 		public void setStatus(int statusCode, String msg) {
 			super.setStatus(statusCode, msg);
 			this.statusCode = statusCode;
-			logger.log(Level.FINE, "FilteredHttpServletResponse set status code to {}", Integer.valueOf(statusCode));
+			logger.log(Level.FINE, "FilteredHttpServletResponse set status code to " + Integer.valueOf(statusCode));
 		}
 
 		/**
 		 * Get the status code
 		 * 
-		 * @return statuc code value
+		 * @return status code value
 		 */
 		int getStatusCode() {
 			return this.statusCode;

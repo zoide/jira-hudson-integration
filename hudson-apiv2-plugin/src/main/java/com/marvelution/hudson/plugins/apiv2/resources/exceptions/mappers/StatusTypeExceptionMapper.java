@@ -20,12 +20,12 @@
 package com.marvelution.hudson.plugins.apiv2.resources.exceptions.mappers;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.StatusType;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.AbstractStatusTypeException;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchBuildException;
 
 /**
@@ -34,28 +34,28 @@ import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchBuildExce
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 @Provider
-public class NoSuchBuildExceptionMapper implements ExceptionMapper<NoSuchBuildException> {
+public class StatusTypeExceptionMapper implements ExceptionMapper<AbstractStatusTypeException> {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Response toResponse(final NoSuchBuildException exception) {
+	public Response toResponse(final AbstractStatusTypeException exception) {
 		return Response.status(new StatusType() {
 			
 			@Override
 			public int getStatusCode() {
-				return Status.NOT_FOUND.getStatusCode();
+				return exception.getStatus().getStatusCode();
 			}
 			
 			@Override
 			public String getReasonPhrase() {
-				return exception.getMessage();
+				return exception.getReasonPhrase();
 			}
 			
 			@Override
 			public Family getFamily() {
-				return Family.CLIENT_ERROR;
+				return exception.getFamily();
 			}
 		}).build();
 	}

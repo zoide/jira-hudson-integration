@@ -24,7 +24,7 @@ package com.marvelution.hudson.plugins.apiv2.resources.exceptions;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
-public class NoSuchJobException extends RuntimeException {
+public class NoSuchJobException extends NotFoundException {
 
 	/**
 	 * Default Serial version ID
@@ -54,24 +54,8 @@ public class NoSuchJobException extends RuntimeException {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getMessage() {
+	public String getReasonPhrase() {
 		return "Job with name '" + name + "' doesn't exist";
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getLocalizedMessage() {
-		return getMessage();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return getMessage();
 	}
 
 }
