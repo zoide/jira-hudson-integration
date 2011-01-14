@@ -79,4 +79,29 @@ public class RemoteTrigger extends Trigger {
 		this.note = note;
 	}
 
+	/**
+	 * Static helper method to create a {@link RemoteTrigger}
+	 * 
+	 * @param note the note that was attached to the {@link Trigger}
+	 * @return the {@link RemoteTrigger}
+	 * @see RemoteTrigger#create(String, String)
+	 */
+	public static RemoteTrigger create(String note) {
+		return create(note, "");
+	}
+
+	/**
+	 * Static helper method to create a {@link RemoteTrigger}
+	 * 
+	 * @param note the note that was attached to the {@link Trigger}
+	 * @param host the host that send the {@link Trigger}
+	 * @return the {@link RemoteTrigger}
+	 */
+	public static RemoteTrigger create(String note, String host) {
+		RemoteTrigger trigger = new RemoteTrigger();
+		trigger.setHost(host);
+		trigger.setNote(note);
+		return trigger;
+	}
+
 }

@@ -20,8 +20,9 @@
 package com.marvelution.hudson.plugins.apiv2.client.connectors;
 
 /**
+ * Connection exception that can be thrown by a {@link Connector} implementation in case on connection errors
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
- *
  */
 public class ConnectionException extends RuntimeException {
 

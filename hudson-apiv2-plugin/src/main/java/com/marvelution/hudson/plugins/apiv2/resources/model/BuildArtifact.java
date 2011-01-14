@@ -35,7 +35,9 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlType(name = "BuildArtifactType", namespace = NameSpaceUtils.BUILD_NAMESPACE)
 @XmlRootElement(name = "BuildArtifact", namespace = NameSpaceUtils.BUILD_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BuildArtifact {
+public class BuildArtifact extends Model {
+
+	public static final String ARTIFACT_URL_PREFIX = "artifact/";
 
 	@XmlElement(name = "name", required = true)
 	private String name;
@@ -75,7 +77,11 @@ public class BuildArtifact {
 	 * @param url the URL
 	 */
 	public void setUrl(String url) {
-		this.url = url;
+		if (!url.startsWith(ARTIFACT_URL_PREFIX)) {
+			this.url = ARTIFACT_URL_PREFIX + url;
+		} else {
+			this.url = url;
+		}
 	}
 
 }

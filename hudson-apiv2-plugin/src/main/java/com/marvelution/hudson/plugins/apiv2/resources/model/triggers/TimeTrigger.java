@@ -38,7 +38,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TimeTrigger extends Trigger {
 
-	@XmlElement(name = "time", required = true)
+	@XmlElement(name = "time")
 	private long timestamp;
 
 	/**
@@ -57,6 +57,18 @@ public class TimeTrigger extends Trigger {
 	 */
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	/**
+	 * Static helper method to create a {@link TimeTrigger} for the given timestamp
+	 * 
+	 * @param timestamp the timestamp of the {@link TimeTrigger}
+	 * @return the {@link TimeTrigger}
+	 */
+	public static TimeTrigger create(long timestamp) {
+		TimeTrigger trigger = new TimeTrigger();
+		trigger.setTimestamp(timestamp);
+		return trigger;
 	}
 
 }

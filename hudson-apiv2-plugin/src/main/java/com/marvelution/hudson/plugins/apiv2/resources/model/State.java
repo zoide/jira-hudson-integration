@@ -33,6 +33,6 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlEnum(String.class)
 public enum State {
 
-	NOT_STARTED, BUILDING, COMPLETED;
+	NOT_STARTED, BUILDING, COMPLETED, UNKNOWN;
 
 }

@@ -19,15 +19,19 @@
 
 package com.marvelution.hudson.plugins.apiv2.client;
 
+import com.marvelution.hudson.plugins.apiv2.client.connectors.Connector;
 
 /**
+ * Host configuration class.
+ * This class contains all the required configuration items to allow a {@link Connector} to connect to the {@link Host}
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 public class Host {
 
-	private String host;
-	private String username;
-	private String password;
+	private String host = "";
+	private String username = "";
+	private String password = "";
 
 	/**
 	 * Default constructor for unsecured instances
@@ -35,7 +39,6 @@ public class Host {
 	 * @param host the host url
 	 */
 	public Host(String host) {
-		super();
 		this.host = host;
 	}
 
@@ -44,11 +47,10 @@ public class Host {
 	 * 
 	 * @param host the host url
 	 * @param username the authentication username
-	 * @param password teh authentication password
+	 * @param password the authentication password
 	 */
 	public Host(String host, String username, String password) {
-		super();
-		this.host = host;
+		this(host);
 		this.username = username;
 		this.password = password;
 	}
@@ -105,6 +107,40 @@ public class Host {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Host) {
+			Host otherHost = (Host) obj;
+			return (getHost().equals(otherHost.getHost()) && getUsername().equals(otherHost.getUsername())
+				&& getPassword().equals(otherHost.getPassword()));
+		}
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return getHost().hashCode() + getUsername().hashCode() + getPassword().hashCode();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String string = "[Host: url: " + getHost();
+		if (!"".equals(getUsername())) { 
+			string += "; username:" + getUsername() + "; password: ******";
+		}
+		string += "]";
+		return string;
 	}
 
 }

@@ -38,6 +38,8 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlRootElement(name = "Job", namespace = NameSpaceUtils.JOB_NAMESPACE)
 public class Job extends Model {
 
+	@XmlElement(name = "name", required = true)
+	private String name;
 	@XmlElement(name = "url", required = true)
 	private String url;
 	@XmlElement(name = "description")
@@ -80,16 +82,25 @@ public class Job extends Model {
 	 * @param jobName the Job Name
 	 */
 	public Job(String jobName) {
-		setModelId(jobName);
+		setName(jobName);
 	}
 
 	/**
-	 * Getter for the jobName
+	 * Getter for the name
 	 * 
-	 * @return the jobName
+	 * @return the name
 	 */
-	public String getJobName() {
-		return getModelId();
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Setter for the name
+	 * 
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

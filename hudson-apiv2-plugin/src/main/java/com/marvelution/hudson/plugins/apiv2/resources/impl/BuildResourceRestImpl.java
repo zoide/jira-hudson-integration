@@ -19,17 +19,20 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
-import java.util.List;
+import hudson.model.AbstractBuild;
+import hudson.model.Hudson;
+import hudson.model.Run;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 
 import org.apache.wink.common.annotations.Parent;
 
+import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.BuildResource;
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchBuildException;
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
 
 /**
  * The {@link BuildResource} REST implementation
@@ -37,106 +40,164 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 @Parent(BaseRestResource.class)
-@Path("/build")
+@Path("builds")
 public class BuildResourceRestImpl extends BaseRestResource implements BuildResource {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	@Path("{jobName}")
-	public Build getBuild(@PathParam("jobName") String jobName, @QueryParam("buildNumber") Integer buildNumber) {
-		// TODO Auto-generated method stub
-		return null;
+	public Build getBuild(String jobName, Integer buildNumber) {
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		AbstractBuild<?, ?> build = (AbstractBuild<?, ?>) job.getBuildByNumber(buildNumber);
+		if (build != null) {
+			return DozerUtils.getMapper().map(build, Build.class);
+		}
+		throw new NoSuchBuildException(jobName, buildNumber);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	@Path("{jobName}/all")
-	public List<Build> getBuilds(@PathParam("jobName") String jobName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Builds getBuilds(String jobName) {
+		Builds builds = new Builds();
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		for (Object object : job.getBuilds()) {
+			if (object instanceof AbstractBuild<?, ?>) {
+				builds.add(DozerUtils.getMapper().map(object, Build.class));
+			}
+		}
+		return builds;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	@Path("{jobName}/firstbuild")
-	public Build getFirstBuild(@PathParam("jobName") String jobName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Build getFirstBuild(String jobName) {
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		if (job.getFirstBuild() != null) {
+			return DozerUtils.getMapper().map(job.getFirstBuild(), Build.class);
+		}
+		throw new NoSuchBuildException(jobName, "First");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	@Path("{jobName}/lastbuild")
-	public Build getLastBuild(@PathParam("jobName") String jobName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Build getLastBuild(String jobName) {
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		if (job.getLastBuild() != null) {
+			return DozerUtils.getMapper().map(job.getLastBuild(), Build.class);
+		}
+		throw new NoSuchBuildException(jobName, "Last");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	@Path("{jobName}/lastSuccessfulBuild")
-	public Build getLastSuccessfulBuild(@PathParam("jobName") String jobName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Build getLastSuccessfulBuild(String jobName) {
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		if (job.getLastSuccessfulBuild() != null) {
+			return DozerUtils.getMapper().map(job.getLastSuccessfulBuild(), Build.class);
+		}
+		throw new NoSuchBuildException(jobName, "Last Successful");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	@Path("{jobName}/lastCompletedBuild")
-	public Build getLastCompletedBuild(@PathParam("jobName") String jobName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Build getLastCompletedBuild(String jobName) {
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		if (job.getLastCompletedBuild() != null) {
+			return DozerUtils.getMapper().map(job.getLastCompletedBuild(), Build.class);
+		}
+		throw new NoSuchBuildException(jobName, "Last Completed");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	@Path("{jobName}/lastFailedBuild")
-	public Build getLastFailedBuild(@PathParam("jobName") String jobName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Build getLastFailedBuild(String jobName) {
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		if (job.getLastFailedBuild() != null) {
+			return DozerUtils.getMapper().map(job.getLastFailedBuild(), Build.class);
+		}
+		throw new NoSuchBuildException(jobName, "Last Failed");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	@Path("{jobName}/lastUnstableBuild")
-	public Build getLastUnstableBuild(@PathParam("jobName") String jobName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Build getLastUnstableBuild(String jobName) {
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		if (job.getLastUnstableBuild() != null) {
+			return DozerUtils.getMapper().map(job.getLastUnstableBuild(), Build.class);
+		}
+		throw new NoSuchBuildException(jobName, "Last Ustable");
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	@Path("{jobName}/lastStableBuild")
-	public Build getLastStableBuild(@PathParam("jobName") String jobName) {
-		// TODO Auto-generated method stub
-		return null;
+	public Build getLastStableBuild(String jobName) {
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		if (job.getLastStableBuild() != null) {
+			return DozerUtils.getMapper().map(job.getLastStableBuild(), Build.class);
+		}
+		throw new NoSuchBuildException(jobName, "Last Stable");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Builds getBuilds(String jobName, Long from, Long to) throws NoSuchJobException {
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		Builds builds = new Builds();
+		for (Run<?, ?> run : job.getBuilds()) {
+			if (run.getTimeInMillis() >= from && run.getTimeInMillis() <= to) {
+				builds.add(DozerUtils.getMapper().map(run, Build.class));
+			}
+		}
+		return builds;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Builds getBuilds(String jobName, Long from) throws NoSuchJobException {
+		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
+		Builds builds = new Builds();
+		for (Run<?, ?> run : job.getBuilds()) {
+			if (run.getTimeInMillis() >= from) {
+				builds.add(DozerUtils.getMapper().map(run, Build.class));
+			}
+		}
+		return builds;
+	}
+
+	/**
+	 * Private method to get the {@link hudson.model.Job} for the given name
+	 * 
+	 * @param jobName the name of the {@link hudson.model.Job} to get
+	 * @return the {@link hudson.model.Job}
+	 * @throws NoSuchJobException in case there is no {@link hudson.model.Job} configured with the given name
+	 */
+	private hudson.model.Job<?, ?> getHudsonJob(String jobName) throws NoSuchJobException {
+		hudson.model.Job<?, ?> job = Hudson.getInstance().getItemByFullName(jobName, hudson.model.Job.class);
+		if (job != null) {
+			return job;
+		}
+		throw new NoSuchJobException(jobName);
 	}
 
 }

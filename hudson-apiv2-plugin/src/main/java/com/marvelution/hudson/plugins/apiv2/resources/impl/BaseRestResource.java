@@ -32,7 +32,7 @@ import javax.ws.rs.core.MediaType;
 @Path(BaseRestResource.BASE_REST_URI)
 @Consumes( { MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
 @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-public abstract class BaseRestResource {
+public class BaseRestResource {
 
 	/**
 	 * The base url for all the rest endpoints

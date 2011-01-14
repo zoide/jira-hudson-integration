@@ -19,10 +19,13 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources;
 
-import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
+import com.marvelution.hudson.plugins.apiv2.resources.model.Jobs;
 
 /**
  * Job Resource Endpoint interface
@@ -38,20 +41,36 @@ public interface JobResource {
 	 * @return the {@link Job}
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 */
-	Job getJob(String name) throws NoSuchJobException;
+	@GET
+	Job getJob(@QueryParam("name") String name) throws NoSuchJobException;
+
+	/**
+	 * Get the status of a {@link Job} identified by the given name
+	 * 
+	 * @param name the name of the {@link Job} to get
+	 * @return the {@link Job}
+	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
+	 */
+	@GET
+	@Path("status")
+	Job getJobStatus(@QueryParam("name") String name) throws NoSuchJobException;
 
 	/**
 	 * Get all the {@link Job} objects on the Hudson server
 	 * 
-	 * @return {@link List} of all the {@link Job} objects
+	 * @return the {@link Jobs} collection
 	 */
-	List<Job> getJobs();
+	@GET
+	@Path("all")
+	Jobs getJobs();
 
 	/**
 	 * Get all {@link Job} objects on the Hudson server, but with minimal data
 	 * 
-	 * @return {@link List} of all the {@link Job} objects with minimal data
+	 * @return the {@link Jobs} collection
 	 */
-	List<Job> listJobs();
+	@GET
+	@Path("list")
+	Jobs listJobs();
 
 }

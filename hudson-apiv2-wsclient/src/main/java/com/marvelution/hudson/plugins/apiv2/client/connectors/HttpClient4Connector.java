@@ -20,9 +20,7 @@
 package com.marvelution.hudson.plugins.apiv2.client.connectors;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -36,6 +34,8 @@ import com.marvelution.hudson.plugins.apiv2.client.services.Query;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
 /**
+ * Apache HTTPClient v4 implementation of the {@link Connector} interface.
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 public class HttpClient4Connector implements Connector {
@@ -55,19 +55,14 @@ public class HttpClient4Connector implements Connector {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public <MODEL extends Model> InputStream execute(Query<MODEL> query) {
+	public <MODEL extends Model> ConnectorResponse execute(Query<MODEL> query) {
 		DefaultHttpClient client = createClient();
 		HttpGet get = createGetMethod(query);
 		try {
 			HttpResponse response = client.execute(get);
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
-				if (response.getStatusLine().getStatusCode() == 200) {
-					return entity.getContent();
-				} else if (response.getStatusLine().getStatusCode() != 404) {
-					throw new ConnectionException("HTTP error: " + response.getStatusLine().getStatusCode() + ", msg: "
-						+ response.getStatusLine().getReasonPhrase() + ", query: " + get.toString());
-				}
+				return getConnectorResponseFromEntity(response);
 			}
 		} catch (IOException e) {
 		} finally {
@@ -77,7 +72,7 @@ public class HttpClient4Connector implements Connector {
 	}
 
 	/**
-	 * Method to create a {@link GetMethod}
+	 * Method to create a {@link HttpGet}
 	 * 
 	 * @param <MODEL> the {@link Model} that is requested in the {@link Query}
 	 * @param query the {@link Query} to execute
@@ -101,5 +96,24 @@ public class HttpClient4Connector implements Connector {
 				new UsernamePasswordCredentials(this.server.getUsername(), this.server.getPassword()));
 		}
 		return client;
+	}
+
+	/**
+	 * Internal method to convert a {@link HttpResponse} into a {@link ConnectorResponse}
+	 * 
+	 * @param httpResponse the {@link HttpResponse} to convert
+	 * @return the {@link ConnectorResponse}
+	 * @throws ConnectionException in case of errors while creating the {@link ConnectorResponse}
+	 */
+	private ConnectorResponse getConnectorResponseFromEntity(HttpResponse httpResponse) throws ConnectionException {
+		ConnectorResponse response = new ConnectorResponse();
+		response.setStatusCode(httpResponse.getStatusLine().getStatusCode());
+		response.setReasonPhrase(httpResponse.getStatusLine().getReasonPhrase());
+		try {
+			response.setResponseAsStream(httpResponse.getEntity().getContent());
+		} catch (Exception e) {
+			throw new ConnectionException("Failed to copy the response stream", e);
+		}
+		return response;
 	}
 }

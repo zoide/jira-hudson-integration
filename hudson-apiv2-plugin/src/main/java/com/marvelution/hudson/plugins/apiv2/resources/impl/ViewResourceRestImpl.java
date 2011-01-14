@@ -19,16 +19,17 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
-import java.util.List;
+import hudson.model.Hudson;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
 
 import org.apache.wink.common.annotations.Parent;
 
+import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.ViewResource;
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchViewException;
 import com.marvelution.hudson.plugins.apiv2.resources.model.View;
+import com.marvelution.hudson.plugins.apiv2.resources.model.Views;
 
 /**
  * The {@link View} REST implementation
@@ -36,28 +37,31 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.View;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 @Parent(BaseRestResource.class)
-@Path("/view")
+@Path("views")
 public class ViewResourceRestImpl extends BaseRestResource implements ViewResource {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	public View getView(@QueryParam("name") String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public View getView(String name) {
+		hudson.model.View view = Hudson.getInstance().getView(name);
+		if (view != null) {
+			return DozerUtils.getMapper().map(view, View.class);
+		}
+		throw new NoSuchViewException(name);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@GET
-	@Path("/all")
-	public List<View> getViews() {
-		// TODO Auto-generated method stub
-		return null;
+	public Views getViews() {
+		Views views = new Views();
+		for (hudson.model.View view : Hudson.getInstance().getViews()) {
+			views.add(DozerUtils.getMapper().map(view, View.class));
+		}
+		return views;
 	}
 
 }

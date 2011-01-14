@@ -41,8 +41,6 @@ import com.marvelution.hudson.plugins.apiv2.servlet.filter.HudsonAPIV2ServletFil
  * {@link WinkApplication} implementation specific for Hudson
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark rekveld</a>
- * 
- * @see 1.0.0
  */
 public class HudsonWinkApplication extends WinkApplication {
 
@@ -66,6 +64,7 @@ public class HudsonWinkApplication extends WinkApplication {
 				classes.addAll(getClassesFromPackage(resourcePackageName));
 			}
 			processClasses(classes);
+			logger.info("Loaded all REST Resource/Provider classes");
 		}
 		return jaxRSClasses;
 	}
@@ -111,11 +110,15 @@ public class HudsonWinkApplication extends WinkApplication {
 	private void processClasses(Set<Class<?>> classes) {
 		for (Class<?> cls : classes) {
 			if (ProviderMetadataCollector.isProvider(cls)) {
+				logger.log(Level.FINE, "Loaded REST Provider class: " + cls.getName());
 				jaxRSClasses.add(cls);
 			} else if (ResourceMetadataCollector.isResource(cls)) {
 				final Parent parent = (Parent) cls.getAnnotation(Parent.class);
-				if ((parent != null && BaseRestResource.class.equals(parent.value())) || BaseRestResource.class.equals(cls)) {
-					logger.info("Loaded REST Resource class [" + cls.getName() + "]");
+				if ((parent != null && BaseRestResource.class.equals(parent.value()))) {
+					logger.log(Level.FINE, "Loaded REST Resource class: " + cls.getName());
+					jaxRSClasses.add(cls);
+				} else if (BaseRestResource.class.equals(cls)) {
+					logger.log(Level.FINE, "Loaded Base REST Resource class: " + cls.getName());
 					jaxRSClasses.add(cls);
 				} else {
 					logger.log(Level.FINE, "Class [" + cls.getName() + "] is not a valid REST Resource, "

@@ -116,13 +116,13 @@
 	</dependencies>
 
 	<build>
-		<!-- This will automatically put POM settings into atlassian-plugin.xml when building.
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<excludes>
 					<exclude>atlassian-plugin.xml</exclude>
 					<exclude>gadgets/*.xml</exclude>
+					<exclude>**/JiraPluginUtils.properties</exclude>
 				</excludes>
 			</resource>
 			<resource>
@@ -148,9 +148,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					< !-- Everything on one line -- >
 					<linebreakpos>-1</linebreakpos>
-					< !-- Don't really care about warning messages. They're fairly useless -- >
 					<jswarn>false</jswarn>
 					<excludes>
 						<exclude>**/**.xml</exclude>
@@ -174,11 +172,6 @@
 						<Embed-Directory>META-INF/lib</Embed-Directory>
 						<Embed-StripGroup>false</Embed-StripGroup>
 						<Embed-StripVersion>false</Embed-StripVersion>
-						<Export-Package>
-							com.marvelution.jira.plugins.hudson.service*;version="${project.version}",
-							com.marvelution.jira.plugins.hudson.api*;version="${project.version}"
-						</Export-Package>
-						< !-- Make all the depended packages optional -- >
 						<Import-Package>
 							*;resolution:=optional
 						</Import-Package>
@@ -191,5 +184,5 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build> -->
+	</build>
 </project>

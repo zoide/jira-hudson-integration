@@ -46,8 +46,8 @@ public final class Unmarshallers {
 	 * @return the {@link Unmarshaller} for the given {@link Model}
 	 * @throws JAXBException in case of exceptions
 	 */
-	public static <MODEL extends Model> Unmarshaller getUnmarshaller(MODEL model) throws JAXBException {
-		return getUnmarshaller(model.getClass());
+	public static <MODEL extends Model> Unmarshaller forModel(MODEL model) throws JAXBException {
+		return forModel(model.getClass());
 	}
 
 	/**
@@ -57,7 +57,7 @@ public final class Unmarshallers {
 	 * @return the {@link Unmarshaller}
 	 * @throws JAXBException in case of exceptions
 	 */
-	public static Unmarshaller getUnmarshaller(Class<? extends Model> model) throws JAXBException {
+	public static Unmarshaller forModel(Class<? extends Model> model) throws JAXBException {
 		if (!unmarshallers.containsKey(model)) {
 			JAXBContext context = JAXBContext.newInstance(model);
 			unmarshallers.put(model, context.createUnmarshaller());

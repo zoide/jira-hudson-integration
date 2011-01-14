@@ -21,7 +21,6 @@ package com.marvelution.hudson.plugins.apiv2.resources.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
@@ -34,26 +33,5 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlType(name = "Model", namespace = NameSpaceUtils.APIV2_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class Model {
-
-	@XmlElement(name = "id", required = true)
-	private String modelId;
-
-	/**
-	 * Getter for the Model Id
-	 * 
-	 * @return the Model Id
-	 */
-	public String getModelId() {
-		return modelId;
-	}
-
-	/**
-	 * Setter for the Model Id
-	 * 
-	 * @param modelId the Model Id
-	 */
-	public void setModelId(String modelId) {
-		this.modelId = modelId;
-	}
 
 }

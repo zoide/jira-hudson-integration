@@ -35,10 +35,10 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlType(name = "HealthReportType", namespace = NameSpaceUtils.JOB_NAMESPACE)
 @XmlRootElement(name = "HealthReport", namespace = NameSpaceUtils.JOB_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class HealthReport {
+public class HealthReport extends Model implements Comparable<HealthReport> {
 
 	public static final HealthReport NO_RECENT_BUILD = new HealthReport("No recent build failures",
-		HealthReportIcon.HEALTH_80_PLUS, 100);
+		HealthReportIcon.HEALTH_OVER_80, 100);
 
 	@XmlElement(name = "description")
 	private String description;
@@ -122,6 +122,62 @@ public class HealthReport {
 				"Invalid score value given. Value may only be 0 or larger up to 100 or smaller");
 		}
 		this.score = score;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int compareTo(HealthReport o) {
+		if (getScore() == o.getScore()) {
+			return 0;
+		} else if (getScore() < o.getScore()) {
+			return -1;
+		} else {
+			return 1;
+		}
+	}
+
+	/**
+	 * Static method implementation to get the smallest of the two {@link HealthReport} objects given
+	 * 
+	 * @param a {@link HealthReport} a
+	 * @param b {@link HealthReport} b
+	 * @return the {@link HealthReport} with the smallest score value
+	 */
+	public static HealthReport min(HealthReport a, HealthReport b) {
+		if (a == null && b == null) {
+			return null;
+		} else if (a == null) {
+			return b;
+		} else if (b == null) {
+			return a;
+		} else if (a.compareTo(b) <= 0) {
+			return a;
+		} else {
+			return b;
+		}
+	}
+
+	/**
+	 * Static method implementation to get the largest of the two {@link HealthReport} objects given
+	 * 
+	 * @param a {@link HealthReport} a
+	 * @param b {@link HealthReport} b
+	 * @return the {@link HealthReport} with the largest score value
+	 */
+	public static HealthReport max(HealthReport a, HealthReport b) {
+		if (a == null && b == null) {
+			return null;
+		} else if (a == null) {
+			return b;
+		} else if (b == null) {
+			return a;
+		} else if (a.compareTo(b) >= 0) {
+			return a;
+		} else {
+			return b;
+		}
 	}
 
 }

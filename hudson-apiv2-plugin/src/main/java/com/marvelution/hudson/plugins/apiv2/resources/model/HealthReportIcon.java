@@ -33,7 +33,8 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlEnum(String.class)
 public enum HealthReportIcon {
 
-	HEALTH_80_PLUS("health-80plus.gif"),
+	HEALTH_UNKNOWN("empty.gif"),
+	HEALTH_OVER_80("health-80plus.gif"),
 	HEALTH_60_TO_79("health-60to79.gif"),
 	HEALTH_40_TO_59("health-40to59.gif"),
 	HEALTH_20_TO_39("health-20to39.gif"),

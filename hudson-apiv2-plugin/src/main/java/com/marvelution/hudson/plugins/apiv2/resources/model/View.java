@@ -36,13 +36,15 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlType(name = "ViewType", namespace = NameSpaceUtils.VIEW_NAMESPACE)
 @XmlRootElement(name = "ViewType", namespace = NameSpaceUtils.VIEW_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class View {
+public class View extends Model {
 
 	@XmlElement(name = "name", required = true)
 	private String name;
 	@XmlElement(name = "description")
 	private String description;
-	@XmlElement(name = "job")
+	@XmlElement(name = "url")
+	private String url;
+	@XmlElement(name = "job", required = true)
 	@XmlElementWrapper(name = "jobs")
 	private List<Job> jobs;
 	
@@ -80,6 +82,24 @@ public class View {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	/**
+	 * Getter for url
+	 *
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+	
+	/**
+	 * Setter for url
+	 * 
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	/**

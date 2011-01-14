@@ -19,7 +19,9 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.model;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -33,12 +35,13 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 
 /**
  * Build XML object
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 @XmlType(name = "BuildType", namespace = NameSpaceUtils.BUILD_NAMESPACE)
 @XmlRootElement(name = "Build", namespace = NameSpaceUtils.BUILD_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Build extends Model {
+public class Build extends Model implements Comparable<Build> {
 
 	@XmlElement(name = "number", required = true)
 	private Integer buildNumber;
@@ -49,7 +52,7 @@ public class Build extends Model {
 	@XmlElement(name = "jobUrl", required = true)
 	private String jobUrl;
 	@XmlElement(name = "duration", required = true)
-	private long dureation;
+	private long duration;
 	@XmlElement(name = "timestamp", required = true)
 	private long timestamp;
 	@XmlElement(name = "testResult")
@@ -59,13 +62,13 @@ public class Build extends Model {
 	@XmlElement(name = "state", required = true)
 	private State state;
 	@XmlElement(name = "buildArtifact")
-	private List<BuildArtifact> buildArtifacts;
+	private Collection<BuildArtifact> buildArtifacts;
 	@XmlElement(name = "trigger", required = true)
 	@XmlElementWrapper(name = "triggers")
-	private List<Trigger> triggers;
+	private Collection<Trigger> triggers;
 	@XmlElement(name = "relatedIssueKey", required = true)
 	@XmlElementWrapper(name = "relatedIssueKeys")
-	private List<String> relatedIssueKeys;
+	private Collection<String> relatedIssueKeys;
 
 	/**
 	 * Default Constructor
@@ -91,8 +94,12 @@ public class Build extends Model {
 		return buildNumber;
 	}
 
+	/**
+	 * Setter for the buildNumber
+	 * 
+	 * @param buildNumber the build number to set
+	 */
 	public void setBuildNumber(int buildNumber) {
-		setModelId("Build-" + String.valueOf(buildNumber));
 		this.buildNumber = buildNumber;
 	}
 
@@ -151,21 +158,21 @@ public class Build extends Model {
 	}
 
 	/**
-	 * Getter for dureation
+	 * Getter for duration
 	 *
-	 * @return the dureation
+	 * @return the duration
 	 */
-	public long getDureation() {
-		return dureation;
+	public long getDuration() {
+		return duration;
 	}
 
 	/**
-	 * Setter for dureation
+	 * Setter for duration
 	 * 
-	 * @param dureation the dureation to set
+	 * @param duration the duration to set
 	 */
-	public void setDureation(long dureation) {
-		this.dureation = dureation;
+	public void setDuration(long duration) {
+		this.duration = duration;
 	}
 
 	/**
@@ -245,7 +252,7 @@ public class Build extends Model {
 	 *
 	 * @return the buildArtifacts
 	 */
-	public List<BuildArtifact> getBuildArtifacts() {
+	public Collection<BuildArtifact> getBuildArtifacts() {
 		return buildArtifacts;
 	}
 
@@ -254,7 +261,7 @@ public class Build extends Model {
 	 * 
 	 * @param buildArtifacts the buildArtifacts to set
 	 */
-	public void setBuildArtifacts(List<BuildArtifact> buildArtifacts) {
+	public void setBuildArtifacts(Collection<BuildArtifact> buildArtifacts) {
 		this.buildArtifacts = buildArtifacts;
 	}
 
@@ -263,7 +270,10 @@ public class Build extends Model {
 	 *
 	 * @return the triggers
 	 */
-	public List<Trigger> getTriggers() {
+	public Collection<Trigger> getTriggers() {
+		if (triggers == null) {
+			triggers = new ArrayList<Trigger>();
+		}
 		return triggers;
 	}
 
@@ -272,7 +282,7 @@ public class Build extends Model {
 	 * 
 	 * @param triggers the triggers to set
 	 */
-	public void setTriggers(List<Trigger> triggers) {
+	public void setTriggers(Collection<Trigger> triggers) {
 		this.triggers = triggers;
 	}
 
@@ -281,7 +291,10 @@ public class Build extends Model {
 	 *
 	 * @return the relatedIssueKeys
 	 */
-	public List<String> getRelatedIssueKeys() {
+	public Collection<String> getRelatedIssueKeys() {
+		if (relatedIssueKeys == null) {
+			relatedIssueKeys = new HashSet<String>();
+		}
 		return relatedIssueKeys;
 	}
 
@@ -290,8 +303,48 @@ public class Build extends Model {
 	 * 
 	 * @param relatedIssueKeys the relatedIssueKeys to set
 	 */
-	public void setRelatedIssueKeys(List<String> relatedIssueKeys) {
+	public void setRelatedIssueKeys(Collection<String> relatedIssueKeys) {
 		this.relatedIssueKeys = relatedIssueKeys;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof Build) {
+			Build other = (Build) obj;
+			return Integer.valueOf(getBuildNumber()).equals(Integer.valueOf(other.getBuildNumber())) &&
+				getJobName().equals(other.getJobName());
+		}
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return Integer.valueOf(getBuildNumber()).hashCode() + getJobName().hashCode();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return getJobName() + " #" + getBuildNumber();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int compareTo(Build other) {
+		return Long.valueOf(getTimestamp()).compareTo(Long.valueOf(other.getTimestamp()));
 	}
 
 }

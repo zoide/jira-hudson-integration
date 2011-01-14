@@ -20,4 +20,70 @@
 <mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
+	<mapping type="one-way">
+		<class-a>hudson.model.AbstractBuild</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.Build</class-b>
+		<field>
+			<a>number</a>
+			<b>buildNUmber</b>
+		</field>
+		<field>
+			<a get-method="getUrl">url</a>
+			<b>url</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildParentToJobNameDozerConverter">
+			<a get-method="getParent">project</a>
+			<b>jobName</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildParentToJobUrlDozerConverter">
+			<a get-method="getParent">project</a>
+			<b>jobUrl</b>
+		</field>
+		<field>
+			<a>duration</a>
+			<b>duration</b>
+		</field>
+		<field>
+			<a get-method="getTimeInMillis">time</a>
+			<b>timestamp</b>
+		</field>
+		<field>
+			<a get-method="getTestResultAction">testResultAction</a>
+			<b>testResult</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ResultDozerConverter">
+			<a>result</a>
+			<b>result</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.StateDozerConverter">
+			<a>this</a>
+			<b>state</b>
+		</field>
+		<field>
+			<a get-method="getArtifacts">artifacts</a>
+			<b>buildArtifacts</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.TriggerDozerConverter">
+			<a get-method="getCauses">causes</a>
+			<b>triggers</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.RelatedIssueKeysDozerConverter">
+			<a get-method="getChangeSet">changeSet</a>
+			<b>relatedIssueKeys</b>
+		</field>
+	</mapping>
+
+	<mapping type="one-way">
+		<class-a>hudson.model.Run$Artifact</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.BuildArtifact</class-b>
+		<field>
+			<a>name</a>
+			<b>name</b>
+		</field>
+		<field>
+			<a>relativePath</a>
+			<b>url</b>
+		</field>
+	</mapping>
+
 </mappings>

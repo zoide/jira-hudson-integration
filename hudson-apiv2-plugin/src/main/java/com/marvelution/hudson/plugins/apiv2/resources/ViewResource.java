@@ -19,10 +19,13 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources;
 
-import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchViewException;
 import com.marvelution.hudson.plugins.apiv2.resources.model.View;
+import com.marvelution.hudson.plugins.apiv2.resources.model.Views;
 
 /**
  * View Resource Endpoint Interface
@@ -38,13 +41,16 @@ public interface ViewResource {
 	 * @return the {@link View}
 	 * @throws NoSuchViewException in case the {@link View} with the given name doesn't exist
 	 */
-	View getView(String name) throws NoSuchViewException;
+	@GET
+	View getView(@QueryParam("name") String name) throws NoSuchViewException;
 
 	/**
 	 * Get all the {@link View} objects on the Hudson server
 	 * 
-	 * @return {@link List} of all the {@link View} objects
+	 * @return the {@link Views} collection
 	 */
-	List<View> getViews();
+	@GET
+	@Path("all")
+	Views getViews();
 
 }

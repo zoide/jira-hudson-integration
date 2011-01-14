@@ -26,6 +26,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 
 /**
  * Result XML Object
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 @XmlType(name = "ResultType", namespace = NameSpaceUtils.BUILD_NAMESPACE)

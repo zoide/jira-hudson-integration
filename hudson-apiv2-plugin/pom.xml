@@ -111,7 +111,42 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/HudsonPluginUtils.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**/HudsonPluginUtils.properties</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-5</version>
+				<executions>
+					<execution>
+						<id>java-client</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<attach>true</attach>
+							<descriptors>
+								<descriptor>src/assembly/java-client.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.enunciate</groupId>
 				<artifactId>maven-enunciate-plugin</artifactId>
@@ -127,11 +162,6 @@
 				<configuration>
 					<configFile>src/enunciate/enunciate.xml</configFile>
 					<artifacts>
-						<artifact>
-							<enunciateArtifactId>java.client.library.binaries</enunciateArtifactId>
-							<classifier>java-client</classifier>
-							<artifactType>jar</artifactType>
-						</artifact>
 						<artifact>
 							<enunciateArtifactId>java.json.client.library.binaries</enunciateArtifactId>
 							<classifier>java-json-client</classifier>

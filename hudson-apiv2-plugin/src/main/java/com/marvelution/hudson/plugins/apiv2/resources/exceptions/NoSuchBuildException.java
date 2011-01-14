@@ -31,17 +31,17 @@ public class NoSuchBuildException extends NotFoundException {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String jobName;
-	private int buildNumber;
+	private Object build;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param jobName the Job name
-	 * @param buildNumber the number of the build
+	 * @param build the build
 	 */
-	public NoSuchBuildException(String jobName, int buildNumber) {
+	public NoSuchBuildException(String jobName, Object build) {
 		this.jobName = jobName;
-		this.buildNumber = buildNumber;
+		this.build = build;
 	}
 
 	/**
@@ -54,12 +54,12 @@ public class NoSuchBuildException extends NotFoundException {
 	}
 
 	/**
-	 * Getter for buildNumber
+	 * Getter for build
 	 *
-	 * @return the buildNumber
+	 * @return the build
 	 */
-	public int getBuildNumber() {
-		return buildNumber;
+	public Object getBuild() {
+		return build;
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class NoSuchBuildException extends NotFoundException {
 	 */
 	@Override
 	public String getReasonPhrase() {
-		return "Build " + buildNumber + " for Job " + jobName + " doesn't exist";
+		return "Build " + String.valueOf(build) + " for Job " + jobName + " doesn't exist";
 	}
 
 }

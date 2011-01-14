@@ -20,11 +20,11 @@
 package com.marvelution.hudson.plugins.apiv2.client.connectors;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
@@ -105,7 +105,7 @@ public class HttpClient3Connector implements Connector {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public <MODEL extends Model> InputStream execute(Query<MODEL> query) {
+	public <MODEL extends Model> ConnectorResponse execute(Query<MODEL> query) {
 		GetMethod method = null;
 		String url = null;
 		try {
@@ -113,11 +113,7 @@ public class HttpClient3Connector implements Connector {
 			method = new GetMethod(url);
 			method.setRequestHeader("Accept", "application/xml");
 			this.httpClient.executeMethod(method);
-			if (method.getStatusCode() == 200) {
-				return method.getResponseBodyAsStream();
-			} else if (method.getStatusCode() != 404)
-				throw new ConnectionException("HTTP error: " + method.getStatusCode() + ", msg: "
-					+ method.getStatusText() + ", query: " + url);
+			return getConnectorResponseFromMethod(method);
 		} catch (HttpException e) {
 		} catch (IOException e) {
 		} finally {
@@ -126,6 +122,25 @@ public class HttpClient3Connector implements Connector {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Internal method to convert a {@link HttpMethod} into a {@link ConnectorResponse}
+	 * 
+	 * @param method the {@link HttpMethod} to convert
+	 * @return the {@link ConnectorResponse}
+	 * @throws ConnectionException in case of errors while creating the {@link ConnectorResponse}
+	 */
+	private ConnectorResponse getConnectorResponseFromMethod(HttpMethod method) throws ConnectionException {
+		ConnectorResponse response = new ConnectorResponse();
+		response.setStatusCode(method.getStatusCode());
+		response.setReasonPhrase(method.getStatusText());
+		try {
+			response.setResponseAsStream(method.getResponseBodyAsStream());
+		} catch (IOException e) {
+			throw new ConnectionException("Failed to copy the response stream", e);
+		}
+		return response;
 	}
 
 }

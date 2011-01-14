@@ -99,4 +99,20 @@ public class ProjectTrigger extends Trigger {
 		this.buildNumber = buildNumber;
 	}
 
+	/**
+	 * Static helper method to create a {@link ProjectTrigger}
+	 * 
+	 * @param name the project name of the triggering project
+	 * @param url the project url of the triggering project
+	 * @param buildNumber the build number of the triggering project
+	 * @return the {@link ProjectTrigger}
+	 */
+	public static ProjectTrigger create(String name, String url, int buildNumber) {
+		ProjectTrigger trigger = new ProjectTrigger();
+		trigger.setName(name);
+		trigger.setUrl(url);
+		trigger.setBuildNumber(buildNumber);
+		return trigger;
+	}
+
 }

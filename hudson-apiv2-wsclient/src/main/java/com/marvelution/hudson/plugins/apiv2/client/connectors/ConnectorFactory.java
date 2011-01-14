@@ -19,13 +19,23 @@
 
 package com.marvelution.hudson.plugins.apiv2.client.connectors;
 
+import org.apache.commons.httpclient.HttpClient;
+
 import com.marvelution.hudson.plugins.apiv2.client.Host;
 
 /**
+ * {@link Connector} utility factory class
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 public final class ConnectorFactory {
 
+	/**
+	 * Create a Apache Commons {@link HttpClient} {@link Connector} implementation
+	 * 
+	 * @param host the {@link Host} configuration that the {@link Connector} needs to connect to
+	 * @return the {@link HttpClient3Connector} implementation
+	 */
 	public static Connector create(Host host) {
 		return new HttpClient3Connector(host);
 	}

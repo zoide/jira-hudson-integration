@@ -21,10 +21,17 @@ package com.marvelution.hudson.plugins.apiv2.client;
 
 import java.util.List;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import com.marvelution.hudson.plugins.apiv2.client.connectors.Connector;
 import com.marvelution.hudson.plugins.apiv2.client.connectors.ConnectorFactory;
+import com.marvelution.hudson.plugins.apiv2.client.connectors.ConnectorResponse;
+import com.marvelution.hudson.plugins.apiv2.client.services.ListableQuery;
 import com.marvelution.hudson.plugins.apiv2.client.services.Query;
+import com.marvelution.hudson.plugins.apiv2.client.unmarshallers.Unmarshallers;
 import com.marvelution.hudson.plugins.apiv2.client.Host;
+import com.marvelution.hudson.plugins.apiv2.resources.model.ListableModel;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
 
@@ -35,13 +42,13 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
  * To instantiate a HudsonClient using commons-httpclient
  * <code>
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
-HudsonClient hudson = HudsonClient.create("http://localhost:9000");
+HudsonClient hudson = HudsonClient.create("http://localhost:8080");
  * </code>
- * If the security is enabled, you have to define the credentials :
+ * If the security is enabled, you have to define the credentials:
  * <code>
 HudsonClient hudson = HudsonClient.create("http://localhost:8080", "login", "password");
  * </code>
- * When using the lib Commons HttpClient 4.0, the constructor is slightly different :
+ * When using the lib Commons HttpClient 4.0, the constructor is slightly different:
  * <code>
 HudsonClient hudson = new HudsonClient(new HttpClient4Connector(new Host("http://localhost:8080")));
  * </code>
@@ -75,27 +82,46 @@ public class HudsonClient {
 	 * 
 	 * @param <MODEL> the {@link Model} type
 	 * @param query the {@link Query} implementation for the {@link Model} type
-	 * @return the {@link Model} response from the Hudson server
+	 * @return the {@link Model} response from the Hudson server, may be <code>null</code>
 	 */
+	@SuppressWarnings("unchecked")
 	public <MODEL extends Model> MODEL find(Query<MODEL> query) {
-		// TODO Implement method
+		ConnectorResponse response = connector.execute(query);
+		if (response != null) {
+			try {
+				Unmarshaller unmarshaller = Unmarshallers.forModel(query.getModelClass());
+				return (MODEL) unmarshaller.unmarshal(response.getResponseAsStream());
+			} catch (JAXBException e) {
+			}
+		}
 		return null;
 	}
 
 	/**
 	 * Method to find all the {@link Model} types using its {@link Query}
 	 * 
-	 * @param <MODEL> the {@link Model} type
+	 * @param <LISTMODEL> the {@link Model} type
 	 * @param query the {@link Query} implementation for the {@link Model} type
-	 * @return the {@link List} of {@link Model} objects from the response from the Hudson server
+	 * @return the {@link List} of {@link Model} objects from the response from the Hudson server, may be
+	 *         <code>null</code> or an <code>empty</code> {@link List}
 	 */
-	public <MODEL extends Model> List<MODEL> findAll(Query<MODEL> query) {
-		// TODO Implement method
+	@SuppressWarnings("unchecked")
+	public <MODEL extends Model, LISTMODEL extends ListableModel<MODEL>> LISTMODEL findAll(ListableQuery<MODEL,
+			LISTMODEL> query) {
+		ConnectorResponse response = connector.execute(query);
+		if (response != null) {
+			try {
+				Unmarshaller unmarshaller = Unmarshallers.forModel(query.getListableModelClass());
+				return (LISTMODEL) unmarshaller.unmarshal(response.getResponseAsStream());
+			} catch (JAXBException e) {
+			}
+		}
 		return null;
 	}
 
 	/**
-	 * Static method to create a {@link HudsonClient} for the unsecured host base-url given  using a Commons-HttpClient version 3 connector
+	 * Static method to create a {@link HudsonClient} for the unsecured host base-url given using a
+	 * Commons-HttpClient version 3 connector
 	 * 
 	 * @param host the host base-url to connect to
 	 * @return the {@link HudsonClient} object
@@ -115,4 +141,5 @@ public class HudsonClient {
 	public static HudsonClient create(String host, String username, String password) {
 		return new HudsonClient(ConnectorFactory.create(new Host(host, username, password)));
 	}
+
 }

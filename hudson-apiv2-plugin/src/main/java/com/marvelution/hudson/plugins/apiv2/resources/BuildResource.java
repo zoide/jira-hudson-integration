@@ -19,17 +19,22 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources;
 
-import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchBuildException;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
 
 /**
  * Build Resource Endpoint interface
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
+// TODO add method to get builds by issue key
 public interface BuildResource {
 
 	/**
@@ -41,16 +46,21 @@ public interface BuildResource {
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 * @throws NoSuchBuildException in case the build identified by the buildNumber doesn't exist
 	 */
-	Build getBuild(String jobName, Integer buildNumber) throws NoSuchJobException, NoSuchBuildException;
+	@GET
+	@Path("{jobName}")
+	Build getBuild(@PathParam("jobName") String jobName, @QueryParam("buildNumber") Integer buildNumber) throws
+		NoSuchJobException, NoSuchBuildException;
 
 	/**
 	 * Get all the builds for a specific Job
 	 * 
 	 * @param jobName the Job name to get all the builds for
-	 * @return a {@link List} of {@link Build} objects, may be an <code>empty</code> {@link List}
+	 * @return the {@link Builds} collection
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 */
-	List<Build> getBuilds(String jobName) throws NoSuchJobException;
+	@GET
+	@Path("{jobName}/all")
+	Builds getBuilds(@PathParam("jobName") String jobName) throws NoSuchJobException;
 
 	/**
 	 * Get the first {@link Build} of a Job
@@ -60,7 +70,9 @@ public interface BuildResource {
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 * @throws NoSuchBuildException in case the Job doesn't have a first build doesn't exist
 	 */
-	Build getFirstBuild(String jobName) throws NoSuchJobException, NoSuchBuildException;
+	@GET
+	@Path("{jobName}/first")
+	Build getFirstBuild(@PathParam("jobName") String jobName) throws NoSuchJobException, NoSuchBuildException;
 
 	/**
 	 * Get the last {@link Build} of a Job
@@ -70,7 +82,9 @@ public interface BuildResource {
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 * @throws NoSuchBuildException in case the Job doesn't have a last  build doesn't exist
 	 */
-	Build getLastBuild(String jobName) throws NoSuchJobException, NoSuchBuildException;
+	@GET
+	@Path("{jobName}/last")
+	Build getLastBuild(@PathParam("jobName") String jobName) throws NoSuchJobException, NoSuchBuildException;
 
 	/**
 	 * Get the last successful {@link Build} of a Job
@@ -80,7 +94,9 @@ public interface BuildResource {
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 * @throws NoSuchBuildException in case the Job doesn't have a last successful build doesn't exist
 	 */
-	Build getLastSuccessfulBuild(String jobName) throws NoSuchJobException, NoSuchBuildException;
+	@GET
+	@Path("{jobName}/lastSuccessful")
+	Build getLastSuccessfulBuild(@PathParam("jobName") String jobName) throws NoSuchJobException, NoSuchBuildException;
 
 	/**
 	 * Get the last completed {@link Build} of a Job
@@ -90,7 +106,9 @@ public interface BuildResource {
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 * @throws NoSuchBuildException in case the Job doesn't have a last completed build doesn't exist
 	 */
-	Build getLastCompletedBuild(String jobName) throws NoSuchJobException, NoSuchBuildException;
+	@GET
+	@Path("{jobName}/lastCompleted")
+	Build getLastCompletedBuild(@PathParam("jobName") String jobName) throws NoSuchJobException, NoSuchBuildException;
 
 	/**
 	 * Get the last failed {@link Build} of a Job
@@ -100,7 +118,9 @@ public interface BuildResource {
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 * @throws NoSuchBuildException in case the Job doesn't have a last failed build doesn't exist
 	 */
-	Build getLastFailedBuild(String jobName) throws NoSuchJobException, NoSuchBuildException;
+	@GET
+	@Path("{jobName}/lastFailed")
+	Build getLastFailedBuild(@PathParam("jobName") String jobName) throws NoSuchJobException, NoSuchBuildException;
 
 	/**
 	 * Get the last unstable {@link Build} of a Job
@@ -110,7 +130,9 @@ public interface BuildResource {
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 * @throws NoSuchBuildException in case the Job doesn't have a last unstable build doesn't exist
 	 */
-	Build getLastUnstableBuild(String jobName) throws NoSuchJobException, NoSuchBuildException;
+	@GET
+	@Path("{jobName}/lastUnstable")
+	Build getLastUnstableBuild(@PathParam("jobName") String jobName) throws NoSuchJobException, NoSuchBuildException;
 
 	/**
 	 * Get the last stable {@link Build} of a Job
@@ -120,6 +142,34 @@ public interface BuildResource {
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 * @throws NoSuchBuildException in case the Job doesn't have a last stable build doesn't exist
 	 */
-	Build getLastStableBuild(String jobName) throws NoSuchJobException, NoSuchBuildException;
+	@GET
+	@Path("{jobName}/lastStable")
+	Build getLastStableBuild(@PathParam("jobName") String jobName) throws NoSuchJobException, NoSuchBuildException;
+
+	/**
+	 * Get all the builds from a specific Job that where executed between the given from and to times
+	 * 
+	 * @param jobName the Job name to get the build for
+	 * @param from the time (in milliseconds) that the builds need to be started after
+	 * @param to the time (in milliseconds) that the builds need to be executed before
+	 * @return the {@link Builds} collection
+	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
+	 */
+	@GET
+	@Path("{jobName}/between")
+	Builds getBuilds(@PathParam("jobName") String jobName, @QueryParam("from") Long from, @QueryParam("to") Long to)
+		throws NoSuchJobException;
+
+	/**
+	 * Get all the builds from a specific Job that where executed after the given from time
+	 * 
+	 * @param jobName the Job name to get the build for
+	 * @param from the time (in milliseconds) that the builds need to be started after
+	 * @return the {@link Builds} collection
+	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
+	 */
+	@GET
+	@Path("{jobName}/after")
+	Builds getBuilds(@PathParam("jobName") String jobName, @QueryParam("from") Long from) throws NoSuchJobException;
 
 }

@@ -39,7 +39,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlType(name = "TestResultType", namespace = NameSpaceUtils.BUILD_NAMESPACE)
 @XmlRootElement(name = "TestResult", namespace = NameSpaceUtils.BUILD_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class TestResult {
+public class TestResult extends Model {
 
 	@XmlElement(name = "failed", required = true)
 	private int failed;
@@ -47,9 +47,9 @@ public class TestResult {
 	private int skipped;
 	@XmlElement(name = "total", required = true)
 	private int total;
-	@XmlElement(name = "failedTest")
+	@XmlElement(name = "failedTest", required = true)
 	@XmlElementWrapper(name = "failedTests")
-	private Collection<String> failedTests;
+	private Collection<TestCaseResult> failedTests;
 
 	/**
 	 * Getter for the successful tests count
@@ -83,11 +83,20 @@ public class TestResult {
 	 * 
 	 * @return the {@link Collection} of failed tests
 	 */
-	public Collection<String> getFailedTests() {
+	public Collection<TestCaseResult> getFailedTests() {
 		if (failedTests == null) {
-			failedTests = new ArrayList<String>();
+			failedTests = new ArrayList<TestCaseResult>();
 		}
 		return failedTests;
+	}
+
+	/**
+	 * Setter for the failed tests
+	 * 
+	 * @param failedTests the failedTests to set
+	 */
+	public void setFailedTests(Collection<TestCaseResult> failedTests) {
+		this.failedTests = failedTests;
 	}
 
 	/**

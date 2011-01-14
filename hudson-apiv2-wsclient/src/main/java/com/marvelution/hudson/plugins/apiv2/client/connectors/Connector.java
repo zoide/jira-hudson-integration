@@ -19,17 +19,23 @@
 
 package com.marvelution.hudson.plugins.apiv2.client.connectors;
 
-import java.io.InputStream;
-
 import com.marvelution.hudson.plugins.apiv2.client.services.Query;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
 /**
+ * Connector interface.
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
- *
  */
 public interface Connector {
 
-	<MODEL extends Model> InputStream execute(Query<MODEL> query);
+	/**
+	 * Method to execute a {@link Query} for a specific {@link Model} identified by the MODEL type
+	 * 
+	 * @param <MODEL> the type of {@link Model} class the {@link Query} can request
+	 * @param query the {@link Query} implementation for a specific {@link Model} to execute
+	 * @return the {@link ConnectorResponse} that gives access to the response of the {@link Query}
+	 */
+	<MODEL extends Model> ConnectorResponse execute(Query<MODEL> query);
 
 }

@@ -19,15 +19,30 @@
 
 package com.marvelution.hudson.plugins.apiv2.client.services;
 
+import com.marvelution.hudson.plugins.apiv2.client.connectors.Connector;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
 /**
+ * HTTP GET Query interface
+ * Interface for all Queries that can be executed using a {@link Connector}
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 public interface Query<MODEL extends Model> {
 
+	/**
+	 * Get the URL string where the query can be executed at
+	 * 
+	 * @return the URL, should start with a slash, but if not present the {@link Connector} should add it.
+	 */
 	public String getUrl();
 
+	/**
+	 * Get the {@link Model} class that this Query returns.
+	 * This is used to get the correct Unmarshaller.
+	 * 
+	 * @return the {@link Model} class
+	 */
 	public Class<MODEL> getModelClass();
 
 }
