@@ -92,6 +92,8 @@ public class HudsonClient {
 				Unmarshaller unmarshaller = Unmarshallers.forModel(query.getModelClass());
 				return (MODEL) unmarshaller.unmarshal(response.getResponseAsStream());
 			} catch (JAXBException e) {
+				// TODO handle logging
+				e.printStackTrace();
 			}
 		}
 		return null;
@@ -114,6 +116,8 @@ public class HudsonClient {
 				Unmarshaller unmarshaller = Unmarshallers.forModel(query.getListableModelClass());
 				return (LISTMODEL) unmarshaller.unmarshal(response.getResponseAsStream());
 			} catch (JAXBException e) {
+				// TODO handle logging
+				e.printStackTrace();
 			}
 		}
 		return null;
