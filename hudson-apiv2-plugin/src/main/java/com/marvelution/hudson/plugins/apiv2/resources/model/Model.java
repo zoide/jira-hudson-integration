@@ -30,7 +30,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
-@XmlType(name = "Model", namespace = NameSpaceUtils.APIV2_NAMESPACE)
+@XmlType(name = "ModelType", namespace = NameSpaceUtils.APIV2_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class Model {
 

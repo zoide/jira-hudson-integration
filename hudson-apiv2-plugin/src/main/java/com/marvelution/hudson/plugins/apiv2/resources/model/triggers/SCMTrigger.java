@@ -35,6 +35,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlType(name = "SCMTriggerType", namespace = NameSpaceUtils.BUILD_TRIGGER_NAMESPACE)
 @XmlRootElement(name = "SCMTrigger", namespace = NameSpaceUtils.BUILD_TRIGGER_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
+// TODO Add ChangeLog to trigger
 public class SCMTrigger extends Trigger {
 
 }

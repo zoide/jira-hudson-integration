@@ -19,20 +19,14 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.model.triggers;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-
-import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
+import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
 /**
  * Build Trigger interface
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
-@XmlType(name = "TriggerType", namespace = NameSpaceUtils.BUILD_TRIGGER_NAMESPACE)
-@XmlAccessorType(XmlAccessType.FIELD)
-public abstract class Trigger {
+public abstract class Trigger extends Model {
 
 	/**
 	 * Get a {@link String} representation of the {@link Trigger}

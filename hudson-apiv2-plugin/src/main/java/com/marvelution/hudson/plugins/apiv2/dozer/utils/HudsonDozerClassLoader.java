@@ -30,7 +30,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.dozer.util.DozerClassLoader;
 import org.dozer.util.MappingUtils;
 
-import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
+import com.marvelution.hudson.plugins.apiv2.PluginImpl;
 
 /**
  * Hudson Specific {@link DozerClassLoader}
@@ -74,7 +74,7 @@ public class HudsonDozerClassLoader implements DozerClassLoader {
 	 */
 	public PluginWrapper getPluginWrapper() {
 		if (pluginWrapper == null) {
-			pluginWrapper = Hudson.getInstance().getPluginManager().getPlugin(HudsonPluginUtils.getPluginArifactId());
+			pluginWrapper = Hudson.getInstance().getPluginManager().getPlugin(PluginImpl.class);
 		}
 		return pluginWrapper;
 	}

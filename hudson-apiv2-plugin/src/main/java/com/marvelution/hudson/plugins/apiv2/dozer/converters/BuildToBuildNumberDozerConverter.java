@@ -19,38 +19,34 @@
 
 package com.marvelution.hudson.plugins.apiv2.dozer.converters;
 
+import hudson.model.AbstractBuild;
+
 import org.dozer.DozerConverter;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.State;
-
 /**
- * {@link DozerConverter} to convert a {@link hudson.model.Run.State} into a {@link State} and back
+ * {@link DozerConverter} implementation to convert a {@link Job} into a String containing the job name
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 @SuppressWarnings("rawtypes")
-public class StateDozerConverter extends DozerConverter<hudson.model.AbstractBuild, State> {
+public class BuildToBuildNumberDozerConverter extends DozerConverter<AbstractBuild, Integer> {
 
 	/**
 	 * Constructor
 	 */
-	public StateDozerConverter() {
-		super(hudson.model.AbstractBuild.class, State.class);
+	public BuildToBuildNumberDozerConverter() {
+		super(AbstractBuild.class, Integer.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public State convertTo(hudson.model.AbstractBuild source, State destination) {
-		if (source.isBuilding()) {
-			return State.BUILDING;
-		} else if (source.hasntStartedYet()) {
-			return State.NOT_STARTED;
-		} else if (source.isLogUpdated()) {
-			return State.COMPLETED;
+	public Integer convertTo(AbstractBuild source, Integer destination) {
+		if (source == null) {
+			return 0;
 		} else {
-			return State.UNKNOWN;
+			return source.getNumber();
 		}
 	}
 
@@ -58,8 +54,8 @@ public class StateDozerConverter extends DozerConverter<hudson.model.AbstractBui
 	 * {@inheritDoc}
 	 */
 	@Override
-	public hudson.model.AbstractBuild<?, ?> convertFrom(State source, hudson.model.AbstractBuild destination) {
-		throw new UnsupportedOperationException("Canot convert a State inot a hudson.model.AbstractBuild object");
+	public AbstractBuild convertFrom(Integer source, AbstractBuild destination) {
+		throw new UnsupportedOperationException("Cannot convert from a Build Number to a hudson.model.AbstractBuild object");
 	}
 
 }

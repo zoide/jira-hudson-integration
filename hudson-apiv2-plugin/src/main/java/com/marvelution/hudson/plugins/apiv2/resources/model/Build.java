@@ -19,18 +19,25 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.ProjectTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.RemoteTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.SCMTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.TimeTrigger;
 import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.Trigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.UnknownTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.UserTrigger;
 import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 
 /**
@@ -61,14 +68,23 @@ public class Build extends Model implements Comparable<Build> {
 	private Result result;
 	@XmlElement(name = "state", required = true)
 	private State state;
-	@XmlElement(name = "buildArtifact")
+	@XmlElement(name = "artifact")
+	@XmlElementWrapper(name = "artifacts")
 	private Collection<BuildArtifact> buildArtifacts;
-	@XmlElement(name = "trigger", required = true)
-	@XmlElementWrapper(name = "triggers")
+	@XmlElementRefs( {
+		@XmlElementRef(name = "ProjectTrigger", type = ProjectTrigger.class),
+		@XmlElementRef(name = "RemoteTrigger", type = RemoteTrigger.class),
+		@XmlElementRef(name = "SCMTrigger", type = SCMTrigger.class),
+		@XmlElementRef(name = "TimeTrigger", type = TimeTrigger.class),
+		@XmlElementRef(name = "UnknownTrigger", type = UnknownTrigger.class),
+		@XmlElementRef(name = "UserTrigger", type = UserTrigger.class)
+	} )
 	private Collection<Trigger> triggers;
 	@XmlElement(name = "relatedIssueKey", required = true)
 	@XmlElementWrapper(name = "relatedIssueKeys")
 	private Collection<String> relatedIssueKeys;
+	@XmlElement(name = "changeLog")
+	private ChangeLog changeLog;
 
 	/**
 	 * Default Constructor
@@ -271,9 +287,6 @@ public class Build extends Model implements Comparable<Build> {
 	 * @return the triggers
 	 */
 	public Collection<Trigger> getTriggers() {
-		if (triggers == null) {
-			triggers = new ArrayList<Trigger>();
-		}
 		return triggers;
 	}
 
@@ -305,6 +318,36 @@ public class Build extends Model implements Comparable<Build> {
 	 */
 	public void setRelatedIssueKeys(Collection<String> relatedIssueKeys) {
 		this.relatedIssueKeys = relatedIssueKeys;
+	}
+
+	/**
+	 * Getter for changeLog
+	 * 
+	 * @return the changeLog
+	 */
+	public ChangeLog getChangeLog() {
+		if (changeLog == null) {
+			changeLog = new ChangeLog();
+		}
+		return changeLog;
+	}
+
+	/**
+	 * Setter for changeLog
+	 * 
+	 * @param changeLog the changeLog to set
+	 */
+	public void setChangeLog(ChangeLog changeLog) {
+		this.changeLog = changeLog;
+	}
+
+	/**
+	 * Setter for buildNumber
+	 * 
+	 * @param buildNumber the buildNumber to set
+	 */
+	public void setBuildNumber(Integer buildNumber) {
+		this.buildNumber = buildNumber;
 	}
 
 	/**

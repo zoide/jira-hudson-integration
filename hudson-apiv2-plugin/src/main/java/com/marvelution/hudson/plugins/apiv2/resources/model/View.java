@@ -19,12 +19,10 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.model;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -34,7 +32,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 @XmlType(name = "ViewType", namespace = NameSpaceUtils.VIEW_NAMESPACE)
-@XmlRootElement(name = "ViewType", namespace = NameSpaceUtils.VIEW_NAMESPACE)
+@XmlRootElement(name = "View", namespace = NameSpaceUtils.VIEW_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class View extends Model {
 
@@ -44,9 +42,8 @@ public class View extends Model {
 	private String description;
 	@XmlElement(name = "url")
 	private String url;
-	@XmlElement(name = "job", required = true)
-	@XmlElementWrapper(name = "jobs")
-	private List<Job> jobs;
+	@XmlElementRef
+	private Jobs jobs;
 	
 	/**
 	 * Getter for name
@@ -107,7 +104,7 @@ public class View extends Model {
 	 *
 	 * @return the jobs
 	 */
-	public List<Job> getJobs() {
+	public Jobs getJobs() {
 		return jobs;
 	}
 	
@@ -116,7 +113,7 @@ public class View extends Model {
 	 * 
 	 * @param jobs the jobs to set
 	 */
-	public void setJobs(List<Job> jobs) {
+	public void setJobs(Jobs jobs) {
 		this.jobs = jobs;
 	}
 

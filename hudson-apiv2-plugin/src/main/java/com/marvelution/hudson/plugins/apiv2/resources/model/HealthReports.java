@@ -19,45 +19,41 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.model;
 
-import javax.xml.bind.annotation.XmlEnum;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 
 /**
- * Enumeration for the icons of available to health reports
- * 
- * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
+ * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-@XmlType(name = "HealthReportIconType", namespace = NameSpaceUtils.JOB_NAMESPACE)
-@XmlEnum(String.class)
-public enum HealthReportIcon {
+@XmlType(name = "HealthReportsType", namespace = NameSpaceUtils.JOB_NAMESPACE)
+@XmlRootElement(name = "HealthReports", namespace = NameSpaceUtils.JOB_NAMESPACE)
+@XmlAccessorType(XmlAccessType.FIELD)
+public class HealthReports extends ListableModel<HealthReport> {
 
-	HEALTH_UNKNOWN("empty.gif"),
-	HEALTH_OVER_80("health-80plus.gif"),
-	HEALTH_60_TO_79("health-60to79.gif"),
-	HEALTH_40_TO_59("health-40to59.gif"),
-	HEALTH_20_TO_39("health-20to39.gif"),
-	HEALTH_00_TO_19("health-00to19.gif");
-
-	private String iconName;
+	@XmlElementRef
+	private Collection<HealthReport> reports;
 
 	/**
-	 * Constructor
-	 * 
-	 * @param iconName the icon name
+	 * Default Constructor
 	 */
-	private HealthReportIcon(String iconName) {
-		this.iconName = iconName;
+	public HealthReports() {
+		this.reports = new ArrayList<HealthReport>();
 	}
 
 	/**
-	 * Getter for the icon name
-	 * 
-	 * @return the icon name
+	 * {@inheritDoc}
 	 */
-	public String getIconName() {
-		return iconName;
+	@Override
+	public Collection<HealthReport> getItems() {
+		return reports;
 	}
 
 }

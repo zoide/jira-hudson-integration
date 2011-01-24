@@ -19,10 +19,10 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -36,6 +36,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
  */
 @XmlType(name = "JobType", namespace = NameSpaceUtils.JOB_NAMESPACE)
 @XmlRootElement(name = "Job", namespace = NameSpaceUtils.JOB_NAMESPACE)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Job extends Model {
 
 	@XmlElement(name = "name", required = true)
@@ -46,29 +47,27 @@ public class Job extends Model {
 	private String description;
 	@XmlElement(name = "buildable", required = true)
 	private boolean buildable;
-	@XmlElement(name = "build", required = true)
-	@XmlElementWrapper(name = "builds")
-	private List<Build> builds;
-	@XmlElement(name = "firstBuild", type = Build.class)
-	private Build firstBuild;
-	@XmlElement(name = "lastBuild", type = Build.class)
-	private Build lastBuild;
-	@XmlElement(name = "lastSuccessfulBuild", type = Build.class)
-	private Build lastSuccessfulBuild;
-	@XmlElement(name = "lastUnstableBuild", type = Build.class)
-	private Build lastUnstableBuild;
-	@XmlElement(name = "lastStableBuild", type = Build.class)
-	private Build lastStableBuild;
-	@XmlElement(name = "lastFailedBuild", type = Build.class)
-	private Build lastFailedBuild;
-	@XmlElement(name = "lastCompletedBuild", type = Build.class)
-	private Build lastCompletedBuild;
-	@XmlElement(name = "healthReport", required = true)
-	@XmlElementWrapper(name = "healthReports")
-	private List<HealthReport> healthReports;
-	@XmlElement(name = "module", required = true)
+	@XmlElementRef
+	private Builds builds;
+	@XmlElement(name = "firstBuildNumber")
+	private int firstBuildNumber;
+	@XmlElement(name = "lastBuildNumber")
+	private int lastBuildNumber;
+	@XmlElement(name = "lastSuccessfulBuildNumber")
+	private int lastSuccessfulBuildNumber;
+	@XmlElement(name = "lastUnstableBuildNumber")
+	private int lastUnstableBuildNumber;
+	@XmlElement(name = "lastStableBuildNumber")
+	private int lastStableBuildNumber;
+	@XmlElement(name = "lastFailedBuildNumber")
+	private int lastFailedBuildNumber;
+	@XmlElement(name = "lastCompletedBuildNumber")
+	private int lastCompletedBuildNumber;
+	@XmlElement(name = "healthReports")
+	private HealthReports healthReports;
+	@XmlElement(name = "module")
 	@XmlElementWrapper(name = "modules")
-	private List<Job> modules;
+	private Jobs modules;
 
 	/**
 	 * Default Constructor
@@ -162,10 +161,7 @@ public class Job extends Model {
 	 *
 	 * @return the builds
 	 */
-	public List<Build> getBuilds() {
-		if (builds == null) {
-			builds = new ArrayList<Build>();
-		}
+	public Builds getBuilds() {
 		return builds;
 	}
 
@@ -174,134 +170,222 @@ public class Job extends Model {
 	 * 
 	 * @param builds the builds to set
 	 */
-	public void setBuilds(List<Build> builds) {
+	public void setBuilds(Builds builds) {
 		this.builds = builds;
 	}
 
 	/**
-	 * Getter for firstBuild
-	 *
-	 * @return the firstBuild
+	 * Getter for the first {@link Build} of the {@link Job}
+	 * 
+	 * @return the first {@link Build}
+	 * @see #getBuild(int)
 	 */
 	public Build getFirstBuild() {
-		return firstBuild;
+		return getBuild(firstBuildNumber);
 	}
 
 	/**
-	 * Setter for firstBuild
-	 * 
-	 * @param firstBuild the firstBuild to set
-	 */
-	public void setFirstBuild(Build firstBuild) {
-		this.firstBuild = firstBuild;
-	}
-
-	/**
-	 * Getter for lastBuild
+	 * Getter for firstBuildNumber
 	 *
-	 * @return the lastBuild
+	 * @return the firstBuildNumber
+	 */
+	public int getFirstBuildNumber() {
+		return firstBuildNumber;
+	}
+
+	/**
+	 * Setter for firstBuildNumber
+	 * 
+	 * @param firstBuildNumber the firstBuildNumber to set
+	 */
+	public void setFirstBuildNumber(int firstBuildNumber) {
+		this.firstBuildNumber = firstBuildNumber;
+	}
+
+	/**
+	 * Getter for the last {@link Build} of the {@link Job}
+	 * 
+	 * @return the last {@link Build}
+	 * @see #getBuild(int)
 	 */
 	public Build getLastBuild() {
-		return lastBuild;
+		return getBuild(lastBuildNumber);
 	}
 
 	/**
-	 * Setter for lastBuild
-	 * 
-	 * @param lastBuild the lastBuild to set
-	 */
-	public void setLastBuild(Build lastBuild) {
-		this.lastBuild = lastBuild;
-	}
-
-	/**
-	 * Getter for lastSuccessfulBuild
+	 * Getter for lastBuildNumber
 	 *
-	 * @return the lastSuccessfulBuild
+	 * @return the lastBuildNumber
+	 */
+	public int getLastBuildNumber() {
+		return lastBuildNumber;
+	}
+
+	/**
+	 * Setter for lastBuildNumber
+	 * 
+	 * @param lastBuildNumber the lastBuildNumber to set
+	 */
+	public void setLastBuildNumber(int lastBuildNumber) {
+		this.lastBuildNumber = lastBuildNumber;
+	}
+
+	/**
+	 * Getter for the last successful {@link Build} of the {@link Job}
+	 * 
+	 * @return the last successful {@link Build}
+	 * @see #getBuild(int)
 	 */
 	public Build getLastSuccessfulBuild() {
-		return lastSuccessfulBuild;
+		return getBuild(lastSuccessfulBuildNumber);
 	}
 
 	/**
-	 * Setter for lastSuccessfulBuild
-	 * 
-	 * @param lastSuccessfulBuild the lastSuccessfulBuild to set
-	 */
-	public void setLastSuccessfulBuild(Build lastSuccessfulBuild) {
-		this.lastSuccessfulBuild = lastSuccessfulBuild;
-	}
-
-	/**
-	 * Getter for lastUnstableBuild
+	 * Getter for lastSuccessfulBuildNumber
 	 *
-	 * @return the lastUnstableBuild
+	 * @return the lastSuccessfulBuildNumber
+	 */
+	public int getLastSuccessfulBuildNumber() {
+		return lastSuccessfulBuildNumber;
+	}
+
+	/**
+	 * Setter for lastSuccessfulBuildNumber
+	 * 
+	 * @param lastSuccessfulBuildNumber the lastSuccessfulBuildNumber to set
+	 */
+	public void setLastSuccessfulBuildNumber(int lastSuccessfulBuildNumber) {
+		this.lastSuccessfulBuildNumber = lastSuccessfulBuildNumber;
+	}
+
+	/**
+	 * Getter for the last unstable {@link Build} of the {@link Job}
+	 * 
+	 * @return the last unstable {@link Build}
+	 * @see #getBuild(int)
 	 */
 	public Build getLastUnstableBuild() {
-		return lastUnstableBuild;
+		return getBuild(lastUnstableBuildNumber);
 	}
 
 	/**
-	 * Setter for lastUnstableBuild
-	 * 
-	 * @param lastUnstableBuild the lastUnstableBuild to set
-	 */
-	public void setLastUnstableBuild(Build lastUnstableBuild) {
-		this.lastUnstableBuild = lastUnstableBuild;
-	}
-
-	/**
-	 * Getter for lastStableBuild
+	 * Getter for lastUnstableBuildNumber
 	 *
-	 * @return the lastStableBuild
+	 * @return the lastUnstableBuildNumber
+	 */
+	public int getLastUnstableBuildNumber() {
+		return lastUnstableBuildNumber;
+	}
+
+	/**
+	 * Setter for lastUnstableBuildNumber
+	 * 
+	 * @param lastUnstableBuildNumber the lastUnstableBuildNumber to set
+	 */
+	public void setLastUnstableBuildNumber(int lastUnstableBuildNumber) {
+		this.lastUnstableBuildNumber = lastUnstableBuildNumber;
+	}
+
+	/**
+	 * Getter for the last stable {@link Build} of the {@link Job}
+	 * 
+	 * @return the last stable {@link Build}
+	 * @see #getBuild(int)
 	 */
 	public Build getLastStableBuild() {
-		return lastStableBuild;
+		return getBuild(lastStableBuildNumber);
 	}
 
 	/**
-	 * Setter for lastStableBuild
-	 * 
-	 * @param lastStableBuild the lastStableBuild to set
-	 */
-	public void setLastStableBuild(Build lastStableBuild) {
-		this.lastStableBuild = lastStableBuild;
-	}
-
-	/**
-	 * Getter for lastFailedBuild
+	 * Getter for lastStableBuildNumber
 	 *
-	 * @return the lastFailedBuild
+	 * @return the lastStableBuildNumber
+	 */
+	public int getLastStableBuildNumber() {
+		return lastStableBuildNumber;
+	}
+
+	/**
+	 * Setter for lastStableBuildNumber
+	 * 
+	 * @param lastStableBuildNumber the lastStableBuildNumber to set
+	 */
+	public void setLastStableBuildNumber(int lastStableBuildNumber) {
+		this.lastStableBuildNumber = lastStableBuildNumber;
+	}
+
+	/**
+	 * Getter for the last failed {@link Build} of the {@link Job}
+	 * 
+	 * @return the last failed {@link Build}
+	 * @see #getBuild(int)
 	 */
 	public Build getLastFailedBuild() {
-		return lastFailedBuild;
+		return getBuild(lastFailedBuildNumber);
 	}
 
 	/**
-	 * Setter for lastFailedBuild
-	 * 
-	 * @param lastFailedBuild the lastFailedBuild to set
-	 */
-	public void setLastFailedBuild(Build lastFailedBuild) {
-		this.lastFailedBuild = lastFailedBuild;
-	}
-
-	/**
-	 * Getter for lastCompletedBuild
+	 * Getter for lastFailedBuildNumber
 	 *
-	 * @return the lastCompletedBuild
+	 * @return the lastFailedBuildNumber
+	 */
+	public int getLastFailedBuildNumber() {
+		return lastFailedBuildNumber;
+	}
+
+	/**
+	 * Setter for lastFailedBuildNumber
+	 * 
+	 * @param lastFailedBuildNumber the lastFailedBuildNumber to set
+	 */
+	public void setLastFailedBuildNumber(int lastFailedBuildNumber) {
+		this.lastFailedBuildNumber = lastFailedBuildNumber;
+	}
+
+	/**
+	 * Getter for the last completed {@link Build} of the {@link Job}
+	 * 
+	 * @return the last completed {@link Build}
+	 * @see #getBuild(int)
 	 */
 	public Build getLastCompletedBuild() {
-		return lastCompletedBuild;
+		return getBuild(lastCompletedBuildNumber);
 	}
 
 	/**
-	 * Setter for lastCompletedBuild
-	 * 
-	 * @param lastCompletedBuild the lastCompletedBuild to set
+	 * Getter for lastCompletedBuildNumber
+	 *
+	 * @return the lastCompletedBuildNumber
 	 */
-	public void setLastCompletedBuild(Build lastCompletedBuild) {
-		this.lastCompletedBuild = lastCompletedBuild;
+	public int getLastCompletedBuildNumber() {
+		return lastCompletedBuildNumber;
+	}
+
+	/**
+	 * Setter for lastCompletedBuildNumber
+	 * 
+	 * @param lastCompletedBuildNumber the lastCompletedBuildNumber to set
+	 */
+	public void setLastCompletedBuildNumber(int lastCompletedBuildNumber) {
+		this.lastCompletedBuildNumber = lastCompletedBuildNumber;
+	}
+
+	/**
+	 * Getter for a specific {@link Build} of the {@link Job}
+	 * 
+	 * @param number the number of the {@link Build} to get
+	 * @return the specific {@link Build}, may be <code>null</code>
+	 */
+	public Build getBuild(int number) {
+		if (number < 1) {
+			throw new IllegalArgumentException("The build number must be equal or larger then 1 (one)");
+		}
+		for (Build build : builds) {
+			if (build.getBuildNumber() == number) {
+				return build;
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -309,7 +393,7 @@ public class Job extends Model {
 	 *
 	 * @return the healthReports
 	 */
-	public List<HealthReport> getHealthReports() {
+	public HealthReports getHealthReports() {
 		return healthReports;
 	}
 
@@ -318,7 +402,7 @@ public class Job extends Model {
 	 * 
 	 * @param healthReports the healthReports to set
 	 */
-	public void setHealthReports(List<HealthReport> healthReports) {
+	public void setHealthReports(HealthReports healthReports) {
 		this.healthReports = healthReports;
 	}
 
@@ -327,7 +411,7 @@ public class Job extends Model {
 	 *
 	 * @return the modules
 	 */
-	public List<Job> getModules() {
+	public Jobs getModules() {
 		return modules;
 	}
 
@@ -336,7 +420,7 @@ public class Job extends Model {
 	 * 
 	 * @param modules the modules to set
 	 */
-	public void setModules(List<Job> modules) {
+	public void setModules(Jobs modules) {
 		this.modules = modules;
 	}
 

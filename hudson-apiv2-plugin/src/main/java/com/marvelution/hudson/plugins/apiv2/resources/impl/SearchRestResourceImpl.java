@@ -75,7 +75,7 @@ public class SearchRestResourceImpl extends BaseRestResource implements SearchRe
 			throw new NoSuchJobException(jobName);
 		} else {
 			for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
-				builds.addAll(searchForBuilds(item, query).getBuilds());
+				builds.addAll(searchForBuilds(item, query).getItems());
 			}
 		}
 		return builds;

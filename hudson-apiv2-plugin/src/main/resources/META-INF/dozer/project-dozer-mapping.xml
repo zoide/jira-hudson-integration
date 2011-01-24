@@ -43,39 +43,39 @@
 			<a get-method="getBuilds">builds</a>
 			<b>builds</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getFirstBuild">firstBuild</a>
-			<b>firstBuild</b>
+			<b>firstBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastBuild">lastBuild</a>
-			<b>lastBuild</b>
+			<b>lastBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastSuccessfulBuild">lastSuccessfulBuild</a>
-			<b>lastSuccessfulBuild</b>
+			<b>lastSuccessfulBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastUnstableBuild">lastUnstableBuild</a>
-			<b>lastUnstableBuild</b>
+			<b>lastUnstableBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastStableBuild">lastStableBuild</a>
-			<b>lastStableBuild</b>
+			<b>lastStableBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastFailedBuild">lastFailedBuild</a>
-			<b>lastFailedBuild</b>
+			<b>lastFailedBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastCompletedBuild">lastCompletedBuild</a>
-			<b>lastCompletedBuild</b>
+			<b>lastCompletedBuildNumber</b>
 		</field>
 		<field>
 			<a get-method="getBuildHealthReports">healthReports</a>
 			<b>healthReports</b>
 		</field>
-		<!-- TODO Implement Modules converter
+		<!-- TODO Implement ListableModel converter
 		<field>
 			<a></a>
 			<b>modules</b>
@@ -131,33 +131,33 @@
 			<a get-method="getBuilds">builds</a>
 			<b>builds</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getFirstBuild">firstBuild</a>
-			<b>firstBuild</b>
+			<b>firstBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastBuild">lastBuild</a>
-			<b>lastBuild</b>
+			<b>lastBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastSuccessfulBuild">lastSuccessfulBuild</a>
-			<b>lastSuccessfulBuild</b>
+			<b>lastSuccessfulBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastUnstableBuild">lastUnstableBuild</a>
-			<b>lastUnstableBuild</b>
+			<b>lastUnstableBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastStableBuild">lastStableBuild</a>
-			<b>lastStableBuild</b>
+			<b>lastStableBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastFailedBuild">lastFailedBuild</a>
-			<b>lastFailedBuild</b>
+			<b>lastFailedBuildNumber</b>
 		</field>
-		<field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getLastCompletedBuild">lastCompletedBuild</a>
-			<b>lastCompletedBuild</b>
+			<b>lastCompletedBuildNumber</b>
 		</field>
 		<field>
 			<a get-method="getBuildHealthReports">healthReports</a>

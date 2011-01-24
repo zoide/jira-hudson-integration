@@ -43,17 +43,17 @@ public class ResultDozerConverter extends DozerConverter<hudson.model.Result, Re
 	@Override
 	public Result convertTo(hudson.model.Result source, Result destination) {
 		if (source == null) {
-			return Result.NOT_BUILT;
+			return Result.NOTBUILD;
 		} else if (source.equals(hudson.model.Result.SUCCESS)) {
-			return Result.SUCCESS;
+			return Result.SUCCESSFUL;
 		} else if (source.equals(hudson.model.Result.FAILURE)) {
-			return Result.FAILURE;
+			return Result.FAILED;
 		} else if (source.equals(hudson.model.Result.UNSTABLE)) {
 			return Result.UNSTABLE;
 		} else if (source.equals(hudson.model.Result.ABORTED)) {
 			return Result.ABORTED;
 		}
-		return Result.NOT_BUILT;
+		return Result.NOTBUILD;
 	}
 
 	/**
@@ -63,9 +63,9 @@ public class ResultDozerConverter extends DozerConverter<hudson.model.Result, Re
 	public hudson.model.Result convertFrom(Result source, hudson.model.Result destination) {
 		if (source == null) {
 			return hudson.model.Result.NOT_BUILT;
-		} else if (source.equals(Result.SUCCESS)) {
+		} else if (source.equals(Result.SUCCESSFUL)) {
 			return hudson.model.Result.SUCCESS;
-		} else if (source.equals(Result.FAILURE)) {
+		} else if (source.equals(Result.FAILED)) {
 			return hudson.model.Result.FAILURE;
 		} else if (source.equals(Result.UNSTABLE)) {
 			return hudson.model.Result.UNSTABLE;

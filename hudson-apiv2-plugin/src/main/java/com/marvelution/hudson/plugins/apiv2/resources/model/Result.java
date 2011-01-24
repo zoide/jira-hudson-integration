@@ -33,26 +33,6 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlEnum(String.class)
 public enum Result {
 
-	SUCCESS("blue.gif"), FAILURE("red.gif"), UNSTABLE("yellow.gif"), NOT_BUILT("grey.gif"), ABORTED("red.gif");
-
-	private String icon;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param icon icon name
-	 */
-	private Result(String icon) {
-		this.icon = icon;
-	}
-
-	/**
-	 * Getter for the icon name
-	 * 
-	 * @return the icon name
-	 */
-	public String getIcon() {
-		return icon;
-	}
+	SUCCESSFUL, FAILED, UNSTABLE, NOTBUILD, ABORTED;
 
 }

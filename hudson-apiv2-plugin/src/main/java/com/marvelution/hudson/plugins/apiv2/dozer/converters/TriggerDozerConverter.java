@@ -27,8 +27,6 @@ import hudson.triggers.SCMTrigger.SCMTriggerCause;
 import hudson.triggers.TimerTrigger.TimerTriggerCause;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +38,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.RemoteTrigg
 import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.SCMTrigger;
 import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.TimeTrigger;
 import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.Trigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.UnknownTrigger;
 import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.UserTrigger;
 
 /**
@@ -48,8 +47,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.UserTrigger
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
-@SuppressWarnings("rawtypes")
-public class TriggerDozerConverter extends DozerConverter<List, Collection> {
+public class TriggerDozerConverter extends DozerConverter<Cause, Trigger> {
 
 	private static final Logger LOGGER = Logger.getLogger(TriggerDozerConverter.class.getName());
 
@@ -57,49 +55,45 @@ public class TriggerDozerConverter extends DozerConverter<List, Collection> {
 	 * Constructor
 	 */
 	public TriggerDozerConverter() {
-		super(List.class, Collection.class);
+		super(Cause.class, Trigger.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Trigger> convertTo(List source, Collection destination) {
-		Collection<Trigger> triggers = new ArrayList<Trigger>();
-		for (Cause cause : (List<Cause>) source) {
-			if (cause instanceof UserCause) {
-				triggers.add(UserTrigger.create(((UserCause) cause).getUserName()));
-			} else if (cause instanceof UpstreamCause) {
-				UpstreamCause upstreamCause = (UpstreamCause) cause;
-				triggers.add(ProjectTrigger.create(upstreamCause.getUpstreamProject(), upstreamCause.getUpstreamUrl(),
-						upstreamCause.getUpstreamBuild()));
-			} else if (cause instanceof RemoteCause) {
-				RemoteCause remoteCause = (RemoteCause) cause;
-				String host = "";
-				try {
-					Field hostField = remoteCause.getClass().getDeclaredField("addr");
-					hostField.setAccessible(true);
-					host = hostField.get(remoteCause).toString();
-				} catch (Exception e) {
-					LOGGER.log(Level.FINE, "Failed to get the Remote Host information form the RemoteCause.");
-				}
-				triggers.add(RemoteTrigger.create(remoteCause.getShortDescription(), host));
-			} else if (cause instanceof TimerTriggerCause) {
-				triggers.add(new TimeTrigger());
-			} else if (cause instanceof SCMTriggerCause) {
-				triggers.add(new SCMTrigger());
+	public Trigger convertTo(Cause source, Trigger destination) {
+		if (source instanceof UserCause) {
+			return UserTrigger.create(((UserCause) source).getUserName());
+		} else if (source instanceof UpstreamCause) {
+			UpstreamCause upstreamCause = (UpstreamCause) source;
+			return ProjectTrigger.create(upstreamCause.getUpstreamProject(), upstreamCause.getUpstreamUrl(),
+					upstreamCause.getUpstreamBuild());
+		} else if (source instanceof RemoteCause) {
+			RemoteCause remoteCause = (RemoteCause) source;
+			String host = "";
+			try {
+				Field hostField = remoteCause.getClass().getDeclaredField("addr");
+				hostField.setAccessible(true);
+				host = hostField.get(remoteCause).toString();
+			} catch (Exception e) {
+				LOGGER.log(Level.FINE, "Failed to get the Remote Host information form the RemoteCause.");
 			}
+			return RemoteTrigger.create(remoteCause.getShortDescription(), host);
+		} else if (source instanceof TimerTriggerCause) {
+			return new TimeTrigger();
+		} else if (source instanceof SCMTriggerCause) {
+			return new SCMTrigger();
 		}
-		return triggers;
+		return new UnknownTrigger();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Cause> convertFrom(Collection source, List destination) {
-		throw new UnsupportedOperationException("Unable to map from a Collection to a List<Cause>");
+	public Cause convertFrom(Trigger source, Cause destination) {
+		throw new UnsupportedOperationException("Unable to map from a Trigger to a Cause");
 	}
 
 }

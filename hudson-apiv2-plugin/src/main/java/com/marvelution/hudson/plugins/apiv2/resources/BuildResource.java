@@ -34,7 +34,6 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
-// TODO add method to get builds by issue key
 public interface BuildResource {
 
 	/**

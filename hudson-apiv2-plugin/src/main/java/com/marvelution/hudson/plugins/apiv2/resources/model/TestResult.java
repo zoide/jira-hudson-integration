@@ -25,7 +25,6 @@ import java.util.Collection;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -47,18 +46,8 @@ public class TestResult extends Model {
 	private int skipped;
 	@XmlElement(name = "total", required = true)
 	private int total;
-	@XmlElement(name = "failedTest", required = true)
-	@XmlElementWrapper(name = "failedTests")
+	@XmlElement(name = "failedTest")
 	private Collection<TestCaseResult> failedTests;
-
-	/**
-	 * Getter for the successful tests count
-	 * 
-	 * @return the count
-	 */
-	public int getSuccessful() {
-		return total - skipped - failed;
-	}
 
 	/**
 	 * Getter for the failed tests count

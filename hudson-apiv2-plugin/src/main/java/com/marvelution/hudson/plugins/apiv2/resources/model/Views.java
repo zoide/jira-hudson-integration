@@ -21,11 +21,10 @@ package com.marvelution.hudson.plugins.apiv2.resources.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -41,51 +40,22 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Views extends ListableModel<View> {
 
-	@XmlElement(name = "view", required = true)
+	@XmlElementRef
 	private Collection<View> items;
 
 	/**
 	 * Default Constructor
 	 */
 	public Views() {
-	}
-
-	/**
-	 * Getter for views
-	 * 
-	 * @return the views
-	 */
-	public Collection<View> getViews() {
-		if (items == null) {
-			items = new ArrayList<View>();
-		}
-		return items;
-	}
-
-	/**
-	 * Add a single {@link View} to the collection
-	 * 
-	 * @param view the {@link View} to add
-	 */
-	public void add(View view) {
-		getViews().add(view);
-	}
-
-	/**
-	 * Add a {@link Collection} of {@link View} objects to the {@link Collection}
-	 * 
-	 * @param views the {@link Collection} of {@link View} objects to add
-	 */
-	public void addAll(Collection<View> views) {
-		getViews().addAll(views);
+		items = new ArrayList<View>();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Iterator<View> iterator() {
-		return getViews().iterator();
+	public Collection<View> getItems() {
+		return items;
 	}
 
 }

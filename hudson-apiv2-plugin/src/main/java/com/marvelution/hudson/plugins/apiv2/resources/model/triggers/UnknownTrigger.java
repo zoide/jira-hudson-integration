@@ -17,45 +17,24 @@
  * under the License.
  */
 
-package com.marvelution.hudson.plugins.apiv2.resources.model;
-
-import java.util.ArrayList;
-import java.util.Collection;
+package com.marvelution.hudson.plugins.apiv2.resources.model.triggers;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 
 /**
- * Jobs XML object
+ * Unkown {@link Trigger} implementation
+ * {@link Trigger} that indicates an unknown trigger caused the build
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
-@XmlType(name = "JobsType", namespace = NameSpaceUtils.JOB_NAMESPACE)
-@XmlRootElement(name = "Jobs", namespace = NameSpaceUtils.JOB_NAMESPACE)
+@XmlType(name = "UnknownTriggerType", namespace = NameSpaceUtils.BUILD_TRIGGER_NAMESPACE)
+@XmlRootElement(name = "UnknownTrigger", namespace = NameSpaceUtils.BUILD_TRIGGER_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Jobs extends ListableModel<Job> {
-
-	@XmlElementRef
-	private Collection<Job> items;
-
-	/**
-	 * Default Constructor
-	 */
-	public Jobs() {
-		items = new ArrayList<Job>();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Collection<Job> getItems() {
-		return items;
-	}
+public class UnknownTrigger extends Trigger {
 
 }

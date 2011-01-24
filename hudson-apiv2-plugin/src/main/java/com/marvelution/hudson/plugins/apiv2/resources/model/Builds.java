@@ -21,11 +21,10 @@ package com.marvelution.hudson.plugins.apiv2.resources.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -41,51 +40,22 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Builds extends ListableModel<Build> {
 
-	@XmlElement(name = "build", required = true)
+	@XmlElementRef
 	private Collection<Build> items;
 
 	/**
 	 * Default Constructor
 	 */
 	public Builds() {
-	}
-
-	/**
-	 * Getter for builds
-	 * 
-	 * @return the builds
-	 */
-	public Collection<Build> getBuilds() {
-		if (items == null) {
-			items = new ArrayList<Build>();
-		}
-		return items;
-	}
-
-	/**
-	 * Add a single {@link Build} to the collection
-	 * 
-	 * @param build the {@link Build} to add
-	 */
-	public void add(Build build) {
-		getBuilds().add(build);
-	}
-
-	/**
-	 * Add a {@link Collection} of {@link Build} objects to the {@link Collection}
-	 * 
-	 * @param builds the {@link Collection} of {@link Build} objects to add
-	 */
-	public void addAll(Collection<Build> builds) {
-		getBuilds().addAll(builds);
+		items = new ArrayList<Build>();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Iterator<Build> iterator() {
-		return getBuilds().iterator();
+	public Collection<Build> getItems() {
+		return items;
 	}
 
 }

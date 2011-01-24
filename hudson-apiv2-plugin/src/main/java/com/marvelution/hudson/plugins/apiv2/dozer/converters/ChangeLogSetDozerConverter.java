@@ -19,47 +19,45 @@
 
 package com.marvelution.hudson.plugins.apiv2.dozer.converters;
 
+import hudson.scm.ChangeLogSet;
+
 import org.dozer.DozerConverter;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.State;
+import com.marvelution.hudson.plugins.apiv2.resources.model.ChangeLog;
+import com.marvelution.hudson.plugins.apiv2.resources.model.ChangeLog.Entry;
 
 /**
- * {@link DozerConverter} to convert a {@link hudson.model.Run.State} into a {@link State} and back
- * 
- * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
+ * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @SuppressWarnings("rawtypes")
-public class StateDozerConverter extends DozerConverter<hudson.model.AbstractBuild, State> {
+public class ChangeLogSetDozerConverter extends DozerConverter<ChangeLogSet, ChangeLog> {
 
 	/**
 	 * Constructor
 	 */
-	public StateDozerConverter() {
-		super(hudson.model.AbstractBuild.class, State.class);
+	public ChangeLogSetDozerConverter() {
+		super(ChangeLogSet.class, ChangeLog.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public State convertTo(hudson.model.AbstractBuild source, State destination) {
-		if (source.isBuilding()) {
-			return State.BUILDING;
-		} else if (source.hasntStartedYet()) {
-			return State.NOT_STARTED;
-		} else if (source.isLogUpdated()) {
-			return State.COMPLETED;
-		} else {
-			return State.UNKNOWN;
+	public ChangeLog convertTo(ChangeLogSet source, ChangeLog destination) {
+		ChangeLog changeLog = new ChangeLog();
+		for (hudson.scm.ChangeLogSet.Entry entry : (ChangeLogSet<hudson.scm.ChangeLogSet.Entry>) source) {
+			changeLog.add(new Entry(entry.getAuthor().getFullName(), entry.getMsg()));
 		}
+		return changeLog;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public hudson.model.AbstractBuild<?, ?> convertFrom(State source, hudson.model.AbstractBuild destination) {
-		throw new UnsupportedOperationException("Canot convert a State inot a hudson.model.AbstractBuild object");
+	public ChangeLogSet convertFrom(ChangeLog source, ChangeLogSet destination) {
+		throw new UnsupportedOperationException("Unable to map from a ChangeLog into a ChangeLogSet");
 	}
 
 }
