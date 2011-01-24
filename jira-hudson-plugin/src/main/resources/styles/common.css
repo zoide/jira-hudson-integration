@@ -1,0 +1,166 @@
+/*
+ * Licensed to Marvelution under one or more contributor license 
+ * agreements.  See the NOTICE file distributed with this work 
+ * for additional information regarding copyright ownership.
+ * Marvelution licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+*/
+
+a {
+	text-decoration: none;
+}
+
+li {
+	display: block;
+}
+
+.tab {
+	padding: 2px 10px;
+	border: 1px solid #CCC;
+	background-color: #CCC;
+	cursor: pointer;
+	display: inline;
+	position: relative;
+}
+
+.selected {
+	background-color: #FFF;
+	border-bottom: 1px solid #FFF;
+	cursor: default;
+}
+
+.summary, .summary ul,.summary ol {
+	list-style-type: none;
+	list-style-position: outside;
+	list-style-image: none;
+	font-family: arial, FreeSans, Helvetica, sans-serif;
+	font-size: 10px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+}
+
+.summary li .last {
+	border-right: 0px solid black;
+}
+
+.leftSummary, .centerSummary {
+	float: left;
+	margin: 0px 10px;
+}
+
+.leftSummary li, .centerSummary li {
+	display: inline;
+}
+
+.leftSummary, .leftSummary ul, .leftSummary ol {
+	padding: 0px 0px;
+}
+
+.leftSummary {
+	width: 50px;
+}
+
+.centerSummary {
+	width: 70%;
+}
+
+.centerSummary, .centerSummary ul, .centerSummary ol {
+	padding: 0px;
+}
+
+.rightSummary, .rightSummary ul, .rightSummary li {
+	width: 150px;
+	float: right;
+	text-align: right;
+	padding: 0px;
+}
+
+.rightSummary .buildDate {
+	font-size: 16px;
+}
+
+.summaryInfo, .summaryInfo a {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.summaryDetails {
+	line-height: 16px;
+	font-size: 10px;
+}
+
+.summaryDetails li {
+	padding: 0px 5px;
+	border-right: 1px solid gray;
+}
+
+.summaryDetails .artifactList {
+	width: 50%;
+}
+
+.summaryDetails .relatedIssues {
+	float: right;
+	width: 45%;
+}
+
+.summaryDetails .relatedIssues .label{
+	float: left;
+	font-size: 12px;
+}
+
+.summaryDetails .relatedIssues li {
+	float: right;
+	font-weight: bold;
+	font-size: 11px;
+}
+
+.summaryDetails .label {
+	border-right: 0px solid #000;
+	padding: 0px 0px 0px 5px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.summaryDetails .changeLog .label {
+	list-style-type: none;
+	margin-left: 0px;
+}
+
+.summaryDetails .changeLog {
+	list-style-type: square;
+	width: 50%;
+}
+
+.summaryDetails .changeLog li {
+	display: list-item;
+	border: 0px solid #000;
+	margin-left: 20px;
+}
+
+.successfulSummary, .successfulSummary a {
+	color: #090;
+}
+
+.failedSummary, .failedSummary a {
+}
+
+.unstableSummary, .unstableSummary a {
+}
+
+.notbuildSummary, .notbuildSummary a {
+}
+
+.abortedSummary, .abortedSummary a {
+}

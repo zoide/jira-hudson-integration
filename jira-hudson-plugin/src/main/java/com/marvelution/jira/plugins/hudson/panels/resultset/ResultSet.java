@@ -51,6 +51,13 @@ public interface ResultSet<MODEL extends Model> {
 	MODEL getResults();
 
 	/**
+	 * Check if the {@link ResultSet} has results
+	 * 
+	 * @return <code>true</code> if there are results, <code>false</code> otherwise
+	 */
+	boolean hasResults();
+
+	/**
 	 * Result Set View enumeration
 	 * 
 	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>

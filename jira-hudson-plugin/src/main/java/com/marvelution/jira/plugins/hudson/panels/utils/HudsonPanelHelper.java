@@ -166,7 +166,7 @@ public class HudsonPanelHelper {
 				context.getUser()));
 		if (module.supportsTabs()) {
 			velocityParams.put(SELECTED_VIEW, RequestAndSessionUtils.retrieveFromRequestOrSession(SELECTED_VIEW,
-					PanelView.BUILDS_BY_JOB.getView()));
+					PanelView.BUILDS_BY_JOB.getViewName()));
 			velocityParams.put("availableViews", VIEWS);
 		}
 	}

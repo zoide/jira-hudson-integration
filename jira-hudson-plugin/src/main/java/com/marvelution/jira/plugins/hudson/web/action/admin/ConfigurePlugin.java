@@ -65,7 +65,7 @@ public class ConfigurePlugin extends AbstractHudsonAdminWebActionSupport {
 	 * 
 	 * @return {@link Collection} of {@link Group} objects
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings( { "rawtypes", "unchecked" } )
 	public Collection<Group> getGroups() {
 		List groups = (List) GroupUtils.getGroups();
 		GroupUtils.sortGroups(groups);
@@ -115,6 +115,24 @@ public class ConfigurePlugin extends AbstractHudsonAdminWebActionSupport {
 	 */
 	public void setFilterHudsonBuilds(Boolean filterHudsonBuilds) {
 		configurationManager.setFilterHudsonBuilds(filterHudsonBuilds);
+	}
+
+	/**
+	 * Getter for timePastDateStrings
+	 * 
+	 * @return the timePastDateStrings
+	 */
+	public Boolean getTimePastDateStrings() {
+		return configurationManager.isTimePastDateStrings();
+	}
+
+	/**
+	 * Setter for timePastDateStrings
+	 * 
+	 * @param timePastDateStrings the timePastDateStrings to set
+	 */
+	public void setTimePastDateStrings(Boolean timePastDateStrings) {
+		configurationManager.setTimePastDateStrings(timePastDateStrings);
 	}
 
 	/**

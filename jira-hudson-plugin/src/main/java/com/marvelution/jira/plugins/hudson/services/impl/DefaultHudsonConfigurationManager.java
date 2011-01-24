@@ -40,6 +40,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	private static final String HIDE_UNASSOCIATED_HUDSON_TABS = CONFIG_SETTING_PREFIX
 		+ "hide.unassociated.hudson.tabs";
 	private static final String FILTER_HUDSON_BUILDS = CONFIG_SETTING_PREFIX + "filter.hudson.builds";
+	private static final String TIME_PAST_DATE_STRINGS = CONFIG_SETTING_PREFIX + "time.past.date.strings";
 	private static final String SHOW_IF_USER_MEMEBER_OF_USERGROUP = CONFIG_SETTING_PREFIX 
 		+ "show.if.user.member.of.usergroup";
 	private static final String SHOW_IF_USER_MEMEBER_OF_PROJECTROLE = CONFIG_SETTING_PREFIX 
@@ -50,6 +51,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 
 	private Boolean hideUnassociatedHudsonTabs = null;
 	private Boolean filterHudsonBuilds = null;
+	private Boolean timePastDateStrings = null;
 	private Collection<String> showIfUserMemberOfUsergroup = null;
 	private Collection<String> showIfUserMemberOfProjectRole = null;
 	private Collection<String> showIfIssueOfIssueType = null;
@@ -101,6 +103,26 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	public void setFilterHudsonBuilds(Boolean filterHudsonBuilds) {
 		this.filterHudsonBuilds = filterHudsonBuilds;
 		propertyManager.getPropertySet().setBoolean(FILTER_HUDSON_BUILDS, filterHudsonBuilds);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Boolean isTimePastDateStrings() {
+		if (timePastDateStrings == null) {
+			timePastDateStrings = propertyManager.getPropertySet().getBoolean(TIME_PAST_DATE_STRINGS);
+		}
+		return timePastDateStrings;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setTimePastDateStrings(Boolean timePastDateStrings) {
+		this.timePastDateStrings = timePastDateStrings;
+		propertyManager.getPropertySet().setBoolean(TIME_PAST_DATE_STRINGS, timePastDateStrings);
 	}
 
 	/**

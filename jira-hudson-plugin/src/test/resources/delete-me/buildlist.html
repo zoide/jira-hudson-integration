@@ -1,0 +1,50 @@
+<html>
+<head>
+	<title>Build List Test</title>
+	<script type="text/javascript" src="http://issues.marvelution.com/s/587/3/3.0.9/_/download/batch/com.atlassian.auiplugin:ajs/com.atlassian.auiplugin:ajs.js"></script>
+	<script type="text/javascript" src="http://issues.marvelution.com/s/587/3/1.0/_/download/batch/jira.webresources:jira-global/jira.webresources:jira-global.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../main/resources/styles/common.css" media="all">
+	<link type="text/css" rel="stylesheet" href="../../../main/resources/styles/panel.css" media="all">
+	<script type="text/javascript" src="../../../main/resources/scripts/hudson-panel.js"></script>
+</head>
+<body>
+<div id="hudsonPanelContent">
+	<p>Some description will be here</p>
+	<ul id="views">
+		<li id="view_jobStatus" class="tab">View Job Status</li>
+		<li id="view_buildsByJob" class="tab">View Builds by Project</li>
+		<li id="view_buildsByIssue" class="tab">View Builds by Issue(s)</li>
+	</ul>
+	<div id="slider">
+	<div id="sliderLeft" style="display: none;">&laquo;</div>
+	<div id="sliderWrapper">
+		<ul id="associations">
+			<li id="association_1" class="tab">Association 1</li>
+			<li id="association_2" class="tab">Association 2</li>
+			<li id="association_3" class="tab">Association 3</li>
+			<li id="association_4" class="tab">Association 4</li>
+			<li id="association_5" class="tab">Association 5</li>
+			<li id="association_6" class="tab">Association 6</li>
+			<li id="association_7" class="tab">Association 7</li>
+			<li id="association_8" class="tab">Association 8</li>
+			<li id="association_9" class="tab">Association 9</li>
+		</ul>
+	</div>
+	<div id="sliderRight" style="display: none;">&raquo;</div>
+	</div>
+	<div id="hudsonPanelContentHtml">
+		
+	</div>
+</div>
+
+<script type="text/javascript">
+AJS.hudson.panel.initializePanel({
+	contextPath: "",
+	view: "jobStatus",
+	associationId: 1,
+	module: "project",
+	objectId: 1
+});
+</script>
+</body>
+</html>

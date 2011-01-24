@@ -24,12 +24,20 @@ AJS.$.namespace("AJS.hudson.panel");
  */
 AJS.hudson.panel.config = {};
 
-AJS.hudson.panel.initializePanel = function() {
-	AJS.$("#" + AJS.hudson.panel.config.viewsContainer + " ." + AJS.hudson.panel.config.tabClass).each(function(index, item) {
+/**
+ * Method to initialize the Hudson panel
+ * 
+ * @param config the configuration to use when initialize the panel
+ */
+AJS.hudson.panel.initializePanel = function(config) {
+	AJS.hudson.panel.config = config;
+	var viewsWidth = 0;
+	AJS.$("#views .tab").each(function(index, item) {
 		var tab = AJS.$("#" + item.id);
 		var tabData = tab.attr('id').split('_');
+		viewsWidth += tab.width() + 20;
 		tab.click(function(event) {
-			AJS.hudson.panel.troggleView(tabData[1]);
+			AJS.hudson.panel.toggleView(tabData[1]);
 			event.preventDefault();
 		});
 		if (AJS.hudson.panel.config.view == "" || AJS.hudson.panel.config.view == tabData[1]) {
@@ -37,11 +45,13 @@ AJS.hudson.panel.initializePanel = function() {
 			AJS.hudson.panel.config.view = tabData[1];
 		}
 	});
-	AJS.$("#" + AJS.hudson.panel.config.associationsContainer + " ." + AJS.hudson.panel.config.tabClass).each(function(index, item) {
+	var associationsWidth = 0;
+	AJS.$("#associations .tab").each(function(index, item) {
 		var tab = AJS.$("#" + item.id);
 		var tabData = tab.attr('id').split('_');
+		associationsWidth += tab.width() + 20;
 		tab.click(function(event) {
-			AJS.hudson.panel.troggleAssociation(tabData[1]);
+			AJS.hudson.panel.toggleAssociation(tabData[1]);
 			event.preventDefault();
 		});
 		if (AJS.hudson.panel.config.associationId == 0 || AJS.hudson.panel.config.associationId == tabData[1]) {
@@ -49,29 +59,77 @@ AJS.hudson.panel.initializePanel = function() {
 			AJS.hudson.panel.config.associationId = tabData[1];
 		}
 	});
+	var associationsWrapper = AJS.$("#sliderWrapper");
+	var wrapperWidth = AJS.$("#hudsonPanelContent").width() - viewsWidth - 50;
+	associationsWrapper.width(wrapperWidth);
+	if (associationsWidth > wrapperWidth) {
+		var sliderLeft = AJS.$("#sliderLeft").css("display", "block");
+		var sliderRight = AJS.$("#sliderRight").css("display", "block");
+		associationsWrapper.parent().width(wrapperWidth);
+		associationsWrapper.width(wrapperWidth - (associationsWrapper.height() * 2) - 10);
+		associationsWrapper.css("margin-left", "14px");
+		associationsWrapper.css("margin-right", "14px");
+		sliderLeft.hover(function() {
+			sliderLeft.css({"background-color": "#FFF"});
+			AJS.$("#associations li").animate({left: "0px"}, 4500);
+		}, function() {
+			sliderLeft.css({"background-color": "#CCC"});
+			AJS.$("#associations li").stop();
+		});
+		sliderLeft.click(function() {
+			AJS.$("#associations li").stop();
+			AJS.$("#associations li").animate({left: "0px"}, 200);
+		});
+		sliderRight.css("margin-top", "-" + sliderRight.height() + "px");
+		var leftPosition = "-" + (associationsWidth - (wrapperWidth / 2)) + "px";
+		sliderRight.hover(function() {
+			sliderRight.css({"background-color": "#FFF"});
+			AJS.$("#associations li").animate({left: leftPosition}, 4500);
+		}, function() {
+			sliderRight.css({"background-color": "#CCC"});
+			AJS.$("#associations li").stop();
+		});
+		sliderRight.click(function() {
+			AJS.$("#associations li").stop();
+			AJS.$("#associations li").animate({left: leftPosition}, 200);
+		});
+	}
 	AJS.hudson.panel.updatePanelContent();
 }
 
-AJS.hudson.panel.troggleView = function(view) {
+/**
+ * Method to toggle the view showing in the hudsonPanelContentHtml
+ * 
+ * @param view the view to show
+ */
+AJS.hudson.panel.toggleView = function(view) {
 	AJS.hudson.panel.config.view = view;
-	AJS.$("#" + AJS.hudson.panel.config.viewsContainer + " ." + AJS.hudson.panel.config.tabClass).each(function(index, item) {
+	AJS.$("#views .tab").each(function(index, item) {
 		AJS.$("#" + item.id).removeClass("selected");
 	});
 	AJS.$("#view_" + view).addClass("selected");
 	AJS.hudson.panel.updatePanelContent();
 }
 
-AJS.hudson.panel.troggleAssociation = function(associationId) {
+/**
+ * Method to toggle the association showing in the hudsonPanelContentHtml
+ * 
+ * @param associationId the association id to show
+ */
+AJS.hudson.panel.toggleAssociation = function(associationId) {
 	AJS.hudson.panel.config.associationId = associationId;
-	AJS.$("#" + AJS.hudson.panel.config.associationsContainer + " ." + AJS.hudson.panel.config.tabClass).each(function(index, item) {
+	AJS.$("#associations .tab").each(function(index, item) {
 		AJS.$("#" + item.id).removeClass("selected");
 	});
 	AJS.$("#association_" + associationId).addClass("selected");
 	AJS.hudson.panel.updatePanelContent();
 }
 
+/**
+ * Method to update the hudsonPanelContentHtml div with a request from the Hudson server
+ */
 AJS.hudson.panel.updatePanelContent = function() {
-	jQuery.ajax({
+	AJS.$.ajax({
 	    type : "GET",
 	    dataType: "html",
 	    data: ({
@@ -82,7 +140,32 @@ AJS.hudson.panel.updatePanelContent = function() {
 	    }),
 	    url : AJS.hudson.panel.config.contextPath + "/secure/ViewHudsonPanelContent.jspa",
 	    success : function(html) {
-	        jQuery('#hudsonTabPanelHtml').html(html);
+	        AJS.$('#hudsonPanelContentHtml').html(html);
 	    }
+	});
+}
+
+/**
+ * Method to register a collapsable list
+ */
+AJS.hudson.panel.registerList = function(listName, listType) {
+	AJS.$("." + listName + " .label").click(function() {
+		AJS.hudson.panel.toggleList(listName, listType);
+	});
+}
+
+/**
+ * Method to toggle the visibility of a list
+ */
+AJS.hudson.panel.toggleList = function(listName, listType) {
+	AJS.$("." + listName + " li").each(function(index, item) {
+		var liItem = AJS.$(item);
+		if (AJS.$(this).attr("class") != "label") {
+			if (liItem.css("display") == "none") {
+				liItem.css({display: listType});
+			} else {
+				liItem.css({display: "none"});
+			}
+		}
 	});
 }

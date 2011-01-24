@@ -44,7 +44,7 @@ public enum PanelView {
 	 * 
 	 * @return the view
 	 */
-	public String getView() {
+	public String getViewName() {
 		return view;
 	}
 
@@ -56,11 +56,11 @@ public enum PanelView {
 	 *         {@link #BUILDS_BY_JOB} if the value given is not a valid {@link PanelView}
 	 */
 	public static PanelView getPanelView(String value) {
-		if (JOB_STATUS.getView().equals(value) || JOB_STATUS.name().equalsIgnoreCase(value)) {
+		if (JOB_STATUS.getViewName().equals(value) || JOB_STATUS.name().equalsIgnoreCase(value)) {
 			return JOB_STATUS;
-		} else if (BUILDS_BY_JOB.getView().equals(value) || BUILDS_BY_JOB.name().equalsIgnoreCase(value)) {
+		} else if (BUILDS_BY_JOB.getViewName().equals(value) || BUILDS_BY_JOB.name().equalsIgnoreCase(value)) {
 			return BUILDS_BY_JOB;
-		} else if (BUILDS_BY_ISSUE.getView().equals(value) || BUILDS_BY_ISSUE.name().equalsIgnoreCase(value)) {
+		} else if (BUILDS_BY_ISSUE.getViewName().equals(value) || BUILDS_BY_ISSUE.name().equalsIgnoreCase(value)) {
 			return BUILDS_BY_ISSUE;
 		} else {
 			return BUILDS_BY_JOB;

@@ -67,4 +67,12 @@ public class JobStatusResultSet implements ResultSet<Job> {
 		return job;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean hasResults() {
+		return job != null;
+	}
+
 }

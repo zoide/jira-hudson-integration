@@ -57,6 +57,20 @@ public interface HudsonConfigurationManager {
 	void setFilterHudsonBuilds(Boolean filterHudsonBuilds);
 
 	/**
+	 * Getter for the 'Time Past Date Strings' property
+	 * 
+	 * @return the value of the property
+	 */
+	Boolean isTimePastDateStrings();
+
+	/**
+	 * Setter for the 'Time Past Date Strings' property
+	 * 
+	 * @param timePastDateStrings the property value
+	 */
+	void setTimePastDateStrings(Boolean timePastDateStrings);
+
+	/**
 	 * Getter for the 'Show If User Member Of Usergroup' property
 	 * 
 	 * @return the value for the property

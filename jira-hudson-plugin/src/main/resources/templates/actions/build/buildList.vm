@@ -14,3 +14,73 @@
 ## KIND, either express or implied. See the License for the
 ## specific language governing permissions and limitations
 ## under the License.
+
+<ul id="summaries">
+#foreach ($build in $resultSet.getResults())
+#set ($result = "${build.result.name().toLowerCase()}")
+	<li class="summary">
+		<ul class="leftSummary">
+			<li><img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson/images/${result}.png" title="${build.result.name()}" align="absmiddle" border="0" /></li>
+		</ul>
+		<ul class="centerSummary">
+			<li class="summaryInfo ${result}Summary">
+				<a href="${server.host}/${build.jobUrl}">${build.jobName}</a> > <a href="${server.host}/${build.url}">${i18n.getText("hudson.panel.build.number", $build.buildNumber)}</a>
+			</li>
+			<li class="summaryDetails">
+				<ul class="relatedIssues">
+					<li class="label">${i18n.getText("hudson.panel.build.related.issues")}:</li>
+					#if ($build.relatedIssueKeys.isEmpty())
+					<li class="last">${i18n.getText("hudson.panel.build.no.related.issues")}</a>
+					#else
+					#foreach ($issueKey in $build.relatedIssueKeys)
+					<li #if (!$foreach.hasNext)class="last"#end><a href="${req.contextPath}/browse/$issueKey">$issueKey</a></li>
+					#end
+					#end
+				</ul>
+				<script type="text/javascript">AJS.hudson.panel.registerList("relatedIssues", "inline");</script>
+				<ul>
+					#foreach ($trigger in $build.triggers)
+					<li>${triggerFormatUtils.format($build.trigger)}</li>
+					#end
+					<li class="last">
+						<strong>${i18n.getText("hudson.panel.build.tests")}</strong>: 
+						#if ($build.testResults.total > 0)
+							${i18n.getText("hudson.panel.build.tests.passed", $build.testResults.passed)}
+							#if ($build.testResults.failed > 0)
+							, ${i18n.getText("hudson.panel.build.tests.failed", $build.testResults.failed)}
+							#end
+							#if ($build.testResults.skipped > 0)
+							, ${i18n.getText("hudson.panel.build.tests.skipped", $build.testResults.skipped)}
+							#end
+						#else
+						${i18n.getText("hudson.panel.build.tests.no.results")}
+						#end
+					</li>
+				</ul>
+				#if (!$build.buildArtifacts.isEmpty())
+				<ul class="artifactList">
+					<li class="label">${i18n.getText("hudson.panel.build.artifacts")}:</li>
+					#foreach ($artifact in $build.buildArtifacts)
+					<li #if (!$foreach.hasNext)class="last"#end><a href="${server.host}/$artifact.url">$artifact.name</a></li>
+					#end
+				</ul>
+				<script type="text/javascript">AJS.hudson.panel.registerList("artifactList", "inline");</script>
+				#end
+				#if (!$build.changeLog.isEmpty())
+				<ul class="changeLog">
+					<li class=label>${i18n.getText("hudson.panel.build.change.log")}:</li>
+					#foreach ($changeLog in $build.changeLog)
+					<li>$changeLog.message</li>
+					#end
+				</ul>
+				<script type="text/javascript">AJS.hudson.panel.registerList("changeLog", "list-item");</script>
+				#end
+			</li>
+		</ul>
+		<ul class="rightSummary">
+			<li class="buildDate">${dateFormatUtils.format(${build.timestamp})}</li>
+			<li>${i18n.getText("hudson.panel.build.duration")}: ${dateFormatUtils.getTimeSpanString(${build.duration})}</li>
+		</ul>
+	</li>
+#end
+</ul>

@@ -67,4 +67,12 @@ public class BuildsResultSet implements ResultSet<Builds> {
 		return builds;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean hasResults() {
+		return (builds != null && !builds.isEmpty());
+	}
+
 }

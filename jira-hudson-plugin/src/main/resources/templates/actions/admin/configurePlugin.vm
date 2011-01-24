@@ -78,6 +78,14 @@
 				</td>
 			</tr>
 			<tr>
+				<td valign="top" class="fieldLabelArea" width="45%">$i18n.getText("hudson.configuration.use.time.past.date.strings"):</td>
+				<td valign="top" bgcolor="#ffffff" class="fieldValueArea">
+					<input type="radio" value="true" name="timePastDateStrings" #if (${timePastDateStrings}) checked #end> $i18n.getText("common.words.on")
+					&nbsp;
+					<input type="radio" value="false" name="timePastDateStrings" #if (!${timePastDateStrings}) checked #end> $i18n.getText("common.words.off")
+				</td>
+			</tr>
+			<tr>
 				<td valign="top" colspan="2" class="fullyCentered jiraformfooter">
 					<input type="submit" id=" Update " name=" $i18n.getText("common.forms.update") " value=" $i18n.getText("common.forms.update") "
 						   accesskey="S" title="Press Alt+S to submit form" class="spaced" />

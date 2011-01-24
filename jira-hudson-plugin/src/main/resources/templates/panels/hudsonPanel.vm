@@ -15,55 +15,40 @@
 ## specific language governing permissions and limitations
 ## under the License.
 
-#macro(showAssociation $association)
-#set ($server = $serverManager.getServer($association.serverId))
-<span id="association_${association.associationId}" class="tab">${association.jobName}</span>
-#end
-#macro(showView $selectedView $view)
-#set ($i18nTitle = "hudson.panel.${module.getName()}.${view.getView()}.title")
-#if ($selectedView == $view.getView())
-	#set ($classes = "tab selected")
-#else
-	#set ($classes = "tab")
-#end
-<span id="view_${view.getView()} class="${classes}">${i18n.getText($i18nTitle)}</span>
-#end
-#end
-
-<div id="hudsonTabPanel">
-    <p>
+<div id="hudsonPanelContent">
+	<p>
 		#set ($i18nDescription = "hudson.panel.${module.getName()}.$!{extraDescriptionKey}description")
 		${i18n.getText($i18nDescription)}
-    </p>
-    <!-- Views to the right, reload builds via AJAX -->
-    #if ($availableViews && !$availableViews.isEmpty())
-    <div id="views">${i18n.getText("common.concepts.view")}:
-        #foreach ($view in $availableViews)
-            #showView(${selectedView} ${view}) #if ($velocityCount < $availableTabs.size()) | #end
-        #end
-    </div>
-    #end
-    <!-- Associations to the left, reload builds via AJAX -->
-    #if ($associations && !$associations.isEmpty())
-    <div id="associations">${i18n.getText('hudson.panel.associations')}
-    	#foreach ($association in $associations)
-    		#showAssociation($association) #if ($velocityCount < $associations.size()) | #end
-    	#end
-    </div>
-    #end
-    <div id="hudsonTabPanelHtml">
-        <img src="${req.ContextPath}/images/icons/wait-large.gif" class="waitingImage" />
-    </div>
+	</p>
+	#if ($availableViews && !$availableViews.isEmpty())
+	<ul id="views">
+		#foreach ($view in $availableViews)
+		#set ($i18nTitle = "hudson.panel.${module.getName()}.${view.getView()}.title")
+		<li id="view_${view.getView()} class="tab">${i18n.getText($i18nTitle)}</li>
+		#end
+	</ul>
+	#end
+	#if ($associations && !$associations.isEmpty())
+	<div id="slider">
+	<div id="sliderLeft" style="display: none;">&laquo;</div>
+	<div id="sliderWrapper">
+		<ul id="associations">
+			#foreach ($association in $associations)
+			<li id="association_${association.associationId}" class="tab">${association.jobName}</li>
+			#end
+		</ul>
+	</div>
+	<div id="sliderRight" style="display: none;">&raquo;</div>
+	</div>
+	#end
+	<div id="hudsonPanelContentHtml">
+		<img src="${req.ContextPath}/images/icons/wait-large.gif" class="waitingImage" />
+	</div>
 </div>
 
 <script type="text/javascript">
 AJS.hudson.panel.initializePanel({
 	contextPath: "${req.contextPath}",
-	tabClass: "tab",
-	selectedTabClass: "selected",
-	contentContainer: "#hudsonTabPanelHtml",
-	viewsContainer: "views",
-	associationsContainer: "associations",
 	view: "${selectedView}",
 	associationId: ${associationId},
 	module: "${module.getName()}",
