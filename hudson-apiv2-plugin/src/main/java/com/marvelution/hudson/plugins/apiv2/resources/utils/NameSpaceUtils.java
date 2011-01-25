@@ -29,12 +29,12 @@ public final class NameSpaceUtils {
 	/**
 	 * The base namespace
 	 */
-	public static final String BASE_NAMESPAVE = "http://hudson.marvelution.com";
+	public static final String BASE_NAMESPACE = "http://hudson.marvelution.com";
 
 	/**
 	 * The API version 2 namespace
 	 */
-	public static final String APIV2_NAMESPACE = BASE_NAMESPAVE + "/apiv2";
+	public static final String APIV2_NAMESPACE = BASE_NAMESPACE + "/apiv2";
 
 	/**
 	 * The Job namespace
