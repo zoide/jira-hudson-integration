@@ -39,10 +39,10 @@ public class VersionQuery extends AbstractQuery<Version> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getUrl() {
-		final StringBuilder builder = new StringBuilder(super.getUrl());
-		builder.append("/plugin").append("/version");
-		return builder.toString();
+	protected String getSpecificUrl() {
+		final StringBuilder url = new StringBuilder();
+		url.append("plugin").append("/version");
+		return url.toString();
 	}
 
 	/**

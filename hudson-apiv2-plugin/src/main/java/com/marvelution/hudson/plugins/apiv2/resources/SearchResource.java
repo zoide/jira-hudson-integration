@@ -20,14 +20,15 @@
 package com.marvelution.hudson.plugins.apiv2.resources;
 
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Jobs;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
 
 /**
  * Search Resource Endpoint interface
@@ -40,25 +41,28 @@ public interface SearchResource {
 	 * Search for {@link Job} objects on the Hudson instance.
 	 * A {@link Job} is matched if the given query is found in the name or the description of the Job in Hudson
 	 * 
-	 * @param query the query array to check against the name or description
+	 * @param query the query to check against the name or description
 	 * @param nameOnly flag to search in the name field only (<code>true</code>) or also in the description field
 	 *        (<code>false</code>)
 	 * @return the {@link Jobs} collection that matches the search query
 	 */
+	@GET
 	@Path("jobs")
-	Jobs searchForJobs(@QueryParam("query[]") String[] query, @QueryParam("nameOnly") @DefaultValue("false")
+	Jobs searchForJobs(@QueryParam("query") String query, @QueryParam("nameOnly") @DefaultValue("false")
 			boolean nameOnly);
 
 	/**
 	 * Search for {@link Build} objects on the Hudson instance
 	 * A {@link Build} is matched if the given query is found in the change log of a build in Hudson
 	 * 
-	 * @param query the query array to check against in the change log of a build
+	 * @param query the query to check against in the change log of a build
+	 * @param jobName the name of the job to search within
 	 * @return the {@link Builds} collection that matches the search query
 	 * @throws NoSuchJobException in case the given Job name doesn't exist in Hudson
 	 */
+	@GET
 	@Path("builds")
-	Builds searchForBuilds(@QueryParam("query[]") String[] query, @QueryParam("jobname") @DefaultValue("") String jobNae)
+	Builds searchForBuilds(@QueryParam("query") String query, @QueryParam("jobname") @DefaultValue("") String jobName)
 			throws NoSuchJobException;
 
 }

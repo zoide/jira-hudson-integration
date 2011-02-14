@@ -37,6 +37,6 @@ public interface ListableQuery<MODEL extends Model, LISTMODEL extends ListableMo
 	 * 
 	 * @return the {@link Model} class
 	 */
-	public Class<LISTMODEL> getListableModelClass();
+	Class<LISTMODEL> getListableModelClass();
 
 }

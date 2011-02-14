@@ -31,6 +31,8 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.ListableModel;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
 /**
+ * Custom {@link Collection} to {@link ListableModel} converter implementation
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class CollectionToListableModelDozerConverter implements ConfigurableCustomConverter, MapperAware {

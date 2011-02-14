@@ -20,7 +20,6 @@
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
 import hudson.model.AbstractBuild;
-import hudson.model.Hudson;
 import hudson.model.Run;
 
 import javax.ws.rs.Path;
@@ -31,8 +30,8 @@ import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.BuildResource;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchBuildException;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 
 /**
  * The {@link BuildResource} REST implementation
@@ -48,12 +47,7 @@ public class BuildResourceRestImpl extends BaseRestResource implements BuildReso
 	 */
 	@Override
 	public Build getBuild(String jobName, Integer buildNumber) {
-		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
-		AbstractBuild<?, ?> build = (AbstractBuild<?, ?>) job.getBuildByNumber(buildNumber);
-		if (build != null) {
-			return DozerUtils.getMapper().map(build, Build.class);
-		}
-		throw new NoSuchBuildException(jobName, buildNumber);
+		return DozerUtils.getMapper().map(getHudsonBuild(jobName, buildNumber), Build.class);
 	}
 
 	/**
@@ -183,21 +177,6 @@ public class BuildResourceRestImpl extends BaseRestResource implements BuildReso
 			}
 		}
 		return builds;
-	}
-
-	/**
-	 * Private method to get the {@link hudson.model.Job} for the given name
-	 * 
-	 * @param jobName the name of the {@link hudson.model.Job} to get
-	 * @return the {@link hudson.model.Job}
-	 * @throws NoSuchJobException in case there is no {@link hudson.model.Job} configured with the given name
-	 */
-	private hudson.model.Job<?, ?> getHudsonJob(String jobName) throws NoSuchJobException {
-		hudson.model.Job<?, ?> job = Hudson.getInstance().getItemByFullName(jobName, hudson.model.Job.class);
-		if (job != null) {
-			return job;
-		}
-		throw new NoSuchJobException(jobName);
 	}
 
 }

@@ -19,7 +19,13 @@
 
 package com.marvelution.jira.plugins.hudson.panels.resultset;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
+import java.io.IOException;
+
+import com.atlassian.jira.charts.jfreechart.ChartHelper;
+import com.atlassian.jira.util.I18nHelper;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
+import com.marvelution.jira.plugins.hudson.charts.BuildResultsRatioChartGenerator;
+import com.marvelution.jira.plugins.hudson.charts.BuildTestResultsRatioChartGenerator;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
 /**
@@ -27,10 +33,12 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class JobStatusResultSet implements ResultSet<Job> {
+public class JobStatusResultSet extends AbstractResultSet<Job> {
 
-	private final HudsonServer server;
-	private final Job job;
+	public static final int CHART_HEIGHT = 300;
+	public static final int CHART_WIDTH = 400;
+
+	private final I18nHelper i18nHelper;
 
 	/**
 	 * Constructor
@@ -38,9 +46,9 @@ public class JobStatusResultSet implements ResultSet<Job> {
 	 * @param server the {@link HudsonServer}
 	 * @param job the {@link Job}
 	 */
-	public JobStatusResultSet(HudsonServer server, Job job) {
-		this.server = server;
-		this.job = job;
+	public JobStatusResultSet(HudsonServer server, Job job, I18nHelper i18nHelper) {
+		super(server, job);
+		this.i18nHelper = i18nHelper;
 	}
 
 	/**
@@ -55,24 +63,32 @@ public class JobStatusResultSet implements ResultSet<Job> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public HudsonServer getServer() {
-		return server;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Job getResults() {
-		return job;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public boolean hasResults() {
-		return job != null;
+		return getResults() != null;
+	}
+
+	/**
+	 * Getter for the Build Results Ratio Chart
+	 * 
+	 * @return the Build Results Ratio Chart {@link ChartHelper}
+	 * @throws IOException in case of generation issues
+	 */
+	public ChartHelper getBuildResultsRatioChart() throws IOException {
+		final ChartHelper chart = new BuildResultsRatioChartGenerator(getServer(), getResults(), i18nHelper).generateChart();
+		chart.generate(CHART_WIDTH, CHART_HEIGHT);
+		return chart;
+	}
+
+	/**
+	 * Getter for the Build Test Results Ratio Chart
+	 * 
+	 * @return the Build Test Results Ratio Chart {@link ChartHelper}
+	 * @throws IOException in case of generation issues
+	 */
+	public ChartHelper getBuildTestResultsRatioChart() throws IOException {
+		final ChartHelper chart = new BuildTestResultsRatioChartGenerator(getServer(), getResults(), i18nHelper).generateChart();
+		chart.generate(CHART_WIDTH, CHART_HEIGHT);
+		return chart;
 	}
 
 }

@@ -19,7 +19,6 @@
 
 package com.marvelution.jira.plugins.hudson.web.action.admin.associations;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationFactory;
@@ -73,15 +72,15 @@ public class AddAssociation extends AbstractModityAssociation {
 	 */
 	@Override
 	public Collection<KeyValuePair> getExtraHiddenInput() {
-		return new ArrayList<KeyValuePair>();
+		return null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<String> getJobOpions() {
-		return new ArrayList<String>();
+	public Collection<String> getJobOptions() {
+		return null;
 	}
 
 }

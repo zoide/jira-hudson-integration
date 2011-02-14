@@ -24,8 +24,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchViewException;
-import com.marvelution.hudson.plugins.apiv2.resources.model.View;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Views;
+import com.marvelution.hudson.plugins.apiv2.resources.model.view.View;
+import com.marvelution.hudson.plugins.apiv2.resources.model.view.Views;
 
 /**
  * View Resource Endpoint Interface

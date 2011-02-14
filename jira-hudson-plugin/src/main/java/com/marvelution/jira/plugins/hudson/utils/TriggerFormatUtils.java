@@ -23,12 +23,12 @@ import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.util.I18nHelper;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.ProjectTrigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.RemoteTrigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.SCMTrigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.TimeTrigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.Trigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.UserTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.ProjectTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.RemoteTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.SCMTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.TimeTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.Trigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.UserTrigger;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.opensymphony.user.EntityNotFoundException;
 import com.opensymphony.user.User;

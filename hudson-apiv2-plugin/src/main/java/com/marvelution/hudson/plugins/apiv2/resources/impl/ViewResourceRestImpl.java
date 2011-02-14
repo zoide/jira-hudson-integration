@@ -28,8 +28,8 @@ import org.apache.wink.common.annotations.Parent;
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.ViewResource;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchViewException;
-import com.marvelution.hudson.plugins.apiv2.resources.model.View;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Views;
+import com.marvelution.hudson.plugins.apiv2.resources.model.view.View;
+import com.marvelution.hudson.plugins.apiv2.resources.model.view.Views;
 
 /**
  * The {@link View} REST implementation

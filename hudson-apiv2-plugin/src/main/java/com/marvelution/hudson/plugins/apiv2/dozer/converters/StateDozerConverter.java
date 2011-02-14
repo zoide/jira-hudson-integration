@@ -21,7 +21,7 @@ package com.marvelution.hudson.plugins.apiv2.dozer.converters;
 
 import org.dozer.DozerConverter;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.State;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.State;
 
 /**
  * {@link DozerConverter} to convert a {@link hudson.model.Run.State} into a {@link State} and back

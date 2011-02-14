@@ -39,11 +39,12 @@ import com.atlassian.jira.project.version.Version;
 import com.atlassian.jira.security.Permissions;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
 import com.atlassian.jira.web.bean.PagerFilter;
+import com.marvelution.hudson.plugins.apiv2.client.ClientException;
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.BuildQuery;
 import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
 import com.marvelution.hudson.plugins.apiv2.client.services.SearchQuery;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 import com.marvelution.jira.plugins.hudson.panels.resultset.BuildsResultSet;
 import com.marvelution.jira.plugins.hudson.panels.resultset.JobStatusResultSet;
 import com.marvelution.jira.plugins.hudson.panels.resultset.ResultSet;
@@ -79,9 +80,9 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 
 	private ResultSet<?> resultSet;
 	private PanelView view;
-	private Integer associationId;
+	private int associationId;
 	private PanelModule module;
-	private Long objectId;
+	private long objectId;
 	private HudsonAssociation association;
 	private HudsonServer server;
 
@@ -157,13 +158,14 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * Internal method to get the content for the project panel view
 	 * 
 	 * @param client the {@link HudsonClient}
+	 * @throws ClientException in case of {@link HudsonClient} errors
 	 */
-	private void getPanelContentForProjectView(HudsonClient client) {
+	private void getPanelContentForProjectView(HudsonClient client) throws ClientException {
 		final Project project = getProjectManager().getProjectObj(objectId);
 		switch (view) {
 		case JOB_STATUS:
 			resultSet = new JobStatusResultSet(server, client.find(JobQuery.createForJobStatusByName(
-					association.getJobName())));
+					association.getJobName())), getI18nHelper());
 			break;
 		case BUILDS_BY_ISSUE:
 			Collection<String> issueKeys = getIssueKeys(project);
@@ -181,13 +183,14 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * Internal method to get the content for the project version panel view
 	 * 
 	 * @param client the {@link HudsonClient}
+	 * @throws ClientException in case of {@link HudsonClient} errors
 	 */
-	private void getPanelContentForVersionView(HudsonClient client) {
+	private void getPanelContentForVersionView(HudsonClient client) throws ClientException {
 		final Version version = getVersionManager().getVersion(objectId);
 		switch (view) {
 		case JOB_STATUS:
 			resultSet = new JobStatusResultSet(server, client.find(JobQuery.createForJobStatusByName(
-					association.getJobName())));
+					association.getJobName())), getI18nHelper());
 			break;
 		case BUILDS_BY_ISSUE:
 			Collection<String> issueKeys = getIssueKeys(version);
@@ -228,8 +231,9 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * 
 	 * @param client the {@link HudsonClient}
 	 * @throws EntityNotFoundException in case the {@link ProjectComponent} cannot be found
+	 * @throws ClientException in case of {@link HudsonClient} errors
 	 */
-	private void getPanelContentForComponentView(HudsonClient client) throws EntityNotFoundException {
+	private void getPanelContentForComponentView(HudsonClient client) throws EntityNotFoundException, ClientException {
 		final ProjectComponent component = getProjectComponentManager().find(objectId);
 		Collection<String> issueKeys = getIssueKeys(component);
 		resultSet = new BuildsResultSet(server, getBuildsRelatedToIssueKeys(client, issueKeys));
@@ -239,8 +243,9 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * Internal method to get the content for the issue panel view
 	 * 
 	 * @param client the {@link HudsonClient}
+	 * @throws ClientException in case of {@link HudsonClient} errors
 	 */
-	private void getPanelContentForIssueView(HudsonClient client) {
+	private void getPanelContentForIssueView(HudsonClient client) throws ClientException {
 		final Issue issue = getIssueManager().getIssueObject(objectId);
 		resultSet = new BuildsResultSet(server, getBuildsRelatedToIssueKeys(client,
 				Collections.singletonList(issue.getKey())));
@@ -252,8 +257,9 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * @param client the {@link HudsonClient}
 	 * @param issueKeys the {@link Collection} of issue keys
 	 * @return the {@link Builds} result
+	 * @throws ClientException in case of {@link HudsonClient} errors
 	 */
-	private Builds getBuildsRelatedToIssueKeys(HudsonClient client, Collection<String> issueKeys) {
+	private Builds getBuildsRelatedToIssueKeys(HudsonClient client, Collection<String> issueKeys) throws ClientException {
 		Builds builds;
 		if (configurationManager.isFilterHudsonBuilds()) {
 			builds = client.findAll(SearchQuery.createForBuildSearch(issueKeys, association.getJobName()));
@@ -363,8 +369,26 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * 
 	 * @param view the view to set
 	 */
-	public void setView(String view) {
-		this.view = PanelView.getPanelView(view);
+	public void setView(PanelView view) {
+		this.view = view;
+	}
+
+	/**
+	 * Getter for view name
+	 * 
+	 * @return the view name
+	 */
+	public String getViewName() {
+		return view.getViewName();
+	}
+
+	/**
+	 * Setter for view name
+	 * 
+	 * @param viewName the view name to set
+	 */
+	public void setViewName(String viewName) {
+		this.view = PanelView.getPanelView(viewName);
 	}
 
 	/**
@@ -372,7 +396,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * 
 	 * @return the associationId
 	 */
-	public Integer getAssociationId() {
+	public int getAssociationId() {
 		return associationId;
 	}
 
@@ -381,7 +405,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * 
 	 * @param associationId the associationId to set
 	 */
-	public void setAssociationId(Integer associationId) {
+	public void setAssociationId(int associationId) {
 		this.associationId = associationId;
 	}
 
@@ -399,8 +423,26 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * 
 	 * @param module the module to set
 	 */
-	public void setModule(String module) {
-		this.module = PanelModule.valueOf(module);
+	public void setModule(PanelModule module) {
+		this.module = module;
+	}
+
+	/**
+	 * Getter for module
+	 * 
+	 * @return the module
+	 */
+	public String getModuleName() {
+		return module.getName();
+	}
+
+	/**
+	 * Setter for module name
+	 * 
+	 * @param moduleName the module name to set
+	 */
+	public void setModuleName(String moduleName) {
+		this.module = PanelModule.valueByName(moduleName);
 	}
 
 	/**
@@ -408,7 +450,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * 
 	 * @return the objectId
 	 */
-	public Long getObjectId() {
+	public long getObjectId() {
 		return objectId;
 	}
 
@@ -417,7 +459,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * 
 	 * @param objectId the objectId to set
 	 */
-	public void setObjectId(Long objectId) {
+	public void setObjectId(long objectId) {
 		this.objectId = objectId;
 	}
 

@@ -22,7 +22,7 @@
 
 	<mapping wildcard="false" type="one-way">
 		<class-a>hudson.model.View</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.View</class-b>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.view.View</class-b>
 		<field>
 			<a get-method="getViewName">name</a>
 			<b>name</b>

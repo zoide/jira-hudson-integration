@@ -21,7 +21,7 @@ package com.marvelution.hudson.plugins.apiv2.dozer.converters;
 
 import org.dozer.DozerConverter;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.HealthReportIcon;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.HealthReportIcon;
 
 /**
  * {@link DozerConverter} implementation to convert a Icon URL String (from {@link hudson.model.HealthReport}) to a

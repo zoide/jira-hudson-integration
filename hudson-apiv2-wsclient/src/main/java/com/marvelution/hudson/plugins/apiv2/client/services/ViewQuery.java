@@ -19,8 +19,8 @@
 
 package com.marvelution.hudson.plugins.apiv2.client.services;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.View;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Views;
+import com.marvelution.hudson.plugins.apiv2.resources.model.view.View;
+import com.marvelution.hudson.plugins.apiv2.resources.model.view.Views;
 
 /**
  * {@link Query} implementation for {@link Job} objects
@@ -52,9 +52,9 @@ public class ViewQuery extends AbstractListableQuery<View, Views> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getUrl() {
-		StringBuilder url = new StringBuilder(super.getUrl());
-		url.append("/views");
+	protected String getSpecificUrl() {
+		final StringBuilder url = new StringBuilder();
+		url.append("views");
 		if (viewName != null) {
 			url.append("?name=").append(viewName);
 		} else {

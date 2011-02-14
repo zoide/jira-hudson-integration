@@ -21,8 +21,8 @@ package com.marvelution.hudson.plugins.apiv2.client.services;
 
 import java.util.List;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Jobs;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
 
 /**
  * {@link Query} implementation for {@link Job} objects
@@ -73,9 +73,9 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getUrl() {
-		StringBuilder url = new StringBuilder(super.getUrl());
-		url.append("/jobs");
+	protected String getSpecificUrl() {
+		final StringBuilder url = new StringBuilder();
+		url.append("jobs");
 		if (QueryType.SPECIFIC.equals(getType()) && name != null) {
 			url.append("?name=").append(name);
 		} else if (QueryType.STATUS.equals(getType()) && name != null) {

@@ -26,8 +26,8 @@ import javax.ws.rs.QueryParam;
 
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchBuildException;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 
 /**
  * Build Resource Endpoint interface

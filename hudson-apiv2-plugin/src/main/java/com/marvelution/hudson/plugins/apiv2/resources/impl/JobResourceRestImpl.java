@@ -28,8 +28,8 @@ import org.apache.wink.common.annotations.Parent;
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.JobResource;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Jobs;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
 
 /**
  * The {@link JobResource} REST implementation
@@ -45,7 +45,7 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	 */
 	@Override
 	public Job getJob(String name) {
-		hudson.model.Job<?, ?> job = Hudson.getInstance().getItemByFullName(name, hudson.model.Job.class);
+		hudson.model.Job<?, ?> job = getHudsonJob(name);
 		if (job != null) {
 			return DozerUtils.getMapper().map(job, Job.class, "full");
 		}
@@ -57,7 +57,7 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	 */
 	@Override
 	public Job getJobStatus(String name) throws NoSuchJobException {
-		hudson.model.Job<?, ?> job = Hudson.getInstance().getItemByFullName(name, hudson.model.Job.class);
+		hudson.model.Job<?, ?> job = getHudsonJob(name);
 		if (job != null) {
 			return DozerUtils.getMapper().map(job, Job.class, "status");
 		}

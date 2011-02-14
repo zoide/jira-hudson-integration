@@ -56,7 +56,7 @@ public class DeleteAssociation extends AbstractHudsonAdminWebActionSupport {
 	 */
 	@Override
 	public String doDefault() throws Exception {
-		association = associationManager.getAssociation(getAid());
+		association = associationManager.getAssociation(getAssociationId());
 		return super.doDefault();
 	}
 
@@ -65,26 +65,26 @@ public class DeleteAssociation extends AbstractHudsonAdminWebActionSupport {
 	 */
 	@Override
 	protected String doExecute() throws Exception {
-		associationManager.removeAssociation(getAid());
+		associationManager.removeAssociation(getAssociationId());
 		return getRedirect(ADMINISTER_SERVERS);
 	}
 
 	/**
-	 * Getter for Aid
+	 * Getter for associationId
 	 * 
-	 * @return the Aid
+	 * @return the associationId
 	 */
-	public int getAid() {
+	public int getAssociationId() {
 		return associationId;
 	}
 
 	/**
 	 * Setter for association Id
 	 * 
-	 * @param server the association Id to set
+	 * @param associationId the association Id to set
 	 */
-	public void setAid(int aid) {
-		associationId = aid;
+	public void setAssociationId(int associationId) {
+		this.associationId = associationId;
 	}
 
 	/**

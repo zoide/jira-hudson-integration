@@ -24,11 +24,15 @@
 		<custom-converters>
 			<converter type="com.marvelution.hudson.plugins.apiv2.dozer.converters.TriggerDozerConverter">
 				<class-a>hudson.model.Cause</class-a>
-				<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.triggers.Trigger</class-b>
+				<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.Trigger</class-b>
 			</converter>
 			<converter type="com.marvelution.hudson.plugins.apiv2.dozer.converters.CollectionToListableModelDozerConverter">
 				<class-a>java.util.Collection</class-a>
 				<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.ListableModel</class-b>
+			</converter>
+			<converter type="com.marvelution.hudson.plugins.apiv2.dozer.converters.ChangeLogSetDozerConverter">
+				<class-a>hudson.scm.ChangeLogSet</class-a>
+				<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.ChangeLog</class-b>
 			</converter>
 		</custom-converters>
 	</configuration>

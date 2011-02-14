@@ -22,7 +22,7 @@
 
 	<mapping wildcard="false" type="one-way">
 		<class-a>hudson.model.HealthReport</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.HealthReport</class-b>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.HealthReport</class-b>
 		<field>
 			<a>score</a>
 			<b>score</b>

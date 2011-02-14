@@ -43,7 +43,7 @@
 			#else
 			#foreach($association in $sorter.sort($associations, "jobName"))
 			#set ($server = $serverManager.getServer($association.serverId))
-			#set ($project = $sprojectManager.getServer($association.projectId))
+			#set ($project = $projectManager.getProjectObj($association.projectId))
 			#if ($velocityCount % 2 == 1)
 				#set ($rowbgcolor = "#FFFFFF")
 			#else
@@ -51,14 +51,14 @@
 			#end
 			<tr bgcolor="$rowbgcolor">
 				<td valign="top">
-					<b><a href="${req.contextPath}/browse/${project.key}">${project.name}<a/></b>
+					<a href="${req.contextPath}/browse/${project.key}">${project.name}<a/>
 				</td>
 				<td valign="top">
-					<b>${server.name}: ${association.jobName}</b>
+					${server.name}: ${association.jobName}
 				</td>
 				<td align="left" valign="top">
-					<a href="UpdateAssociation!default.jspa?sid=${association.associationId}">$i18n.getText("common.forms.edit")</a>
-					| <a href="DeleteAssociation!default.jspa?sid=${association.associationId}">$i18n.getText("common.words.delete")</a>
+					<a href="UpdateAssociation!default.jspa?associationId=${association.associationId}">$i18n.getText("common.forms.edit")</a>
+					| <a href="DeleteAssociation!default.jspa?associationId=${association.associationId}">$i18n.getText("common.words.delete")</a>
 				</td>
 			</tr>
 			#end

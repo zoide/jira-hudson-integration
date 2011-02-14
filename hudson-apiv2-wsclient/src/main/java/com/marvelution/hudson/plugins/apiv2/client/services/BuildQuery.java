@@ -19,8 +19,8 @@
 
 package com.marvelution.hudson.plugins.apiv2.client.services;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 
 /**
  * {@link Query} implementation for {@link Job} objects
@@ -29,18 +29,11 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
  */
 public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 
-	private String jobName;
+	private final String jobName;
 	private Integer buildNumber = 0;
-	private BuildType buildType = BuildType.FIRST;
-	private Long from = 0L;
-	private Long to = 0L;
-
-	/**
-	 * Private constructor to force the use of the static methods below
-	 */
-	private BuildQuery() {
-		super(Build.class, Builds.class);
-	}
+	private BuildType buildType = null;
+	private Long from = -1L;
+	private Long to = -1L;
 
 	/**
 	 * Private constructor to force the use of the static methods below
@@ -48,7 +41,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @param jobName the name of the Job on hudson to get the builds for
 	 */
 	private BuildQuery(String jobName) {
-		this();
+		super(Build.class, Builds.class);
 		this.jobName = jobName;
 	}
 
@@ -86,7 +79,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @param to the to to set
 	 */
 	private void setBetween(Long from, Long to) {
-		if (from < 0) {
+		if (from < 0L) {
 			throw new IllegalArgumentException("From variable must be 0 (zero) or large");
 		} else if (to < from) {
 			throw new IllegalArgumentException("To variable must be larger then the from variable");
@@ -102,7 +95,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @param from the from to set
 	 */
 	private void setAfter(Long from) {
-		if (from < 0) {
+		if (from < 0L) {
 			throw new IllegalArgumentException("From variable must be 0 (zero) or large");
 		} else {
 			this.from = from;
@@ -153,9 +146,9 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getUrl() {
-		StringBuilder url = new StringBuilder(super.getUrl());
-		url.append("/builds/").append(jobName);
+	protected String getSpecificUrl() {
+		final StringBuilder url = new StringBuilder();
+		url.append("builds/").append(jobName);
 		if (buildNumber > 0) {
 			url.append("?buildNumber=").append(buildNumber);
 		} else if (from >= 0L && to == -1L) {
@@ -169,14 +162,6 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 			url.append("/all");
 		}
 		return url.toString();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Class<Builds> getListableModelClass() {
-		return Builds.class;
 	}
 
 	/**
@@ -322,7 +307,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 
 		FIRST("/first"),
 		LAST("/last"),
-		LAST_SUCCESSFUL("/lastSucessful"),
+		LAST_SUCCESSFUL("/lastSuccessful"),
 		LAST_FAILED("/lastFailed"),
 		LAST_STABLE("/lastStable"),
 		LAST_UNSTABLE("/lastUnstable"),

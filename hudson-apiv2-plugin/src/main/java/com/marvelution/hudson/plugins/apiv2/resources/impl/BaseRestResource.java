@@ -19,10 +19,16 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
+import hudson.model.AbstractBuild;
+import hudson.model.Hudson;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchBuildException;
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
 
 /**
  * Parent (Base) REST resource for all REST implementations for Hudson
@@ -38,5 +44,51 @@ public class BaseRestResource {
 	 * The base url for all the rest endpoints
 	 */
 	public static final String BASE_REST_URI = "apiv2";
+
+	/**
+	 * Internal method to get the {@link hudson.model.Job} for the given name
+	 * 
+	 * @param jobName the name of the {@link hudson.model.Job} to get
+	 * @return the {@link hudson.model.Job}
+	 * @throws NoSuchJobException in case there is no {@link hudson.model.Job} configured with the given name
+	 */
+	protected hudson.model.Job<?, ?> getHudsonJob(String jobName) throws NoSuchJobException {
+		hudson.model.Job<?, ?> job = Hudson.getInstance().getItemByFullName(jobName, hudson.model.Job.class);
+		if (job != null) {
+			return job;
+		}
+		throw new NoSuchJobException(jobName);
+	}
+
+	/**
+	 * Internal method to get the {@link AbstractBuild} by the build number and for the {@link hudson.model.Job} given
+	 * name
+	 * 
+	 * @param job the {@link hudson.model.Job} to get the build from
+	 * @param number the number of the build to get
+	 * @return the {@link AbstractBuild}
+	 * @throws NoSuchBuildException in case there is no {@link AbstractBuild} with the given number within the given
+	 *         {@link hudson.model.Job}
+	 */
+	protected AbstractBuild<?, ?> getHudsonBuild(hudson.model.Job<?, ?> job, int number) {
+		final AbstractBuild<?, ?> build = (AbstractBuild<?, ?>) job.getBuildByNumber(number);
+		if (build != null) {
+			return build;
+		}
+		throw new NoSuchBuildException(job.getFullName(), number);
+	}
+
+	/**
+	 * Internal method to get the {@link AbstractBuild} by the build number and for the Job name given
+	 * 
+	 * @param job the Job name to get the build from
+	 * @param number the number of the build to get
+	 * @return the {@link AbstractBuild}
+	 * @throws NoSuchBuildException in case there is no {@link AbstractBuild} with the given number within the given
+	 *         {@link hudson.model.Job}
+	 */
+	protected AbstractBuild<?, ?> getHudsonBuild(String job, int number) {
+		return getHudsonBuild(getHudsonJob(job), number);
+	}
 
 }

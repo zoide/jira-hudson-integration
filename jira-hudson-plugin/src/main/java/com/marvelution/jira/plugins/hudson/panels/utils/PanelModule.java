@@ -93,4 +93,8 @@ public enum PanelModule {
 		return objectType;
 	}
 
+	public static PanelModule valueByName(String name) {
+		return valueOf(name.toUpperCase());
+	}
+
 }

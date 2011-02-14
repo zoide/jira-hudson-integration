@@ -24,12 +24,14 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Jobs;
+import org.apache.commons.lang.StringUtils;
+
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 import com.marvelution.hudson.plugins.apiv2.resources.model.ListableModel;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
 
 /**
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
@@ -54,16 +56,13 @@ public abstract class SearchQuery<MODEL extends Model, LISTMODEL extends Listabl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final String getUrl() {
-		StringBuilder url = new StringBuilder(super.getUrl());
-		url.append("/search/").append(getSearchMethod());
-		url.append("?");
-		for (String item : query) {
-			url.append("query[]=").append(item).append("&");
-		}
+	protected String getSpecificUrl() {
+		final StringBuilder url = new StringBuilder();
+		url.append("search/").append(getSearchMethod());
+		url.append("?query=").append(StringUtils.join(query, " "));
 		if (getExtraParameters() != null) {
 			for (Entry<String, String> entry : getExtraParameters().entrySet()) {
-				url.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+				url.append("&").append(entry.getKey()).append("=").append(entry.getValue());
 			}
 		}
 		return url.toString();

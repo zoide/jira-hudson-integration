@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Jobs;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
 import com.marvelution.jira.plugins.hudson.rest.exceptions.NoSuchServerException;
 import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
@@ -36,7 +36,7 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.sun.jersey.spi.resource.Singleton;
 
 /**
- * Hekper REST Resource for HudsonServers
+ * Helper REST Resource for HudsonServers
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */

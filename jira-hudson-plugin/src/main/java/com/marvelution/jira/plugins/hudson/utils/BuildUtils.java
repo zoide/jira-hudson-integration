@@ -19,9 +19,9 @@
 
 package com.marvelution.jira.plugins.hudson.utils;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Result;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Result;
 
 /**
  * Utility class for {@link Builds} and {@link Build} objects

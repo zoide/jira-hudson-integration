@@ -31,7 +31,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
  * @param <LISTMODEL> the {@link Model} type
  */
 public abstract class AbstractListableQuery<MODEL extends Model, LISTMODEL extends ListableModel<MODEL>>
-		extends AbstractQuery<MODEL> implements ListableQuery<MODEL, LISTMODEL> {
+		extends AbstractQuery<MODEL> implements ListableQuery<MODEL, LISTMODEL>, Query<MODEL> {
 
 	private Class<LISTMODEL> listModelClass;
 
@@ -43,14 +43,6 @@ public abstract class AbstractListableQuery<MODEL extends Model, LISTMODEL exten
 	protected AbstractListableQuery(Class<MODEL> modelClass, Class<LISTMODEL> listModelClass) {
 		super(modelClass);
 		this.listModelClass = listModelClass;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getUrl() {
-		return "/apiv2";
 	}
 
 	/**

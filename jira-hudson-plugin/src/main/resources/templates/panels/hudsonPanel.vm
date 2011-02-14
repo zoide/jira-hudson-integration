@@ -23,8 +23,8 @@
 	#if ($availableViews && !$availableViews.isEmpty())
 	<ul id="views">
 		#foreach ($view in $availableViews)
-		#set ($i18nTitle = "hudson.panel.${module.getName()}.${view.getView()}.title")
-		<li id="view_${view.getView()} class="tab">${i18n.getText($i18nTitle)}</li>
+		#set ($i18nTitle = "hudson.panel.${module.getName()}.${view.getViewName()}.title")
+		<li id="view_${view.getViewName()}" class="tab">${i18n.getText($i18nTitle)}</li>
 		#end
 	</ul>
 	#end

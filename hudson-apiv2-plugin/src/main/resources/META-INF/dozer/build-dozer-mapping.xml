@@ -22,7 +22,7 @@
 
 	<mapping type="one-way">
 		<class-a>hudson.model.AbstractBuild</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.Build</class-b>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.Build</class-b>
 		<field>
 			<a>number</a>
 			<b>buildNumber</b>
@@ -71,7 +71,7 @@
 			<a get-method="getChangeSet">changeSet</a>
 			<b>relatedIssueKeys</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ChangeLogSetDozerConverter">
+		<field>
 			<a get-method="getChangeSet">changeSet</a>
 			<b>changeLog</b>
 		</field>
@@ -79,7 +79,7 @@
 
 	<mapping type="one-way">
 		<class-a>hudson.model.Run$Artifact</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.BuildArtifact</class-b>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.BuildArtifact</class-b>
 		<field>
 			<a>name</a>
 			<b>name</b>

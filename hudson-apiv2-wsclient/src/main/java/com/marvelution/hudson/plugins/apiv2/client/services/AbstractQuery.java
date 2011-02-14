@@ -45,9 +45,16 @@ public abstract class AbstractQuery<MODEL extends Model> implements Query<MODEL>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getUrl() {
-		return "/apiv2";
+	public final String getUrl() {
+		return "/apiv2/" + getSpecificUrl();
 	}
+
+	/**
+	 * Get the specific url
+	 *  
+	 * @return the specific url, must NOT start with a slash '/'
+	 */
+	protected abstract String getSpecificUrl();
 
 	/**
 	 * {@inheritDoc}

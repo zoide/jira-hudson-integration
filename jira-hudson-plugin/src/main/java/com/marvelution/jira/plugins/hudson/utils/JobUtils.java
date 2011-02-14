@@ -19,8 +19,10 @@
 
 package com.marvelution.jira.plugins.hudson.utils;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Jobs;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Result;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
 
 /**
  * Utility class for {@link Jobs} and {@link Job} objects
@@ -106,6 +108,23 @@ public class JobUtils {
 	 */
 	public static boolean hasValidLastCompletedBuild(Job job) {
 		return BuildUtils.isValidBuild(job.getLastCompletedBuild());
+	}
+
+	/**
+	 * Calculate the success ration of the {@link Job}
+	 * 
+	 * @param job the {@link Job}
+	 * @return the success ratio
+	 */
+	public static int getJobSuccessRatio(Job job) {
+		double count = 0, success = 0;
+		for (Build build : job.getBuilds()) {
+			count++;
+			if (Result.SUCCESSFUL.equals(build.getResult())) {
+				success++;
+			}
+		}
+		return Double.valueOf(success / count * 100).intValue();
 	}
 
 }

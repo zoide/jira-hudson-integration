@@ -57,7 +57,7 @@ public enum ModifyActionType {
 	 * @return the form action
 	 */
 	public String formAction() {
-		return type() + formAction + ".jspa";
+		return type + formAction + ".jspa";
 	}
 
 }

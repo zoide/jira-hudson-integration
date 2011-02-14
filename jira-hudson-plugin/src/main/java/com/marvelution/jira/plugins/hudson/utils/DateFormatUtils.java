@@ -20,6 +20,7 @@
 package com.marvelution.jira.plugins.hudson.utils;
 
 import static com.atlassian.core.util.DateUtils.*;
+import static org.apache.commons.lang.time.DateFormatUtils.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -104,7 +105,12 @@ public class DateFormatUtils {
 		if (useTimePastSinceCurrectTime) {
 			return getPastTimeString(timestamp);
 		} else {
-			return org.apache.commons.lang.time.DateFormatUtils.ISO_DATETIME_FORMAT.format(timestamp);
+			final Date today = Calendar.getInstance(i18nHelper.getLocale()).getTime();
+			if (ISO_DATE_FORMAT.format(today).hashCode() == ISO_DATE_FORMAT.format(timestamp).hashCode()) {
+				return ISO_TIME_NO_T_FORMAT.format(timestamp);
+			} else {
+				return ISO_DATE_FORMAT.format(timestamp);
+			}
 		}
 	}
 

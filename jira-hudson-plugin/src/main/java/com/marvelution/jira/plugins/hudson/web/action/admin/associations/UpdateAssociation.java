@@ -25,7 +25,7 @@ import java.util.Collection;
 
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
 import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationFactory;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
@@ -65,10 +65,10 @@ public class UpdateAssociation extends AbstractModityAssociation {
 	 */
 	@Override
 	public String doDefault() throws Exception {
-		if (!associationManager.hasAssociation(getAid())) {
+		if (!associationManager.hasAssociation(getAssociationId())) {
 			return getRedirect(ADMINISTER_ASSOCIATIONS);
 		}
-		association = associationFactory.create(associationManager.getAssociation(getAid()));
+		association = associationFactory.create(associationManager.getAssociation(getAssociationId()));
 		return super.doDefault();
 	}
 
@@ -101,8 +101,8 @@ public class UpdateAssociation extends AbstractModityAssociation {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<String> getJobOpions() {
-		HudsonClient client = clientFactory.create(serverManager.getServer(getSid()));
+	public Collection<String> getJobOptions() {
+		HudsonClient client = clientFactory.create(serverManager.getServer(getHudsonId()));
 		Collection<String> options = new ArrayList<String>();
 		for (Job job : client.findAll(JobQuery.createForJobList())) {
 			options.add(job.getName());

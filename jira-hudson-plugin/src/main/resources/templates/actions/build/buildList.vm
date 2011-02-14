@@ -16,6 +16,7 @@
 ## under the License.
 
 <ul id="summaries">
+#set ($server = $resultSet.getServer())
 #foreach ($build in $resultSet.getResults())
 #set ($result = "${build.result.name().toLowerCase()}")
 	<li class="summary">
@@ -40,7 +41,7 @@
 				<script type="text/javascript">AJS.hudson.panel.registerList("relatedIssues", "inline");</script>
 				<ul>
 					#foreach ($trigger in $build.triggers)
-					<li>${triggerFormatUtils.format($build.trigger)}</li>
+					<li>${triggerFormatUtils.format($trigger)}</li>
 					#end
 					<li class="last">
 						<strong>${i18n.getText("hudson.panel.build.tests")}</strong>: 
@@ -82,5 +83,6 @@
 			<li>${i18n.getText("hudson.panel.build.duration")}: ${dateFormatUtils.getTimeSpanString(${build.duration})}</li>
 		</ul>
 	</li>
+	<li class="clear space"></li>
 #end
 </ul>

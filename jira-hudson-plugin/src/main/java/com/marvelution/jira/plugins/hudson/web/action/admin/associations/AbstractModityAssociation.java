@@ -65,11 +65,11 @@ public abstract class AbstractModityAssociation extends AbstractHudsonAdminWebAc
 	 */
 	@Override
 	protected void doValidation() {
-		if (getSid() > 0) {
-			addError("sid", getText("hudson.association.server.required"));
+		if (getHudsonId() == 0) {
+			addError("hudsonId", getText("hudson.association.server.required"));
 		}
-		if (getPid() > 0) {
-			addError("pid", getText("hudson.association.project.required"));
+		if (getProjectId() == 0) {
+			addError("projectId", getText("hudson.association.project.required"));
 		}
 		if (StringUtils.isBlank(getJobName())) {
 			addError("jobname", getText("hudson.association.jobname.required"));
@@ -107,60 +107,60 @@ public abstract class AbstractModityAssociation extends AbstractHudsonAdminWebAc
 	 * 
 	 * @return the {@link Collection} of {@link String} options
 	 */
-	public abstract Collection<String> getJobOpions();
+	public abstract Collection<String> getJobOptions();
 
 	/**
-	 * Getter for aid
+	 * Getter for associationId
 	 * 
-	 * @return the aid
+	 * @return the associationId
 	 */
-	public Integer getAid() {
+	public int getAssociationId() {
 		return association.getAssociationId();
 	}
 
 	/**
-	 * Setter for aid
+	 * Setter for associationId
 	 * 
-	 * @param aid the aid to set
+	 * @param associationId the associationId to set
 	 */
-	public void setAid(Integer aid) {
-		association.setAssociationId(aid);
+	public void setAssociationId(int associationId) {
+		association.setAssociationId(associationId);
 	}
 
 	/**
-	 * Getter for sid
+	 * Getter for hudsonId
 	 * 
-	 * @return the sid
+	 * @return the hudsonId
 	 */
-	public Integer getSid() {
+	public int getHudsonId() {
 		return association.getServerId();
 	}
 
 	/**
-	 * Setter for sid
+	 * Setter for hudsonId
 	 * 
-	 * @param sid the sid to set
+	 * @param hudsonId the hudsonId to set
 	 */
-	public void setSid(Integer sid) {
-		association.setServerId(sid);
+	public void setHudsonId(int hudsonId) {
+		association.setServerId(hudsonId);
 	}
 
 	/**
-	 * Getter for pid
+	 * Getter for projectId
 	 * 
-	 * @return the pid
+	 * @return the projectId
 	 */
-	public Long getPid() {
+	public long getProjectId() {
 		return association.getProjectId();
 	}
 
 	/**
-	 * Setter for pid
+	 * Setter for projectId
 	 * 
-	 * @param pid the pid to set
+	 * @param projectId the projectId to set
 	 */
-	public void setPid(Long pid) {
-		association.setProjectId(pid);
+	public void setProjectId(long projectId) {
+		association.setProjectId(projectId);
 	}
 
 	/**

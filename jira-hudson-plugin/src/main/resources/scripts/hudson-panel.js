@@ -133,9 +133,9 @@ AJS.hudson.panel.updatePanelContent = function() {
 	    type : "GET",
 	    dataType: "html",
 	    data: ({
-	    	view: AJS.hudson.panel.config.view,
+	    	moduleName: AJS.hudson.panel.config.module,
+	    	viewName: AJS.hudson.panel.config.view,
 	    	associationId: AJS.hudson.panel.config.associationId,
-	    	module: AJS.hudson.panel.config.module,
 	    	objectId: AJS.hudson.panel.config.objectId
 	    }),
 	    url : AJS.hudson.panel.config.contextPath + "/secure/ViewHudsonPanelContent.jspa",

@@ -83,17 +83,18 @@ public class HudsonClient {
 	 * @param <MODEL> the {@link Model} type
 	 * @param query the {@link Query} implementation for the {@link Model} type
 	 * @return the {@link Model} response from the Hudson server, may be <code>null</code>
+	 * @throws ClientException in case of unmarshalling exceptions
 	 */
 	@SuppressWarnings("unchecked")
-	public <MODEL extends Model> MODEL find(Query<MODEL> query) {
+	public <MODEL extends Model> MODEL find(Query<MODEL> query) throws ClientException {
 		ConnectorResponse response = connector.execute(query);
 		if (response != null) {
 			try {
 				Unmarshaller unmarshaller = Unmarshallers.forModel(query.getModelClass());
 				return (MODEL) unmarshaller.unmarshal(response.getResponseAsStream());
 			} catch (JAXBException e) {
-				// TODO handle logging
-				e.printStackTrace();
+				throw new ClientException("Failed to unmarshal Hudson response. Original Request: "
+						+ query.getUrl(), e);
 			}
 		}
 		return null;
@@ -106,18 +107,19 @@ public class HudsonClient {
 	 * @param query the {@link Query} implementation for the {@link Model} type
 	 * @return the {@link List} of {@link Model} objects from the response from the Hudson server, may be
 	 *         <code>null</code> or an <code>empty</code> {@link List}
+	 * @throws ClientException in case of unmarshalling exceptions
 	 */
 	@SuppressWarnings("unchecked")
 	public <MODEL extends Model, LISTMODEL extends ListableModel<MODEL>> LISTMODEL findAll(ListableQuery<MODEL,
-			LISTMODEL> query) {
+			LISTMODEL> query) throws ClientException {
 		ConnectorResponse response = connector.execute(query);
 		if (response != null) {
 			try {
 				Unmarshaller unmarshaller = Unmarshallers.forModel(query.getListableModelClass());
 				return (LISTMODEL) unmarshaller.unmarshal(response.getResponseAsStream());
 			} catch (JAXBException e) {
-				// TODO handle logging
-				e.printStackTrace();
+				throw new ClientException("Failed to unmarshal Hudson response. Original Request: "
+						+ query.getUrl(), e);
 			}
 		}
 		return null;

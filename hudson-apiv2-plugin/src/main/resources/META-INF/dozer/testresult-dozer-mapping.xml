@@ -22,7 +22,7 @@
 
 	<mapping type="one-way">
 		<class-a>hudson.tasks.test.AbstractTestResultAction</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.TestResult</class-b>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.TestResult</class-b>
 		<field>
 			<a get-method="getTotalCount">totalCount</a>
 			<b>total</b>
@@ -43,7 +43,7 @@
 
 	<mapping type="one-way">
 		<class-a>hudson.tasks.test.TestResult</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.TestCaseResult</class-b>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.TestCaseResult</class-b>
 		<field>
 			<a>duration</a>
 			<b>duration</b>

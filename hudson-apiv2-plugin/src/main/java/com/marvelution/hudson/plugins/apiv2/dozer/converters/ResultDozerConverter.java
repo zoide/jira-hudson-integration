@@ -21,7 +21,7 @@ package com.marvelution.hudson.plugins.apiv2.dozer.converters;
 
 import org.dozer.DozerConverter;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.Result;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Result;
 
 /**
  * {@link DozerConverter} to convert a {@link hudson.model.Result} into a {@link Result} and back

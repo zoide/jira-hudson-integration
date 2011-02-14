@@ -20,13 +20,18 @@
 package com.marvelution.hudson.plugins.apiv2.dozer.converters;
 
 import hudson.scm.ChangeLogSet;
+import hudson.scm.EditType;
 
 import org.dozer.DozerConverter;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.ChangeLog;
-import com.marvelution.hudson.plugins.apiv2.resources.model.ChangeLog.Entry;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.ChangeLog;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.ChangeLog.AffectedFile;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.ChangeLog.ChangeType;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.ChangeLog.Entry;
 
 /**
+ * Custom {@link DozerConverter} to convert a {@link ChangeLogSet} to a {@link ChangeLog}
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @SuppressWarnings("rawtypes")
@@ -46,8 +51,22 @@ public class ChangeLogSetDozerConverter extends DozerConverter<ChangeLogSet, Cha
 	@Override
 	public ChangeLog convertTo(ChangeLogSet source, ChangeLog destination) {
 		ChangeLog changeLog = new ChangeLog();
-		for (hudson.scm.ChangeLogSet.Entry entry : (ChangeLogSet<hudson.scm.ChangeLogSet.Entry>) source) {
-			changeLog.add(new Entry(entry.getAuthor().getFullName(), entry.getMsg()));
+		for (hudson.scm.ChangeLogSet.Entry entry : (ChangeLogSet<? extends hudson.scm.ChangeLogSet.Entry>) source) {
+			final Entry newEntry = new Entry(entry.getAuthor().getFullName(), entry.getMsg());
+			try {
+				// Lets try to convert the affected files
+				for (hudson.scm.ChangeLogSet.AffectedFile file : entry.getAffectedFiles()) {
+					newEntry.getAffectedFiles().add(new AffectedFile(file.getPath(),
+							convertChangeType(file.getEditType())));
+				}
+			} catch (Exception e) {
+				// Oke this ChangeLogSet entry doesn't implement the affected files method. Default to the affected
+				// paths implementation
+				for (String path : entry.getAffectedPaths()) {
+					newEntry.getAffectedFiles().add(new AffectedFile(path, ChangeType.UNKNOWN));
+				}
+			}
+			changeLog.add(newEntry);
 		}
 		return changeLog;
 	}
@@ -58,6 +77,24 @@ public class ChangeLogSetDozerConverter extends DozerConverter<ChangeLogSet, Cha
 	@Override
 	public ChangeLogSet convertFrom(ChangeLog source, ChangeLogSet destination) {
 		throw new UnsupportedOperationException("Unable to map from a ChangeLog into a ChangeLogSet");
+	}
+
+	/**
+	 * Internal method to convert a {@link EditType} to a {@link ChangeType}
+	 * 
+	 * @param type the {@link EditType} to convert
+	 * @return the {@link ChangeType}
+	 */
+	private ChangeType convertChangeType(EditType type) {
+		if (EditType.ADD.equals(type)) {
+			return ChangeType.ADD;
+		} else if (EditType.EDIT.equals(type)) {
+			return ChangeType.EDIT;
+		} else if (EditType.DELETE.equals(type)) {
+			return ChangeType.DELETE;
+		} else {
+			return ChangeType.UNKNOWN;
+		}
 	}
 
 }

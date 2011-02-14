@@ -31,20 +31,21 @@
 	<resource type="i18n" name="i18n-hudson-admin" location="i18n.hudson-admin"/>
 	<resource type="i18n" name="i18n-hudson-panels" location="i18n.hudson-panels"/>
 	<resource type="i18n" name="i18n-hudson-time" location="i18n.hudson-time"/>
+	<resource type="i18n" name="i18n-hudson-charts" location="i18n.hudson-charts"/>
 
 	<!-- W E B   R E S O U R C E S -->
-	<web-resource key="common-css" name="Common CSS">
+	<web-resource key="hudson-common" name="Hudson Common">
 		<resource type="download" name="common.css" location="styles/common.css" />
 	</web-resource>
 	<web-resource key="hudson-panel" name="Hudson Panel Resources">
-		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
+		<dependency>${atlassian.plugin.key}:hudson-common</dependency>
 		<resource type="download" name="panel.css" location="styles/panel.css" />
 		<resource type="download" name="hudson-panel.js" location="scripts/hudson-panel.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
 	</web-resource>
 	<web-resource key="hudson-gadget" name="Hudson Gadget Resources">
-		<dependency>${atlassian.jira.plugin.key}:common-css</dependency>
+		<dependency>${atlassian.plugin.key}:hudson-common</dependency>
 		<resource type="download" name="gadget.css" location="styles/gadget.css" />
 	</web-resource>
 

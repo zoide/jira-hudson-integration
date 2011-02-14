@@ -17,11 +17,13 @@
 
 #set($i18n = $action)
 <form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="$actionType.formAction()">
-#if ($aid > 0)
-<input type="hidden" name="aid" value="${aid}" />
+#if ($associationId > 0)
+<input type="hidden" name="associationId" value="${associationId}" />
 #end
+#if ($extraHiddenInput)
 #foreach ($extra in $extraHiddenInput)
 <input type="hidden" name="$extra.key" value="$extra.value" />
+#end
 #end
 <div class="jiraform maxWidth">
 	<div class="jiraformheader">
@@ -54,9 +56,10 @@
 	        <tr>
 	            <td class="fieldLabelArea">$i18n.getText("hudson.association.server.label"):</td>
 	            <td bgcolor="#ffffff" class="fieldValueArea">
-	            	<select size="1" name="sid" id="sid">
+	            	<select size="1" name="hudsonId" id="hudsonId">
+	            		<option value="">${i18n.getText("hudson.association.select.server")}</option>
 	            		#foreach ($server in $sorter.sort($serverManager.getServers(), "name"))
-	            		<option value="$server.serverId" #if ($sid == $server.serverId) selected #end >$server.name</option>
+	            		<option value="$server.serverId" #if ($hudsonId == $server.serverId) selected #end >$server.name</option>
 	            		#end
 	            	</select>
 	                <br /><font size="1">$i18n.getText("hudson.association.server.hint")</font>
@@ -65,9 +68,10 @@
 	        <tr>
 	            <td class="fieldLabelArea">$i18n.getText("hudson.association.project.label"):</td>
 	            <td bgcolor="#ffffff" class="fieldValueArea">
-	            	<select size="1" name="pid" id="pid">
+	            	<select size="1" name="projectId" id="projectId">
+	            		<option value="">${i18n.getText("hudson.association.select.project")}</option>
 	            		#foreach ($project in $sorter.sort($projectManager.getProjectObjects(), "name"))
-	            		<option value="$project.id" #if ($pid == $project.id) selected #end >$project.name</option>
+	            		<option value="$project.id" #if ($projectId == $project.id) selected #end >$project.name</option>
 	            		#end
 	            	</select>
 	                <br /><font size="1">$i18n.getText("hudson.association.project.hint")</font>
@@ -77,8 +81,11 @@
 	            <td class="fieldLabelArea">$i18n.getText("hudson.association.jobname.label"):</td>
 	            <td bgcolor="#ffffff" class="fieldValueArea">
 	                <select size="1" name="jobName" id="jobName">
+	            		<option value="">${i18n.getText("hudson.association.select.jobname")}</option>
+	                	#if ($jobOptions)
 	            		#foreach ($jobOption in $jobOptions)
 	            		<option value="$jobOption" #if ($jobOption.equals($jobName)) selected #end >$jobOption</option>
+	            		#end
 	            		#end
 	            	</select>
 	            	<img src="${req.contextPath}/images/icons/wait.gif" border="0" class="waiting-image" id="waitImage" style="display: none;" />
@@ -102,20 +109,20 @@
 	</div>
 </div>
 </form>
-<script type="text/javascript" >
-jQuery('#sid').change(function() {
+<script type="text/javascript">
+function updateJobList() {
 	jQuery('#jobName').attr("disabled", false);
 	jQuery('#jobName').css("display", "none");
 	jQuery('#waitImage').css("display", "block");
 	jQuery.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: '${req.contextPath}/rest/hudson/2.0/server/' + jQuery('#sid').val() + '/listJobs',
+		url: '${req.contextPath}/rest/hudson/2.0/server/' + jQuery('#hudsonId').val() + '/listJobs',
 		success: function(data) {
 			var jobName = jQuery('#jobName');
 			jobName.empty();
-			if (data.job !== undefined) {
-				jQuery(data.job).each(function() {
+			if (data !== undefined) {
+				jQuery(data).each(function() {
 					jQuery('<option/>')
 						.attr({value: this.name})
 						.text(this.name)
@@ -126,8 +133,8 @@ jQuery('#sid').change(function() {
 			jQuery('#jobName').css("display", "block");
 		}
 	});
+}
+jQuery('#hudsonId').change(function() {
+	updateJobList();
 });
-#if ($jobOptions.isEmpty())
-jQuery('#sid').change();
-#end
 </script>

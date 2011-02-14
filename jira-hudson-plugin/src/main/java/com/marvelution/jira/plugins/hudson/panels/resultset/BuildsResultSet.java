@@ -19,7 +19,7 @@
 
 package com.marvelution.jira.plugins.hudson.panels.resultset;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
 /**
@@ -27,10 +27,7 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class BuildsResultSet implements ResultSet<Builds> {
-
-	private final HudsonServer server;
-	private final Builds builds;
+public class BuildsResultSet extends AbstractResultSet<Builds> {
 
 	/**
 	 * Constructor
@@ -39,8 +36,7 @@ public class BuildsResultSet implements ResultSet<Builds> {
 	 * @param builds the {@link Builds}
 	 */
 	public BuildsResultSet(HudsonServer server, Builds builds) {
-		this.server = server;
-		this.builds = builds;
+		super(server, builds);
 	}
 
 	/**
@@ -55,24 +51,8 @@ public class BuildsResultSet implements ResultSet<Builds> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public HudsonServer getServer() {
-		return server;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Builds getResults() {
-		return builds;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public boolean hasResults() {
-		return (builds != null && !builds.isEmpty());
+		return (getResults() != null && !getResults().isEmpty());
 	}
 
 }

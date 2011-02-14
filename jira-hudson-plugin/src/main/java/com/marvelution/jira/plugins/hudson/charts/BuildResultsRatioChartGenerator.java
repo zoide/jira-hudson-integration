@@ -41,9 +41,9 @@ import org.jfree.ui.TextAnchor;
 import com.atlassian.jira.charts.jfreechart.ChartHelper;
 import com.atlassian.jira.charts.jfreechart.util.ChartDefaults;
 import com.atlassian.jira.util.I18nHelper;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
 import com.marvelution.jira.plugins.hudson.charts.renderers.BuildResultRenderer;
 import com.marvelution.jira.plugins.hudson.charts.utils.DurationFormat;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
@@ -53,11 +53,17 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class BuildResultsRatioChartGenerator implements HudsonChartGenerator {
+public class BuildResultsRatioChartGenerator extends AbstractHudsonChartGenerator {
 
-	private final I18nHelper i18nHelper;
-	private final HudsonServer server;
-	private final Builds builds;
+	/**
+	 * Constructor
+	 * 
+	 * @param server the {@link HudsonServer} the {@link Builds} came from
+	 * @param builds the {@link Builds} collection
+	 */
+	public BuildResultsRatioChartGenerator(HudsonServer server, Builds builds) {
+		this(server, builds, null);
+	}
 
 	/**
 	 * Constructor
@@ -67,9 +73,17 @@ public class BuildResultsRatioChartGenerator implements HudsonChartGenerator {
 	 * @param i18nHelper the {@link I18nHelper} implementation
 	 */
 	public BuildResultsRatioChartGenerator(HudsonServer server, Builds builds, I18nHelper i18nHelper) {
-		this.i18nHelper = i18nHelper;
-		this.server = server;
-		this.builds = builds;
+		super(server, builds, i18nHelper);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param server the {@link HudsonServer} the {@link Job} came from
+	 * @param job the {@link Job} containing its {@link Builds}
+	 */
+	public BuildResultsRatioChartGenerator(HudsonServer server, Job job) {
+		this(server, job.getBuilds(), null);
 	}
 
 	/**
@@ -93,10 +107,10 @@ public class BuildResultsRatioChartGenerator implements HudsonChartGenerator {
 		for (Build build : builds) {
 			buildMap.put(Integer.valueOf(build.getBuildNumber()), build);
 			dataSet.add(Double.valueOf(build.getBuildNumber()),
-					Double.valueOf(build.getDuration()), i18nHelper.getText("hudson.charts.duration"));
+					Double.valueOf(build.getDuration()), getI18n().getText("hudson.charts.duration"));
 		}
 		final JFreeChart chart = ChartFactory.createXYBarChart("", "", false,
-				i18nHelper.getText("hudson.charts.duration"), dataSet, PlotOrientation.VERTICAL, false, false, false);
+				getI18n().getText("hudson.charts.duration"), dataSet, PlotOrientation.VERTICAL, false, false, false);
 		chart.setBackgroundPaint(Color.WHITE);
 		final BuildResultRenderer renderer = new BuildResultRenderer(server, buildMap);
 		renderer.setBaseItemLabelFont(ChartDefaults.defaultFont);
@@ -118,7 +132,7 @@ public class BuildResultsRatioChartGenerator implements HudsonChartGenerator {
 		final DateAxis rangeAxis = new DateAxis();
 		final DurationFormat durationFormat = new DurationFormat();
 		rangeAxis.setDateFormatOverride(durationFormat);
-		rangeAxis.setLabel(i18nHelper.getText("hudson.charts.duration"));
+		rangeAxis.setLabel(getI18n().getText("hudson.charts.duration"));
 		xyPlot.setRangeAxis(rangeAxis);
 		return new ChartHelper(chart);
 	}

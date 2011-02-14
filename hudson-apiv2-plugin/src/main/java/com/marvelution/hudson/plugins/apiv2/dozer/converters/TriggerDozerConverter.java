@@ -33,13 +33,13 @@ import java.util.logging.Logger;
 
 import org.dozer.DozerConverter;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.ProjectTrigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.RemoteTrigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.SCMTrigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.TimeTrigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.Trigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.UnknownTrigger;
-import com.marvelution.hudson.plugins.apiv2.resources.model.triggers.UserTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.ProjectTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.RemoteTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.SCMTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.TimeTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.Trigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.UnknownTrigger;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.UserTrigger;
 
 /**
  * {@link DozerConverter} implementation to convert a {@link List} of {@link Cause} objects to a {@link List} of
@@ -85,7 +85,7 @@ public class TriggerDozerConverter extends DozerConverter<Cause, Trigger> {
 		} else if (source instanceof SCMTriggerCause) {
 			return new SCMTrigger();
 		}
-		return new UnknownTrigger();
+		return UnknownTrigger.create(source.getClass().getSimpleName());
 	}
 
 	/**

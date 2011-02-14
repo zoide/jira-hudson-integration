@@ -40,6 +40,16 @@
 
 	<properties>
 		<atlassian.plugin.key>${project.groupId}.hudson</atlassian.plugin.key>
+		
+		<!-- These RGB colors are only here to make sure that within the css style the correct colors are used. -->
+		<red.outline.color>rgb(204, 0, 0)</red.outline.color>
+		<red.paint.color>rgb(255, 204, 204)</red.paint.color>
+		<green.outline.color>rgb(0, 204 ,0)</green.outline.color>
+		<green.paint.color>rgb(204, 255, 204)</green.paint.color>
+		<yellow.outline.color>rgb(204, 204, 0)</yellow.outline.color>
+		<yellow.paint.color>rgb(255, 255, 204)</yellow.paint.color>
+		<gray.outline.color>rgb(204, 204, 204)</gray.outline.color>
+		<gray.paint.color>rgb(238, 238, 238)</gray.paint.color>
 	</properties>
 
 	<dependencies>
@@ -131,7 +141,8 @@
 				<includes>
 					<include>atlassian-plugin.xml</include>
 					<include>gadgets/*.xml</include>
-					<include>**/*.properties</include>
+					<include>**/JiraPluginUtils.properties</include>
+					<include>**/*.css</include>
 				</includes>
 			</resource>
 		</resources>
@@ -160,25 +171,36 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.1.0</version>
+				<version>2.2.0</version>
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
 						<Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
 						<Bundle-SymbolicName>${atlassian.plugin.key}</Bundle-SymbolicName>
 						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
-						<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+						<Embed-Dependency>*;scope=compile|runtime;inline=true</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
 						<Embed-Directory>META-INF/lib</Embed-Directory>
 						<Embed-StripGroup>false</Embed-StripGroup>
 						<Embed-StripVersion>false</Embed-StripVersion>
+						<Private-Package>
+							com.marvelution.jira.plugins.hudson*,
+							com.sun.xml.bind*,
+							com.sun.istack*,
+							com.sun.istack.localization*,
+							org.apache.commons.io*
+						</Private-Package>
+						<Export-Package>
+							com.marvelution.jira.plugins.hudson.rest*,
+							com.marvelution.jira.plugins.hudson.services*,
+						</Export-Package>
 						<Import-Package>
 							*;resolution:=optional
 						</Import-Package>
 						<Include-Resource>
 							{maven-resources},
 							{maven-dependencies},
-						</Include-Resource> 
+						</Include-Resource>
 						<Spring-Context>*;timeout:=60</Spring-Context>
 					</instructions>
 				</configuration>

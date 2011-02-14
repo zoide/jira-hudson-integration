@@ -20,7 +20,7 @@
 package com.marvelution.jira.plugins.hudson.rest.exceptions;
 
 /**
- * Exception thrown if an invalif server id is given
+ * Exception thrown if an invalid server id is given
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */

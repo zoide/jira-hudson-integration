@@ -59,7 +59,15 @@ public final class Unmarshallers {
 	 */
 	public static Unmarshaller forModel(Class<? extends Model> model) throws JAXBException {
 		if (!unmarshallers.containsKey(model)) {
-			JAXBContext context = JAXBContext.newInstance(model);
+			JAXBContext context;
+			try {
+				context = JAXBContext.newInstance(model);
+			} catch (JAXBException e) {
+				// OK there is a class-loader issue
+				// Try loading the JAXBContext using the package name for the Model class
+				// This will use the ObjectFactory class within the package
+				context = JAXBContext.newInstance(model.getPackage().getName(), model.getClassLoader());
+			}
 			unmarshallers.put(model, context.createUnmarshaller());
 		}
 		return unmarshallers.get(model);

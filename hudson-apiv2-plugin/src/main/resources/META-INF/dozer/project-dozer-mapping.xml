@@ -22,7 +22,7 @@
 
 	<mapping wildcard="false" type="one-way" map-id="full">
 		<class-a>hudson.model.Job</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.Job</class-b>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>
 		<field>
 			<a>name</a>
 			<b>name</b>
@@ -85,7 +85,7 @@
 
 	<mapping wildcard="false" type="one-way" map-id="list">
 		<class-a>hudson.model.Job</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.Job</class-b>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>
 		<field>
 			<a>name</a>
 			<b>name</b>
@@ -110,7 +110,7 @@
 
 	<mapping wildcard="false" type="one-way" map-id="status">
 		<class-a>hudson.model.Job</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.Job</class-b>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>
 		<field>
 			<a>name</a>
 			<b>name</b>

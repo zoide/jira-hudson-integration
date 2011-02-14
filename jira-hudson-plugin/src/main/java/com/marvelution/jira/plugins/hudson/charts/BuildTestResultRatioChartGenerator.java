@@ -40,10 +40,10 @@ import org.jfree.data.xy.XYDataset;
 
 import com.atlassian.jira.charts.jfreechart.ChartHelper;
 import com.atlassian.jira.util.I18nHelper;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Builds;
-import com.marvelution.hudson.plugins.apiv2.resources.model.Job;
-import com.marvelution.hudson.plugins.apiv2.resources.model.TestResult;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.TestResult;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
 /**
@@ -96,7 +96,7 @@ public class BuildTestResultRatioChartGenerator implements HudsonChartGenerator,
 		for (Build build : builds) {
 			final TestResult results = build.getTestResult();
 			double percentagePass = 0.0D, percentageFail = 0.0D, percentageSkipped = 0.0D;
-			if (results.getTotal() > 0) {
+			if (results != null && results.getTotal() > 0) {
 				percentagePass = Double.valueOf(results.getPassed()) / Double.valueOf(results.getTotal()) * 100.0D;
 				percentageFail = Double.valueOf(results.getFailed()) / Double.valueOf(results.getTotal()) * 100.0D;
 				percentageSkipped = Double.valueOf(results.getSkipped()) / Double.valueOf(results.getTotal()) * 100.0D;
