@@ -29,7 +29,7 @@
 			#if($build)
 			<li class="ratio">${i18n.getText("hudson.panel.job.success.ratio", $jobUtils.getJobSuccessRatio($job))}</li>
 			<li class="image"><img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson/images/${result}.png" width="48" height="48"></li>
-			<li class="title">${i18n.getText("hudson.panel.job.header.title")} <a href="${server.host}/${job.url}">${job.name}</a> <a href="${server.host}/${build.url}">${i18n.getText("hudson.panel.build.number", $build.buildNumber)}</a> ${i18n.getText("hudson.panel.job.header.was")} ${i18n.getText("hudson.panel.job.header.$result")}</li>
+			<li class="title">${i18n.getText("hudson.panel.job.header.title")} <a href="${server.publicHost}/${job.url}">${job.name}</a> <a href="${server.publicHost}/${build.url}">${i18n.getText("hudson.panel.build.number", $build.buildNumber)}</a> ${i18n.getText("hudson.panel.job.header.was")} ${i18n.getText("hudson.panel.job.header.$result")}</li>
 			<li class="description">
 				<ul>
 					<li class="label">${i18n.getText("hudson.panel.build.reason")}:</li>
@@ -44,7 +44,7 @@
 			</li>
 			#else
 			<li class="image"><img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson/images/notbuild.png" width="48" height="48"></li>
-			<li class="title"><a href="${server.host}/${job.url}">${job.name}</a> ${i18n.getText("hudson.panel.job.not.yet.build")}</li>
+			<li class="title"><a href="${server.publicHost}/${job.url}">${job.name}</a> ${i18n.getText("hudson.panel.job.not.yet.build")}</li>
 			#end
 		</ul>
 	</li>
@@ -69,7 +69,7 @@
 	<li class="clear">&nbsp;</li>
 	<li class="testResults">
 		<ul>
-			<li class="header">${i18n.getText("common.words.latest")} <a href="${server.host}/${job.url}/lastCompletedBuild/testReport/">${i18n.getText("hudson.panel.build.tests.results")}</a> (${i18n.getText("hudson.panel.build.tests.failed", $build.testResults.failed)}):</li>
+			<li class="header">${i18n.getText("common.words.latest")} <a href="${server.publicHost}/${job.url}/lastCompletedBuild/testReport/">${i18n.getText("hudson.panel.build.tests.results")}</a> (${i18n.getText("hudson.panel.build.tests.failed", $build.testResults.failed)}):</li>
 			#if ($build.testResults.failed > 0)
 			#foreach ($test in $build.testResults.failedTests)
 			<li #if (!$foreach.hasNext)class="last"#end>${test.className}.${test.testName}</li>
@@ -85,7 +85,7 @@
 			<li class="header">${i18n.getText("common.words.latest")} ${i18n.getText("hudson.panel.build.artifacts")}:</li>
 			#if ($build.buildArtifacts.size() > 0)
 			#foreach ($artifact in $build.buildArtifacts)
-			<li #if (!$foreach.hasNext)class="last"#end><a href="${server.host}/${job.url}/${artifact.url}">${artifact.name}</a></li>
+			<li #if (!$foreach.hasNext)class="last"#end><a href="${server.publicHost}/${job.url}/${artifact.url}">${artifact.name}</a></li>
 			#end
 			#else
 			<li class="last">${i18n.getText("hudson.panel.build.no.build.artifacts")}</li>

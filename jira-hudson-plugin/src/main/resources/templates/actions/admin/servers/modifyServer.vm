@@ -72,6 +72,13 @@
 	            </td>
 	        </tr>
 	        <tr>
+	            <td class="fieldLabelArea">$i18n.getText("hudson.server.public.host.label"):</td>
+	            <td bgcolor="#ffffff" class="fieldValueArea">
+	                <input type="text" name="publicHost" label="$i18n.getText("hudson.server.public.host.label")" value="$!publicHost" />
+	                <br /><font size="1">$i18n.getText("hudson.server.publicHost.hint")</font>
+	            </td>
+	        </tr>
+	        <tr>
 	            <td class="fieldLabelArea">$i18n.getText("common.words.username"):</td>
 	            <td bgcolor="#ffffff" class="fieldValueArea">
 	                <input type="text" name="username" label="$i18n.getText("common.words.username")" value="$!username" />

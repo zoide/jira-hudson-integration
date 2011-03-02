@@ -25,7 +25,7 @@
 		</ul>
 		<ul class="centerSummary">
 			<li class="summaryInfo ${result}Summary">
-				<a href="${server.host}/${build.jobUrl}">${build.jobName}</a> > <a href="${server.host}/${build.url}">${i18n.getText("hudson.panel.build.number", $build.buildNumber)}</a>
+				<a href="${server.publicHost}/${build.jobUrl}">${build.jobName}</a> > <a href="${server.publicHost}/${build.url}">${i18n.getText("hudson.panel.build.number", $build.buildNumber)}</a>
 			</li>
 			<li class="summaryDetails">
 				<ul class="relatedIssues">
@@ -62,7 +62,7 @@
 				<ul class="artifactList">
 					<li class="label">${i18n.getText("hudson.panel.build.artifacts")}:</li>
 					#foreach ($artifact in $build.buildArtifacts)
-					<li #if (!$foreach.hasNext)class="last"#end><a href="${server.host}/$artifact.url">$artifact.name</a></li>
+					<li #if (!$foreach.hasNext)class="last"#end><a href="${server.publicHost}/$artifact.url">$artifact.name</a></li>
 					#end
 				</ul>
 				<script type="text/javascript">AJS.hudson.panel.registerList("artifactList", "inline");</script>

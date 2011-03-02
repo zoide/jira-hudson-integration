@@ -85,6 +85,20 @@ public interface HudsonServer {
 	void setHost(String host);
 
 	/**
+	 * Getter for the Server Public Host
+	 * 
+	 * @return the Server Public Host
+	 */
+	String getPublicHost();
+
+	/**
+	 * Setter for the Server Public Host
+	 * 
+	 * @param publicHost the Server Public Host
+	 */
+	void setPublicHost(String publicHost);
+
+	/**
 	 * Getter for the username
 	 * 
 	 * @return the username

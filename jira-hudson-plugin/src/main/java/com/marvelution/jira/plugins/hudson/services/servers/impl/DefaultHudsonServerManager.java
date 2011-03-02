@@ -48,6 +48,7 @@ public class DefaultHudsonServerManager implements HudsonServerManager, Initiali
 	private static final String SERVER_NAME_KEY_SUFFIX = ".name";
 	private static final String SERVER_DESCRIPTION_KEY_SUFFIX = ".description";
 	private static final String SERVER_HOST_KEY_SUFFIX = ".host";
+	private static final String SERVER_PUBLIC_HOST_KEY_SUFFIX = ".publicHost";
 	private static final String SERVER_USERNAME_KEY_SUFFIX = ".username";
 	private static final String SERVER_PASSWORD_KEY_SUFFIX = ".password";
 
@@ -270,6 +271,7 @@ public class DefaultHudsonServerManager implements HudsonServerManager, Initiali
 		server.setName(propertyManager.getPropertySet().getString(getServerNameKey(serverId)));
 		server.setDescription(propertyManager.getPropertySet().getString(getServerDescriptionKey(serverId)));
 		server.setHost(propertyManager.getPropertySet().getString(getServerHostKey(serverId)));
+		server.setPublicHost(propertyManager.getPropertySet().getString(getServerPublicHostKey(serverId)));
 		if (propertyManager.getPropertySet().exists(getServerUsernameKey(serverId))) {
 			server.setUsername(propertyManager.getPropertySet().getString(getServerUsernameKey(serverId)));
 			String encryptedPassword = propertyManager.getPropertySet().getString(getServerPasswordKey(serverId));
@@ -290,6 +292,7 @@ public class DefaultHudsonServerManager implements HudsonServerManager, Initiali
 		propertyManager.getPropertySet().setString(getServerNameKey(serverId), server.getName());
 		propertyManager.getPropertySet().setString(getServerDescriptionKey(serverId), server.getDescription());
 		propertyManager.getPropertySet().setString(getServerHostKey(serverId), server.getHost());
+		propertyManager.getPropertySet().setString(getServerPublicHostKey(serverId), server.getPublicHost());
 		if (server.isSecured()) {
 			propertyManager.getPropertySet().setString(getServerUsernameKey(serverId), server.getUsername());
 			String encryptedPassword = ENCRYPTER.encrypt(server.getPassword());
@@ -308,6 +311,7 @@ public class DefaultHudsonServerManager implements HudsonServerManager, Initiali
 		propertyManager.getPropertySet().remove(getServerNameKey(serverId));
 		propertyManager.getPropertySet().remove(getServerDescriptionKey(serverId));
 		propertyManager.getPropertySet().remove(getServerHostKey(serverId));
+		propertyManager.getPropertySet().remove(getServerPublicHostKey(serverId));
 		if (propertyManager.getPropertySet().exists(getServerUsernameKey(serverId))) {
 			propertyManager.getPropertySet().remove(getServerUsernameKey(serverId));
 			propertyManager.getPropertySet().remove(getServerPasswordKey(serverId));
@@ -353,6 +357,16 @@ public class DefaultHudsonServerManager implements HudsonServerManager, Initiali
 	 */
 	public static String getServerHostKey(int serverId) {
 		return SERVER_KEY_PREFIX + serverId + SERVER_HOST_KEY_SUFFIX;
+	}
+
+	/**
+	 * Get the {@link PropertySet} key used for the HudsonServer Public Host field
+	 * 
+	 * @param serverId the server id
+	 * @return the {@link PropertySet} key
+	 */
+	public static String getServerPublicHostKey(int serverId) {
+		return SERVER_KEY_PREFIX + serverId + SERVER_PUBLIC_HOST_KEY_SUFFIX;
 	}
 
 	/**

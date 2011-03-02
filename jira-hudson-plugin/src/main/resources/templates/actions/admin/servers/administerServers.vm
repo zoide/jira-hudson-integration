@@ -55,7 +55,8 @@
 					<font size="1">$!{server.description}</font>
 				</td>
 				<td valign="top">
-					<b>$i18n.getText("hudson.servers.host")</b>: ${server.host}
+					<b>$i18n.getText("hudson.servers.host")</b>: <a href="${server.host}">${server.host}</a><br>
+					<b>$i18n.getText("hudson.servers.public.host")</b>: <a href="${server.publicHost}">${server.publicHost}</a>
 					#if (${server.isSecured()})
 					<br><b>$i18n.getText("common.words.username")</b>: ${server.username}<br>
 					#else

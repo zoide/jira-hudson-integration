@@ -65,7 +65,7 @@ public class TriggerFormatUtils {
 	 * @return the formatted {@link ProjectTrigger}
 	 */
 	public String format(ProjectTrigger trigger) {
-		return i18nHelper.getText("hudson.panel.build.trigger.project", server.getHost(), trigger.getUrl(),
+		return i18nHelper.getText("hudson.panel.build.trigger.project", server.getPublicHost(), trigger.getUrl(),
 				trigger.getName(), String.valueOf(trigger.getBuildNumber()));
 	}
 
@@ -124,7 +124,7 @@ public class TriggerFormatUtils {
 			}
 		}
 		// It was a Hudson user that triggered the build
-		return i18nHelper.getText("hudson.panel.build.trigger.hudson.user", server.getHost(), trigger.getUsername());
+		return i18nHelper.getText("hudson.panel.build.trigger.hudson.user", server.getPublicHost(), trigger.getUsername());
 	}
 
 	/**

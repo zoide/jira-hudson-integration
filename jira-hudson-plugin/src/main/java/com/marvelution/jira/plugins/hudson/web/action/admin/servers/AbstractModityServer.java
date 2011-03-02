@@ -185,6 +185,28 @@ public abstract class AbstractModityServer extends AbstractHudsonAdminWebActionS
 	}
 
 	/**
+	 * Getter for public host
+	 * 
+	 * @return the public host
+	 */
+	public String getPublicHost() {
+		return server.getPublicHost();
+	}
+
+	/**
+	 * Setter for public host
+	 * 
+	 * @param publicH the public host to set
+	 */
+	public void setPublicHost(String publicHost) {
+		if (publicHost.endsWith("/")) {
+			server.setPublicHost(publicHost.substring(0, publicHost.length() - 1));
+		} else {
+			server.setPublicHost(publicHost);
+		}
+	}
+
+	/**
 	 * Getter for username
 	 * 
 	 * @return the username

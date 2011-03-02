@@ -34,6 +34,7 @@ public class DefaultHudsonServer implements HudsonServer, Comparable<HudsonServe
 	private String name;
 	private String description;
 	private String host;
+	private String publicHost;
 	private String username;
 	private String password;
 
@@ -95,6 +96,7 @@ public class DefaultHudsonServer implements HudsonServer, Comparable<HudsonServe
 		setName(server.getName());
 		setDescription(server.getDescription());
 		setHost(server.getHost());
+		setPublicHost(server.getPublicHost());
 		setUsername(server.getUsername());
 		setPassword(server.getPassword());
 	}
@@ -161,6 +163,27 @@ public class DefaultHudsonServer implements HudsonServer, Comparable<HudsonServe
 	@Override
 	public void setHost(String host) {
 		this.host = host;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getPublicHost() {
+		if (StringUtils.isNotBlank(publicHost)) {
+			return publicHost;
+		}
+		return host;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setPublicHost(String publicHost) {
+		if (publicHost != null && !publicHost.equals(host)) {
+			this.publicHost = publicHost;
+		}
 	}
 
 	/**
