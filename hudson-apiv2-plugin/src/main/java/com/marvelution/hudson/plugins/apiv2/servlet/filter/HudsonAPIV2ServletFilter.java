@@ -29,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -83,7 +84,8 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 					ServletException {
 		// The Wink RestFilter can only handle HttpServletRequests so make sure we have one
 		if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
-			final HttpServletRequest servletRequest = (HttpServletRequest) request;
+			// Put the original HttpServletRequest in the HttpServletRequestWrapper
+			final HttpServletRequestWrapper servletRequest = new HttpServletRequestWrapper((HttpServletRequest) request);
 			// Get the requestUri without the context path and the leading slash
 			final String requestUri = servletRequest.getRequestURI().substring(servletRequest.getContextPath().length() + 1);
 			logger.log(Level.FINE, "Got a request from URI + " + requestUri);
@@ -120,7 +122,7 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 	protected static class HudsonRestServletForFilter extends RestServletForFilter {
 
 		private static final long serialVersionUID = 1L;
-
+	
 		/**
 		 * Constructor
 		 * 
@@ -129,7 +131,7 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 		public HudsonRestServletForFilter(FilterConfig filterConfig) {
 			super(filterConfig);
 		}
-
+	
 	}
 
 	/**

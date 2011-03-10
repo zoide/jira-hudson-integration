@@ -34,7 +34,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 @XmlType(name = "ViewType", namespace = NameSpaceUtils.VIEW_NAMESPACE, factoryClass = ObjectFactory.class,
-		factoryMethod = "createViews")
+		factoryMethod = "createView")
 @XmlRootElement(name = "View", namespace = NameSpaceUtils.VIEW_NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class View extends Model {

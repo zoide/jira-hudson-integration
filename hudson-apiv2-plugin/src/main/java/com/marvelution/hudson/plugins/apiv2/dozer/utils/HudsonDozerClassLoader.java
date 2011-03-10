@@ -48,7 +48,7 @@ public class HudsonDozerClassLoader implements DozerClassLoader {
 	 */
 	@Override
 	public Class<?> loadClass(String className) {
-		LOGGER.log(Level.FINE, "Trying to load: " + className);
+		LOGGER.log(Level.FINE, "Trying to load Class: " + className);
 		Class<?> result = null;
 		try {
 			result = ClassUtils.getClass(getPluginWrapper().classLoader, className);
@@ -63,7 +63,7 @@ public class HudsonDozerClassLoader implements DozerClassLoader {
 	 */
 	@Override
 	public URL loadResource(String uri) {
-		LOGGER.log(Level.FINE, "Trying to load: " + uri);
+		LOGGER.log(Level.FINE, "Trying to load Resource: " + uri);
 		return getPluginWrapper().classLoader.getResource(uri);
 	}
 

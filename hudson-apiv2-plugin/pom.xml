@@ -39,7 +39,7 @@
 	</scm>
 
 	<properties>		
-		<apache.wink.verwion>1.1.2-incubating</apache.wink.verwion>
+		<apache.wink.version>1.1.2-incubating</apache.wink.version>
 		<enunciate.version>1.21.1</enunciate.version>
 	</properties>
 
@@ -47,13 +47,20 @@
 		<dependency>
 			<groupId>org.apache.wink</groupId>
 			<artifactId>wink-server</artifactId>
-			<version>${apache.wink.verwion}</version>
+			<version>${apache.wink.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wink</groupId>
+			<artifactId>wink-jackson-provider</artifactId>
+			<version>${apache.wink.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-nop</artifactId>
+			<artifactId>slf4j-jdk14</artifactId>
 			<version>1.6.1</version>
 			<scope>compile</scope>
 		</dependency>
