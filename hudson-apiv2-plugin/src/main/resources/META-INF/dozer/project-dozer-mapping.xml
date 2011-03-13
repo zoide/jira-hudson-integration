@@ -43,44 +43,42 @@
 			<a get-method="getBuilds">builds</a>
 			<b>builds</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getFirstBuild">firstBuild</a>
-			<b>firstBuildNumber</b>
+			<b>firstBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastBuild">lastBuild</a>
-			<b>lastBuildNumber</b>
+			<b>lastBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastSuccessfulBuild">lastSuccessfulBuild</a>
-			<b>lastSuccessfulBuildNumber</b>
+			<b>lastSuccessfulBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastUnstableBuild">lastUnstableBuild</a>
-			<b>lastUnstableBuildNumber</b>
+			<b>lastUnstableBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastStableBuild">lastStableBuild</a>
-			<b>lastStableBuildNumber</b>
+			<b>lastStableBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastFailedBuild">lastFailedBuild</a>
-			<b>lastFailedBuildNumber</b>
+			<b>lastFailedBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastCompletedBuild">lastCompletedBuild</a>
-			<b>lastCompletedBuildNumber</b>
+			<b>lastCompletedBuild</b>
 		</field>
 		<field>
 			<a get-method="getBuildHealthReports">healthReports</a>
 			<b>healthReports</b>
 		</field>
-		<!-- TODO Implement ListableModel converter
-		<field>
-			<a></a>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ItemGroupDozerConverter" custom-converter-param="full">
+			<a>this</a>
 			<b>modules</b>
 		</field>
-		-->
 	</mapping>
 
 	<mapping wildcard="false" type="one-way" map-id="list">
@@ -103,8 +101,40 @@
 			<b>buildable</b>
 		</field>
 		<field>
+			<a get-method="getFirstBuild">firstBuild</a>
+			<b>firstBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastBuild">lastBuild</a>
+			<b>lastBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastSuccessfulBuild">lastSuccessfulBuild</a>
+			<b>lastSuccessfulBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastUnstableBuild">lastUnstableBuild</a>
+			<b>lastUnstableBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastStableBuild">lastStableBuild</a>
+			<b>lastStableBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastFailedBuild">lastFailedBuild</a>
+			<b>lastFailedBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastCompletedBuild">lastCompletedBuild</a>
+			<b>lastCompletedBuild</b>
+		</field>
+		<field>
 			<a get-method="getBuildHealthReports">healthReports</a>
 			<b>healthReports</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ItemGroupDozerConverter" custom-converter-param="list">
+			<a>this</a>
+			<b>modules</b>
 		</field>
 	</mapping>
 
@@ -128,40 +158,40 @@
 			<b>buildable</b>
 		</field>
 		<field>
-			<a get-method="getBuilds">builds</a>
-			<b>builds</b>
-		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
 			<a get-method="getFirstBuild">firstBuild</a>
-			<b>firstBuildNumber</b>
+			<b>firstBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastBuild">lastBuild</a>
-			<b>lastBuildNumber</b>
+			<b>lastBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastSuccessfulBuild">lastSuccessfulBuild</a>
-			<b>lastSuccessfulBuildNumber</b>
+			<b>lastSuccessfulBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastUnstableBuild">lastUnstableBuild</a>
-			<b>lastUnstableBuildNumber</b>
+			<b>lastUnstableBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastStableBuild">lastStableBuild</a>
-			<b>lastStableBuildNumber</b>
+			<b>lastStableBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastFailedBuild">lastFailedBuild</a>
-			<b>lastFailedBuildNumber</b>
+			<b>lastFailedBuild</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildToBuildNumberDozerConverter">
+		<field>
 			<a get-method="getLastCompletedBuild">lastCompletedBuild</a>
-			<b>lastCompletedBuildNumber</b>
+			<b>lastCompletedBuild</b>
 		</field>
 		<field>
 			<a get-method="getBuildHealthReports">healthReports</a>
 			<b>healthReports</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ItemGroupDozerConverter" custom-converter-param="status">
+			<a>this</a>
+			<b>modules</b>
 		</field>
 	</mapping>
 
