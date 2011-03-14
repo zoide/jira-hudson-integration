@@ -17,3 +17,74 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
+<Module>
+	<ModulePrefs title="__MSG_hudson.gadget.job.status.title__" directory_title="__MSG_hudson.gadget.job.status.title__"
+		description="__MSG_hudson.gadget.job.status.description__"
+		author="Marvelution" author_email="info@marvelution.com" author_affiliation="Marvelution"
+		author_location="Beverwijk, The Netherlands" title_url="http://www.marvelution.com/" height="100"
+		creenshot='#staticResourceUrl("${atlassian.plugin.key}:hudson-job-status-gadget", "job-status-screenshot.png")'
+		thumbnail='#staticResourceUrl("${atlassian.plugin.key}:hudson-job-status-gadget", "job-status-thumb.png")'>
+		<Optional feature="gadget-directory">
+			<Param name="categories">
+				JIRA
+			</Param>
+		</Optional>
+		<Require feature="setprefs" />
+		<Require feature="settitle" />
+		<Require feature="dynamic-height" />
+		<Require feature="views" />
+		<Optional feature="atlassian.util" />
+		<Require feature="oauthpopup" />
+		#oauth
+		#supportedLocales("gadget.common,hudson.gadget")
+	</ModulePrefs>
+	<UserPref name="refresh" datatype="hidden" default_value="false" />
+	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
+	<UserPref name="titleRequired" datatype="hidden" default_value="true" />
+	<Content type="html"><![CDATA[
+		#requireResource("${atlassian.plugin.key}:hudson-job-status-gadget")
+		#includeResources()
+		<script type="text/javascript">
+		gadgets.window.setTitle("__MSG_hudson.gadget.job.status.title__");
+		(function () {
+			AJS.Gadget({
+				baseUrl: "__ATLASSIAN_BASE_URL__",
+				useOauth: "/rest/gadget/1.0/currentUser",
+				config: {
+					descriptor: function (args) {
+						var gadget = this;
+						gadgets.window.setTitle("__MSG_hudson.gadget.job.status.title__");
+						return  {
+							action: "",
+							theme : AJS.hudson.gadget.config.getThemeConfiguration(gadgets),
+							fields: AJS.hudson.gadget.config.getFields(gadget)
+						};
+					},
+					args: []
+				},
+				view: {
+					enableReload: true,
+					onResizeReload: true,
+					template: function (args) {
+						var gadget = this;
+						gadget.getView().empty();
+						var baseUrl = AJS.$.ajaxSettings.baseUrl;
+						gadget.resize();
+					},
+					args: [{
+						key: "data",
+						ajaxOptions: function () {
+							var gadget = this;
+							return {
+								url: "",
+								data: {
+								}
+							};
+						}
+					}]
+				}
+			});
+		})();
+		</script>
+	]]></Content>
+</Module>

@@ -39,11 +39,29 @@ AJS.hudson.gadget.config.getThemeConfiguration = function(gadgets) {
  * @param gadget the gadget to get the fields array for
  * @return the fields array
  */
-AJS.hudson.gadget.config.getFields = function(gadget) {
+AJS.hudson.gadget.config.getServerOnlyFields = function(gadget) {
 	return [
+	    AJS.hudson.gadget.config.serverField,
 		AJS.hudson.gadget.config.isConfiguredField,
 		AJS.hudson.gadget.config.titleRequiredField
 	];
+}
+
+/**
+ * The Gadgets' Server field
+ * 
+ * @param gadget the gadget to get the server field for
+ * @return the server field
+ */
+AJS.hudson.gadget.config.serverField = function(gadget) {
+	return {
+		id: "hudsonServer",
+		userpref: "server",
+		label: gadget.getMsg("hudson.gadget.server.label"),
+		description: gadget.getMsg("hudson.gadget.server.description"),
+		type: "text",
+		value: gadget.getPref("server")
+	}
 }
 
 /**
