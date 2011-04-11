@@ -33,3 +33,65 @@ AJS.hudson.utils.createDiv = function(id) {
 	}
 	return div;
 }
+
+/**
+ * Method to create an A element
+ * If the text argument is given then that text is used, otherwise the link will also be used for the text
+ * 
+ * @param link the url link
+ * @param text the optional text to show
+ * @return the A element
+ */
+AJS.hudson.utils.createLink = function(link, text) {
+	var element = AJS.$('<a/>').attr('href', link);
+	if (text !== undefined && text != "") {
+		element.text(text);
+	} else {
+		element.text(link);
+	}
+	return element;
+}
+
+/**
+ * Method to create a details table element
+ * 
+ * @param details the details object
+ * @return the details table
+ */
+AJS.hudson.utils.createDetailsTable = function(details) {
+	var table = AJS.$('<table/>');
+	for (var index in details) {
+		var detail = details[index];
+		var row = AJS.$('<tr/>');
+		var label = AJS.$('<th/>');
+		label.text(detail.label);
+		row.append(label);
+		var value = AJS.$('<td/>');
+		value.html(detail.value);
+		row.append(value);
+		table.append(row);
+	}
+	return table;
+}
+
+/**
+ * Method to create a chart div
+ * 
+ * @param gadget the gadget to create a chart for
+ * @param chart the chart data
+ * @return the chart div
+ */
+AJS.hudson.utils.createChart = function(gadget, chart) {
+	var chartDiv = AJS.hudson.utils.createDiv();
+	chartDiv.addClass('chartImage');
+	chartDiv.html(chart.imageMap);
+	var chartImg = AJS.$("<img/>");
+	chartImg.attr({
+		src: gadget.getBaseUrl() + "/charts?filename=" + chart.location,
+		usemap: chart.imageMapName,
+		height: chart.height,
+		width: chart.width
+	});
+	chartDiv.append(chartImg);
+	return chartDiv;
+}

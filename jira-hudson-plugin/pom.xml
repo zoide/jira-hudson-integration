@@ -59,6 +59,20 @@
 			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.wink</groupId>
+					<artifactId>wink-jackson-provider</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- needed for the wsclient jar -->
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.2.1.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.atlassian.jira</groupId>
@@ -178,18 +192,11 @@
 						<Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
 						<Bundle-SymbolicName>${atlassian.plugin.key}</Bundle-SymbolicName>
 						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
-						<Embed-Dependency>*;scope=compile|runtime;inline=true</Embed-Dependency>
+						<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
 						<Embed-Directory>META-INF/lib</Embed-Directory>
 						<Embed-StripGroup>false</Embed-StripGroup>
 						<Embed-StripVersion>false</Embed-StripVersion>
-						<Private-Package>
-							com.marvelution.jira.plugins.hudson*,
-							com.sun.xml.bind*,
-							com.sun.istack*,
-							com.sun.istack.localization*,
-							org.apache.commons.io*
-						</Private-Package>
 						<Export-Package>
 							com.marvelution.jira.plugins.hudson.rest*,
 							com.marvelution.jira.plugins.hudson.services*,

@@ -29,7 +29,7 @@
 	<resource type="i18n" name="i18n-hudson-commons-words" location="i18n.common-words"/>
 	<resource type="i18n" name="i18n-hudson-admin" location="i18n.hudson-admin"/>
 	<resource type="i18n" name="i18n-hudson-charts" location="i18n.hudson-charts"/>
-	<resource type="i18n" name="i18n-hudson-charts" location="i18n.hudson-gadgets"/>
+	<resource type="i18n" name="i18n-hudson-gadgets" location="i18n.hudson-gadgets"/>
 	<resource type="i18n" name="i18n-hudson-panels" location="i18n.hudson-panels"/>
 	<resource type="i18n" name="i18n-hudson-plugin" location="i18n.hudson-plugin"/>
 	<resource type="i18n" name="i18n-hudson-time" location="i18n.hudson-time"/>
@@ -37,7 +37,13 @@
 	<!-- W E B   R E S O U R C E S -->
 	<web-resource key="hudson-common" name="Hudson Common">
 		<resource type="download" name="common.css" location="styles/common.css" />
+		<resource type="download" name="date.js" location="scripts/date.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
 		<resource type="download" name="hudson-utils.js" location="scripts/hudson-utils.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+		<resource type="download" name="hudson-trigger-parser.js" location="scripts/hudson-trigger-parser.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
 	</web-resource>
@@ -49,6 +55,7 @@
 		</resource>
 	</web-resource>
 	<web-resource key="hudson-gadget" name="Hudson Gadget Resources">
+		<dependency>com.atlassian.jira.gadgets:jira-global</dependency>
 		<dependency>${atlassian.plugin.key}:hudson-common</dependency>
 		<resource type="download" name="gadget.css" location="styles/gadget.css" />
 		<resource type="download" name="hudson-gadget-config.js" location="scripts/hudson-gadget-config.js">
@@ -58,18 +65,6 @@
 			<property key="content-type" value="text/javascript"/>
 		</resource>
 	</web-resource>
-	<web-resource key="hudson-status-gadget" name="Hudson Status Gadget Resources">
-		<dependency>${atlassian.plugin.key}:hudson-gadget</dependency>
-	</web-resource>
-	<web-resource key="hudson-job-status-gadget" name="Hudson Job Status Gadget Resources">
-		<dependency>${atlassian.plugin.key}:hudson-gadget</dependency>
-	</web-resource>
-	<web-resource key="hudson-build-trend-gadget" name="Hudson Build Trend Gadget Resources">
-		<dependency>${atlassian.plugin.key}:hudson-gadget</dependency>
-	</web-resource>
-	<web-resource key="hudson-test-trend-gadget" name="Hudson Test Trend Gadget Resources">
-		<dependency>${atlassian.plugin.key}:hudson-gadget</dependency>
-	</web-resource>
 
 	<!-- I M A G E   R E S O U R C E S -->
 	<resource type="download" name="images/" location="images/" />
@@ -77,16 +72,13 @@
 	<resource type="download" name="status-thumb.png" location="images/gadgets/status-thumb.png"/>
 	<resource type="download" name="job-status-screenshot.png" location="images/gadgets/job-status-screenshot.png"/>
 	<resource type="download" name="job-status-thumb.png" location="images/gadgets/job-status-thumb.png"/>
-	<resource type="download" name="build-trend-screenshot.png" location="images/gadgets/build-trend-screenshot.png"/>
-	<resource type="download" name="build-trend-thumb.png" location="images/gadgets/build-trend-thumb.png"/>
-	<resource type="download" name="test-trend-screenshot.png" location="images/gadgets/test-trend-screenshot.png"/>
-	<resource type="download" name="test-trend-thumb.png" location="images/gadgets/test-trend-thumb.png"/>
+	<resource type="download" name="chart-screenshot.png" location="images/gadgets/chart-screenshot.png"/>
+	<resource type="download" name="chart-thumb.png" location="images/gadgets/chart-thumb.png"/>
 
 	<!-- G A D G E T S -->
 	<gadget key="hudson-status-gadget" name="Hudson Status Gadget" location="gadgets/hudson-status-gadget.xml" />
 	<gadget key="hudson-job-status-gadget" name="Hudson Job Status Gadget" location="gadgets/hudson-job-status-gadget.xml" />
-	<gadget key="hudson-build-trend-gadget" name="Hudson Build Trend Gadget" location="gadgets/hudson-build-trend-gadget.xml" />
-	<gadget key="hudson-test-trend-gadget" name="Hudson Test Trend Gadget" location="gadgets/hudson-test-trend-gadget.xml" />
+	<gadget key="hudson-chart-gadget" name="Hudson Chart Gadget" location="gadgets/hudson-chart-gadget.xml" />
 
 	<!-- R E S T   R E S O U R C E S -->
 	<rest key="${atlassian.plugin.key}.resource" path="/hudson" version="2.0">

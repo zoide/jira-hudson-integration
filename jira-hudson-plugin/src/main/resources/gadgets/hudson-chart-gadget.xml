@@ -18,12 +18,12 @@
  ~ under the License.
  -->
 <Module>
-	<ModulePrefs title="__MSG_hudson.gadget.build.trend.title__" directory_title="__MSG_hudson.gadget.build.trend.title__"
-		description="__MSG_hudson.gadget.build.trend.description__"
+	<ModulePrefs title="__MSG_hudson.gadget.chart.title__" directory_title="__MSG_hudson.gadget.chart.title__"
+		description="__MSG_hudson.gadget.chart.description__"
 		author="Marvelution" author_email="info@marvelution.com" author_affiliation="Marvelution"
 		author_location="Beverwijk, The Netherlands" title_url="http://www.marvelution.com/" height="100"
-		creenshot='#staticResourceUrl("${atlassian.plugin.key}:hudson-build-trend-gadget", "build-trend-screenshot.png")'
-		thumbnail='#staticResourceUrl("${atlassian.plugin.key}:hudson-build-trend-gadget", "build-trend-thumb.png")'>
+		creenshot='#staticResourceUrl("${atlassian.plugin.key}:hudson-chart-gadget", "chart-screenshot.png")'
+		thumbnail='#staticResourceUrl("${atlassian.plugin.key}:hudson-chart-gadget", "chart-thumb.png")'>
 		<Optional feature="gadget-directory">
 			<Param name="categories">
 				JIRA
@@ -38,14 +38,16 @@
 		#oauth
 		#supportedLocales("gadget.common,hudson.gadget")
 	</ModulePrefs>
+	<UserPref name="association" datatype="hidden" default_value="false" />
+	<UserPref name="chart" datatype="hidden" default_value="false" />
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
 	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
 	<UserPref name="titleRequired" datatype="hidden" default_value="true" />
 	<Content type="html"><![CDATA[
-		#requireResource("${atlassian.plugin.key}:hudson-build-trend-gadget")
+		#requireResource("${atlassian.plugin.key}:hudson-gadget")
 		#includeResources()
 		<script type="text/javascript">
-		gadgets.window.setTitle("__MSG_hudson.gadget.build.trend.title__");
+		gadgets.window.setTitle("__MSG_hudson.gadget.chart.title__");
 		(function () {
 			AJS.Gadget({
 				baseUrl: "__ATLASSIAN_BASE_URL__",
@@ -53,32 +55,43 @@
 				config: {
 					descriptor: function (args) {
 						var gadget = this;
-						gadgets.window.setTitle("__MSG_hudson.gadget.build.trend.title__");
+						gadgets.window.setTitle("__MSG_hudson.gadget.chart.title__");
 						return  {
 							action: "",
 							theme : AJS.hudson.gadget.config.getThemeConfiguration(gadgets),
-							fields: AJS.hudson.gadget.config.getFields(gadget)
+							fields: AJS.hudson.gadget.config.getChartFields(gadget, args)
 						};
 					},
-					args: []
+					args: [{
+						key: "options",
+						ajaxOptions: function() {
+							var gadget = this;
+							return {
+								url: gadget.getBaseUrl() + "/rest/hudson/2.0/associations"
+							};
+						}
+					}]
 				},
 				view: {
 					enableReload: true,
 					onResizeReload: true,
 					template: function (args) {
 						var gadget = this;
+						gadgets.window.setTitle(gadget.getMsg("hudson.gadget." + gadget.getPref("chart") + ".title"));
 						gadget.getView().empty();
-						var baseUrl = AJS.$.ajaxSettings.baseUrl;
+						var headerDiv = AJS.hudson.utils.createDiv();
+						headerDiv.addClass('chartHeader');
+						headerDiv.html(gadget.getMsg("hudson.gadget." + gadget.getPref("chart") + ".description"));
+						gadget.getView().append(headerDiv);
+						gadget.getView().append(AJS.hudson.utils.createChart(gadget, args.chart));
 						gadget.resize();
 					},
 					args: [{
-						key: "data",
+						key: "chart",
 						ajaxOptions: function () {
 							var gadget = this;
 							return {
-								url: "",
-								data: {
-								}
+								url: gadget.getBaseUrl() + "/rest/hudson/2.0/charts/" + gadget.getPref("chart") + "/" + gadget.getPref("association")
 							};
 						}
 					}]

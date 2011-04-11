@@ -118,6 +118,9 @@ public class JobUtils {
 	 */
 	public static int getJobSuccessRatio(Job job) {
 		double count = 0, success = 0;
+		if (job == null || job.getBuilds() == null || job.getBuilds().isEmpty()) {
+			return 100;
+		}
 		for (Build build : job.getBuilds()) {
 			count++;
 			if (Result.SUCCESSFUL.equals(build.getResult())) {

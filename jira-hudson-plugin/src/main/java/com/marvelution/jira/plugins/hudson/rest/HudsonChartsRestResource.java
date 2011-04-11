@@ -19,6 +19,8 @@
 
 package com.marvelution.jira.plugins.hudson.rest;
 
+import java.io.IOException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -59,6 +61,9 @@ import com.sun.jersey.spi.resource.Singleton;
 @Singleton
 public class HudsonChartsRestResource {
 
+	public static final int CHART_WIDTH = 350;
+	public static final int CHART_HEIGHT = 250;
+
 	private final HudsonServerManager serverManager;
 	private final HudsonAssociationManager associationManager;
 	private final HudsonClientFactory clientFactory;
@@ -79,7 +84,7 @@ public class HudsonChartsRestResource {
 
 	@GET
 	@Path("buildResultsRationChart/{associationId}")
-	public Chart getBuildResultsRatioChart(@PathParam("associationId") int associationId) {
+	public Chart getBuildResultsRatioChart(@PathParam("associationId") int associationId) throws IOException {
 		if (associationManager.hasAssociation(associationId)) {
 			final HudsonAssociation association= associationManager.getAssociation(associationId);
 			return getBuildResultsRatioChart(association.getServerId(), association.getJobName());
@@ -90,13 +95,14 @@ public class HudsonChartsRestResource {
 
 	@GET
 	@Path("buildResultsRationChart")
-	public Chart getBuildResultsRatioChart(@QueryParam("serverId") int serverId, @QueryParam("jobName") String jobname) {
+	public Chart getBuildResultsRatioChart(@QueryParam("serverId") int serverId, @QueryParam("jobName") String jobname) throws IOException {
 		if (serverManager.hasServer(serverId)) {
 			final HudsonServer server = serverManager.getServer(serverId);
 			final HudsonClient client = clientFactory.create(server);
 			final Job job = client.find(JobQuery.createForJobByName(jobname));
 			if (job != null && StringUtils.isNotBlank(job.getName())) {
 				final ChartHelper chartHelper = new BuildResultsRatioChartGenerator(server, job.getBuilds()).generateChart();
+				chartHelper.generate(CHART_WIDTH, CHART_HEIGHT);
 				return new Chart(chartHelper);
 			} else {
 				throw new NoSuchJobException(jobname);
@@ -108,7 +114,7 @@ public class HudsonChartsRestResource {
 
 	@GET
 	@Path("buildTestResultsRationChart/{associationId}")
-	public Chart getBuildTestResultsRatioChart(@PathParam("associationId") int associationId) {
+	public Chart getBuildTestResultsRatioChart(@PathParam("associationId") int associationId) throws IOException {
 		if (associationManager.hasAssociation(associationId)) {
 			final HudsonAssociation association= associationManager.getAssociation(associationId);
 			return getBuildTestResultsRatioChart(association.getServerId(), association.getJobName());
@@ -119,13 +125,14 @@ public class HudsonChartsRestResource {
 
 	@GET
 	@Path("buildTestResultsRationChart")
-	public Chart getBuildTestResultsRatioChart(@QueryParam("serverId") int serverId, @QueryParam("jobName") String jobname) {
+	public Chart getBuildTestResultsRatioChart(@QueryParam("serverId") int serverId, @QueryParam("jobName") String jobname) throws IOException {
 		if (serverManager.hasServer(serverId)) {
 			final HudsonServer server = serverManager.getServer(serverId);
 			final HudsonClient client = clientFactory.create(server);
 			final Job job = client.find(JobQuery.createForJobByName(jobname));
 			if (job != null && StringUtils.isNotBlank(job.getName())) {
 				final ChartHelper chartHelper = new BuildTestResultsRatioChartGenerator(server, job.getBuilds()).generateChart();
+				chartHelper.generate(CHART_WIDTH, CHART_HEIGHT);
 				return new Chart(chartHelper);
 			} else {
 				throw new NoSuchJobException(jobname);

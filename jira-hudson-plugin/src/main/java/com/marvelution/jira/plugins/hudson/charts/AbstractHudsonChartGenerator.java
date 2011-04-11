@@ -55,7 +55,7 @@ public abstract class AbstractHudsonChartGenerator implements HudsonChartGenerat
 	protected AbstractHudsonChartGenerator(HudsonServer server, Builds builds) {
 		this.server = server;
 		this.builds = builds;
-		this.i18nHelper = ComponentManager.getInstance().getJiraAuthenticationContext().getI18nHelper();
+		this.i18nHelper = null;
 	}
 
 	/**
@@ -64,6 +64,9 @@ public abstract class AbstractHudsonChartGenerator implements HudsonChartGenerat
 	 * @return the {@link I18nHelper}
 	 */
 	protected final I18nHelper getI18n() {
+		if (i18nHelper == null) {
+			i18nHelper = ComponentManager.getInstance().getJiraAuthenticationContext().getI18nHelper();
+		}
 		return i18nHelper;
 	}
 

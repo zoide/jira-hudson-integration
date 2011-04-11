@@ -17,3 +17,109 @@
  * under the License.
 */
 
+/** Status Gadget Styles **/
+.job {
+	font-family: arial,sans-serif;
+	width: 100%;
+}
+
+.result {
+	height: 115px;
+	padding-top: 10px;
+}
+
+.job .successful {
+	background-color: #393;
+}
+
+.job .successful .name {
+	border: 1px solid #393;
+}
+
+.job .successful .name,
+.job .successful .name a {
+	color: #FFF;
+}
+
+.job .failed {
+	background-color: #A00;
+}
+
+.job .failed .name {
+	border: 1px solid #A00;
+}
+
+.job .failed .name,
+.job .failed .name a {
+	color: #FFF;
+}
+
+.job .unstable {
+	background-color: #FFDD00;
+}
+
+.job .unstable .name {
+	border: 1px solid #FFDD00;
+}
+
+.job .unstable .name,
+.job .unstable .name a {
+	color: #FFF;
+}
+
+.job .aborted,
+.job .notbuild {
+	background-color: #999;
+}
+
+.job .aborted .name,
+.job .notbuild .name {
+	border: 1px solid #999;
+}
+
+.job .aborted .name,
+.job .aborted .name a,
+.job .notbuild .name,
+.job .notbuild .name a {
+	color: #FFF;
+}
+
+.job .name {
+	background-color: rgba(255, 255, 255, 0.2);
+	font-family: arial,sans-serif;
+	padding: 10px 5px 5px 5px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.5em;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.job .name a,
+.job .name a:HOVER,
+.job .name a:VISITED {
+	text-decoration: none;
+}
+
+.details {
+	color: #FFF;
+	padding-left: 50px;
+}
+
+.details table,
+.details table a {
+	color: #FFF;
+}
+
+.details table th {	
+	text-align: right;
+}
+
+.chartHeader {
+	
+}
+
+.chartImage {
+	
+}

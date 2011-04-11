@@ -164,7 +164,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 		final Project project = getProjectManager().getProjectObj(objectId);
 		switch (view) {
 		case JOB_STATUS:
-			resultSet = new JobStatusResultSet(server, client.find(JobQuery.createForJobStatusByName(
+			resultSet = new JobStatusResultSet(server, client.find(JobQuery.createForJobByName(
 					association.getJobName())), getI18nHelper());
 			break;
 		case BUILDS_BY_ISSUE:
@@ -189,7 +189,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 		final Version version = getVersionManager().getVersion(objectId);
 		switch (view) {
 		case JOB_STATUS:
-			resultSet = new JobStatusResultSet(server, client.find(JobQuery.createForJobStatusByName(
+			resultSet = new JobStatusResultSet(server, client.find(JobQuery.createForJobByName(
 					association.getJobName())), getI18nHelper());
 			break;
 		case BUILDS_BY_ISSUE:

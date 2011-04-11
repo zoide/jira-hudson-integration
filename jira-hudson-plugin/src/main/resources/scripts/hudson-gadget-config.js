@@ -31,7 +31,7 @@ AJS.hudson.gadget.config.getThemeConfiguration = function(gadgets) {
 	} else {
 		return "long-label";
 	}
-};
+}
 
 /**
  * Get the fields array for the given gadget
@@ -41,7 +41,23 @@ AJS.hudson.gadget.config.getThemeConfiguration = function(gadgets) {
  */
 AJS.hudson.gadget.config.getServerOnlyFields = function(gadget) {
 	return [
-	    AJS.hudson.gadget.config.serverField,
+	    AJS.hudson.gadget.config.serverField(gadget),
+	    AJS.hudson.gadget.config.dateFormatField(gadget),
+		AJS.hudson.gadget.config.isConfiguredField,
+		AJS.hudson.gadget.config.titleRequiredField
+	];
+}
+
+/**
+ * Get the fields array for the given gadget
+ * 
+ * @param gadget the gadget to get the fields array for
+ * @return the fields array
+ */
+AJS.hudson.gadget.config.getChartFields = function(gadget, args) {
+	return [
+	    AJS.hudson.gadget.config.associationField(gadget, args.options.associations),
+	    AJS.hudson.gadget.config.chartsField(gadget),
 		AJS.hudson.gadget.config.isConfiguredField,
 		AJS.hudson.gadget.config.titleRequiredField
 	];
@@ -61,6 +77,65 @@ AJS.hudson.gadget.config.serverField = function(gadget) {
 		description: gadget.getMsg("hudson.gadget.server.description"),
 		type: "text",
 		value: gadget.getPref("server")
+	}
+}
+
+/**
+ * The Gadgets' Date Format field
+ * 
+ * @param gadget the gadget to get the date format field for
+ * @return the date format field
+ */
+AJS.hudson.gadget.config.dateFormatField = function(gadget) {
+	return {
+		id: "dateFormat",
+		userpref: "dateFormat",
+		label: gadget.getMsg("hudson.gadget.date.format.label"),
+		description: gadget.getMsg("hudson.gadget.date.format.description"),
+		type: "text",
+		value: gadget.getPref("dateFormat")
+	}
+}
+
+/**
+ * The Gadgets' Associations field
+ * 
+ * @param gadget the gadget to get the associations field for
+ * @return the associations field
+ */
+AJS.hudson.gadget.config.associationField = function(gadget, associations) {
+	return {
+		id: "association",
+		userpref: "association",
+		label: gadget.getMsg("hudson.gadget.associations.label"),
+		description: gadget.getMsg("hudson.gadget.associations.description"),
+		type: "select",
+		value: gadget.getPref("association"),
+		options: associations
+	}
+}
+
+/**
+ * The Gadgets' Charts field
+ * 
+ * @param gadget the gadget to get the charts field for
+ * @return the charts field
+ */
+AJS.hudson.gadget.config.chartsField = function(gadget) {
+	return {
+		id: "chart",
+		userpref: "chart",
+		label: gadget.getMsg("hudson.gadget.charts.label"),
+		description: gadget.getMsg("hudson.gadget.charts.description"),
+		type: "select",
+		value: gadget.getPref("chart"),
+		options: [{
+			label: gadget.getMsg("hudson.gadget.buildResultsRationChart.title"),
+			value: "buildResultsRationChart"
+		},{
+			label: gadget.getMsg("hudson.gadget.buildTestResultsRationChart.title"),
+			value: "buildTestResultsRationChart"
+		}]
 	}
 }
 
