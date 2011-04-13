@@ -29,7 +29,7 @@
 		<rest defaultRestSubcontext="/apiv2" />
 	</services>
 	<modules>
-		<docs forceExampleJson="true" title="${project.name} Docs" copyright="Marvelution.com" docsDir="help" />
+		<docs forceExampleJson="true" title="${project.name} Docs" copyright="Marvelution.com" />
 		<java-client generateJsonJar="true" />
 		<xml prettyPrint="true">
 			<schema namespace="http://hudson.marvelution.com/apiv2" file="apiv2.xsd" />
