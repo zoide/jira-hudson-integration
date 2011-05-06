@@ -22,6 +22,9 @@ package com.marvelution.jira.plugins.hudson.charts;
 import java.awt.Color;
 
 import com.atlassian.jira.charts.jfreechart.ChartGenerator;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
 /**
  * Hudson plugin specific {@link ChartGenerator}
@@ -38,5 +41,21 @@ public interface HudsonChartGenerator extends ChartGenerator {
 	Color YELLOW_PAINT = new Color(255, 255, 204);
 	Color GRAY_OUTLINE = new Color(204, 204, 204);
 	Color GRAY_PAINT = new Color(238, 238, 238);
+
+	/**
+	 * Set the data for the Chart
+	 * 
+	 * @param server the {@link HudsonServer}
+	 * @param job the {@link Job}
+	 */
+	void setData(HudsonServer server, Job job);
+
+	/**
+	 * Set the Data for the chart
+	 * 
+	 * @param server the {@link HudsonServer}
+	 * @param builds the {@link Builds} collection
+	 */
+	void setData(HudsonServer server, Builds builds);
 
 }

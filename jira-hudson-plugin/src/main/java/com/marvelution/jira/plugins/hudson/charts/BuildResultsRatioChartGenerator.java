@@ -42,11 +42,8 @@ import com.atlassian.jira.charts.jfreechart.ChartHelper;
 import com.atlassian.jira.charts.jfreechart.util.ChartDefaults;
 import com.atlassian.jira.util.I18nHelper;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
-import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
 import com.marvelution.jira.plugins.hudson.charts.renderers.BuildResultRenderer;
 import com.marvelution.jira.plugins.hudson.charts.utils.DurationFormat;
-import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
 /**
  * {@link HudsonChartGenerator} implementation for generating the build results ratio chart
@@ -57,44 +54,18 @@ public class BuildResultsRatioChartGenerator extends AbstractHudsonChartGenerato
 
 	/**
 	 * Constructor
-	 * 
-	 * @param server the {@link HudsonServer} the {@link Builds} came from
-	 * @param builds the {@link Builds} collection
 	 */
-	public BuildResultsRatioChartGenerator(HudsonServer server, Builds builds) {
-		this(server, builds, null);
+	public BuildResultsRatioChartGenerator() {
+		this(null);
 	}
 
 	/**
 	 * Constructor
 	 * 
-	 * @param server the {@link HudsonServer} the {@link Builds} came from
-	 * @param builds the {@link Builds} collection
 	 * @param i18nHelper the {@link I18nHelper} implementation
 	 */
-	public BuildResultsRatioChartGenerator(HudsonServer server, Builds builds, I18nHelper i18nHelper) {
-		super(server, builds, i18nHelper);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param server the {@link HudsonServer} the {@link Job} came from
-	 * @param job the {@link Job} containing its {@link Builds}
-	 */
-	public BuildResultsRatioChartGenerator(HudsonServer server, Job job) {
-		this(server, job.getBuilds(), null);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param server the {@link HudsonServer} the {@link Job} came from
-	 * @param job the {@link Job} containing its {@link Builds}
-	 * @param i18nHelper the {@link I18nHelper} implementation
-	 */
-	public BuildResultsRatioChartGenerator(HudsonServer server, Job job, I18nHelper i18nHelper) {
-		this(server, job.getBuilds(), i18nHelper);
+	public BuildResultsRatioChartGenerator(I18nHelper i18nHelper) {
+		super(i18nHelper);
 	}
 
 	/**

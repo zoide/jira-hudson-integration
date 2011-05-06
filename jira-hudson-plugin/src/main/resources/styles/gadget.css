@@ -26,6 +26,7 @@
 .result {
 	height: 115px;
 	padding-top: 10px;
+	border-top: 1px solid #DDD;
 }
 
 .job .successful {
@@ -118,9 +119,12 @@
 
 /** Chart Gadget Styles **/
 .chartHeader {
-	
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
 }
 
 .chartImage {
-	
+	text-align: center;
+	vertical-align: middle;
 }

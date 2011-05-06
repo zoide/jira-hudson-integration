@@ -56,8 +56,8 @@ AJS.hudson.gadget.config.getServerOnlyFields = function(gadget) {
  */
 AJS.hudson.gadget.config.getChartFields = function(gadget, args) {
 	return [
-	    AJS.hudson.gadget.config.associationField(gadget, args.options.associations),
-	    AJS.hudson.gadget.config.chartsField(gadget),
+	    AJS.hudson.gadget.config.associationField(gadget, args.associations.associations),
+	    AJS.hudson.gadget.config.chartsField(gadget, args.charts.charts),
 		AJS.hudson.gadget.config.isConfiguredField,
 		AJS.hudson.gadget.config.titleRequiredField
 	];
@@ -121,7 +121,7 @@ AJS.hudson.gadget.config.associationField = function(gadget, associations) {
  * @param gadget the gadget to get the charts field for
  * @return the charts field
  */
-AJS.hudson.gadget.config.chartsField = function(gadget) {
+AJS.hudson.gadget.config.chartsField = function(gadget, charts) {
 	return {
 		id: "chart",
 		userpref: "chart",
@@ -129,13 +129,7 @@ AJS.hudson.gadget.config.chartsField = function(gadget) {
 		description: gadget.getMsg("hudson.gadget.charts.description"),
 		type: "select",
 		value: gadget.getPref("chart"),
-		options: [{
-			label: gadget.getMsg("hudson.gadget.buildResultsRationChart.title"),
-			value: "buildResultsRationChart"
-		},{
-			label: gadget.getMsg("hudson.gadget.buildTestResultsRationChart.title"),
-			value: "buildTestResultsRationChart"
-		}]
+		options: charts
 	}
 }
 

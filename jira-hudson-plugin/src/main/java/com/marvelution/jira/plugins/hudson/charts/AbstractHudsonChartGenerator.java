@@ -22,6 +22,7 @@ package com.marvelution.jira.plugins.hudson.charts;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.util.I18nHelper;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
 /**
@@ -30,32 +31,23 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 public abstract class AbstractHudsonChartGenerator implements HudsonChartGenerator {
 
 	private I18nHelper i18nHelper;
-	protected final HudsonServer server;
-	protected final Builds builds;
+	protected HudsonServer server;
+	protected Builds builds;
 
 	/**
 	 * Constructor
-	 * 
-	 * @param server the {@link HudsonServer} the data came from
-	 * @param builds the {@link Builds} collection
-	 * @param i18nHelper the {@link I18nHelper} class to use
 	 */
-	protected AbstractHudsonChartGenerator(HudsonServer server, Builds builds, I18nHelper i18nHelper) {
-		this.server = server;
-		this.builds = builds;
-		this.i18nHelper = i18nHelper;
+	protected AbstractHudsonChartGenerator() {
+		this(null);
 	}
 
 	/**
 	 * Constructor
 	 * 
-	 * @param server the {@link HudsonServer} the data came from
-	 * @param builds the {@link Builds} collection
+	 * @param i18nHelper the {@link I18nHelper} class to use
 	 */
-	protected AbstractHudsonChartGenerator(HudsonServer server, Builds builds) {
-		this.server = server;
-		this.builds = builds;
-		this.i18nHelper = null;
+	protected AbstractHudsonChartGenerator(I18nHelper i18nHelper) {
+		this.i18nHelper = i18nHelper;
 	}
 
 	/**
@@ -68,6 +60,23 @@ public abstract class AbstractHudsonChartGenerator implements HudsonChartGenerat
 			i18nHelper = ComponentManager.getInstance().getJiraAuthenticationContext().getI18nHelper();
 		}
 		return i18nHelper;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setData(HudsonServer server, Job job) {
+		setData(server, job.getBuilds());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setData(HudsonServer server, Builds builds) {
+		this.server = server;
+		this.builds = builds;
 	}
 
 }

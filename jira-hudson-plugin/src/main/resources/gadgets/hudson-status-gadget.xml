@@ -84,7 +84,6 @@
 							}
 							var nameDiv = AJS.hudson.utils.createDiv();
 							nameDiv.addClass('name');
-							nameDiv.append(AJS.hudson.utils.createLink(hudsonServer.host + "/" + job.url, job.name));
 							resultsDiv.append(nameDiv);
 							var detailsDiv = AJS.hudson.utils.createDiv().addClass('details');
 							if (job.lastBuild !== undefined) {

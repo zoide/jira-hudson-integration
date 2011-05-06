@@ -36,7 +36,7 @@
 		<Optional feature="atlassian.util" />
 		<Require feature="oauthpopup" />
 		#oauth
-		#supportedLocales("gadget.common,hudson.gadget")
+		#supportedLocales("gadget.common,hudson.gadget,hudson.charts")
 	</ModulePrefs>
 	<UserPref name="association" datatype="hidden" default_value="false" />
 	<UserPref name="chart" datatype="hidden" default_value="false" />
@@ -63,11 +63,19 @@
 						};
 					},
 					args: [{
-						key: "options",
+						key: "associations",
 						ajaxOptions: function() {
 							var gadget = this;
 							return {
 								url: gadget.getBaseUrl() + "/rest/hudson/2.0/associations"
+							};
+						}
+					}, {
+						key: "charts",
+						ajaxOptions: function() {
+							var gadget = this;
+							return {
+								url: gadget.getBaseUrl() + "/rest/hudson/2.0/charts"
 							};
 						}
 					}]
@@ -77,11 +85,11 @@
 					onResizeReload: true,
 					template: function (args) {
 						var gadget = this;
-						gadgets.window.setTitle(gadget.getMsg("hudson.gadget." + gadget.getPref("chart") + ".title"));
+						gadgets.window.setTitle(gadget.getMsg("hudson.charts." + gadget.getPref("chart") + ".title"));
 						gadget.getView().empty();
 						var headerDiv = AJS.hudson.utils.createDiv();
 						headerDiv.addClass('chartHeader');
-						headerDiv.html(gadget.getMsg("hudson.gadget." + gadget.getPref("chart") + ".description"));
+						headerDiv.html(gadget.getMsg("hudson.charts." + gadget.getPref("chart") + ".description"));
 						gadget.getView().append(headerDiv);
 						gadget.getView().append(AJS.hudson.utils.createChart(gadget, args.chart));
 						gadget.resize();
@@ -91,7 +99,7 @@
 						ajaxOptions: function () {
 							var gadget = this;
 							return {
-								url: gadget.getBaseUrl() + "/rest/hudson/2.0/charts/" + gadget.getPref("chart") + "/" + gadget.getPref("association")
+								url: gadget.getBaseUrl() + "/rest/hudson/2.0/charts/generate/" + gadget.getPref("chart") + "/" + gadget.getPref("association")
 							};
 						}
 					}]

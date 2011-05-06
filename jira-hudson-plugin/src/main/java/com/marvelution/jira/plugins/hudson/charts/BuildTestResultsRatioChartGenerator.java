@@ -41,10 +41,7 @@ import org.jfree.data.xy.XYDataset;
 import com.atlassian.jira.charts.jfreechart.ChartHelper;
 import com.atlassian.jira.util.I18nHelper;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.TestResult;
-import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
-import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
 /**
  * {@link HudsonChartGenerator} implementation for generating a ratio build test results chart
@@ -59,50 +56,24 @@ public class BuildTestResultsRatioChartGenerator extends AbstractHudsonChartGene
 	/**
 	 * Constructor
 	 * 
-	 * @param server the {@link HudsonServer} the {@link Builds} came from
-	 * @param builds the {@link Builds} collection
 	 * @param i18nHelper the {@link I18nHelper} implementation
 	 */
-	public BuildTestResultsRatioChartGenerator(HudsonServer server, Builds builds) {
-		this(server, builds, null);
+	public BuildTestResultsRatioChartGenerator() {
+		this(null);
 	}
 
 	/**
 	 * Constructor
 	 * 
-	 * @param server the {@link HudsonServer} the {@link Builds} came from
-	 * @param builds the {@link Builds} collection
 	 * @param i18nHelper the {@link I18nHelper} implementation
 	 */
-	public BuildTestResultsRatioChartGenerator(HudsonServer server, Builds builds, I18nHelper i18nHelper) {
-		super(server, builds, i18nHelper);
+	public BuildTestResultsRatioChartGenerator(I18nHelper i18nHelper) {
+		super(i18nHelper);
 		seriesNames = new String[] {
 			getI18n().getText("hudson.charts.test.passed"),
 			getI18n().getText("hudson.charts.test.failed"),
 			getI18n().getText("hudson.charts.test.skipped")
 		};
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param server the {@link HudsonServer} the {@link Job} came from
-	 * @param job the {@link Job} containing its {@link Builds}
-	 * @param i18nHelper the {@link I18nHelper} implementation
-	 */
-	public BuildTestResultsRatioChartGenerator(HudsonServer server, Job job) {
-		this(server, job.getBuilds(), null);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param server the {@link HudsonServer} the {@link Job} came from
-	 * @param job the {@link Job} containing its {@link Builds}
-	 * @param i18nHelper the {@link I18nHelper} implementation
-	 */
-	public BuildTestResultsRatioChartGenerator(HudsonServer server, Job job, I18nHelper i18nHelper) {
-		this(server, job.getBuilds(), i18nHelper);
 	}
 
 	/**

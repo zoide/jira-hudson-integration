@@ -265,4 +265,7 @@
 		<interface>com.marvelution.jira.plugins.hudson.panels.utils.HudsonPanelHelper</interface>
 	</component>
 
+	<!-- I M P O R T E D   C O M P O N E N T S -->
+	<component-import key="i18nResolver" interface="com.atlassian.sal.api.message.I18nResolver" />
+
 </atlassian-plugin>

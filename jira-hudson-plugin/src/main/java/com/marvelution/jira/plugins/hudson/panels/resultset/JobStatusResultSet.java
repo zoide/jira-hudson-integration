@@ -26,6 +26,7 @@ import com.atlassian.jira.util.I18nHelper;
 import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
 import com.marvelution.jira.plugins.hudson.charts.BuildResultsRatioChartGenerator;
 import com.marvelution.jira.plugins.hudson.charts.BuildTestResultsRatioChartGenerator;
+import com.marvelution.jira.plugins.hudson.charts.HudsonChartGenerator;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
 /**
@@ -74,7 +75,9 @@ public class JobStatusResultSet extends AbstractResultSet<Job> {
 	 * @throws IOException in case of generation issues
 	 */
 	public ChartHelper getBuildResultsRatioChart() throws IOException {
-		final ChartHelper chart = new BuildResultsRatioChartGenerator(getServer(), getResults(), i18nHelper).generateChart();
+		final HudsonChartGenerator chartGenerator = new BuildResultsRatioChartGenerator(i18nHelper);
+		chartGenerator.setData(getServer(), getResults());
+		final ChartHelper chart = chartGenerator.generateChart();
 		chart.generate(CHART_WIDTH, CHART_HEIGHT);
 		return chart;
 	}
@@ -86,7 +89,9 @@ public class JobStatusResultSet extends AbstractResultSet<Job> {
 	 * @throws IOException in case of generation issues
 	 */
 	public ChartHelper getBuildTestResultsRatioChart() throws IOException {
-		final ChartHelper chart = new BuildTestResultsRatioChartGenerator(getServer(), getResults(), i18nHelper).generateChart();
+		final HudsonChartGenerator chartGenerator = new BuildTestResultsRatioChartGenerator(i18nHelper);
+		chartGenerator.setData(getServer(), getResults());
+		final ChartHelper chart = chartGenerator.generateChart();
 		chart.generate(CHART_WIDTH, CHART_HEIGHT);
 		return chart;
 	}
