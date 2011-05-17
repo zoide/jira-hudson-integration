@@ -59,7 +59,6 @@ public class SearchRestResourceImpl extends BaseRestResource implements SearchRe
 			log.info("Search in Job " + item.getDisplayName());
 			if (stringMatchesQuery(query, item.getDisplayName()) || (!nameOnly && stringMatchesQuery(query,
 					item.getDescription()))) {
-				log.info("ADDING JOB " + item.getFullName());
 				jobs.add(DozerUtils.getMapper().map(item, Job.class, "full"));
 			}
 		}
@@ -129,11 +128,9 @@ public class SearchRestResourceImpl extends BaseRestResource implements SearchRe
 		for (String item : StringUtils.split(query, " ")) {
 			log.info("Search for " + item + " in " + searchString);
 			if (StringUtils.containsIgnoreCase(searchString, item)) {
-				log.info("FOUND IT");
 				return true;
 			}
 		}
-		log.info("DIDN'T FOUND IT");
 		return false;
 	}
 
