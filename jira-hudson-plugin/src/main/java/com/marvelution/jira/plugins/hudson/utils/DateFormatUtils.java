@@ -187,8 +187,7 @@ public class DateFormatUtils {
 	 * @param smallLabel the small time unit label
 	 * @return the formatted {@link String}
 	 */
-	private String makeTimeSpanString(long bigUnit, String bigLabel,
-			long smallUnit, String smallLabel) {
+	private String makeTimeSpanString(long bigUnit, String bigLabel, long smallUnit, String smallLabel) {
 		String text = bigLabel;
 		if (bigUnit < 10L) {
 			text = text + ' ' + smallLabel;

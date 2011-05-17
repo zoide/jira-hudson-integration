@@ -38,7 +38,7 @@
 		#oauth
 		#supportedLocales("gadget.common,hudson.gadget")
 	</ModulePrefs>
-	<UserPref name="server" datatype="hidden" default_value="false" />
+	<UserPref name="server" datatype="hidden" default_value="" />
 	<UserPref name="dateFormat" datatype="hidden" default_value="m-d-Y H:i:s" />
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
 	<UserPref name="isConfigured" datatype="hidden" default_value="false" />

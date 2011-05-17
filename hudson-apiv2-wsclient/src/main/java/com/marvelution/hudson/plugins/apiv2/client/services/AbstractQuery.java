@@ -19,6 +19,8 @@
 
 package com.marvelution.hudson.plugins.apiv2.client.services;
 
+import org.apache.commons.codec.EncoderException;
+
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
 /**
@@ -50,18 +52,32 @@ public abstract class AbstractQuery<MODEL extends Model> implements Query<MODEL>
 	}
 
 	/**
-	 * Get the specific url
-	 *  
-	 * @return the specific url, must NOT start with a slash '/'
-	 */
-	protected abstract String getSpecificUrl();
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<MODEL> getModelClass() {
 		return modelClass;
 	}
+
+	/**
+	 * Helper method to url encode a given {@link String}
+	 * 
+	 * @param url the url {@link String} to encode
+	 * @return the encoded url
+	 */
+	protected String urlEncode(String url) {
+		try {
+			return URLCODEC.encode(url).replace("+", "%20");
+		} catch (EncoderException e) {
+			return url;
+		}
+	}
+
+	/**
+	 * Get the specific url
+	 *  
+	 * @return the specific url, must NOT start with a slash '/'
+	 */
+	protected abstract String getSpecificUrl();
 
 }

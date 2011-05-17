@@ -42,8 +42,38 @@ Date.prototype.duration = function(duration) {
  * @return the formatted duration
  */
 Date.duration = function(duration) {
-	// TODO code me
-	return duration + " ms";
+	var years = duration / Date.YEAR_MILLIS;
+	var remDuration = duration % Date.YEAR_MILLIS;
+	var months = remDuration / Date.MONTH_MILLIS;
+	remDuration %= Date.MONTH_MILLIS;
+	var days = remDuration / Date.DAY_MILLIS;
+	remDuration %= Date.DAY_MILLIS;
+	var hours = remDuration / Date.HOUR_MILLIS;
+	remDuration %= Date.HOUR_MILLIS;
+	var minutes = remDuration / Date.MINUTE_MILLIS;
+	remDuration %= Date.MINUTE_MILLIS;
+	var seconds = remDuration / Date.SECOND_MILLIS;
+	remDuration %= Date.SECOND_MILLIS;
+	var millisecs = remDuration;
+	if (years > 0) {
+		return years + " yr " + months + " mo"
+	} else if (months > 0 && days == 1) {
+		return months + " mo " + days + " day"
+	} else if (months > 0) {
+		return months + " mo " + days + " days"
+	} else if (days == 1) {
+		return days + " day " + hours + " hr"
+	} else if (days > 0) {
+		return days + " days " + hours + " hr"
+	} else if (hours > 0) {
+		return hours + " hr " + minutes + " min"
+	} else if (minutes > 0) {
+		return minutes + " min " + seconds + " sec"
+	} else if (seconds > 0) {
+		return seconds + " sec"
+	} else {
+		return millisecs + " ms";
+	}
 }
 
 /**
@@ -93,7 +123,7 @@ Date.replaceChars = {
 	t: function() { var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 0).getDate() },
 	// Year
 	L: function() { var year = this.getFullYear(); return (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)); },
-	o: function() { var d  = new Date(this.valueOf());  d.setDate(d.getDate() - ((this.getDay() + 6) % 7) + 3); return d.getFullYear();},
+	o: function() { var d  = new Date(this.valueOf());  d.setDate(d.getDate() - ((this.getDay() + 6) % 7) + 3); return d.getFullYear(); },
 	Y: function() { return this.getFullYear(); },
 	y: function() { return ('' + this.getFullYear()).substr(2); },
 	// Time
@@ -110,7 +140,7 @@ Date.replaceChars = {
 	// Timezone
 	O: function() { return (-this.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(this.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(this.getTimezoneOffset() / 60)) + '00'; },
 	P: function() { return (-this.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(this.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(this.getTimezoneOffset() / 60)) + ':00'; },
-	T: function() { var m = this.getMonth(); this.setMonth(0); var result = this.toTimeString().replace(/^.+ \(?([^\)]+)\)?$/, '$1'); this.setMonth(m); return result;},
+	T: function() { var m = this.getMonth(); this.setMonth(0); var result = this.toTimeString().replace(/^.+ \(?([^\)]+)\)?$/, '$1'); this.setMonth(m); return result; },
 	Z: function() { return -this.getTimezoneOffset() * 60; },
 	// Full Date/Time
 	c: function() { return this.format("Y-m-d\\TH:i:sP"); },

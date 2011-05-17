@@ -81,11 +81,11 @@
 		<class-a>hudson.model.Run$Artifact</class-a>
 		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.BuildArtifact</class-b>
 		<field>
-			<a>name</a>
+			<a get-method="getFileName">name</a>
 			<b>name</b>
 		</field>
 		<field>
-			<a>relativePath</a>
+			<a get-method="toString">relativePath</a>
 			<b>url</b>
 		</field>
 	</mapping>

@@ -67,7 +67,7 @@ public class ChangeLogQuery extends AbstractListableQuery<ChangeLog.Entry, Chang
 	@Override
 	protected String getSpecificUrl() {
 		final StringBuilder url = new StringBuilder();
-		url.append("changelog/").append(jobname);
+		url.append("changelog/").append(urlEncode(jobname));
 		url.append("?buildNumber=").append(buildNumber);
 		return url.toString();
 	}

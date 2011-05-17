@@ -85,7 +85,7 @@
 			<li class="header">${i18n.getText("common.words.latest")} ${i18n.getText("hudson.panel.build.artifacts")}:</li>
 			#if ($build.buildArtifacts.size() > 0)
 			#foreach ($artifact in $build.buildArtifacts)
-			<li #if (!$foreach.hasNext)class="last"#end><a href="${server.publicHost}/${job.url}/${artifact.url}">${artifact.name}</a></li>
+			<li #if (!$foreach.hasNext)class="last"#end><a href="${server.publicHost}/${job.url}/lastBuild/${artifact.url}">${artifact.name}</a></li>
 			#end
 			#else
 			<li class="last">${i18n.getText("hudson.panel.build.no.build.artifacts")}</li>

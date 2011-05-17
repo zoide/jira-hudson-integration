@@ -47,10 +47,8 @@ public class StateDozerConverter extends DozerConverter<hudson.model.AbstractBui
 			return State.BUILDING;
 		} else if (source.hasntStartedYet()) {
 			return State.NOT_STARTED;
-		} else if (source.isLogUpdated()) {
-			return State.COMPLETED;
 		} else {
-			return State.UNKNOWN;
+			return State.COMPLETED;
 		}
 	}
 
@@ -59,7 +57,7 @@ public class StateDozerConverter extends DozerConverter<hudson.model.AbstractBui
 	 */
 	@Override
 	public hudson.model.AbstractBuild<?, ?> convertFrom(State source, hudson.model.AbstractBuild destination) {
-		throw new UnsupportedOperationException("Canot convert a State inot a hudson.model.AbstractBuild object");
+		throw new UnsupportedOperationException("Cannot convert a State into a hudson.model.AbstractBuild object");
 	}
 
 }

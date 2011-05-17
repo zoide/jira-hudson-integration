@@ -27,6 +27,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchBuildException;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
 
@@ -53,9 +55,20 @@ public class BaseRestResource {
 	 * @throws NoSuchJobException in case there is no {@link hudson.model.Job} configured with the given name
 	 */
 	protected hudson.model.Job<?, ?> getHudsonJob(String jobName) throws NoSuchJobException {
+		if (jobName == null || StringUtils.isBlank(jobName)) {
+			throw new IllegalArgumentException("Job Name may not me null or empty");
+		}
 		hudson.model.Job<?, ?> job = Hudson.getInstance().getItemByFullName(jobName, hudson.model.Job.class);
 		if (job != null) {
 			return job;
+		} else {
+			// We failed to get the Job, but it could be a module.
+			// Loop through all the Jobs to locate it.
+			for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
+				if (jobName.equals(item.getName())) {
+					return item;
+				}
+			}
 		}
 		throw new NoSuchJobException(jobName);
 	}

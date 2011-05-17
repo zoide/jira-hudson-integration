@@ -77,9 +77,9 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 		final StringBuilder url = new StringBuilder();
 		url.append("jobs");
 		if (QueryType.SPECIFIC.equals(getType()) && name != null) {
-			url.append("?name=").append(name);
+			url.append("?name=").append(urlEncode(name));
 		} else if (QueryType.STATUS.equals(getType()) && name != null) {
-			url.append("/status?name=").append(name);
+			url.append("/status?name=").append(urlEncode(name));
 		} else if (QueryType.LIST.equals(getType())) {
 			url.append("/list");
 		} else if (QueryType.ALL.equals(getType())) {

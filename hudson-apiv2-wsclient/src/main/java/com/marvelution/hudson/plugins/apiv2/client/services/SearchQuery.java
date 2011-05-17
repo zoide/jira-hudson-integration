@@ -59,10 +59,10 @@ public abstract class SearchQuery<MODEL extends Model, LISTMODEL extends Listabl
 	protected String getSpecificUrl() {
 		final StringBuilder url = new StringBuilder();
 		url.append("search/").append(getSearchMethod());
-		url.append("?query=").append(StringUtils.join(query, " "));
+		url.append("?query=").append(urlEncode(StringUtils.join(query, " ")));
 		if (getExtraParameters() != null) {
 			for (Entry<String, String> entry : getExtraParameters().entrySet()) {
-				url.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+				url.append("&").append(entry.getKey()).append("=").append(urlEncode(entry.getValue()));
 			}
 		}
 		return url.toString();

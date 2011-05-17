@@ -148,7 +148,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	@Override
 	protected String getSpecificUrl() {
 		final StringBuilder url = new StringBuilder();
-		url.append("builds/").append(jobName);
+		url.append("builds/").append(urlEncode(jobName));
 		if (buildNumber > 0) {
 			url.append("?buildNumber=").append(buildNumber);
 		} else if (from >= 0L && to == -1L) {

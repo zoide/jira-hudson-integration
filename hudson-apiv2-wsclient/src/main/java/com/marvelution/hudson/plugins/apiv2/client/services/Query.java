@@ -19,6 +19,8 @@
 
 package com.marvelution.hudson.plugins.apiv2.client.services;
 
+import org.apache.commons.codec.net.URLCodec;
+
 import com.marvelution.hudson.plugins.apiv2.client.connectors.Connector;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
@@ -29,6 +31,11 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 public interface Query<MODEL extends Model> {
+
+	/**
+	 * {@link URLCodec} object used for URL encoding
+	 */
+	URLCodec URLCODEC = new URLCodec();
 
 	/**
 	 * Get the URL string where the query can be executed at

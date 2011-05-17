@@ -62,7 +62,7 @@
 				<ul class="artifactList">
 					<li class="label">${i18n.getText("hudson.panel.build.artifacts")}:</li>
 					#foreach ($artifact in $build.buildArtifacts)
-					<li #if (!$foreach.hasNext)class="last"#end><a href="${server.publicHost}/$artifact.url">$artifact.name</a></li>
+					<li #if (!$foreach.hasNext)class="last"#end><a href="${server.publicHost}/${build.jobUrl}/lastBuild/${artifact.url}">$artifact.name</a></li>
 					#end
 				</ul>
 				<script type="text/javascript">AJS.hudson.panel.registerList("artifactList", "inline");</script>

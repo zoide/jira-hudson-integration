@@ -38,7 +38,7 @@
 		#oauth
 		#supportedLocales("gadget.common,hudson.gadget,hudson.charts")
 	</ModulePrefs>
-	<UserPref name="association" datatype="hidden" default_value="false" />
+	<UserPref name="association" datatype="hidden" default_value="0" />
 	<UserPref name="chart" datatype="hidden" default_value="false" />
 	<UserPref name="refresh" datatype="hidden" default_value="false" />
 	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
