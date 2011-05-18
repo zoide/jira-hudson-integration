@@ -47,6 +47,12 @@ public class Chart {
 	private int height;
 
 	/**
+	 * Default Constructor
+	 */
+	public Chart() {
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param location the file location of the chart

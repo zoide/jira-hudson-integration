@@ -33,16 +33,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.atlassian.jira.charts.jfreechart.ChartHelper;
 import com.atlassian.sal.api.message.I18nResolver;
@@ -57,6 +49,7 @@ import com.marvelution.jira.plugins.hudson.rest.exceptions.NoSuchChartException;
 import com.marvelution.jira.plugins.hudson.rest.exceptions.NoSuchJobException;
 import com.marvelution.jira.plugins.hudson.rest.exceptions.NoSuchServerException;
 import com.marvelution.jira.plugins.hudson.rest.model.Chart;
+import com.marvelution.jira.plugins.hudson.rest.model.Charts;
 import com.marvelution.jira.plugins.hudson.rest.model.Option;
 import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
@@ -108,6 +101,14 @@ public class HudsonChartsRestResource {
 		charts.put("BuildTestResultsRatioChartGenerator", BuildTestResultsRatioChartGenerator.class);
 	}
 
+	/**
+	 * Endpoint method to generate a given chart for an Association specified
+	 * 
+	 * @param type the type of Chart to generate (This is used to select the {@link HudsonChartGenerator} implementation
+	 * @param associationId the Id of the Hudson Association configured using the <a href="http://docs.marvelution.com/display/MARVJIRAHUDSON/Manage%20Hudson%20Associations">Manage Hudson Associations</a> feature
+	 * @return the {@link Chart} object with all the information related to the chart
+	 * @throws IOException in case of errors
+	 */
 	@GET
 	@Path("generate/{type}/{associationId}")
 	public Chart getChart(@PathParam("type") String type, @PathParam("associationId") int associationId)
@@ -120,6 +121,15 @@ public class HudsonChartsRestResource {
 		}
 	}
 
+	/**
+	 * Endpoint method to generate a given chart for a server and jobname specified
+	 * 
+	 * @param type the type of Chart to generate (This is used to select the {@link HudsonChartGenerator} implementation
+	 * @param serverId the Id of the Hudson Server that was configured using the <a href="http://docs.marvelution.com/display/MARVJIRAHUDSON/Manage%20Hudson%20Servers">Manage Hudson Servers</a> feature
+	 * @param jobname the job name of the job to get the data for
+	 * @return the {@link Chart} object with all the information related to the chart
+	 * @throws IOException in case of errors
+	 */
 	@GET
 	@Path("generate/{type}")
 	public Chart getChart(@PathParam("type") String type, @QueryParam("serverId") int serverId,
@@ -153,6 +163,11 @@ public class HudsonChartsRestResource {
 		}
 	}
 
+	/**
+	 * Getter for all the supported Charts that this Rest Endpoint can generate
+	 * 
+	 * @return {@link Charts} collection with all charts supported
+	 */
 	@GET
 	public Response getCharts() {
 		final Collection<Option> options = new ArrayList<Option>();
@@ -161,77 +176,6 @@ public class HudsonChartsRestResource {
 			options.add(new Option(label, entry.getKey()));
 		}
 		return Response.ok(new Charts(options)).build();
-	}
-
-	/**
-	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
-	 */
-	@XmlAccessorType(XmlAccessType.FIELD)
-	@XmlRootElement
-	public static class Charts {
-
-		private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.SIMPLE_STYLE;
-
-		@XmlElement
-		private Collection<Option> charts;
-
-		/**
-		 * Default Constructor
-		 */
-		public Charts() {
-		}
-
-		/**
-		 * Constructor
-		 * 
-		 * @param charts the {@link Collection} of charts
-		 */
-		public Charts(Collection<Option> charts) {
-			this.charts = charts;
-		}
-
-		/**
-		 * Getter for charts
-		 * 
-		 * @return the charts
-		 */
-		public Collection<Option> getCharts() {
-			return charts;
-		}
-
-		/**
-		 * Setter for charts
-		 * 
-		 * @param charts the charts to set
-		 */
-		public void setCharts(Collection<Option> charts) {
-			this.charts = charts;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public boolean equals(Object object) {
-			return EqualsBuilder.reflectionEquals(this, object);
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public int hashCode() {
-			return HashCodeBuilder.reflectionHashCode(this);
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public String toString() {
-			return ToStringBuilder.reflectionToString(this, Charts.TO_STRING_STYLE);
-		}
-
 	}
 
 }

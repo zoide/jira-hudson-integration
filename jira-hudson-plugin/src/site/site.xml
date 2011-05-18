@@ -23,6 +23,7 @@
 
 		<menu name="Overview">
 			<item name="Introduction" href="./index.html" />
+			<item name="API Documentation" href="./wsdocs/index.html" />
 		</menu>
 	</body>
 </project>

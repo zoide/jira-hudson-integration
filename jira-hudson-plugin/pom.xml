@@ -33,9 +33,9 @@
 	<url>http://apidocs.marvelution.com/${project.parent.artifactId}/${project.version}/${project.artifactId}/</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson-plugin</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson-plugin</developerConnection>
-		<url>http://fisheye.marvelution.com/browse/public/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson-plugin</url>
+		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk/jira-hudson-plugin</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk/jira-hudson-plugin</developerConnection>
+		<url>http://fisheye.marvelution.com/browse/public/atlassian/jira-hudson-integration/trunk/jira-hudson-plugin</url>
 	</scm>
 
 	<properties>
@@ -66,7 +66,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- needed for the wsclient jar -->
+		<!-- needed for the ws-client jar -->
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
@@ -136,6 +136,19 @@
 			<version>${javax.xml.bind.version}</version>
 			<type>jar</type>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.enunciate</groupId>
+			<artifactId>enunciate-core</artifactId>
+			<version>${enunciate.version}</version>
+			<type>jar</type>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
@@ -212,6 +225,64 @@
 					</instructions>
 				</configuration>
 			</plugin>
+			<plugin>
+				<inherited>true</inherited>
+				<groupId>org.codehaus.enunciate</groupId>
+				<artifactId>maven-enunciate-slim-plugin</artifactId>
+				<version>${enunciate.version}</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>docs</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<configFile>src/enunciate/enunciate.xml</configFile>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.enunciate</groupId>
+						<artifactId>enunciate-docs</artifactId>
+						<version>${enunciate.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.codehaus.enunciate</groupId>
+						<artifactId>enunciate-java-client</artifactId>
+						<version>${enunciate.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.codehaus.enunciate</groupId>
+						<artifactId>enunciate-xml</artifactId>
+						<version>${enunciate.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>javax.xml.bind</groupId>
+						<artifactId>jaxb-api</artifactId>
+						<version>${javax.xml.bind.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>com.marvelution.skins</groupId>
+						<artifactId>marvelution-enunciate-template</artifactId>
+						<version>0.0.1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.enunciate</groupId>
+				<artifactId>maven-enunciate-slim-plugin</artifactId>
+				<version>${enunciate.version}</version>
+				<configuration>
+					<docsSubdir></docsSubdir>
+					<indexPageName>index.html</indexPageName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

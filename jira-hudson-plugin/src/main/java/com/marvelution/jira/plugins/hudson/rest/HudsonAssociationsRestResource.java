@@ -27,17 +27,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.atlassian.plugins.rest.common.security.AnonymousAllowed;
+import com.marvelution.jira.plugins.hudson.rest.model.Associations;
 import com.marvelution.jira.plugins.hudson.rest.model.Option;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
@@ -46,6 +38,8 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 
 
 /**
+ * REST Resource to get all Association information
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @Path("/associations")
@@ -67,6 +61,11 @@ public class HudsonAssociationsRestResource {
 		this.associationManager = associationManager;
 	}
 
+	/**
+	 * Getter to get all the configured associations.
+	 * 
+	 * @return an {@link Associations} collection with all the configured associations
+	 */
 	@GET
 	public Response getAssociations() {
 		final Collection<Option> options = new ArrayList<Option>();
@@ -76,77 +75,6 @@ public class HudsonAssociationsRestResource {
 			options.add(new Option(label, String.valueOf(association.getAssociationId())));
 		}
 		return Response.ok(new Associations(options)).build();
-	}
-
-	/**
-	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
-	 */
-	@XmlAccessorType(XmlAccessType.FIELD)
-	@XmlRootElement
-	public static class Associations {
-
-		private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.SIMPLE_STYLE;
-
-		@XmlElement
-		private Collection<Option> associations;
-
-		/**
-		 * Default Constructor
-		 */
-		public Associations() {
-		}
-
-		/**
-		 * Constructor
-		 * 
-		 * @param associations the {@link Collection} of associations
-		 */
-		public Associations(Collection<Option> associations) {
-			this.associations = associations;
-		}
-
-		/**
-		 * Getter for associations
-		 * 
-		 * @return the associations
-		 */
-		public Collection<Option> getAssociations() {
-			return associations;
-		}
-
-		/**
-		 * Setter for associations
-		 * 
-		 * @param associations the associations to set
-		 */
-		public void setAssociations(Collection<Option> associations) {
-			this.associations = associations;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public boolean equals(Object object) {
-			return EqualsBuilder.reflectionEquals(this, object);
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public int hashCode() {
-			return HashCodeBuilder.reflectionHashCode(this);
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public String toString() {
-			return ToStringBuilder.reflectionToString(this, Associations.TO_STRING_STYLE);
-		}
-
 	}
 
 }

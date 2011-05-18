@@ -40,7 +40,6 @@
 
 	<properties>		
 		<apache.wink.version>1.1.2-incubating</apache.wink.version>
-		<enunciate.version>1.21.1</enunciate.version>
 	</properties>
 
 	<dependencies>
@@ -155,6 +154,7 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<inherited>true</inherited>
 				<groupId>org.codehaus.enunciate</groupId>
 				<artifactId>maven-enunciate-slim-plugin</artifactId>
 				<version>${enunciate.version}</version>
@@ -175,6 +175,10 @@
 							<artifactType>jar</artifactType>
 						</artifact>
 					</artifacts>
+					<exports>
+						<java.client.library.sources>java-client-sources.jar</java.client.library.sources>
+						<java.json.client.library.sources>java-json-client-sources.jar</java.json.client.library.sources>
+					</exports>
 				</configuration>
 				<dependencies>
 					<dependency>
@@ -226,4 +230,18 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.enunciate</groupId>
+				<artifactId>maven-enunciate-slim-plugin</artifactId>
+				<version>${enunciate.version}</version>
+				<configuration>
+					<docsSubdir></docsSubdir>
+					<indexPageName>index.html</indexPageName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

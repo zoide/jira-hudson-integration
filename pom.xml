@@ -86,7 +86,8 @@
 		<hudson.version>1.391</hudson.version>
 		<atlassian.jira.version>4.2</atlassian.jira.version>
 		<javax.xml.bind.version>2.2</javax.xml.bind.version>
-		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/apidocs-staging/jira-hudson-integration/${project.version}/</stagingSiteURL>
+		<enunciate.version>1.22</enunciate.version>
+		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/apidocs-staging/jira-hudson-integration/${project.version}</stagingSiteURL>
 	</properties>
 
 	<dependencies>

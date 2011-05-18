@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -32,8 +33,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
 /**
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
+@XmlType(name = "OptionType", namespace = "http://jira.marvelution.com/hudson")
+@XmlRootElement(name = "Option", namespace = "http://jira.marvelution.com/hudson")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement
 public class Option {
 
 	private static final ToStringStyle TO_STRING_STYLE = ToStringStyle.SIMPLE_STYLE;

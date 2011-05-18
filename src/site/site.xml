@@ -38,6 +38,10 @@
 			<item name="Download" href="http://docs.marvelution.com/display/REPO/Jira+Hudson+Integration+Repository+Directory" />
 			<item name="Installation Guide" href="http://docs.marvelution.com/display/MARVJIRAHUDSON/Installation+Guide" />
 			<item name="Configuration Guide" href="http://docs.marvelution.com/display/MARVJIRAHUDSON/Administrators+Guide" />
+			<item name="Hudson Plugin API" href="./hudson-apiv2-plugin/wsdocs/index.html" />
+			<item name="JIRA Plugin API" href="./jira-hudson-plugin/wsdocs/index.html" />
 		</menu>
+
+		<menu ref="modules" />
 	</body>
 </project>
