@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.  See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~  http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<enunciate label="${project.artifactId}" xsi:noNamespaceSchemaLocation="http://enunciate.codehaus.org/schemas/enunciate-1.21.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<namespaces>
+		<namespace id="hudson" uri="http://jira.marvelution.com/hudson" />
+		<!-- Copied from the hudson-apiv2-plugin enunciate xml -->
+		<namespace id="apiv2" uri="http://hudson.marvelution.com/apiv2" />
+		<namespace id="build" uri="http://hudson.marvelution.com/apiv2/build" />
+		<namespace id="trigger" uri="http://hudson.marvelution.com/apiv2/build/trigger" />
+		<namespace id="job" uri="http://hudson.marvelution.com/apiv2/job" />
+		<namespace id="view" uri="http://hudson.marvelution.com/apiv2/view" />
+	</namespaces>
+	<services>
+		<rest defaultRestSubcontext="/rest/hudson/2.0" />
+	</services>
+	<modules>
+		<docs forceExampleJson="true" title="${project.name} Docs" copyright="Marvelution.com" />
+		<java-client disabled="true" />
+		<xml prettyPrint="true">
+			<schema namespace="http://jira.marvelution.com/hudson" file="hudson.xsd" />
+			<!-- Copied from the hudson-apiv2-plugin enunciate xml -->
+			<schema namespace="http://hudson.marvelution.com/apiv2" file="apiv2.xsd" />
+			<schema namespace="http://hudson.marvelution.com/apiv2/build" file="build.xsd" />
+			<schema namespace="http://hudson.marvelution.com/apiv2/build/trigger" file="trigger.xsd" />
+			<schema namespace="http://hudson.marvelution.com/apiv2/job" file="job.xsd" />
+			<schema namespace="http://hudson.marvelution.com/apiv2/view" file="view.xsd" />
+		</xml>
+	</modules>
+	<api-classes>
+		<include pattern="com.marvelution.jira.plugins.hudson.rest.**"/>
+	</api-classes>
+	<api-import pattern="com.marvelution.hudson.plugins.apiv2.resources.model.*" />
+</enunciate>
