@@ -19,6 +19,8 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
 /**
@@ -27,6 +29,16 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 public abstract class Trigger extends Model {
+
+	/**
+	 * Getter for the type
+	 * 
+	 * @return the type of {@link Trigger}
+	 */
+	@XmlAttribute(name = "type", required = true)
+	public final String getType() {
+		return this.getClass().getSimpleName();
+	}
 
 	/**
 	 * Get a {@link String} representation of the {@link Trigger}

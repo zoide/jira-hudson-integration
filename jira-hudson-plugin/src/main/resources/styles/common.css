@@ -168,21 +168,31 @@ li {
 
 /* Build result colors */
 
-.successfulSummary, .successfulSummary a {
-	color: ${green.outline.color};
+.successfulSummary, .successfulSummary a,
+.successfulSummary a:hover, .successfulSummary a:active,
+.successfulSummary a:link, .successfulSummary a:visited {
+	color: #393;
 }
 
-.failedSummary, .failedSummary a {
-	color: ${red.outline.color};
+.failedSummary, .failedSummary a,
+.failedSummary a:hover, .failedSummary a:active,
+.failedSummary a:link, .failedSummary a:visited {
+	color: #A00;
 }
 
-.unstableSummary, .unstableSummary a {
-	color: ${yellow.outline.color};
+.unstableSummary, .unstableSummary a,
+.unstableSummary a:hover, .unstableSummary a:active,
+.unstableSummary a:link, .unstableSummary a:visited {
+	color: #FFDD00;
 }
 
 .notbuildSummary, .notbuildSummary a,
-.abortedSummary, .abortedSummary a {
-	color: ${gray.outline.color};
+.notbuildSummary a:hover, .notbuildSummary a:active,
+.notbuildSummary a:link, .notbuildSummary a:visited,
+.abortedSummary, .abortedSummary a,
+.abortedSummary a:hover, .abortedSummary a:active,
+.abortedSummary a:link, .abortedSummary a:visited {
+	color: #999;
 }
 
 /* Job Status related styles */
@@ -194,6 +204,12 @@ li {
 #jobStatus .header {
 	margin: 10px;
 	padding: 10px;
+}
+
+#jobStatus .header, #jobStatus .header a,
+#jobStatus .header a:hover, #jobStatus .header a:active,
+#jobStatus .header a:link, #jobStatus .header a:visited {
+	color: #FFF;
 }
 
 #jobStatus .header .image {
@@ -237,41 +253,24 @@ li {
 	padding: 0px 5px 0px 0px;
 }
 
-.successfulHeader, .successfulHeader a {
-	background-color: ${green.paint.color};
-	color: ${green.outline.color};
-}
-
 .successfulHeader {
-	border: 1px solid ${green.outline.color};
-}
-
-.failedHeader, .failedHeader a {
-	background-color: ${red.paint.color};
-	color: ${red.outline.color};
+	background-color: #393;
+	border: 1px solid #393;
 }
 
 .failedHeader {
-	border: 1px solid ${red.outline.color};
-}
-
-.unstableHeader, .unstableHeader a {
-	background-color: ${yellow.paint.color};
-	color: ${yellow.outline.color};
+	background-color: #A00;
+	border: 1px solid #A00;
 }
 
 .unstableHeader {
-	border: 1px solid ${yellow.outline.color};
-}
-
-.notbuildHeader, .notbuildHeader a,
-.abortedHeader, .abortedHeader a {
-	background-color: ${gray.paint.color};
-	color: ${gray.outline.color};
+	background-color: #FFDD00;
+	border: 1px solid #FFDD00;
 }
 
 .notbuildHeader, .abortedHeader {
-	border: 1px solid ${gray.outline.color};
+	background-color: #999;
+	border: 1px solid #999;
 }
 
 #jobStatus .charts {
@@ -285,6 +284,7 @@ li {
 
 #jobStatus .testResults ul,
 #jobStatus .buildArtifacts ul {
+	margin: 0px 5px;
 	padding: 10px;
 	list-style: circle;
 	list-style-position: inside;

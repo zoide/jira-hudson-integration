@@ -59,10 +59,12 @@
 			<a>this</a>
 			<b>state</b>
 		</field>
+		<!-- TODO Update this mapping to include all submodule artifacts in case of a ItemGroup build -->
 		<field>
 			<a get-method="getArtifacts">artifacts</a>
 			<b>buildArtifacts</b>
 		</field>
+		<!-- TODO Update this mapping to include all triggers of the Parent ItemGroups -->
 		<field>
 			<a get-method="getCauses">causes</a>
 			<b>triggers</b>

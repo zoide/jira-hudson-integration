@@ -20,9 +20,6 @@
 #foreach ($build in $resultSet.getResults())
 #set ($result = "${build.result.name().toLowerCase()}")
 	<li class="summary">
-		<ul class="leftSummary">
-			<li><img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson/images/${result}.png" title="${build.result.name()}" align="absmiddle" border="0" /></li>
-		</ul>
 		<ul class="centerSummary">
 			<li class="summaryInfo ${result}Summary">
 				<a href="${server.publicHost}/${build.jobUrl}">${build.jobName}</a> > <a href="${server.publicHost}/${build.url}">${i18n.getText("hudson.panel.build.number", $build.buildNumber)}</a>

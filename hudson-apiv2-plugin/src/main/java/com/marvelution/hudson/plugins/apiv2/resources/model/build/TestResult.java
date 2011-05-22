@@ -43,11 +43,11 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 public class TestResult extends Model {
 
 	@XmlElement(name = "failed", required = true)
-	private int failed;
+	private int failed = 0;
 	@XmlElement(name = "skipped", required = true)
-	private int skipped;
+	private int skipped = 0;
 	@XmlElement(name = "total", required = true)
-	private int total;
+	private int total = 0;
 	@XmlElement(name = "failedTest")
 	private Collection<TestCaseResult> failedTests;
 

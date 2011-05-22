@@ -31,15 +31,27 @@ AJS.$.namespace("AJS.hudson.trigger.parser");
 AJS.hudson.trigger.parser.parse = function(gadget, server, job, build) {
 	var triggers = new Array();
 	for (var index in build.triggers) {
-		for (var name in build.triggers[index]) {
+		if (build.triggers[index].type !== undefined) {
 			var trigger = "";
 			try {
-				eval("trigger = AJS.hudson.trigger.parser.parse" + name + "(gadget, server, job, build, build.triggers[index]." + name + ");");
+				eval("trigger = AJS.hudson.trigger.parser.parse" + build.triggers[index].type + "(gadget, server, job, build, build.triggers[index]);");
 			} catch (err) {
 				trigger = gadget.getMsg("hudson.gadget.trigger.unknown");
 			}
 			if (AJS.$.inArray(trigger, triggers) == -1) {
 				triggers.push(trigger);
+			}
+		} else {
+			for (var name in build.triggers[index]) {
+				var trigger = "";
+				try {
+					eval("trigger = AJS.hudson.trigger.parser.parse" + name + "(gadget, server, job, build, build.triggers[index]." + name + ");");
+				} catch (err) {
+					trigger = gadget.getMsg("hudson.gadget.trigger.unknown");
+				}
+				if (AJS.$.inArray(trigger, triggers) == -1) {
+					triggers.push(trigger);
+				}
 			}
 		}
 	}

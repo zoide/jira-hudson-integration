@@ -24,13 +24,19 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
+import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
 import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
+import com.marvelution.jira.plugins.hudson.rest.exceptions.NoSuchAssociationException;
 import com.marvelution.jira.plugins.hudson.rest.exceptions.NoSuchServerException;
+import com.marvelution.jira.plugins.hudson.rest.model.Server;
 import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
+import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
+import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.sun.jersey.spi.resource.Singleton;
@@ -47,16 +53,20 @@ import com.sun.jersey.spi.resource.Singleton;
 public class HudsonServerRestResource {
 
 	private final HudsonServerManager serverManager;
+	private final HudsonAssociationManager associationManager;
 	private final HudsonClientFactory clientFactory;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param serverManager the {@link HudsonServerManager} implementation
+	 * @param associationManager the {@link HudsonAssociationManager} implementation
 	 * @param clientFactory the {@link HudsonClientFactory} implementation
 	 */
-	public HudsonServerRestResource(HudsonServerManager serverManager, HudsonClientFactory clientFactory) {
+	public HudsonServerRestResource(HudsonServerManager serverManager, HudsonAssociationManager associationManager,
+					HudsonClientFactory clientFactory) {
 		this.serverManager = serverManager;
+		this.associationManager = associationManager;
 		this.clientFactory = clientFactory;
 	}
 
@@ -74,6 +84,55 @@ public class HudsonServerRestResource {
 			return client.findAll(JobQuery.createForJobList());
 		} else {
 			throw new NoSuchServerException(serverId);
+		}
+	}
+
+	/**
+	 * Helper method to get the {@link Job} data of a Hudson Job via its {@link HudsonAssociation} Id
+	 * 
+	 * @param associationId the {@link HudsonAssociation} Id to get the Job Data for
+	 * @return the {@link Job}
+	 */
+	@GET
+	@Path("job/{associationId}")
+	public Job getJobData(@PathParam("associationId") Integer associationId) {
+		if (associationManager.hasAssociation(associationId)) {
+			final HudsonAssociation association = associationManager.getAssociation(associationId);
+			final HudsonClient client = clientFactory.create(serverManager.getServer(association.getServerId()));
+			return client.find(JobQuery.createForJobByName(association.getJobName()));
+		} else {
+			throw new NoSuchAssociationException(associationId);
+		}
+	}
+
+	/**
+	 * Getter for the Server details via its Id.
+	 * 
+	 * @param serverId the Server Id
+	 * @return the {@link Server} details
+	 */
+	@GET
+	@Path("{serverId}")
+	public Server getServer(@PathParam("serverId") Integer serverId) {
+		if (serverManager.hasServer(serverId)) {
+			return new Server(serverManager.getServer(serverId));
+		} else {
+			throw new NoSuchServerException(serverId);
+		}
+	}
+
+	/**
+	 * Getter for the Server details via an {@link HudsonAssociation} Id.
+	 * 
+	 * @param associationId the {@link HudsonAssociation} Id
+	 * @return the {@link Server} details
+	 */
+	@GET
+	public Server getServerByAssociation(@QueryParam("associationId") Integer associationId) {
+		if (associationManager.hasAssociation(associationId)) {
+			return getServer(associationManager.getAssociation(associationId).getServerId());
+		} else {
+			throw new NoSuchAssociationException(associationId);
 		}
 	}
 

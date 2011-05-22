@@ -42,19 +42,19 @@ Date.prototype.duration = function(duration) {
  * @return the formatted duration
  */
 Date.duration = function(duration) {
-	var years = duration / Date.YEAR_MILLIS;
+	var years = (duration / Date.YEAR_MILLIS).toFixed(0);
 	var remDuration = duration % Date.YEAR_MILLIS;
-	var months = remDuration / Date.MONTH_MILLIS;
+	var months = (remDuration / Date.MONTH_MILLIS).toFixed(0);
 	remDuration %= Date.MONTH_MILLIS;
-	var days = remDuration / Date.DAY_MILLIS;
+	var days = (remDuration / Date.DAY_MILLIS).toFixed(0);
 	remDuration %= Date.DAY_MILLIS;
-	var hours = remDuration / Date.HOUR_MILLIS;
+	var hours = (remDuration / Date.HOUR_MILLIS).toFixed(0);
 	remDuration %= Date.HOUR_MILLIS;
-	var minutes = remDuration / Date.MINUTE_MILLIS;
+	var minutes = (remDuration / Date.MINUTE_MILLIS).toFixed(0);
 	remDuration %= Date.MINUTE_MILLIS;
-	var seconds = remDuration / Date.SECOND_MILLIS;
+	var seconds = (remDuration / Date.SECOND_MILLIS).toFixed(0);
 	remDuration %= Date.SECOND_MILLIS;
-	var millisecs = remDuration;
+	var millisecs = (remDuration).toFixed(0);
 	if (years > 0) {
 		return years + " yr " + months + " mo"
 	} else if (months > 0 && days == 1) {

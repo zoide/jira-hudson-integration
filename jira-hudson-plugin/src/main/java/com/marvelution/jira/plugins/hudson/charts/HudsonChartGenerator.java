@@ -33,14 +33,14 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
  */
 public interface HudsonChartGenerator extends ChartGenerator {
 
-	Color RED_OUTLINE = new Color(204, 0, 0);
-	Color RED_PAINT = new Color(255, 204, 204);
-	Color GREEN_OUTLINE = new Color(0, 204, 0);
-	Color GREEN_PAINT = new Color(204, 255, 204);
-	Color YELLOW_OUTLINE = new Color(204, 204, 0);
-	Color YELLOW_PAINT = new Color(255, 255, 204);
-	Color GRAY_OUTLINE = new Color(204, 204, 204);
-	Color GRAY_PAINT = new Color(238, 238, 238);
+	Color RED_OUTLINE = new Color(170, 0, 0);
+	Color RED_PAINT = new Color(170, 0, 0);
+	Color GREEN_OUTLINE = new Color(51, 153, 51);
+	Color GREEN_PAINT = new Color(51, 153, 51);
+	Color YELLOW_OUTLINE = new Color(255, 221, 0);
+	Color YELLOW_PAINT = new Color(255, 221, 0);
+	Color GRAY_OUTLINE = new Color(153, 153, 153);
+	Color GRAY_PAINT = new Color(153, 153, 153);
 
 	/**
 	 * Set the data for the Chart

@@ -28,7 +28,6 @@
 		<ul class="header ${result}Header">
 			#if($build)
 			<li class="ratio">${i18n.getText("hudson.panel.job.success.ratio", $jobUtils.getJobSuccessRatio($job))}</li>
-			<li class="image"><img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson/images/${result}.png" width="48" height="48"></li>
 			<li class="title">${i18n.getText("hudson.panel.job.header.title")} <a href="${server.publicHost}/${job.url}">${job.name}</a> <a href="${server.publicHost}/${build.url}">${i18n.getText("hudson.panel.build.number", $build.buildNumber)}</a> ${i18n.getText("hudson.panel.job.header.was")} ${i18n.getText("hudson.panel.job.header.$result")}</li>
 			<li class="description">
 				<ul>

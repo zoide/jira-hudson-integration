@@ -64,6 +64,21 @@ AJS.hudson.gadget.config.getChartFields = function(gadget, args) {
 }
 
 /**
+ * Get the fields array for the given gadget
+ * 
+ * @param gadget the gadget to get the fields array for
+ * @return the fields array
+ */
+AJS.hudson.gadget.config.getJobStatusFields = function(gadget, args) {
+	return [
+	    AJS.hudson.gadget.config.associationField(gadget, args.associations.associations),
+	    AJS.hudson.gadget.config.dateFormatField(gadget),
+		AJS.hudson.gadget.config.isConfiguredField,
+		AJS.hudson.gadget.config.titleRequiredField
+	];
+}
+
+/**
  * The Gadgets' Server field
  * 
  * @param gadget the gadget to get the server field for

@@ -40,16 +40,6 @@
 
 	<properties>
 		<atlassian.plugin.key>${project.groupId}.hudson</atlassian.plugin.key>
-		
-		<!-- These RGB colors are only here to make sure that within the css style the correct colors are used. -->
-		<red.outline.color>rgb(204, 0, 0)</red.outline.color>
-		<red.paint.color>rgb(255, 204, 204)</red.paint.color>
-		<green.outline.color>rgb(0, 204 ,0)</green.outline.color>
-		<green.paint.color>rgb(204, 255, 204)</green.paint.color>
-		<yellow.outline.color>rgb(204, 204, 0)</yellow.outline.color>
-		<yellow.paint.color>rgb(255, 255, 204)</yellow.paint.color>
-		<gray.outline.color>rgb(204, 204, 204)</gray.outline.color>
-		<gray.paint.color>rgb(238, 238, 238)</gray.paint.color>
 	</properties>
 
 	<dependencies>
@@ -59,12 +49,6 @@
 			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.wink</groupId>
-					<artifactId>wink-jackson-provider</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<!-- needed for the ws-client jar -->
 		<dependency>
@@ -169,7 +153,6 @@
 					<include>atlassian-plugin.xml</include>
 					<include>gadgets/*.xml</include>
 					<include>**/JiraPluginUtils.properties</include>
-					<include>**/*.css</include>
 				</includes>
 			</resource>
 		</resources>

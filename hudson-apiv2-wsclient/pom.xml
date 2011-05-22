@@ -51,6 +51,10 @@
 					<artifactId>wink-server</artifactId>
 				</exclusion>
 				<exclusion>
+					<groupId>org.apache.wink</groupId>
+					<artifactId>wink-jackson-provider</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-nop</artifactId>
 				</exclusion>

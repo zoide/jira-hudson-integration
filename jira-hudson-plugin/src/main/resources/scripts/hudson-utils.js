@@ -88,7 +88,7 @@ AJS.hudson.utils.createChart = function(gadget, chart) {
 	var chartImg = AJS.$("<img/>");
 	chartImg.attr({
 		src: gadget.getBaseUrl() + "/charts?filename=" + chart.location,
-		usemap: chart.imageMapName,
+		usemap: "#" + chart.imageMapName,
 		height: chart.height,
 		width: chart.width
 	});
