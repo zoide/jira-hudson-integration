@@ -59,4 +59,12 @@ public abstract class AbstractHudsonIdGenerator implements HudsonIdGenerator {
 		return nextId;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setInitialNextId(int nextId) {
+		propertyManager.getPropertySet().setInt(getNextIdKey(), nextId);
+	}
+
 }

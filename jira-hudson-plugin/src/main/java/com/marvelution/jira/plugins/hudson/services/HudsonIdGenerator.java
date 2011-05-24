@@ -33,4 +33,11 @@ public interface HudsonIdGenerator {
 	 */
 	int next();
 
+	/**
+	 * Method to set the inital next id
+	 *  
+	 * @param nextId the initial next id
+	 */
+	void setInitialNextId(int nextId);
+
 }
