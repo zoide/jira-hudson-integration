@@ -102,7 +102,9 @@ public class HudsonServerUpgradeTask implements PluginUpgradeTask {
 			loadOldServer(serverId);
 			removeOldServer(serverId);
 		}
-		idGenerator.setInitialNextId(serverIds.get(serverIds.size() - 1) + 1);
+		if (serverIds.size() > 0) {
+			idGenerator.setInitialNextId(serverIds.get(serverIds.size() - 1) + 1);
+		}
 		int defaultServerId = 0;
 		if (propertySet.exists(CONFIG_DEFAULT_SERVER_ID)
 			&& serverManager.hasServer(new Integer(propertySet.getInt(CONFIG_DEFAULT_SERVER_ID)))) {

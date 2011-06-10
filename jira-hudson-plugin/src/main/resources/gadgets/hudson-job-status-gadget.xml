@@ -36,7 +36,7 @@
 		<Optional feature="atlassian.util" />
 		<Require feature="oauthpopup" />
 		#oauth
-		#supportedLocales("gadget.common,hudson.gadget")
+		#supportedLocales("gadget.common,hudson.gadget,hudson.charts")
 	</ModulePrefs>
 	<UserPref name="association" datatype="hidden" default_value="0" />
 	<UserPref name="dateFormat" datatype="hidden" default_value="m-d-Y H:i:s" />
@@ -93,6 +93,8 @@
 						nameDiv.addClass('name');
 						resultsDiv.append(nameDiv);
 						var detailsDiv = AJS.hudson.utils.createDiv().addClass('details');
+						resultsDiv.append(detailsDiv);
+						jobDiv.append(resultsDiv);
 						if (job.lastBuild !== undefined) {
 							var details = [{
 								"label": "__MSG_hudson.gadget.build.on__",
@@ -106,13 +108,24 @@
 							}];
 							nameDiv.append(AJS.hudson.utils.createLink(args.hudson.host + "/" + job.lastBuild.url, job.name + " #" + job.lastBuild.number));
 							detailsDiv.append(AJS.hudson.utils.createDetailsTable(details));
-							// TODO Create the tabs for the charts and details
+							var tabs = [{
+								id: 'buildDetails',
+								name: '__MSG_hudson.gadget.build.details__',
+								content: AJS.hudson.utils.createBuildDetailsView(gadget, args.hudson, job, job.lastBuild)
+							}, {
+								id: 'buildTrendChart',
+								name: '__MSG_hudson.charts.BuildResultsRatioChartGenerator.title__',
+								content: AJS.hudson.utils.createChart(gadget, args.buildTrendChart)
+							}, {
+								id: 'testTrendChart',
+								name: '__MSG_hudson.charts.BuildTestResultsRatioChartGenerator.title__',
+								content: AJS.hudson.utils.createChart(gadget, args.testTrendChart)
+							}];
+							jobDiv.append(AJS.hudson.utils.createTabView(gadget, tabs, 'buildDetails'));
 						} else {
 							nameDiv.append(AJS.hudson.utils.createLink(args.hudson.host + "/" + job.url, job.name));
 							detailsDiv.text("__MSG_hudson.gadget.no.build.info__");
 						}
-						resultsDiv.append(detailsDiv);
-						jobDiv.append(resultsDiv);
 						gadget.getView().append(jobDiv);
 						gadget.resize();
 					},

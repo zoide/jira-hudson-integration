@@ -19,12 +19,10 @@
 
 package com.marvelution.jira.plugins.hudson.web.action.build;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Transformer;
 
 import webwork.action.ActionContext;
 
@@ -330,19 +328,16 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * @return the {@link Collection} of issue keys
 	 * @throws SearchException in case of errors during the execution of the {@link JqlQueryBuilder}
 	 */
-	@SuppressWarnings("unchecked")
 	private Collection<String> getIssueKeys(JqlQueryBuilder queryBuilder) throws SearchException {
 		SearchResults searchResults = getSearchProvider().search(queryBuilder.buildQuery(), getAuthenticationContext()
 				.getUser(), PagerFilter.getUnlimitedFilter());
 		Collection<?> issues = searchResults.getIssues();
-		Collection<?> issueKeys = CollectionUtils.collect(issues,
-				new Transformer() {
-					@Override
-					public Object transform(Object object) {
-						Issue issue = (Issue) object;
-						return issue.getKey();
-					}
-				});
+		Collection<String> issueKeys = new ArrayList<String>();
+		for (Object issue : issues) {
+			if (issue instanceof Issue) {
+				issueKeys.add(((Issue) issue).getKey());
+			}
+		}
 		return (Collection<String>) issueKeys;
 	}
 

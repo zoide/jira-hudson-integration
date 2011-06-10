@@ -95,3 +95,115 @@ AJS.hudson.utils.createChart = function(gadget, chart) {
 	chartDiv.append(chartImg);
 	return chartDiv;
 }
+
+/**
+ * Method to create a View of the build data given
+ * 
+ * @param gadget the gadget to create the view for
+ * @param server the Hudson server the data came from
+ * @param job the Job on Hudson that was build
+ * @param build the build to create the view for
+ * @return the details view
+ */
+AJS.hudson.utils.createBuildDetailsView = function(gadget, server, job, build) {
+	var jobStatus = AJS.$('<ol/>').attr('id', 'jobStatus');
+	jobStatus.append('<li class="clear">&nbsp;</li>');
+	var trLi = AJS.$('<li/>').addClass('testResults');
+	var trUl = AJS.$('<ul/>');
+	trUl.append(AJS.$('<li/>').addClass('header').text(gadget.getMsg('hudson.gadget.build.test.results')));
+	if (build.testResult !== undefined && build.testResult.failed > 0) {
+		AJS.$.each(build.testResult.failedTests, function(index, test) {
+			var listItem = AJS.$('<li/>');
+			listItem.text(test.className + "." + test.testName);
+			if (index == build.testResult.failedTests.length - 1) {
+				listItem.addClass('last');
+			}
+			trUl.append(listItem);
+		});
+	} else {
+		trUl.append(AJS.$('<li/>').addClass('last').text(gadget.getMsg('hudson.gadget.build.no.test.results')));
+	}
+	trLi.append(trUl);
+	jobStatus.append(trLi);
+	jobStatus.append('<li class="clear">&nbsp;</li>');
+	var baLi = AJS.$('<li/>').addClass('buildArtifacts');
+	var baUl = AJS.$('<ul/>');
+	baUl.append(AJS.$('<li/>').addClass('header').text(gadget.getMsg('hudson.gadget.build.artifacts')));
+	if (build.artifacts !== undefined && build.artifacts.length > 0) {
+		AJS.$.each(build.artifacts, function(index, artifact) {
+			var listItem = AJS.$('<li/>');
+			var href = server.host + "/" + job.url + "/lastBuild/" + artifact.url;
+			listItem.append(AJS.hudson.utils.createLink(href, artifact.name));
+			if (index == build.artifacts.length - 1) {
+				listItem.addClass('last');
+			}
+			baUl.append(listItem);
+		});
+	} else {
+		baUl.append(AJS.$('<li/>').addClass('last').text(gadget.getMsg('hudson.gadget.build.no.artifacts')));
+	}
+	baLi.append(baUl);
+	jobStatus.append(baLi);
+	jobStatus.append('<li class="clear">&nbsp;</li>');
+	return jobStatus
+}
+
+/**
+ * Method to create a Tab view
+ * 
+ * @param gadget the gadget to create the tab view for
+ * @param tabs the array of tab object (tab.name/tab.content)
+ * @return the tabs view div
+ */
+AJS.hudson.utils.createTabView = function(gadget, tabs, selectedTab) {
+	var tabsDiv = AJS.hudson.utils.createDiv();
+	tabsDiv.addClass('tabbedDetails');
+	var tabsList = AJS.$('<ul/>');
+	tabsList.attr('id', 'tabs');
+	var tabsContent = AJS.hudson.utils.createDiv();
+	tabsContent.attr('id', 'tabsContent');
+	for (var index in tabs) {
+		var tab = AJS.$('<li/>');
+		tab.addClass('tab');
+		tab.click(function(event) {
+			var tabId = AJS.$(event.target).attr('id').split('_')[0];
+			AJS.hudson.utils.toggleTabView(gadget, tabId);
+			event.preventDefault();
+		});
+		var tabContent = AJS.hudson.utils.createDiv(tabs[index].id + "_content");
+		tabContent.addClass("content");
+		if (selectedTab == "" || tabs[index].id == selectedTab) {
+			selectedTab = tabs[index].id;
+			tab.addClass('selected');
+			tabContent.css({display: "block"});
+		} else {
+			tabContent.css({display: "none"});
+		}
+		tab.attr('id', tabs[index].id + "_tab");
+		tab.text(tabs[index].name);
+		tabsList.append(tab);
+		tabContent.append(tabs[index].content);
+		tabsContent.append(tabContent);
+	}
+	tabsDiv.append(tabsList);
+	tabsDiv.append(tabsContent);
+	return tabsDiv;
+}
+
+/**
+ * Method to toggle the selected tab within a tabbed view
+ * 
+ * @param gadget the gadget holding the tabs
+ * @param tabId the tab id to toggle
+ */
+AJS.hudson.utils.toggleTabView = function(gadget, tabId) {
+	AJS.$("#tabs .tab").each(function(index, item) {
+		AJS.$("#" + item.id).removeClass("selected");
+	});
+	AJS.$("#" + tabId + "_tab").addClass("selected");
+	AJS.$("#tabsContent .content").each(function(index, item) {
+		AJS.$("#" + item.id).css({display: 'none'});
+	});
+	AJS.$("#" + tabId + "_content").css({display: 'block'});
+	gadget.resize();
+}

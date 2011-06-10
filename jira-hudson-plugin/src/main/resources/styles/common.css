@@ -34,6 +34,13 @@ li {
 }
 
 /* Tab related styles */
+#tabs {
+	list-style-type: none;
+	list-style-image: none;
+	list-style-position: outside;
+	padding: 0px;
+	margin: 0px;
+}
 
 .tab {
 	padding: 2px 10px;
@@ -50,6 +57,14 @@ li {
 	cursor: default;
 }
 
+#tabsContent {
+	border: 1px solid #CCC;
+	margin: 1px 0px;
+	padding: 10px;
+}
+
+#tabsContent .content {
+}
 
 /* Build summary related styles */
 

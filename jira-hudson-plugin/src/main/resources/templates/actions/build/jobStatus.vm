@@ -71,7 +71,7 @@
 			<li class="header">${i18n.getText("common.words.latest")} <a href="${server.publicHost}/${job.url}/lastCompletedBuild/testReport/">${i18n.getText("hudson.panel.build.tests.results")}</a> (${i18n.getText("hudson.panel.build.tests.failed", $build.testResults.failed)}):</li>
 			#if ($build.testResults.failed > 0)
 			#foreach ($test in $build.testResults.failedTests)
-			<li #if (!$foreach.hasNext)class="last"#end>${test.className}.${test.testName}</li>
+			<li #if (!${foreach.hasNext})class="last"#end>${test.className}.${test.testName}</li>
 			#end
 			#else
 			<li class="last">${i18n.getText("hudson.panel.build.tests.no.results")}</li>
@@ -84,7 +84,7 @@
 			<li class="header">${i18n.getText("common.words.latest")} ${i18n.getText("hudson.panel.build.artifacts")}:</li>
 			#if ($build.buildArtifacts.size() > 0)
 			#foreach ($artifact in $build.buildArtifacts)
-			<li #if (!$foreach.hasNext)class="last"#end><a href="${server.publicHost}/${job.url}/lastBuild/${artifact.url}">${artifact.name}</a></li>
+			<li #if (!${foreach.hasNext})class="last"#end><a href="${server.publicHost}/${job.url}/lastBuild/${artifact.url}">${artifact.name}</a></li>
 			#end
 			#else
 			<li class="last">${i18n.getText("hudson.panel.build.no.build.artifacts")}</li>
