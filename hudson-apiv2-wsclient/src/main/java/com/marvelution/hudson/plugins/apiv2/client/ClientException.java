@@ -19,6 +19,8 @@
 
 package com.marvelution.hudson.plugins.apiv2.client;
 
+import com.marvelution.hudson.plugins.apiv2.client.connectors.ConnectorResponse;
+
 /**
  * Exception throws by the {@link HudsonClient} is case of errors
  * 
@@ -28,10 +30,13 @@ public class ClientException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
+	private final ConnectorResponse response;
+
 	/**
 	 * Constructor
 	 */
-	public ClientException() {
+	public ClientException(ConnectorResponse response) {
+		this.response = response;
 	}
 
 	/**
@@ -39,8 +44,9 @@ public class ClientException extends RuntimeException {
 	 * 
 	 * @param message the exception message
 	 */
-	public ClientException(String message) {
+	public ClientException(String message, ConnectorResponse response) {
 		super(message);
+		this.response = response;
 	}
 
 	/**
@@ -48,8 +54,9 @@ public class ClientException extends RuntimeException {
 	 * 
 	 * @param cause the exception cause
 	 */
-	public ClientException(Throwable cause) {
+	public ClientException(Throwable cause, ConnectorResponse response) {
 		super(cause);
+		this.response = response;
 	}
 
 	/**
@@ -58,8 +65,18 @@ public class ClientException extends RuntimeException {
 	 * @param message the exception message
 	 * @param cause the exception cause
 	 */
-	public ClientException(String message, Throwable cause) {
+	public ClientException(String message, Throwable cause, ConnectorResponse response) {
 		super(message, cause);
+		this.response = response;
+	}
+
+	/**
+	 * Getter for response
+	 * 
+	 * @return the response
+	 */
+	public ConnectorResponse getResponse() {
+		return response;
 	}
 
 }

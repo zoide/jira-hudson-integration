@@ -94,7 +94,7 @@ public class HudsonClient {
 				return (MODEL) unmarshaller.unmarshal(response.getResponseAsStream());
 			} catch (JAXBException e) {
 				throw new ClientException("Failed to unmarshal Hudson response. Original Request: "
-						+ query.getUrl(), e);
+						+ query.getUrl(), e, response);
 			}
 		}
 		return null;
@@ -119,7 +119,7 @@ public class HudsonClient {
 				return (LISTMODEL) unmarshaller.unmarshal(response.getResponseAsStream());
 			} catch (JAXBException e) {
 				throw new ClientException("Failed to unmarshal Hudson response. Original Request: "
-						+ query.getUrl(), e);
+						+ query.getUrl(), e, response);
 			}
 		}
 		return null;

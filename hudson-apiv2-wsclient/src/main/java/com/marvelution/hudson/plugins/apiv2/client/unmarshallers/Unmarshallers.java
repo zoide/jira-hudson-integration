@@ -19,9 +19,6 @@
 
 package com.marvelution.hudson.plugins.apiv2.client.unmarshallers;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -34,9 +31,6 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 public final class Unmarshallers {
-
-	private static Map<Class<? extends Model>, Unmarshaller> unmarshallers =
-		new HashMap<Class<? extends Model>, Unmarshaller>();
 
 	/**
 	 * Method to get an {@link Unmarshaller} for the given {@link Model} object
@@ -58,19 +52,16 @@ public final class Unmarshallers {
 	 * @throws JAXBException in case of exceptions
 	 */
 	public static Unmarshaller forModel(Class<? extends Model> model) throws JAXBException {
-		if (!unmarshallers.containsKey(model)) {
-			JAXBContext context;
-			try {
-				context = JAXBContext.newInstance(model);
-			} catch (JAXBException e) {
-				// OK there is a class-loader issue
-				// Try loading the JAXBContext using the package name for the Model class
-				// This will use the ObjectFactory class within the package
-				context = JAXBContext.newInstance(model.getPackage().getName(), model.getClassLoader());
-			}
-			unmarshallers.put(model, context.createUnmarshaller());
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(model);
+		} catch (JAXBException e) {
+			// OK there is a class-loader issue
+			// Try loading the JAXBContext using the package name for the Model class
+			// This will use the ObjectFactory class within the package
+			context = JAXBContext.newInstance(model.getPackage().getName(), model.getClassLoader());
 		}
-		return unmarshallers.get(model);
+		return context.createUnmarshaller();
 	}
 
 }
