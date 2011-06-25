@@ -83,7 +83,7 @@
 
 	<properties>
 		<project.jdk.revision>1.6</project.jdk.revision>
-		<hudson.version>1.391</hudson.version>
+		<hudson.version>2.0.1</hudson.version>
 		<atlassian.jira.version>4.2</atlassian.jira.version>
 		<javax.xml.bind.version>2.2</javax.xml.bind.version>
 		<enunciate.version>1.22</enunciate.version>

@@ -42,7 +42,7 @@
 	</mapping>
 
 	<mapping type="one-way">
-		<class-a>hudson.tasks.test.TestResult</class-a>
+		<class-a>hudson.tasks.junit.CaseResult</class-a>
 		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.TestCaseResult</class-b>
 		<field>
 			<a>duration</a>
