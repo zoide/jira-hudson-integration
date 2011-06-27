@@ -101,12 +101,12 @@
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
-        <!-- dependency>
+        <dependency>
             <groupId>org.jvnet.hudson.main</groupId>
             <artifactId>hudson-test-harness</artifactId>
             <version>${hudson.version}</version>
             <scope>test</scope>
-        </dependency -->
+        </dependency>
 		<dependency>
 			<groupId>org.jvnet.hudson.main</groupId>
 			<artifactId>hudson-war</artifactId>
@@ -211,7 +211,7 @@
 			<plugin>
 				<groupId>org.jvnet.hudson.tools</groupId>
 				<artifactId>maven-hpi-plugin</artifactId>
-				<version>1.57</version>
+				<version>2.0.1</version>
 				<extensions>true</extensions>
 				<configuration>
 					<webResources>
