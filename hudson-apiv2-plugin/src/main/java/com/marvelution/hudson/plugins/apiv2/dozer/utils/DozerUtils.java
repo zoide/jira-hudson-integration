@@ -64,6 +64,7 @@ public class DozerUtils {
 	 */
 	public static List<String> getMappingFiles() {
 		if (mappingFiles == null) {
+			// First load, add all the plugin default mappings
 			mappingFiles = new ArrayList<String>();
 			try {
 				final URL resourcePackage = FileLoader.loadFile(DOZER_CONFIG_LOCATION);
@@ -77,6 +78,7 @@ public class DozerUtils {
 				LOGGER.log(Level.SEVERE, "Failed to load Dozer Mapper configuration", e);
 			}
 		}
+		// TODO Support user specific mapping files
 		return mappingFiles;
 	}
 

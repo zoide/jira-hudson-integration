@@ -41,31 +41,32 @@
 		</field>
 	</mapping>
 
+	<!-- J U N I T   T E S T R E S U L T   M A P P I N G -->
 	<mapping type="one-way">
 		<class-a>hudson.tasks.junit.CaseResult</class-a>
 		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.TestCaseResult</class-b>
 		<field>
-			<a>duration</a>
+			<a get-method="getDuration">duration</a>
 			<b>duration</b>
 		</field>
 		<field>
-			<a>className</a>
+			<a get-method="getClassName">className</a>
 			<b>className</b>
 		</field>
 		<field>
-			<a>testName</a>
+			<a get-method="getName">testName</a>
 			<b>testName</b>
 		</field>
 		<field>
-			<a>skipped</a>
+			<a get-method="isSkipped">skipped</a>
 			<b>skipped</b>
 		</field>
 		<field>
-			<a>errorStackTrace</a>
+			<a get-method="getErrorStackTrace">errorStackTrace</a>
 			<b>errorStackTrace</b>
 		</field>
 		<field>
-			<a>errorDetails</a>
+			<a get-method="getErrorDetails">errorDetails</a>
 			<b>errorDetails</b>
 		</field>
 	</mapping>
