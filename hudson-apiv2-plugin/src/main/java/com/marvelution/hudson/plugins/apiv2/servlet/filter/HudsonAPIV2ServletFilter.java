@@ -87,7 +87,10 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 			// Put the original HttpServletRequest in the HttpServletRequestWrapper
 			final HttpServletRequestWrapper servletRequest = new HttpServletRequestWrapper((HttpServletRequest) request);
 			// Get the requestUri without the context path and the leading slash
-			final String requestUri = servletRequest.getRequestURI().substring(servletRequest.getContextPath().length() + 1);
+			String requestUri = servletRequest.getPathInfo();
+			if (requestUri.startsWith("/")) {
+				requestUri = requestUri.substring(1);
+			}
 			logger.log(Level.FINE, "Got a request from URI + " + requestUri);
 			// Make sure it is a REST call
 			if (requestUri.startsWith(BaseRestResource.BASE_REST_URI)) {
