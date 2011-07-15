@@ -31,11 +31,11 @@
 			<a get-method="getUrl">url</a>
 			<b>url</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildParentToJobNameDozerConverter">
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildParentToJobNameDozerConverter"> 
 			<a get-method="getParent">project</a>
 			<b>jobName</b>
 		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildParentToJobUrlDozerConverter">
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildParentToJobUrlDozerConverter"> 
 			<a get-method="getParent">project</a>
 			<b>jobUrl</b>
 		</field>
@@ -47,8 +47,8 @@
 			<a get-method="getTimeInMillis">time</a>
 			<b>timestamp</b>
 		</field>
-		<field>
-			<a get-method="getTestResultAction">testResultAction</a>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.TestResultsDozerConverter">
+			<a>this</a>
 			<b>testResult</b>
 		</field>
 		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ResultDozerConverter">

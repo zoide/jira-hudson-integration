@@ -57,6 +57,9 @@ public class TestResult extends Model {
 	 * @return the count
 	 */
 	public int getFailed() {
+		if (getFailedTests().size() > failed) {
+			failed = getFailedTests().size();
+		}
 		return failed;
 	}
 
@@ -79,6 +82,17 @@ public class TestResult extends Model {
 			failedTests = new ArrayList<TestCaseResult>();
 		}
 		return failedTests;
+	}
+
+	/**
+	 * Add a single Failed {@link TestCaseResult}, used in the Dozer mapping configuration
+	 * 
+	 * @param test the {@link TestCaseResult} to add
+	 * 
+	 * @since 4.0.1
+	 */
+	public void addFailedTest(TestCaseResult test) {
+		getFailedTests().add(test);
 	}
 
 	/**

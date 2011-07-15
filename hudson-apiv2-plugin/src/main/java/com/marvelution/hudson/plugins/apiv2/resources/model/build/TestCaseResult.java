@@ -46,7 +46,7 @@ public class TestCaseResult extends Model {
 	@XmlElement(name = "test", required = true)
 	private String testName;
 	@XmlElement(name = "skipped", required = true, defaultValue = "false")
-	private boolean skipped;
+	private boolean skipped = false;
 	@XmlElement(name = "stackTrace")
 	private String errorStackTrace;
 	@XmlElement(name = "details")
