@@ -19,6 +19,8 @@
 
 package com.marvelution.hudson.plugins.apiv2.utils;
 
+import hudson.model.Hudson;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -71,6 +73,17 @@ public final class HudsonPluginUtils {
 	 */
 	public static String getPluginVersion() {
 		return INSTANCE.getProperty("plugin.version");
+	}
+
+	/**
+	 * Get if the TestNG plugin is installed on this Hudson/Jenkins platform
+	 * 
+	 * @return <code>true</code> if installed, <code>false</code> otherwise
+	 * 
+	 * @since 4.0.2
+	 */
+	public static boolean hasTestNGPlugin() {
+		return Hudson.getInstance().getPluginManager().getPlugin("testng-plugin") != null;
 	}
 
 	/**

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.  See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~  http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<!-- T E S T N G   T E S T R E S U L T   M A P P I N G -->
+	<mapping type="one-way">
+		<class-a>hudson.plugins.testng.results.TestResults</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.TestResult</class-b>
+		<field>
+			<a get-method="getTotalTestCount">totalTestCount</a>
+			<b>total</b>
+		</field>
+		<field>
+			<a get-method="getSkippedTestCount">skippedTestCount</a>
+			<b>skipped</b>
+		</field>
+		<field>
+			<a get-method="getFailedTestCount">failedTestCount</a>
+			<b>failed</b>
+		</field>
+		<field>
+			<a get-method="getFailedTests">failedTests</a>
+			<b set-method="addFailedTest" type="iterate">failedTests</b>
+			<a-hint>hudson.plugins.testng.results.MethodResult</a-hint>
+			<b-hint>com.marvelution.hudson.plugins.apiv2.resources.model.build.TestCaseResult</b-hint>
+		</field>
+		<field>
+			<a get-method="getSkippedTests">skippedTests</a>
+			<b set-method="addFailedTest" type="iterate">failedTests</b>
+			<a-hint>hudson.plugins.testng.results.MethodResult</a-hint>
+			<b-hint>com.marvelution.hudson.plugins.apiv2.resources.model.build.TestCaseResult</b-hint>
+		</field>
+	</mapping>
+
+	<mapping type="one-way">
+		<class-a>hudson.plugins.testng.results.MethodResult</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.TestCaseResult</class-b>
+		<field>
+			<a get-method="getDuration">duration</a>
+			<b>duration</b>
+		</field>
+		<field>
+			<a>parent.name</a>
+			<b>className</b>
+		</field>
+		<field>
+			<a get-method="getName">name</a>
+			<b>testName</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.StatusToIsSkippedDozerConverter">
+			<a get-method="getStatus">status</a>
+			<b>skipped</b>
+		</field>
+		<field>
+			<a>exception.stackTrace</a>
+			<b>errorStackTrace</b>
+		</field>
+		<field>
+			<a>exception.message</a>
+			<b>errorDetails</b>
+		</field>
+	</mapping>
+
+</mappings>

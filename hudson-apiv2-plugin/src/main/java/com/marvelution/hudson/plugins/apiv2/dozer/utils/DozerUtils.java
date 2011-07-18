@@ -31,6 +31,8 @@ import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.dozer.util.DozerConstants;
 
+import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
+
 /**
  * Utility class for the <a href="http://dozer.sourceforge.net">Dozer</a> {@link Mapper} implementation
  * 
@@ -69,7 +71,7 @@ public class DozerUtils {
 			try {
 				final URL resourcePackage = FileLoader.loadFile(DOZER_CONFIG_LOCATION);
 				for (String filename : new File(resourcePackage.toURI()).list()) {
-					if (filename.endsWith(".xml")) {
+					if (!filename.startsWith("optional") && filename.endsWith(".xml")) {
 						LOGGER.log(Level.FINE, "Loaded Dozer Mapping file: " + DOZER_CONFIG_LOCATION + "/" + filename);
 						mappingFiles.add(DOZER_CONFIG_LOCATION + "/" + filename);
 					}
@@ -77,6 +79,10 @@ public class DozerUtils {
 			} catch (Exception e) {
 				LOGGER.log(Level.SEVERE, "Failed to load Dozer Mapper configuration", e);
 			}
+		}
+		if (HudsonPluginUtils.hasTestNGPlugin()) {
+			// TestNG plugin is used, add the TestNG Dozer mapping
+			mappingFiles.add(DOZER_CONFIG_LOCATION + "/optional-testng-dozer-mapping.xml");
 		}
 		// TODO Support user specific mapping files
 		return mappingFiles;

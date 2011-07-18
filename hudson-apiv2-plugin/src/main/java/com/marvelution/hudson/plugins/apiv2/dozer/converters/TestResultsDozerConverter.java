@@ -19,14 +19,12 @@
 
 package com.marvelution.hudson.plugins.apiv2.dozer.converters;
 
-import hudson.model.Hudson;
-import hudson.plugins.helpers.AbstractBuildAction;
-
 import org.dozer.DozerConverter;
 import org.dozer.Mapper;
 import org.dozer.MapperAware;
 
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.TestResult;
+import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
 
 
 /**
@@ -55,11 +53,10 @@ public class TestResultsDozerConverter extends DozerConverter<hudson.model.Abstr
 		if (source.getTestResultAction() != null) {
 			// We have Surefire test results, map these to the TestResult object
 			return mapper.map(source.getTestResultAction(), TestResult.class);
-		} else if (Hudson.getInstance().getPluginManager().getPlugin("testng-plugin") != null) {
+		} else if (HudsonPluginUtils.hasTestNGPlugin()) {
 			// We have the TestNG plugin installed, maybe there are TestNG test results?
-			AbstractBuildAction<?> buildAction = source.getAction(AbstractBuildAction.class);
+			hudson.plugins.testng.TestNGBuildAction buildAction = source.getAction(hudson.plugins.testng.TestNGBuildAction.class);
 			if (buildAction != null) {
-				// TODO Map the TestNG MethodResult to TestCaseResult and merge the Failed and Skipped tests
 				return mapper.map(buildAction.getResults(), TestResult.class);
 			}
 		}
