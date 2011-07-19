@@ -17,7 +17,7 @@
 
 #set($i18n = $action)
 <form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="DeleteAssociation.jspa">
-<input type="hidden" name="aid" value="${aid}" />
+<input type="hidden" name="associationId" value="${associationId}" />
 <div class="jiraform maxWidth">
 	<div class="jiraformheader">
 		<h3 class="formtitle">
