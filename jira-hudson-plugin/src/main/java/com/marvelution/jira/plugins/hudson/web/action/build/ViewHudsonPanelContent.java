@@ -166,8 +166,9 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 					association.getJobName())), getI18nHelper());
 			break;
 		case BUILDS_BY_ISSUE:
-			Collection<String> issueKeys = getIssueKeys(project);
-			resultSet = new BuildsResultSet(server, getBuildsRelatedToIssueKeys(client, issueKeys));
+			// See MARVJIRAHUDSON-130, simply use the project key followed by a '-' as the search term
+			resultSet = new BuildsResultSet(server, getBuildsRelatedToIssueKeys(client,
+					Collections.singleton(project.getKey() + "-")));
 			break;
 		case BUILDS_BY_JOB:
 		default:
@@ -265,24 +266,6 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 			builds = client.findAll(SearchQuery.createForBuildSearch(issueKeys));
 		}
 		return builds;
-	}
-
-	/**
-	 * Get all Issue Keys related to the given {@link Project}
-	 * 
-	 * @param project the {@link Project} to get all the issue keys for
-	 * @return the {@link Collection} of issue keys
-	 */
-	private Collection<String> getIssueKeys(Project project) {
-		try {
-			JqlQueryBuilder queryBuilder = JqlQueryBuilder.newBuilder().where().project(
-					new Long[] { project.getId() }).endWhere();
-			return getIssueKeys(queryBuilder);
-		} catch (SearchException e) {
-			this.log.warn("Unable to get all issues from project " + project.getName() + ". Reason: "
-					+ e.getMessage(), e);
-		}
-		return null;
 	}
 
 	/**
