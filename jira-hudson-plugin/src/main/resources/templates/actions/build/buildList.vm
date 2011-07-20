@@ -42,7 +42,7 @@
 					#end
 					<li class="last">
 						<strong>${i18n.getText("hudson.panel.build.tests")}</strong>: 
-						#if ($build.testResults.total > 0)
+						#if ($build.testResults && $build.testResults.total > 0)
 							${i18n.getText("hudson.panel.build.tests.passed", $build.testResults.passed)}
 							#if ($build.testResults.failed > 0)
 							, ${i18n.getText("hudson.panel.build.tests.failed", $build.testResults.failed)}
