@@ -122,32 +122,38 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 		}
 		RequestAndSessionUtils.storeInSession(HudsonPanelHelper.SELECTED_VIEW, view.getViewName());
 		RequestAndSessionUtils.storeInSession(HudsonPanelHelper.SELECTED_ASSOCIATION, associationId);
-		server = serverManager.getServer(association.getServerId());
-		final HudsonClient client = clientFactory.create(server);
-		switch (module) {
-		case ISSUE:
-			getPanelContentForIssueView(client);
-			break;
-		case COMPONENT:
-			try {
-				getPanelContentForComponentView(client);
-			} catch (EntityNotFoundException e) {
-				addErrorMessage(getText("hudson.panel.error.invalid.project.component"));
+		try {
+			server = serverManager.getServer(association.getServerId());
+			final HudsonClient client = clientFactory.create(server);
+			switch (module) {
+			case ISSUE:
+				getPanelContentForIssueView(client);
+				break;
+			case COMPONENT:
+				try {
+					getPanelContentForComponentView(client);
+				} catch (EntityNotFoundException e) {
+					addErrorMessage(getText("hudson.panel.error.invalid.project.component"));
+					return ERROR;
+				}
+				break;
+			case VERSION:
+				getPanelContentForVersionView(client);
+				break;
+			case PROJECT:
+			default:
+				getPanelContentForProjectView(client);
+				break;
+			}
+			if (resultSet != null && resultSet.hasResults()) {
+				return resultSet.getView().getView();
+			} else {
+				addErrorMessage(getText("hudson.panel.error.no.results"));
 				return ERROR;
 			}
-			break;
-		case VERSION:
-			getPanelContentForVersionView(client);
-			break;
-		case PROJECT:
-		default:
-			getPanelContentForProjectView(client);
-			break;
-		}
-		if (resultSet != null && resultSet.hasResults()) {
-			return resultSet.getView().getView();
-		} else {
-			addErrorMessage(getText("hudson.panel.error.no.results"));
+		} catch (ClientException e) {
+			// MARVJIRAHUDSON-140, Make sure to catch any ClientException and show the error in the panel
+			addErrorMessage(e.getMessage());
 			return ERROR;
 		}
 	}
