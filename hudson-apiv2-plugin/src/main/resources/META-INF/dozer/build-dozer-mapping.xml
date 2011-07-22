@@ -77,6 +77,10 @@
 			<a get-method="getChangeSet">changeSet</a>
 			<b>changeLog</b>
 		</field>
+		<field>
+			<a get-method="getCulprits">culprits</a>
+			<b>culprits</b>
+		</field>
 	</mapping>
 
 	<mapping type="one-way">

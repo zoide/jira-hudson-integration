@@ -21,6 +21,7 @@ package com.marvelution.hudson.plugins.apiv2.resources.model.build;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
+import com.marvelution.hudson.plugins.apiv2.resources.model.User;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.ProjectTrigger;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.RemoteTrigger;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.SCMTrigger;
@@ -87,6 +89,8 @@ public class Build extends Model implements Comparable<Build> {
 	private Collection<String> relatedIssueKeys;
 	@XmlElement(name = "changeLog")
 	private ChangeLog changeLog;
+	@XmlElement(name = "culprits")
+	private Set<User> culprits;
 
 	/**
 	 * Default Constructor
@@ -350,6 +354,27 @@ public class Build extends Model implements Comparable<Build> {
 	 */
 	public void setBuildNumber(Integer buildNumber) {
 		this.buildNumber = buildNumber;
+	}
+
+	/**
+	 * Getter for culprits
+	 * 
+	 * @return the culprits
+	 */
+	public Set<User> getCulprits() {
+		if (culprits == null) {
+			culprits = new HashSet<User>();
+		}
+		return culprits;
+	}
+
+	/**
+	 * Setter for culprits
+	 * 
+	 * @param culprits the culprits to set
+	 */
+	public void setCulprits(Set<User> culprits) {
+		this.culprits = culprits;
 	}
 
 	/**

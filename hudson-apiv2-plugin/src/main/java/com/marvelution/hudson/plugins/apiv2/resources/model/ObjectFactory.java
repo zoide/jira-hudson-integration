@@ -44,4 +44,13 @@ public class ObjectFactory {
 		return new Version();
 	}
 
+	/**
+	 * Create a {@link User}
+	 * 
+	 * @return the {@link User}
+	 */
+	public static User createUser() {
+		return new User();
+	}
+
 }
