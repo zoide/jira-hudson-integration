@@ -33,17 +33,17 @@ import hudson.util.DescribableList;
 public class JIRABuildResultReportAction implements Action {
 
 	public final AbstractBuild<?, ?> owner;
-	public final String raisedIssue;
+	public final String raisedIssueKey;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param owner the {@link AbstractBuild} that this {@link Action} is owner by
-	 * @param raisedIssue the raised JIRA Issue
+	 * @param raisedIssueKey the raised JIRA Issue Key
 	 */
-	public JIRABuildResultReportAction(AbstractBuild<?, ?> owner, String raisedIssue) {
+	public JIRABuildResultReportAction(AbstractBuild<?, ?> owner, String raisedIssueKey) {
 		this.owner = owner;
-		this.raisedIssue = raisedIssue;
+		this.raisedIssueKey = raisedIssueKey;
 	}
 
 	/**

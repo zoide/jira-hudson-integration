@@ -49,7 +49,11 @@ public class JIRABuildResultReportNotifier extends Notifier {
 
 	@DataBoundConstructor
 	public JIRABuildResultReportNotifier(String serverAddress, String projectKey, String username, String password) {
-		this.serverAddress = serverAddress;
+		if (serverAddress.endsWith("/")) {
+			this.serverAddress = serverAddress;
+		} else {
+			this.serverAddress = serverAddress + "/";
+		}
 		this.projectKey = projectKey;
 		this.username = username;
 		this.password = password;
