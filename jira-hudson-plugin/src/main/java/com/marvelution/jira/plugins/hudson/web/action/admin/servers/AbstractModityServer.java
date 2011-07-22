@@ -24,7 +24,7 @@ import java.util.Collection;
 import org.apache.commons.lang.StringUtils;
 
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
-import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
+import com.marvelution.hudson.plugins.apiv2.client.services.VersionQuery;
 import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerFactory;
@@ -76,7 +76,7 @@ public abstract class AbstractModityServer extends AbstractHudsonAdminWebActionS
 			addError("host", getText("hudson.server.host.invalid"));
 		} else {
 			HudsonClient client = clientFactory.create(server);
-			if (client.findAll(JobQuery.createForJobList()) == null) {
+			if (client.find(VersionQuery.createForPluginVersion()) == null) {
 				addError("host", getText("hudson.server.host.apiv2.failed"));
 			}
 		}

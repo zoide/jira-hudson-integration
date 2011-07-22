@@ -20,6 +20,20 @@
 <mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
+
+	<mapping wildcard="false" type="one-way" map-id="nameOnly">
+		<class-a>hudson.model.Job</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>
+		<field>
+			<a>name</a>
+			<b>name</b>
+		</field>
+		<field>
+			<a get-method="getUrl">url</a>
+			<b>url</b>
+		</field>
+	</mapping>
+
 	<mapping wildcard="false" type="one-way" map-id="full">
 		<class-a>hudson.model.Job</class-a>
 		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>

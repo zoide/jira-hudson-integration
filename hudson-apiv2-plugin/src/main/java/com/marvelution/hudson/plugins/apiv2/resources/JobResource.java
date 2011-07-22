@@ -19,6 +19,7 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -71,6 +72,6 @@ public interface JobResource {
 	 */
 	@GET
 	@Path("list")
-	Jobs listJobs();
+	Jobs listJobs(@QueryParam("nameOnly") @DefaultValue("false") Boolean nameOnly);
 
 }

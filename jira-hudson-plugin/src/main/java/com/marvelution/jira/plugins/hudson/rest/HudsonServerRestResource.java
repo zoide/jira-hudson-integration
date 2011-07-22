@@ -81,7 +81,7 @@ public class HudsonServerRestResource {
 	public Jobs listAllJobs(@PathParam("serverId") Integer serverId) {
 		if (serverManager.hasServer(serverId)) {
 			final HudsonClient client = clientFactory.create(serverManager.getServer(serverId));
-			return client.findAll(JobQuery.createForJobList());
+			return client.findAll(JobQuery.createForJobList(true));
 		} else {
 			throw new NoSuchServerException(serverId);
 		}

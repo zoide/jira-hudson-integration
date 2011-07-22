@@ -80,10 +80,14 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Jobs listJobs() {
+	public Jobs listJobs(Boolean nameOnly) {
+		String mapperContext = "list";
+		if (nameOnly) {
+			mapperContext = "nameOnly";
+		}
 		Jobs jobs = new Jobs();
 		for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
-			jobs.add(DozerUtils.getMapper().map(item, Job.class, "list"));
+			jobs.add(DozerUtils.getMapper().map(item, Job.class, mapperContext));
 		}
 		return jobs;
 	}

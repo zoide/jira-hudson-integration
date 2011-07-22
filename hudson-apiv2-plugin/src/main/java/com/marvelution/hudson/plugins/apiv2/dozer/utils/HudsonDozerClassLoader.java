@@ -19,9 +19,6 @@
 
 package com.marvelution.hudson.plugins.apiv2.dozer.utils;
 
-import hudson.PluginWrapper;
-import hudson.model.Hudson;
-
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +27,7 @@ import org.apache.commons.lang.ClassUtils;
 import org.dozer.util.DozerClassLoader;
 import org.dozer.util.MappingUtils;
 
-import com.marvelution.hudson.plugins.apiv2.PluginImpl;
+import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
 
 /**
  * Hudson Specific {@link DozerClassLoader}
@@ -41,8 +38,6 @@ public class HudsonDozerClassLoader implements DozerClassLoader {
 
 	private static final Logger LOGGER = Logger.getLogger(HudsonDozerClassLoader.class.getName());
 
-	private PluginWrapper pluginWrapper = null;
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -51,7 +46,7 @@ public class HudsonDozerClassLoader implements DozerClassLoader {
 		LOGGER.log(Level.FINE, "Trying to load Class: " + className);
 		Class<?> result = null;
 		try {
-			result = ClassUtils.getClass(getPluginWrapper().classLoader, className);
+			result = ClassUtils.getClass(HudsonPluginUtils.getPluginClassloader(), className);
 		} catch (ClassNotFoundException e) {
 			MappingUtils.throwMappingException(e);
 		}
@@ -64,19 +59,7 @@ public class HudsonDozerClassLoader implements DozerClassLoader {
 	@Override
 	public URL loadResource(String uri) {
 		LOGGER.log(Level.FINE, "Trying to load Resource: " + uri);
-		return getPluginWrapper().classLoader.getResource(uri);
-	}
-
-	/**
-	 * Get the {@link PluginWrapper} for the plugin so Dozer can load its classes
-	 * 
-	 * @return the {@link PluginWrapper} of the hudson-apiv2-plugin
-	 */
-	public PluginWrapper getPluginWrapper() {
-		if (pluginWrapper == null) {
-			pluginWrapper = Hudson.getInstance().getPluginManager().getPlugin(PluginImpl.class);
-		}
-		return pluginWrapper;
+		return HudsonPluginUtils.getPluginClassloader().getResource(uri);
 	}
 
 }

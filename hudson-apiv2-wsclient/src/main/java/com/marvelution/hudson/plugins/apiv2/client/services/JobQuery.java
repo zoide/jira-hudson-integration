@@ -80,8 +80,11 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 			url.append("?name=").append(urlEncode(name));
 		} else if (QueryType.STATUS.equals(getType()) && name != null) {
 			url.append("/status?name=").append(urlEncode(name));
-		} else if (QueryType.LIST.equals(getType())) {
+		} else if (QueryType.LIST.equals(getType()) || QueryType.NAME_ONLY.equals(getType())) {
 			url.append("/list");
+			if (QueryType.NAME_ONLY.equals(getType())) {
+				url.append("?nameOnly=true");
+			}
 		} else if (QueryType.ALL.equals(getType())) {
 			url.append("/all");
 		}
@@ -116,10 +119,17 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * Method to create {@link JobQuery} that will result in a {@link List} of all {@link Job} objects on the
 	 * Hudson server, but with minimal {@link Job} data
 	 * 
+	 * @param nameOnly {@link Boolean} flag to specify if you want Job Names only or a more complete mapping of each
+	 * 				   Job
 	 * @return the {@link JobQuery}
 	 */
-	public static JobQuery createForJobList() {
-		JobQuery query = new JobQuery(QueryType.LIST);
+	public static JobQuery createForJobList(boolean nameOnly) {
+		JobQuery query;
+		if (nameOnly) {
+			query = new JobQuery(QueryType.NAME_ONLY);
+		} else {
+			query = new JobQuery(QueryType.LIST);
+		}
 		return query;
 	}
 
@@ -134,7 +144,7 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	}
 
 	private static enum QueryType {
-		SPECIFIC, LIST, ALL, STATUS;
+		SPECIFIC, LIST, ALL, STATUS, NAME_ONLY;
 	}
 
 }

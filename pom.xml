@@ -32,6 +32,7 @@
 
 	<modules>
 		<module>hudson-apiv2-plugin</module>
+		<module>hudson-jirareporter-plugin</module>
 		<module>hudson-apiv2-wsclient</module>
 		<module>jira-hudson-plugin</module>
 		<module>jira-hudson</module>

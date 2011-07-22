@@ -41,14 +41,21 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.marvelution.jira.plugins</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>hudson-apiv2-plugin</artifactId>
 			<version>${project.version}</version>
 			<type>hpi</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.marvelution.jira.plugins</groupId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>hudson-jirareporter-plugin</artifactId>
+			<version>${project.version}</version>
+			<type>hpi</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jira-hudson-plugin</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>

@@ -20,11 +20,14 @@
 package com.marvelution.hudson.plugins.apiv2.wink;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.URISyntaxException;
+import java.io.IOException;
+import java.net.JarURLConnection;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,10 +35,10 @@ import org.apache.wink.common.WinkApplication;
 import org.apache.wink.common.annotations.Parent;
 import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollector;
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
-import org.apache.wink.common.internal.utils.FileLoader;
 
 import com.marvelution.hudson.plugins.apiv2.resources.impl.BaseRestResource;
 import com.marvelution.hudson.plugins.apiv2.servlet.filter.HudsonAPIV2ServletFilter;
+import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
 
 /**
  * {@link WinkApplication} implementation specific for Hudson
@@ -61,7 +64,23 @@ public class HudsonWinkApplication extends WinkApplication {
 			jaxRSClasses = new HashSet<Class<?>>();
 			final Set<Class<?>> classes = new HashSet<Class<?>>();
 			for (String resourcePackageName : DEFAULT_APPLICATION_RESOURCE_PACKAGES) {
-				classes.addAll(getClassesFromPackage(resourcePackageName));
+				try {
+					Enumeration<URL> resources = HudsonPluginUtils.getPluginClassloader().getResources(resourcePackageName.replace(".", "/"));
+					while (resources.hasMoreElements()) {
+						URL resource = resources.nextElement();
+						if (resource.getProtocol().equalsIgnoreCase("jar")) {
+							// Load resources from the JAR file
+							JarURLConnection connection = (JarURLConnection) resource.openConnection();
+							classes.addAll(getClassesFromJarFile(connection.getJarFile(), resourcePackageName));
+						} else if (resource.getProtocol().equalsIgnoreCase("file")) {
+							// Load resources form File system
+							classes.addAll(getClassesFromPackage(new File(resource.getFile()), resourcePackageName));
+						} else {
+							logger.info("Skipping resource [" + resource.toString() + "]; Unsupport resource protocol");
+						}
+					}
+				} catch (IOException e) {
+				}
 			}
 			processClasses(classes);
 			logger.info("Loaded all REST Resource/Provider classes");
@@ -73,30 +92,55 @@ public class HudsonWinkApplication extends WinkApplication {
 	 * Get all the classes that are located in a source package.
 	 * All sub packages are also processed.
 	 * 
+	 * @param baseResource the {@link File} base resource to load from
 	 * @param resourcePackageName the source package to get all the classes for
 	 * @return {@link Set} of {@link Class} objects that are located in the source package or one of its sub packages
 	 */
-	private Set<Class<?>> getClassesFromPackage(String resourcePackageName) {
+	private Set<Class<?>> getClassesFromPackage(File baseResource, String resourcePackageName) {
 		Set<Class<?>> classes = new HashSet<Class<?>>();
-		try {
-			final URL resourcePackage = FileLoader.loadFile(resourcePackageName.replace(".", "/"));
-			for (String filename : new File(resourcePackage.toURI()).list()) {
-				if (filename.endsWith(".class")) {
-					final String className = filename.replace(".class", "");
+		for (File file : baseResource.listFiles()) {
+			if (file.isFile() && file.getName().endsWith(".class")) {
+				final String className = file.getName().substring(0, file.getName().lastIndexOf('.'));
+				try {
+					classes.add(Class.forName(resourcePackageName + "." + className));
+					logger.log(Level.FINE, "Loaded Resource: " + resourcePackageName + "." + className);
+				} catch (ClassNotFoundException e) {
+					logger.log(Level.SEVERE, "Failed to load REST Resources: " + resourcePackageName
+						+ "." + className, e);
+				}
+			} else {
+				classes.addAll(getClassesFromPackage(file, resourcePackageName + "." + file.getName()));
+			}
+		}
+		return classes;
+	}
+
+	/**
+	 * Get all the classes that are in a {@link JarFile} and that are in the given package
+	 * 
+	 * @param jarFile the {@link JarFile} to filter
+	 * @param resourcePackageName the package to filter with
+	 * @return {@link Set} of {@link Class} objects
+	 * 
+	 * @since 4.1.0
+	 */
+	private Set<Class<?>> getClassesFromJarFile(JarFile jarFile, String resourcePackageName) {
+		Set<Class<?>> classes = new HashSet<Class<?>>();
+		Enumeration<JarEntry> entries = jarFile.entries();
+		while (entries.hasMoreElements()) {
+			JarEntry jarEntry = entries.nextElement();
+			if (!jarEntry.isDirectory() && jarEntry.getName().endsWith(".class")) {
+				String className = jarEntry.getName().substring(0, jarEntry.getName().lastIndexOf('.'));
+				className = className.replaceAll("/", ".");
+				if (className.startsWith(resourcePackageName)) {
 					try {
-						classes.add(Class.forName(resourcePackageName + "." + className));
+						classes.add(Class.forName(className));
+						logger.log(Level.FINE, "Loaded Resource: " + className);
 					} catch (ClassNotFoundException e) {
-						logger.log(Level.SEVERE, "Failed to load REST Resources in package: " + resourcePackageName
-							+ "." + className, e);
+						logger.log(Level.SEVERE, "Failed to load REST Resources: " + className, e);
 					}
-				} else {
-					classes.addAll(getClassesFromPackage(resourcePackageName + "." + filename));
 				}
 			}
-		} catch (FileNotFoundException e) {
-			logger.log(Level.SEVERE, "Failed to load REST Resources in package: " + resourcePackageName, e);
-		} catch (URISyntaxException e) {
-			logger.log(Level.SEVERE, "Failed to load REST Resources in package: " + resourcePackageName, e);
 		}
 		return classes;
 	}

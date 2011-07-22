@@ -104,7 +104,7 @@ public class UpdateAssociation extends AbstractModityAssociation {
 	public Collection<String> getJobOptions() {
 		HudsonClient client = clientFactory.create(serverManager.getServer(getHudsonId()));
 		Collection<String> options = new ArrayList<String>();
-		for (Job job : client.findAll(JobQuery.createForJobList())) {
+		for (Job job : client.findAll(JobQuery.createForJobList(true))) {
 			options.add(job.getName());
 		}
 		return options;
