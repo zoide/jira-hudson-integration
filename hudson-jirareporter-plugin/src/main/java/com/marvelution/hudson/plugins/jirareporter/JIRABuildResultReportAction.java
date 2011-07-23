@@ -67,7 +67,7 @@ public class JIRABuildResultReportAction implements Action {
 	 */
 	@Override
 	public String getUrlName() {
-		return "jbrr";
+		return null;
 	}
 
 	/**

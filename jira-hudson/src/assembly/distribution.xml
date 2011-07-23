@@ -28,8 +28,6 @@
 			<outputDirectory>hudson-plugin</outputDirectory>
 			<includes>
 				<include>com.marvelution.jira.plugins:hudson-apiv2-plugin</include>
-			</includes>
-			<includes>
 				<include>com.marvelution.jira.plugins:hudson-jirareporter-plugin</include>
 			</includes>
 			<excludes>
