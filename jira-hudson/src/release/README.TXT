@@ -11,10 +11,11 @@ Hudson CI - Quick Installation Guide
 -------------------------------
 1. Shutdown the Hudson server instance
 2. Remove any existing Jira Hudson Integration plugins of previous versions
-3. Install the new plugin (hudson-apiv2-plugin-${project.version}.hpi) in the [HUDSON_HOME]/plugins directory
+3a. Install the new plugin (hudson-apiv2-plugin-${project.version}.hpi) in the [HUDSON_HOME]/plugins directory
+3b. Optionally install the new pugin (hudson-jira-reporter-${project.version}.hpi) in the [HUDSON_HOME]/plugins directory
 4. Start the Hudson server instance
 
-Jira - Quick Installation Guide
+JIRA - Quick Installation Guide
 -------------------------------
 1. Shutdown the JIRA server instance
 2. Remove any existing Jira Hudson Integration plugins of previous versions
