@@ -21,7 +21,12 @@ package com.marvelution.hudson.plugins.jirareporter;
 
 import java.io.IOException;
 
+import net.sf.json.JSONObject;
+
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.StaplerRequest;
+
+import com.marvelution.hudson.plugins.jirareporter.utils.HudsonPluginUtils;
 
 import hudson.Extension;
 import hudson.Launcher;
@@ -33,30 +38,37 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
+import hudson.util.CopyOnWriteList;
 
 /**
  * A {@link Notifier} to report non successful builds to JIRA
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-@SuppressWarnings("unchecked")
 public class JIRABuildResultReportNotifier extends Notifier {
 
-	public final String serverAddress;
-	public final String projectKey;
-	public final String username;
-	public final String password;
+	@Extension
+	public static final JIRABuildReportNotifierDescriptorImpl DESCRIPTOR = new JIRABuildReportNotifierDescriptorImpl();
 
+	public final String siteName;
+	public final String projectKey;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param siteName the JIRA Site name
+	 * @param projectKey the JIRA Project Key
+	 */
 	@DataBoundConstructor
-	public JIRABuildResultReportNotifier(String serverAddress, String projectKey, String username, String password) {
-		if (serverAddress.endsWith("/")) {
-			this.serverAddress = serverAddress;
-		} else {
-			this.serverAddress = serverAddress + "/";
+	public JIRABuildResultReportNotifier(String siteName, String projectKey) {
+		if (siteName == null) {
+			// Defaults to the first one
+			JIRASite[] sites = DESCRIPTOR.getSites();
+			if (sites.length > 0)
+				siteName = sites[0].name;
 		}
+		this.siteName = siteName;
 		this.projectKey = projectKey;
-		this.username = username;
-		this.password = password;
 	}
 
 	/**
@@ -65,6 +77,28 @@ public class JIRABuildResultReportNotifier extends Notifier {
 	@Override
 	public BuildStepMonitor getRequiredMonitorService() {
 		return BuildStepMonitor.NONE;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public JIRABuildReportNotifierDescriptorImpl getDescriptor() {
+		return DESCRIPTOR;
+	}
+
+	public JIRASite getSite() {
+		JIRASite[] sites = getDescriptor().getSites();
+		if (siteName == null && sites.length > 0) {
+			// Return the default one
+			return sites[0];
+		}
+		for (JIRASite site : sites) {
+			if (site.name.equals(siteName)) {
+				return site;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -86,8 +120,19 @@ public class JIRABuildResultReportNotifier extends Notifier {
 	 * 
 	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
 	 */
-	@Extension
 	public static class JIRABuildReportNotifierDescriptorImpl extends BuildStepDescriptor<Publisher> {
+
+		private final CopyOnWriteList<JIRASite> sites = new CopyOnWriteList<JIRASite>();
+
+		public static final String PARAMETER_PREFIX = "jbrr.";
+
+		/**
+		 * Default Constructor
+		 */
+		public JIRABuildReportNotifierDescriptorImpl() {
+			super(JIRABuildResultReportNotifier.class);
+			load();
+		}
 
 		/**
 		 * {@inheritDoc}
@@ -104,6 +149,51 @@ public class JIRABuildResultReportNotifier extends Notifier {
 		@Override
 		public String getDisplayName() {
 			return "JIRA Build Result Reporter";
+		}
+
+		/**
+		 * Add a Site to the Configuration
+		 * 
+		 * @param site the {@link JIRASite} to add
+		 */
+		public void setSites(JIRASite site) {
+			sites.add(site);
+		}
+
+		/**
+		 * Get all the configured {@link JIRASite} objects in an Array
+		 * 
+		 * @return the {@link JIRASite} array
+		 */
+		public JIRASite[] getSites() {
+			return sites.toArray(new JIRASite[0]);
+		}
+
+		public String getBaseHelpURL() {
+			return "/plugin/" + HudsonPluginUtils.getPluginArifactId() + "/help-";
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public JIRABuildResultReportNotifier newInstance(StaplerRequest req, JSONObject formData)
+				throws FormException {
+			JIRABuildResultReportNotifier notifier = req.bindParameters(JIRABuildResultReportNotifier.class, PARAMETER_PREFIX);
+			if (notifier.siteName == null) {
+				notifier = null;
+			}
+			return notifier;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
+			sites.replaceBy(req.bindParametersToList(JIRASite.class, PARAMETER_PREFIX));
+			save();
+			return true;
 		}
 		
 	}

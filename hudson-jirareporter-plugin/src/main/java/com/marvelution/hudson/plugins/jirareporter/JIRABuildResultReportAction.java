@@ -28,6 +28,8 @@ import hudson.tasks.Publisher;
 import hudson.util.DescribableList;
 
 /**
+ * Build {@link Action} to display the raised issue incase a build in not succesfull
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class JIRABuildResultReportAction implements Action {
@@ -67,7 +69,7 @@ public class JIRABuildResultReportAction implements Action {
 	 */
 	@Override
 	public String getUrlName() {
-		return null;
+		return getNotifier().getSite().url + "browse/" + raisedIssueKey;
 	}
 
 	/**
