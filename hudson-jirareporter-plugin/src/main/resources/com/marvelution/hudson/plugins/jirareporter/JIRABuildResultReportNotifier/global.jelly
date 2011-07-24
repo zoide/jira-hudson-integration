@@ -26,16 +26,22 @@
 						<f:textbox name="jbrr.name" value="${site.name}" />
 					</f:entry>
 					<f:entry title="URL" help="${descriptor.getBaseHelpURL()}url.html">
-						<f:textbox name="jbrr.url" value="${site.url}" />
+						<f:textbox name="jbrr.url" value="${site.url}"
+							checkUrl="'${rootURL}/publisher/JIRABuildResultReportNotifier/urlCheck?value='+escape(this.value)" />
 					</f:entry>
 					<f:entry title="Supports Wiki notation" help="${descriptor.getBaseHelpURL()}wiki.html">
 						<f:checkbox name="jbrr.supportsWikiStyle" checked="${site.supportsWikiStyle}"/>
 					</f:entry>
 					<f:entry title="Username" help="${descriptor.getBaseHelpURL()}username.html">
-						<f:textbox name="jbrr.username" value="${site.username}" />
+						<f:textbox name="jbrr.username" value="${site.username}"
+							checkMethod="post"
+							checkUrl="'${rootURL}/publisher/JIRABuildResultReportNotifier/loginCheck?url='+escape(Form.findMatchingInput(this,'jbrr.url').value)+'&amp;user='+escape(this.value)+'&amp;pass='+escape(Form.findMatchingInput(this,'jbrr.password').value)" />
 					</f:entry>
 					<f:entry title="Password" help="${descriptor.getBaseHelpURL()}password.html">
 						<f:password name="jbrr.password" value="${site.password}" />
+						<input class="setting-input" name="jibrr.password"
+							type="password" value="${site.password}"
+							onchange="Form.findMatchingInput(this,'jbrr.username').onchange()" />
 					</f:entry>
 					<f:entry title="">
 						<div align="right">

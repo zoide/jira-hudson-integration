@@ -20,25 +20,35 @@
 package com.marvelution.hudson.plugins.jirareporter;
 
 import java.io.IOException;
+import java.net.URL;
+
+import javax.servlet.ServletException;
+import javax.xml.rpc.ServiceException;
 
 import net.sf.json.JSONObject;
 
+import org.apache.axis.AxisFault;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
+import com.atlassian.jira.rpc.soap.client.RemoteAuthenticationException;
 import com.marvelution.hudson.plugins.jirareporter.utils.HudsonPluginUtils;
 
 import hudson.Extension;
 import hudson.Launcher;
+import hudson.Util;
 import hudson.model.BuildListener;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Hudson;
 import hudson.model.Result;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
 import hudson.util.CopyOnWriteList;
+import hudson.util.FormValidation;
 
 /**
  * A {@link Notifier} to report non successful builds to JIRA
@@ -194,6 +204,70 @@ public class JIRABuildResultReportNotifier extends Notifier {
 			sites.replaceBy(req.bindParametersToList(JIRASite.class, PARAMETER_PREFIX));
 			save();
 			return true;
+		}
+
+		/**
+		 * Check method to validate the URL given
+		 * 
+		 * @param value the URL to check
+		 * @return the {@link FormValidation} results
+		 * @throws IOException in case of IO exceptions
+		 * @throws ServletException
+		 */
+		public FormValidation doUrlCheck(@QueryParameter final String value) throws IOException, ServletException {
+			if (!Hudson.getInstance().hasPermission(Hudson.ADMINISTER)) {
+				return FormValidation.ok();
+			}
+			return new FormValidation.URLCheck() {
+
+				@Override
+				protected FormValidation check() throws IOException, ServletException {
+					String url = Util.fixEmpty(value);
+					if (url == null) {
+						return FormValidation.error("The URL parameter is required");
+					} else if (!url.endsWith("/")) {
+						url = url + "/";
+					}
+					try {
+						if (!findText(open(new URL(url)), "Atlassian JIRA")) {
+							return FormValidation.error("This URL does not point to an Atlassian JIRA instance");
+						}
+						URL soapUrl = new URL(new URL(url), JIRASite.SERVICE_ENDPOINT_WSDL);
+						if (!findText(open(soapUrl), "wsdl:definitions")) {
+							return FormValidation.error("Unable to access the JIRA SOAP service. Is it enabled?");
+						}
+						return FormValidation.ok();
+					} catch (IOException e) {
+						return handleIOException(url, e);
+					}
+				}
+			}.check();
+		}
+
+		/**
+		 * Check method to validate the authentication details
+		 * 
+		 * @param request the {@link StaplerRequest}
+		 * @return the {@link FormValidation} result
+		 * @throws IOException in case of IO exceptions
+		 */
+		public FormValidation doLoginCheck(StaplerRequest request) throws IOException {
+			String url = Util.fixEmpty(request.getParameter("url"));
+			if (url == null) {
+				return FormValidation.ok();
+			}
+			JIRASite site = new JIRASite("Login Check", new URL(url), request.getParameter("user"),
+				request.getParameter("pass"), false);
+			try {
+				site.createClient();
+				return FormValidation.ok();
+			} catch (RemoteAuthenticationException e) {
+				return FormValidation.error(e.getMessage());
+			} catch (AxisFault e) {
+				return FormValidation.error(e.getFaultString());
+			} catch (ServiceException e) {
+				return FormValidation.error(e.getMessage());
+			}
 		}
 		
 	}

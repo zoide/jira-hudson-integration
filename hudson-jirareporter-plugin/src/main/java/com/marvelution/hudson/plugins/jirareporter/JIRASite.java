@@ -22,7 +22,16 @@ package com.marvelution.hudson.plugins.jirareporter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.xml.rpc.ServiceException;
+
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
+
+import com.atlassian.jira.rpc.soap.client.JiraSoapService;
+import com.atlassian.jira.rpc.soap.client.JiraSoapServiceService;
+import com.atlassian.jira.rpc.soap.client.JiraSoapServiceServiceLocator;
+import com.atlassian.jira.rpc.soap.client.RemoteAuthenticationException;
+import com.atlassian.jira.rpc.soap.client.RemoteException;
 
 /**
  * JIRA Site object used by the Notifier
@@ -30,6 +39,13 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class JIRASite {
+
+	/**
+	 * The Endpoint where the JIRA SOAP service can be found
+	 */
+	public static final String SERVICE_ENDPOINT = "rpc/soap/jirasoapservice-v2";
+
+	public static final String SERVICE_ENDPOINT_WSDL = SERVICE_ENDPOINT + "?wsdl";
 
 	public final String name;
 	public final URL url;
@@ -59,6 +75,26 @@ public class JIRASite {
 		this.username = username;
 		this.password = password;
 		this.supportsWikiStyle = supportsWikiStyle;
+	}
+
+	/**
+	 * Get the {@link JIRAClient} for this {@link JIRASite}
+	 * 
+	 * @return the {@link JIRAClient}
+	 * @throws RemoteAuthenticationException
+	 * @throws RemoteException
+	 * @throws java.rmi.RemoteException
+	 * @throws MalformedURLException
+	 * @throws ServiceException
+	 */
+	public JIRAClient createClient() throws RemoteAuthenticationException, RemoteException, java.rmi.RemoteException,
+			MalformedURLException, ServiceException {
+		if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+			return null;
+		}
+		JiraSoapServiceService jiraSoapServiceLocator = new JiraSoapServiceServiceLocator();
+		JiraSoapService service = jiraSoapServiceLocator.getJirasoapserviceV2(new URL(url, SERVICE_ENDPOINT));
+		return new JIRAClient(service, service.login(username, password), this);
 	}
 	
 }

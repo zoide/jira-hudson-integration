@@ -38,6 +38,13 @@
 		<url>http://fisheye.marvelution.com/browse/public/atlassian/jira-hudson-integration/trunk/hudson-jirareporter-plugin</url>
 	</scm>
 
+	<properties>
+		<axis.version>1.4</axis.version>
+		<javax.activation.version>1.1.1</javax.activation.version>
+		<javax.mail.version>1.4.1</javax.mail.version>
+		<axis.wsdl4j.version>1.5.1</axis.wsdl4j.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -47,16 +54,58 @@
 			<type>jar</type>
 		</dependency>
 		<dependency>
-			<groupId>org.jvnet.hudson.main</groupId>
-			<artifactId>hudson-core</artifactId>
-			<version>${hudson.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.4</version>
 			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>${javax.activation.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>${javax.mail.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>${axis.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis-jaxrpc</artifactId>
+			<version>${axis.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis-saaj</artifactId>
+			<version>${axis.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>axis</groupId>
+			<artifactId>axis-wsdl4j</artifactId>
+			<version>${axis.wsdl4j.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jvnet.hudson.main</groupId>
+			<artifactId>hudson-core</artifactId>
+			<version>${hudson.version}</version>
 			<scope>provided</scope>
 		</dependency>
         <dependency>
@@ -92,6 +141,47 @@
 		</resources>
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>axistools-maven-plugin</artifactId>
+				<version>1.4</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.axis</groupId>
+						<artifactId>axis</artifactId>
+						<version>${axis.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>javax.activation</groupId>
+						<artifactId>activation</artifactId>
+						<version>${javax.activation.version}</version>
+						<type>jar</type>
+						<scope>compile</scope>
+					</dependency>
+					<dependency>
+						<groupId>javax.mail</groupId>
+						<artifactId>mail</artifactId>
+						<version>${javax.mail.version}</version>
+						<type>jar</type>
+						<scope>compile</scope>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<wsdlFiles>
+						<wsdlFile>jirasoapservice-v2.wsdl</wsdlFile>
+					</wsdlFiles>
+					<packageSpace>com.atlassian.jira.rpc.soap.client</packageSpace>
+				</configuration>
+				<executions>
+					<execution>
+						<id>wsdl2java-generation</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>wsdl2java</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.jvnet.hudson.tools</groupId>
 				<artifactId>maven-hpi-plugin</artifactId>
 				<version>2.0.1</version>
@@ -107,4 +197,39 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>get-jira-wsdl</id>
+			<activation>
+				<file>
+					<missing>${basedir}/src/main/wsdl/jirasoapservice-v2.wsdl</missing>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>get-jira-wsdl</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<get src="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2?wsdl"
+											 dest="${basedir}/src/main/wsdl/jirasoapservice-v2.wsdl" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
