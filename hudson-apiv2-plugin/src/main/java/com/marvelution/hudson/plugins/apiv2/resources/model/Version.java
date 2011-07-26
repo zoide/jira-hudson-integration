@@ -37,6 +37,8 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Version extends Model {
 
+	@XmlElement(name = "hudsonSystem")
+	private HudsonSystem hudsonSystem;
 	@XmlElement(name = "hudsonVersion")
 	private String hudsonVersion;
 	@XmlElement(name = "pluginVersion")
@@ -54,16 +56,39 @@ public class Version extends Model {
 	/**
 	 * Constructor
 	 * 
+	 * @param hudsonSystem the {@link HudsonSystem}
 	 * @param hudsonVersion the hudsonVersion
 	 * @param pluginVersion the pluginVersion
 	 * @param pluginGroupId the group Id
 	 * @param artifactId the artifact Id
 	 */
-	public Version(String hudsonVersion, String pluginVersion, String pluginGroupId, String pluginArtifactId) {
+	public Version(HudsonSystem hudsonSystem, String hudsonVersion, String pluginVersion, String pluginGroupId,
+			String pluginArtifactId) {
+		this.hudsonSystem = hudsonSystem;
 		this.hudsonVersion = hudsonVersion;
 		this.pluginVersion = pluginVersion;
 		this.pluginGroupId = pluginGroupId;
 		this.pluginArtifactId = pluginArtifactId;
+	}
+
+	/**
+	 * Getter for hudsonSystem
+	 * 
+	 * @return the hudsonSystem
+	 * @since 4.1.0
+	 */
+	public HudsonSystem getHudsonSystem() {
+		return hudsonSystem;
+	}
+
+	/**
+	 * Setter for hudsonSystem
+	 * 
+	 * @param hudsonSystem the hudsonSystem to set
+	 * @since 4.1.0
+	 */
+	public void setHudsonSystem(HudsonSystem hudsonSystem) {
+		this.hudsonSystem = hudsonSystem;
 	}
 
 	/**

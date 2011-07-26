@@ -26,6 +26,7 @@ import javax.ws.rs.Path;
 import org.apache.wink.common.annotations.Parent;
 
 import com.marvelution.hudson.plugins.apiv2.resources.PluginResource;
+import com.marvelution.hudson.plugins.apiv2.resources.model.HudsonSystem;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Version;
 import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
 
@@ -43,7 +44,14 @@ public class PluginRestResourceImpl extends BaseRestResource implements PluginRe
 	 */
 	@Override
 	public Version getVersion() {
-		return new Version(Hudson.getVersion().toString(), HudsonPluginUtils.getPluginVersion(),
+		HudsonSystem system = HudsonSystem.HUDSON;
+		try {
+			Class.forName("jenkins.model.Jenkins");
+			system = HudsonSystem.JENKINS;
+		} catch (ClassNotFoundException e) {
+			// Oke not a Jenkins instance so keep the system set to HUDSON
+		}
+		return new Version(system, Hudson.getVersion().toString(), HudsonPluginUtils.getPluginVersion(),
 				HudsonPluginUtils.getPluginGroupId(), HudsonPluginUtils.getPluginArifactId());
 	}
 
