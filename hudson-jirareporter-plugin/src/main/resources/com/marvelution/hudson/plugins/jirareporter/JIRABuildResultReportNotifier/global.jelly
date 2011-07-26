@@ -29,9 +29,6 @@
 						<f:textbox name="jbrr.url" value="${site.url}"
 							checkUrl="'${rootURL}/publisher/JIRABuildResultReportNotifier/urlCheck?value='+escape(this.value)" />
 					</f:entry>
-					<f:entry title="Supports Wiki notation" help="${descriptor.getBaseHelpURL()}wiki.html">
-						<f:checkbox name="jbrr.supportsWikiStyle" checked="${site.supportsWikiStyle}"/>
-					</f:entry>
 					<f:entry title="Username" help="${descriptor.getBaseHelpURL()}username.html">
 						<f:textbox name="jbrr.username" value="${site.username}"
 							checkMethod="post"
@@ -42,6 +39,12 @@
 						<input class="setting-input" name="jibrr.password"
 							type="password" value="${site.password}"
 							onchange="Form.findMatchingInput(this,'jbrr.username').onchange()" />
+					</f:entry>
+					<f:entry title="Supports Wiki notation" help="${descriptor.getBaseHelpURL()}wiki.html">
+						<f:checkbox name="jbrr.supportsWikiStyle" checked="${site.supportsWikiStyle}"/>
+					</f:entry>
+					<f:entry title="Close action name" help="${descriptor.getBaseHelpURL()}closeAction.html">
+						<f:textbox name="jbrr.closeAction" value="${site.closeAction}" />
 					</f:entry>
 					<f:entry title="">
 						<div align="right">

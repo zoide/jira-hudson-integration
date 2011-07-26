@@ -36,16 +36,20 @@ public class JIRABuildResultReportAction implements Action {
 
 	public final AbstractBuild<?, ?> owner;
 	public final String raisedIssueKey;
+	public final boolean resolved;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param owner the {@link AbstractBuild} that this {@link Action} is owner by
 	 * @param raisedIssueKey the raised JIRA Issue Key
+	 * @param resolved flag indicating if the raisedIssue was resolved (<code>true</code>) or created
+	 * 		(<code>false</code>)
 	 */
-	public JIRABuildResultReportAction(AbstractBuild<?, ?> owner, String raisedIssueKey) {
+	public JIRABuildResultReportAction(AbstractBuild<?, ?> owner, String raisedIssueKey, boolean resolved) {
 		this.owner = owner;
 		this.raisedIssueKey = raisedIssueKey;
+		this.resolved = resolved;
 	}
 
 	/**
@@ -80,6 +84,19 @@ public class JIRABuildResultReportAction implements Action {
 	public JIRABuildResultReportNotifier getNotifier() {
 		DescribableList<Publisher,Descriptor<Publisher>> publishers = owner.getProject().getPublishersList();
 		return publishers.get(JIRABuildResultReportNotifier.class);
+	}
+
+	/**
+	 * Get the action based text
+	 * 
+	 * @return the action base text
+	 */
+	public String getAction() {
+		if (resolved) {
+			return "Resolved JIRA Issue:";
+		} else {
+			return "Raised JIRA Issue:";
+		}
 	}
 
 }

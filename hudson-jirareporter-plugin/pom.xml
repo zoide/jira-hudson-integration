@@ -203,7 +203,7 @@
 			<id>get-jira-wsdl</id>
 			<activation>
 				<file>
-					<missing>${basedir}/src/main/wsdl/jirasoapservice-v2.wsdl</missing>
+					<missing>hudson-jirareporter-plugin/src/main/wsdl/jirasoapservice-v2.wsdl</missing>
 				</file>
 			</activation>
 			<build>

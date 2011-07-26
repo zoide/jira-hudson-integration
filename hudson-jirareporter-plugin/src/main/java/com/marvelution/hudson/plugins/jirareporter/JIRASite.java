@@ -19,8 +19,11 @@
 
 package com.marvelution.hudson.plugins.jirareporter;
 
+import hudson.model.AbstractBuild;
+
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 
 import javax.xml.rpc.ServiceException;
 
@@ -45,6 +48,9 @@ public class JIRASite {
 	 */
 	public static final String SERVICE_ENDPOINT = "rpc/soap/jirasoapservice-v2";
 
+	/**
+	 * The Endpoint where the JIRA SOAP service WSDL can be found
+	 */
 	public static final String SERVICE_ENDPOINT_WSDL = SERVICE_ENDPOINT + "?wsdl";
 
 	public final String name;
@@ -52,6 +58,9 @@ public class JIRASite {
 	public final String username;
 	public final String password;
 	public final boolean supportsWikiStyle;
+	public final String closeAction;
+
+	transient volatile Map<String, String> priorities;
 
 	/**
 	 * Constructor
@@ -61,9 +70,11 @@ public class JIRASite {
 	 * @param username the username to use for Authentication with the JIRA Site
 	 * @param password the password for the given username
 	 * @param supportsWikiStyle flag is Wiki style texts are supported
+	 * @param closeAction the name of the Close action, defaults to Close
 	 */
 	@DataBoundConstructor
-	public JIRASite(String name, URL url, String username, String password, boolean supportsWikiStyle) {
+	public JIRASite(String name, URL url, String username, String password, boolean supportsWikiStyle,
+			String closeAction) {
 		this.name = name;
 		if (!url.toExternalForm().endsWith("/"))
 		try {
@@ -75,6 +86,7 @@ public class JIRASite {
 		this.username = username;
 		this.password = password;
 		this.supportsWikiStyle = supportsWikiStyle;
+		this.closeAction = closeAction;
 	}
 
 	/**
@@ -95,6 +107,51 @@ public class JIRASite {
 		JiraSoapServiceService jiraSoapServiceLocator = new JiraSoapServiceServiceLocator();
 		JiraSoapService service = jiraSoapServiceLocator.getJirasoapserviceV2(new URL(url, SERVICE_ENDPOINT));
 		return new JIRAClient(service, service.login(username, password), this);
+	}
+
+	/**
+	 * Getter for the {@link #closeAction}
+	 * 
+	 * @return the {@link #closeAction}
+	 */
+	public String getCloseAction() {
+		if (StringUtils.isBlank(closeAction)) {
+			return "Close Issue";
+		} else {
+			return closeAction;
+		}
+	}
+
+	/**
+	 * Static helper method to get a {@link JIRASite} by its name
+	 * 
+	 * @param name the name of the {@link JIRASite} to get
+	 * @return the {@link JIRASite}, may be <code>null</code> if no {@link JIRASite} with the given name can be found
+	 */
+	public static JIRASite getSite(String name) {
+		for (JIRASite site : JIRABuildResultReportNotifier.DESCRIPTOR.getSites()) {
+			if (site.name.equals(name)) {
+				return site;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Static helper method to get a {@link JIRASite} by the configuration of a Build and this Project
+	 * 
+	 * @param build the {@link AbstractBuild} to get the {@link JIRASite} for
+	 * @return the {@link JIRASite}, may be <code>null</code> if the proejct is not configured with
+	 * 			{@link JIRABuildResultReportNotifier}
+	 */
+	public static JIRASite getSite(AbstractBuild<?, ?> build) {
+		JIRABuildResultReportNotifier notifier = build.getProject().getPublishersList()
+			.get(JIRABuildResultReportNotifier.class);
+		if (notifier == null) {
+			return null;
+		} else {
+			return notifier.getSite();
+		}
 	}
 	
 }

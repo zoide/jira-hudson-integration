@@ -17,17 +17,22 @@
  ~ under the License.
  -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-	<j:if test="${descriptor.sites.size() &gt; 1}">
+	<j:if test="${descriptor.sites.size() &gt; 0}">
 		<!-- show the selection only when there's something to select -->
-		<f:entry title="JIRA site" help="${descriptor.getBaseHelpURL()}jiraSite.html">
-			<select class="setting-input" name="jbrr.siteName">
-				<j:forEach var="s" items="${descriptor.sites}">
-					<f:option selected="${s.name==instance.siteName}">${s.name}</f:option>
-				</j:forEach>
-			</select>
+		<f:entry title="JIRA site" help="${descriptor.getBaseHelpURL()}jiraSite.html" field="siteName">
+			<f:select class="setting-input" name="jbrr.siteName" value="${instance.siteName}" />
 		</f:entry>
-		<f:entry title="JIRA Project Key" help="${descriptor.getBaseHelpURL()}projectKey.html">
-			<f:textbox name="jbrr.projectKey" value="${instance.projectKey}" />
+		<f:entry title="JIRA Project Key" help="${descriptor.getBaseHelpURL()}projectKey.html" field="projectKey">
+			<f:select class="setting-input" name="jbrr.projectKey" value="${instance.projectKey}" />
+		</f:entry>
+		<f:entry title="Issue Type" help="${descriptor.getBaseHelpURL()}issueType.html" field="issueType">
+			<f:select class="setting-input" name="jbrr.issueType" value="${instance.issueType}" />
+		</f:entry>
+		<f:entry title="Issue Priority" help="${descriptor.getBaseHelpURL()}issuePriority.html" field="issuePriority">
+			<f:select class="setting-input" name="jbrr.issuePriority" value="${instance.issuePriority}" />
+		</f:entry>
+		<f:entry title="Auto Close" help="${descriptor.getBaseHelpURL()}autoClose.html" field="autoClose">
+			<f:checkbox name="jbrr.autoClose" checked="${instance.autoClose}"/>
 		</f:entry>
 	</j:if>
 </j:jelly>
