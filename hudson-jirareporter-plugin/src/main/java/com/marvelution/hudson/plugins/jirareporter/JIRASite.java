@@ -119,7 +119,7 @@ public class JIRASite {
 	 * 
 	 * @return the {@link #closeAction}
 	 */
-	public String getCloseAction() {
+	public String getCloseActionName() {
 		if (StringUtils.isBlank(closeAction)) {
 			return "Close Issue";
 		} else {

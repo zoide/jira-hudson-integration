@@ -146,28 +146,38 @@ public class JIRABuildResultReportNotifier extends Notifier {
 	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener)
 			throws InterruptedException, IOException {
 		JIRAClient client = null;
+		// Get the previous JIRA Build Action, if any.
+		Run<?, ?> prevBuild = build.getPreviousBuild();
+		JIRABuildResultReportAction buildAction = null;
+		if (prevBuild != null) {
+			buildAction = prevBuild.getAction(JIRABuildResultReportAction.class);
+		}
 		try {
 			client = getSite().createClient();
 			if (build.getResult().isWorseThan(Result.SUCCESS)) {
-				String issueKey = client.createIssue(build, projectKey, issueType, issuePriority);
+				String issueKey = null;
+				if (buildAction != null && StringUtils.isNotBlank(buildAction.raisedIssueKey)
+						&& !buildAction.resolved) {
+					// Oke the previous build also failed and has an Issue linked to it.
+					// So relink that issue also to this build
+					issueKey = client.updateIssue(build, buildAction.raisedIssueKey);
+				} else {
+					issueKey = client.createIssue(build, projectKey, issueType, issuePriority);
+				}
 				build.addAction(new JIRABuildResultReportAction(build, issueKey, false));
 				listener.getLogger().println("JBRR: Raised build failure issue: " + issueKey);
 			} else if (autoClose && build.getResult().isBetterOrEqualTo(Result.SUCCESS)) {
 				// Auto close the previously raised issues, if any
-				Run<?, ?> prevBuild = build.getPreviousBuild();
-				if (prevBuild != null) {
-					JIRABuildResultReportAction buildAction = prevBuild.getAction(JIRABuildResultReportAction.class);
-					if (buildAction != null) {
-						RemoteIssue issue = client.getIssue(buildAction);
-						if (client.canCloseIssue(issue)) {
-							if (client.closeIssue(issue, build)) {
-								build.addAction(new JIRABuildResultReportAction(build, issue.getKey(), true));
-								listener.getLogger().println("INFO: Closed issue " + issue.getKey() + " using action: "
-									+ getSite().getCloseAction());
-							} else {
-								listener.getLogger().println("WARN: Failed to automatically close issue: "
-									+ issue.getKey());
-							}
+				if (buildAction != null) {
+					RemoteIssue issue = client.getIssue(buildAction);
+					if (client.canCloseIssue(issue)) {
+						if (client.closeIssue(issue, build)) {
+							build.addAction(new JIRABuildResultReportAction(build, issue.getKey(), true));
+							listener.getLogger().println("INFO: Closed issue " + issue.getKey() + " using action: "
+								+ getSite().getCloseActionName());
+						} else {
+							listener.getLogger().println("WARN: Failed to automatically close issue: "
+								+ issue.getKey());
 						}
 					}
 				}

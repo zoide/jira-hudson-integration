@@ -29,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.atlassian.jira.rpc.soap.client.JiraSoapService;
+import com.atlassian.jira.rpc.soap.client.RemoteComment;
 import com.atlassian.jira.rpc.soap.client.RemoteIssue;
 import com.atlassian.jira.rpc.soap.client.RemoteIssueType;
 import com.atlassian.jira.rpc.soap.client.RemoteNamedObject;
@@ -109,6 +110,22 @@ public class JIRAClient {
 	}
 
 	/**
+	 * Update an Issue by adding a Comment to it
+	 * 
+	 * @param build the {@link AbstractBuild} with build data
+	 * @param issueKey the key of the issue to update
+	 * @return the updated issue key
+	 * @throws RemoteException in case of errors
+	 */
+	public String updateIssue(AbstractBuild<?, ?> build, String issueKey) throws RemoteException {
+		RemoteComment comment = new RemoteComment();
+		comment.setAuthor(site.username);
+		comment.setBody(IssueTextUtils.createFieldText(Type.DESCRIPTION, build, site));
+		service.addComment(token, issueKey, comment);
+		return issueKey;
+	}
+
+	/**
 	 * Get {@link RemoteIssue} objects via the JQL Search
 	 * 
 	 * @param jqlQuery the JQL Query to execute
@@ -150,7 +167,7 @@ public class JIRAClient {
 	 * @throws RemoteException in case of errors
 	 */
 	public boolean canCloseIssue(RemoteIssue issue) throws RemoteException {
-		return getIssueAction(issue, site.getCloseAction()) != null;
+		return getIssueAction(issue, site.getCloseActionName()) != null;
 	}
 
 	/**
@@ -180,7 +197,7 @@ public class JIRAClient {
 	 * @throws RemoteException in case of errors
 	 */
 	public boolean closeIssue(RemoteIssue issue, AbstractBuild<?, ?> build) throws RemoteException {
-		RemoteNamedObject action = getIssueAction(issue, site.getCloseAction());
+		RemoteNamedObject action = getIssueAction(issue, site.getCloseActionName());
 		if (action != null) {
 			// TODO Get the Action fields?
 			service.progressWorkflowAction(token, issue.getKey(), action.getId(), null);

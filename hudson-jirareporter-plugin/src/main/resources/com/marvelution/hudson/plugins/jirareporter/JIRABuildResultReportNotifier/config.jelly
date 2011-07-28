@@ -22,7 +22,7 @@
 		<f:entry title="JIRA site" help="${descriptor.getBaseHelpURL()}jiraSite.html" field="siteName">
 			<f:select class="setting-input" name="jbrr.siteName" value="${instance.siteName}" />
 		</f:entry>
-		<f:entry title="JIRA Project Key" help="${descriptor.getBaseHelpURL()}projectKey.html" field="projectKey">
+		<f:entry title="JIRA Project" help="${descriptor.getBaseHelpURL()}projectKey.html" field="projectKey">
 			<f:select class="setting-input" name="jbrr.projectKey" value="${instance.projectKey}" />
 		</f:entry>
 		<f:entry title="Issue Type" help="${descriptor.getBaseHelpURL()}issueType.html" field="issueType">
