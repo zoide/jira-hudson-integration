@@ -51,7 +51,7 @@ public class HudsonWinkApplication extends WinkApplication {
 		"com.marvelution.hudson.plugins.apiv2.resources",
 	};
 
-	private static final Logger logger = Logger.getLogger(HudsonAPIV2ServletFilter.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(HudsonAPIV2ServletFilter.class.getName());
 
 	private Set<Class<?>> jaxRSClasses = null;
 
@@ -76,14 +76,14 @@ public class HudsonWinkApplication extends WinkApplication {
 							// Load resources form File system
 							classes.addAll(getClassesFromPackage(new File(resource.getFile()), resourcePackageName));
 						} else {
-							logger.info("Skipping resource [" + resource.toString() + "]; Unsupport resource protocol");
+							LOGGER.info("Skipping resource [" + resource.toString() + "]; Unsupport resource protocol");
 						}
 					}
 				} catch (IOException e) {
 				}
 			}
 			processClasses(classes);
-			logger.info("Loaded all REST Resource/Provider classes");
+			LOGGER.info("Loaded all REST Resource/Provider classes");
 		}
 		return jaxRSClasses;
 	}
@@ -103,9 +103,9 @@ public class HudsonWinkApplication extends WinkApplication {
 				final String className = file.getName().substring(0, file.getName().lastIndexOf('.'));
 				try {
 					classes.add(Class.forName(resourcePackageName + "." + className));
-					logger.log(Level.FINE, "Loaded Resource: " + resourcePackageName + "." + className);
+					LOGGER.log(Level.FINE, "Loaded Resource: " + resourcePackageName + "." + className);
 				} catch (ClassNotFoundException e) {
-					logger.log(Level.SEVERE, "Failed to load REST Resources: " + resourcePackageName
+					LOGGER.log(Level.SEVERE, "Failed to load REST Resources: " + resourcePackageName
 						+ "." + className, e);
 				}
 			} else {
@@ -135,9 +135,9 @@ public class HudsonWinkApplication extends WinkApplication {
 				if (className.startsWith(resourcePackageName)) {
 					try {
 						classes.add(Class.forName(className));
-						logger.log(Level.FINE, "Loaded Resource: " + className);
+						LOGGER.log(Level.FINE, "Loaded Resource: " + className);
 					} catch (ClassNotFoundException e) {
-						logger.log(Level.SEVERE, "Failed to load REST Resources: " + className, e);
+						LOGGER.log(Level.SEVERE, "Failed to load REST Resources: " + className, e);
 					}
 				}
 			}
@@ -154,22 +154,22 @@ public class HudsonWinkApplication extends WinkApplication {
 	private void processClasses(Set<Class<?>> classes) {
 		for (Class<?> cls : classes) {
 			if (ProviderMetadataCollector.isProvider(cls)) {
-				logger.log(Level.FINE, "Loaded REST Provider class: " + cls.getName());
+				LOGGER.log(Level.FINE, "Loaded REST Provider class: " + cls.getName());
 				jaxRSClasses.add(cls);
 			} else if (ResourceMetadataCollector.isResource(cls)) {
 				final Parent parent = (Parent) cls.getAnnotation(Parent.class);
 				if ((parent != null && BaseRestResource.class.equals(parent.value()))) {
-					logger.log(Level.FINE, "Loaded REST Resource class: " + cls.getName());
+					LOGGER.log(Level.FINE, "Loaded REST Resource class: " + cls.getName());
 					jaxRSClasses.add(cls);
 				} else if (BaseRestResource.class.equals(cls)) {
-					logger.log(Level.FINE, "Loaded Base REST Resource class: " + cls.getName());
+					LOGGER.log(Level.FINE, "Loaded Base REST Resource class: " + cls.getName());
 					jaxRSClasses.add(cls);
 				} else {
-					logger.log(Level.FINE, "Class [" + cls.getName() + "] is not a valid REST Resource, "
+					LOGGER.log(Level.FINE, "Class [" + cls.getName() + "] is not a valid REST Resource, "
 						+ "the @Parent(RestBaseResource.class) annotation is missing");
 				}
 			} else {
-				logger.log(Level.FINE, "Skipping class [" + cls.getName() + "]; Its not a REST Resource or Provider");
+				LOGGER.log(Level.FINE, "Skipping class [" + cls.getName() + "]; Its not a REST Resource or Provider");
 			}
 		}
 	}

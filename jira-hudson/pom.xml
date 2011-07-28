@@ -28,7 +28,7 @@
 	<artifactId>jira-hudson</artifactId>
 	<packaging>pom</packaging>
 	
-	<name>Jira Hudson Distribution</name>
+	<name>JIRA Hudson Distribution</name>
 	<description>Combination of a Jira and a Hudson CI plugin to integrate Hudson CI into Jira like is done with the Bamboo plugin</description>
 	<url>http://apidocs.marvelution.com/${project.parent.artifactId}/${project.version}</url>
 	<inceptionYear>2009</inceptionYear>

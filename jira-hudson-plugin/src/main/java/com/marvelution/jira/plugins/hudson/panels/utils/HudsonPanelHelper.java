@@ -152,9 +152,9 @@ public class HudsonPanelHelper {
 		velocityParams.put("associationManager", associationManager);
 		if (associationManager.hasAssociations(context.getProject())) {
 			velocityParams.put("associations", associationManager.getAssociations(context.getProject()));
-			velocityParams.put("associationId", RequestAndSessionUtils.retrieveFromRequestOrSession(
-					SELECTED_ASSOCIATION, "0"));
 		}
+		velocityParams.put(SELECTED_ASSOCIATION, RequestAndSessionUtils.retrieveFromRequestOrSession(
+			SELECTED_ASSOCIATION, "0"));
 		velocityParams.put("project", context.getProject());
 		velocityParams.put("pluginKey", JiraPluginUtils.getPluginKey());
 		velocityParams.put("module", module);
@@ -165,10 +165,10 @@ public class HudsonPanelHelper {
 		velocityParams.put("isSystemAdmin", permissionManager.hasPermission(Permissions.SYSTEM_ADMIN,
 				context.getUser()));
 		if (module.supportsTabs()) {
-			velocityParams.put(SELECTED_VIEW, RequestAndSessionUtils.retrieveFromRequestOrSession(SELECTED_VIEW,
-					PanelView.BUILDS_BY_JOB.getViewName()));
 			velocityParams.put("availableViews", VIEWS);
 		}
+		velocityParams.put(SELECTED_VIEW, RequestAndSessionUtils.retrieveFromRequestOrSession(SELECTED_VIEW,
+			PanelView.BUILDS_BY_JOB.getViewName()));
 	}
 
 	/**

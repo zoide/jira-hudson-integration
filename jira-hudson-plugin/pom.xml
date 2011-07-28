@@ -28,7 +28,7 @@
 	<artifactId>jira-hudson-plugin</artifactId>
 	<packaging>bundle</packaging>
 	
-	<name>Jira Hudson Plugin</name>
+	<name>JIRA Hudson Plugin</name>
 	<description>Jira Plugin to integrate Hudson CI</description>
 	<url>http://apidocs.marvelution.com/${project.parent.artifactId}/${project.version}/${project.artifactId}/</url>
 

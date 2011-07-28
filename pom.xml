@@ -38,7 +38,7 @@
 		<module>jira-hudson</module>
 	</modules>
 
-	<name>Jira Hudson Integration</name>
+	<name>JIRA Hudson Integration</name>
 	<description>Project to integrate Jira with Hudson by use of Gadgets and Tab Panels</description>
 	<url>http://apidocs.marvelution.com/${project.artifactId}/${project.version}</url>
 	<inceptionYear>2009</inceptionYear>

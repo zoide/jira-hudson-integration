@@ -39,7 +39,7 @@ public final class HudsonPluginUtils {
 
 	private final Properties PROPERTIES = new Properties();
 
-	private PluginWrapper PLUGIN_WRAPPER;
+	private final PluginWrapper PLUGIN_WRAPPER;
 
 	/**
 	 * Private constructor
