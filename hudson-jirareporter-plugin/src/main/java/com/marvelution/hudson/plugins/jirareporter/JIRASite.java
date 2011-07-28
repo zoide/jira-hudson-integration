@@ -24,6 +24,7 @@ import hudson.model.AbstractBuild;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.xml.rpc.ServiceException;
 
@@ -35,6 +36,7 @@ import com.atlassian.jira.rpc.soap.client.JiraSoapServiceService;
 import com.atlassian.jira.rpc.soap.client.JiraSoapServiceServiceLocator;
 import com.atlassian.jira.rpc.soap.client.RemoteAuthenticationException;
 import com.atlassian.jira.rpc.soap.client.RemoteException;
+import com.marvelution.hudson.plugins.apiv2.utils.JiraKeyUtils;
 
 /**
  * JIRA Site object used by the Notifier
@@ -57,8 +59,9 @@ public class JIRASite {
 	public final URL url;
 	public final String username;
 	public final String password;
-	public final boolean supportsWikiStyle;
 	public final String closeAction;
+	public final boolean supportsWikiStyle;
+	public final boolean checkIssueExistence;
 
 	transient volatile Map<String, String> priorities;
 
@@ -71,10 +74,11 @@ public class JIRASite {
 	 * @param password the password for the given username
 	 * @param supportsWikiStyle flag is Wiki style texts are supported
 	 * @param closeAction the name of the Close action, defaults to Close
+	 * @param checkIssueExistence flag to check if an Issue exists before annotating it in the Changelog
 	 */
 	@DataBoundConstructor
 	public JIRASite(String name, URL url, String username, String password, boolean supportsWikiStyle,
-			String closeAction) {
+			String closeAction, boolean checkIssueExistence) {
 		this.name = name;
 		if (!url.toExternalForm().endsWith("/"))
 		try {
@@ -87,6 +91,7 @@ public class JIRASite {
 		this.password = password;
 		this.supportsWikiStyle = supportsWikiStyle;
 		this.closeAction = closeAction;
+		this.checkIssueExistence = checkIssueExistence;
 	}
 
 	/**
@@ -123,6 +128,16 @@ public class JIRASite {
 	}
 
 	/**
+	 * The {@link Pattern} used to find JIRA Issue keys
+	 * 
+	 * @return the Issue key {@link Pattern}
+	 */
+	public Pattern getIssuePattern() {
+		// TODO Support a custom pattern
+		return JiraKeyUtils.DEFAULT_JIRA_ISSUE_KEY_PATTERN;
+	}
+
+	/**
 	 * Static helper method to get a {@link JIRASite} by its name
 	 * 
 	 * @param name the name of the {@link JIRASite} to get
@@ -152,6 +167,16 @@ public class JIRASite {
 		} else {
 			return notifier.getSite();
 		}
+	}
+
+	/**
+	 * Check if the given Build has a {@link JIRASite} configured
+	 * 
+	 * @param build the {@link AbstractBuild} to check
+	 * @return <code>true</code> is a {@link JIRASite} is configured, <code>false</code> otherwise
+	 */
+	public static boolean hasSite(AbstractBuild<?, ?> build) {
+		return getSite(build) != null;
 	}
 	
 }

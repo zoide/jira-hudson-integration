@@ -35,6 +35,7 @@ import com.atlassian.jira.rpc.soap.client.RemoteNamedObject;
 import com.atlassian.jira.rpc.soap.client.RemotePriority;
 import com.atlassian.jira.rpc.soap.client.RemoteProject;
 import com.marvelution.hudson.plugins.jirareporter.utils.IssueTextUtils;
+import com.marvelution.hudson.plugins.jirareporter.utils.IssueTextUtils.Type;
 
 /**
  * A SOAP Client for a {@link JIRASite}
@@ -99,12 +100,24 @@ public class JIRAClient {
 		newIssue.setProject(projectKey);
 		newIssue.setType(issueType);
 		newIssue.setPriority(issuePriority);
-		newIssue.setSummary(IssueTextUtils.createIssueSummary(build, site));
-		newIssue.setDescription(IssueTextUtils.createIssueDescription(build, site));
+		newIssue.setSummary(IssueTextUtils.createFieldText(Type.SUMMARY, build, site));
+		newIssue.setDescription(IssueTextUtils.createFieldText(Type.DESCRIPTION, build, site));
+		newIssue.setEnvironment(IssueTextUtils.createFieldText(Type.ENVIRONMENT, build, site));
 		newIssue.setReporter(site.username);
-		newIssue.setEnvironment(IssueTextUtils.createIssueEnvironment(build, site));
 		RemoteIssue raisedIssue = service.createIssue(token, newIssue);
 		return raisedIssue.getKey();
+	}
+
+	/**
+	 * Get {@link RemoteIssue} objects via the JQL Search
+	 * 
+	 * @param jqlQuery the JQL Query to execute
+	 * @param maxResutls the maximum number of results
+	 * @return the {@link RemoteIssue} array
+	 * @throws RemoteException in case of errors
+	 */
+	public RemoteIssue[] getIssuesFromJqlSearch(String jqlQuery, int maxResutls) throws RemoteException {
+		return service.getIssuesFromJqlSearch(token, jqlQuery, maxResutls);
 	}
 
 	/**

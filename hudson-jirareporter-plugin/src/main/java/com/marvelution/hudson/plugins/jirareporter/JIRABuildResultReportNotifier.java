@@ -323,7 +323,7 @@ public class JIRABuildResultReportNotifier extends Notifier {
 				return FormValidation.ok();
 			}
 			JIRASite site = new JIRASite("Login Check", new URL(url), request.getParameter("user"),
-				request.getParameter("pass"), false, null);
+				request.getParameter("pass"), false, null, false);
 			try {
 				site.createClient();
 				return FormValidation.ok();

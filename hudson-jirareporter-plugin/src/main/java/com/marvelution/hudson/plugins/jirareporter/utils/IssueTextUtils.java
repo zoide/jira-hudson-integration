@@ -19,76 +19,91 @@
 
 package com.marvelution.hudson.plugins.jirareporter.utils;
 
+import java.io.StringWriter;
+import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.apache.commons.jelly.JellyContext;
+import org.apache.commons.jelly.JellyException;
+import org.apache.commons.jelly.XMLOutput;
+
 import com.marvelution.hudson.plugins.jirareporter.JIRASite;
 
 import hudson.model.AbstractBuild;
-import hudson.model.Cause;
 import hudson.model.Hudson;
-import hudson.model.Result;
+import hudson.util.LogTaskListener;
 
 /**
+ * Utility class for Issue Text generation
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class IssueTextUtils {
 
-	private static final String NEW_LINE = "\n";
+	private static final Logger LOGGER = Logger.getLogger(IssueTextUtils.class.getName());
 
 	/**
-	 * Helper method to create the Summary text
+	 * Create the text content for a specific issue field
 	 * 
+	 * @param type the {@link Type} of text to create
 	 * @param build the {@link AbstractBuild}
-	 * @param site the {@link JIRASite} configuration
-	 * @return the summary text
+	 * @param site the {@link JIRASite}
+	 * @return the created text content
 	 */
-	public static String createIssueSummary(AbstractBuild<?, ?> build, JIRASite site) {
-		StringBuilder summary = new StringBuilder();
-		summary.append(build.getProject().getDisplayName());
-		summary.append(" build #");
-		summary.append(build.getNumber());
-		summary.append(" ");
-		if (build.getResult().isWorseThan(Result.SUCCESS)) {
-			summary.append("failed");
-		} else {
-			summary.append("succeeded");
-		}
-		return summary.toString();
-	}
-
-	/**
-	 * Helper method to create the Description text
-	 * 
-	 * @param build the {@link AbstractBuild}
-	 * @param site the {@link JIRASite} configuration
-	 * @return the description text
-	 */
-	public static String createIssueDescription(AbstractBuild<?, ?> build, JIRASite site) {
-		StringBuilder description = new StringBuilder();
-		// TODO Auto-generated method stub
-		return description.toString();
-	}
-
-	/**
-	 * Helper method to create the Environment text
-	 * 
-	 * @param build the {@link AbstractBuild}
-	 * @param site the {@link JIRASite} configuration
-	 * @return the environment text
-	 */
-	public static String createIssueEnvironment(AbstractBuild<?, ?> build, JIRASite site) {
-		StringBuilder environment = new StringBuilder();
+	public static String createFieldText(Type type, AbstractBuild<?, ?> build, JIRASite site) {
+		final StringWriter writer = new StringWriter();
+		final XMLOutput output = XMLOutput.createXMLOutput(writer);
+		final JellyContext context = new JellyContext();
+		context.setVariable("build", build);
+		context.setVariable("site", site);
 		try {
 			Class.forName("jenkins.model.Jenkins");
-			environment.append("Jenkins");
+			context.setVariable("system", "Jenkins");
 		} catch (ClassNotFoundException e) {
-			environment.append("Hudson");
+			context.setVariable("system", "Hudson");
 		}
-		environment.append(" version: ").append(Hudson.getVersion().toString()).append(NEW_LINE);
-		environment.append("Job: ").append(build.getProject().getDisplayName()).append(NEW_LINE);
-		environment.append("Build: ").append(build.getNumber()).append(NEW_LINE);
-		for (Cause cause : build.getCauses()) {
-			environment.append("Build Trigger: ").append(cause.getShortDescription());
+		context.setVariable("version", Hudson.getVersion().toString());
+		try {
+			context.setVariable("environment", build.getEnvironment(new LogTaskListener(LOGGER, Level.INFO)));
+		} catch (Exception e) {
+			context.setVariable("environment", Collections.emptyMap());
 		}
-		return environment.toString();
+		try {
+			// TODO Support custom templates
+			context.runScript(HudsonPluginUtils.getPluginClassloader().getResource("fields/" + type.field(site)
+				+ ".jelly"), output);
+		} catch (JellyException e) {
+			LOGGER.log(Level.SEVERE, "Failed to create Text of type " + type.name(), e);
+			throw new IllegalStateException("Cannot raise an issue if no text is available", e);
+		}
+		return writer.toString().trim();
+	}
+
+	/**
+	 * Text Type enumeration
+	 * 
+	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
+	 */
+	public static enum Type {
+
+		SUMMARY, DESCRIPTION, ENVIRONMENT;
+
+		/**
+		 * Getter for the field name
+		 * 
+		 * @param site the {@link JIRASite} object the text will be send to, used to determine in the Wiki template
+		 * 			should be used
+		 * @return the field name
+		 */
+		String field(JIRASite site) {
+			if (site.supportsWikiStyle) {
+				return name().toLowerCase() + "-wiki";
+			} else {
+				return name().toLowerCase();
+			}
+		}
+
 	}
 
 }

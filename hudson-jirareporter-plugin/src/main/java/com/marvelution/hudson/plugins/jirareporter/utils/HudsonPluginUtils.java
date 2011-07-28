@@ -19,9 +19,14 @@
 
 package com.marvelution.hudson.plugins.jirareporter.utils;
 
+import hudson.PluginWrapper;
+import hudson.model.Hudson;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import com.marvelution.hudson.plugins.jirareporter.PluginImpl;
 
 /**
  * Helper class to get Plugin properties
@@ -34,6 +39,8 @@ public final class HudsonPluginUtils {
 
 	private final Properties PROPERTIES = new Properties();
 
+	private PluginWrapper PLUGIN_WRAPPER;
+
 	/**
 	 * Private constructor
 	 */
@@ -44,6 +51,7 @@ public final class HudsonPluginUtils {
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to load Hudson Plugin properties", e);
 		}
+		PLUGIN_WRAPPER = Hudson.getInstance().getPluginManager().getPlugin(PluginImpl.class);
 	}
 
 	/**
@@ -71,6 +79,26 @@ public final class HudsonPluginUtils {
 	 */
 	public static String getPluginVersion() {
 		return INSTANCE.getProperty("plugin.version");
+	}
+
+	/**
+	 * Get the Plugin {@link ClassLoader}
+	 * 
+	 * @return the Plugin {@link ClassLoader}
+	 * @since 4.1.0
+	 */
+	public static ClassLoader getPluginClassloader() {
+		return INSTANCE.PLUGIN_WRAPPER.classLoader;
+	}
+
+	/**
+	 * Getter for the {@link PluginWrapper}
+	 * 
+	 * @return the {@link PluginWrapper}
+	 * @since 4.1.0
+	 */
+	public static PluginWrapper getPluginWrapper() {
+		return INSTANCE.PLUGIN_WRAPPER;
 	}
 
 	/**
