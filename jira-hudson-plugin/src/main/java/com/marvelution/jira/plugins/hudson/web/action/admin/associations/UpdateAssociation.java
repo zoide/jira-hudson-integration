@@ -23,6 +23,7 @@ package com.marvelution.jira.plugins.hudson.web.action.admin.associations;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.marvelution.hudson.plugins.apiv2.client.ClientException;
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
 import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
@@ -40,7 +41,7 @@ import com.marvelution.jira.plugins.hudson.web.action.admin.ModifyActionType;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @SuppressWarnings("unchecked")
-public class UpdateAssociation extends AbstractModityAssociation {
+public class UpdateAssociation extends AbstractModifyAssociation {
 
 	private static final long serialVersionUID = 1L;
 
@@ -104,8 +105,13 @@ public class UpdateAssociation extends AbstractModityAssociation {
 	public Collection<String> getJobOptions() {
 		HudsonClient client = clientFactory.create(serverManager.getServer(getHudsonId()));
 		Collection<String> options = new ArrayList<String>();
-		for (Job job : client.findAll(JobQuery.createForJobList(true))) {
-			options.add(job.getName());
+		try {
+			for (Job job : client.findAll(JobQuery.createForJobList(true))) {
+				options.add(job.getName());
+			}
+		} catch (ClientException e) {
+			// TODO Improve on this
+			options.add(e.getMessage());
 		}
 		return options;
 	}

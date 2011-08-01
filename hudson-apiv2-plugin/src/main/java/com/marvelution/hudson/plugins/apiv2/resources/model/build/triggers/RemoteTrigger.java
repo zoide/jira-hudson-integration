@@ -99,9 +99,22 @@ public class RemoteTrigger extends Trigger {
 	 * @return the {@link RemoteTrigger}
 	 */
 	public static RemoteTrigger create(String note, String host) {
+		return create(note, host, "");
+	}
+
+	/**
+	 * Static helper method to create a {@link RemoteTrigger}
+	 * 
+	 * @param note the note that was attached to the {@link Trigger}
+	 * @param host the host that send the {@link Trigger}
+	 * @param shortDescription the short description of the trigger
+	 * @return the {@link RemoteTrigger}
+	 */
+	public static RemoteTrigger create(String note, String host, String shortDescription) {
 		RemoteTrigger trigger = new RemoteTrigger();
 		trigger.setHost(host);
 		trigger.setNote(note);
+		trigger.setShortDescription(shortDescription);
 		return trigger;
 	}
 

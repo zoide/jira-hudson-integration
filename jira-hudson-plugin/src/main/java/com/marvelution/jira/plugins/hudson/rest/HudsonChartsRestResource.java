@@ -38,6 +38,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.atlassian.jira.charts.jfreechart.ChartHelper;
 import com.atlassian.sal.api.message.I18nResolver;
+import com.marvelution.hudson.plugins.apiv2.client.ClientException;
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
 import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
@@ -108,11 +109,12 @@ public class HudsonChartsRestResource {
 	 * @param associationId the Id of the Hudson Association configured using the <a href="http://docs.marvelution.com/display/MARVJIRAHUDSON/Manage%20Hudson%20Associations">Manage Hudson Associations</a> feature
 	 * @return the {@link Chart} object with all the information related to the chart
 	 * @throws IOException in case of errors
+	 * @throws ClientException in case of {@link HudsonClient} communication issues
 	 */
 	@GET
 	@Path("generate/{type}/{associationId}")
 	public Chart getChart(@PathParam("type") String type, @PathParam("associationId") int associationId)
-			throws IOException {
+			throws IOException, ClientException {
 		if (associationManager.hasAssociation(associationId)) {
 			final HudsonAssociation association = associationManager.getAssociation(associationId);
 			return getChart(type, association.getServerId(), association.getJobName());
@@ -129,11 +131,12 @@ public class HudsonChartsRestResource {
 	 * @param jobname the job name of the job to get the data for
 	 * @return the {@link Chart} object with all the information related to the chart
 	 * @throws IOException in case of errors
+	 * @throws ClientException in case of {@link HudsonClient} communication issues
 	 */
 	@GET
 	@Path("generate/{type}")
 	public Chart getChart(@PathParam("type") String type, @QueryParam("serverId") int serverId,
-			@QueryParam("jobName") String jobname) throws IOException {
+			@QueryParam("jobName") String jobname) throws IOException, ClientException {
 		if (serverManager.hasServer(serverId)) {
 			final HudsonServer server = serverManager.getServer(serverId);
 			final HudsonClient client = clientFactory.create(server);

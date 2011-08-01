@@ -39,4 +39,16 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 // TODO Add ChangeLog to trigger
 public class SCMTrigger extends Trigger {
 
+	/**
+	 * Static helper method to create a {@link SCMTrigger}
+	 * 
+	 * @param shortDescription the short description of the Trigger
+	 * @return the {@link SCMTrigger}
+	 */
+	public static SCMTrigger create(String shortDescription) {
+		SCMTrigger trigger = new SCMTrigger();
+		trigger.setShortDescription(shortDescription);
+		return trigger;
+	}
+
 }

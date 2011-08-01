@@ -38,10 +38,12 @@ public abstract class AbstractListableQuery<MODEL extends Model, LISTMODEL exten
 	/**
 	 * Protected constructor so this class must be subclassed
 	 *  
-	 * @param modelClass the {@link Class}
+	 * @param modelClass the {@link Model} class
+	 * @param listModelClass the {@link ListableModel} class
+	 * @param type the {@link QueryType}
 	 */
-	protected AbstractListableQuery(Class<MODEL> modelClass, Class<LISTMODEL> listModelClass) {
-		super(modelClass);
+	protected AbstractListableQuery(Class<MODEL> modelClass, Class<LISTMODEL> listModelClass, QueryType type) {
+		super(modelClass, type);
 		this.listModelClass = listModelClass;
 	}
 

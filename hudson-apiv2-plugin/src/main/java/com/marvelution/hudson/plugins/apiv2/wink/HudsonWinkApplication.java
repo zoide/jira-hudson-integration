@@ -37,7 +37,6 @@ import org.apache.wink.common.internal.registry.metadata.ProviderMetadataCollect
 import org.apache.wink.common.internal.registry.metadata.ResourceMetadataCollector;
 
 import com.marvelution.hudson.plugins.apiv2.resources.impl.BaseRestResource;
-import com.marvelution.hudson.plugins.apiv2.servlet.filter.HudsonAPIV2ServletFilter;
 import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
 
 /**
@@ -51,7 +50,7 @@ public class HudsonWinkApplication extends WinkApplication {
 		"com.marvelution.hudson.plugins.apiv2.resources",
 	};
 
-	private static final Logger LOGGER = Logger.getLogger(HudsonAPIV2ServletFilter.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(HudsonWinkApplication.class.getName());
 
 	private Set<Class<?>> jaxRSClasses = null;
 

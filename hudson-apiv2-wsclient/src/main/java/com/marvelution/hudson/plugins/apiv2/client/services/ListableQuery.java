@@ -19,7 +19,6 @@
 
 package com.marvelution.hudson.plugins.apiv2.client.services;
 
-import com.marvelution.hudson.plugins.apiv2.client.connectors.Connector;
 import com.marvelution.hudson.plugins.apiv2.resources.model.ListableModel;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 

@@ -48,7 +48,7 @@ public abstract class SearchQuery<MODEL extends Model, LISTMODEL extends Listabl
 	 * @param listModelClass the <MDL> Listable type
 	 */
 	protected SearchQuery(Class<MODEL> modelClass, Class<LISTMODEL> listModelClass, String[] query) {
-		super(modelClass, listModelClass);
+		super(modelClass, listModelClass, QueryType.GET);
 		this.query = query;
 	}
 

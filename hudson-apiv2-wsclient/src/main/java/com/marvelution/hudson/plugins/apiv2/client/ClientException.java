@@ -26,7 +26,7 @@ import com.marvelution.hudson.plugins.apiv2.client.connectors.ConnectorResponse;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class ClientException extends RuntimeException {
+public class ClientException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 

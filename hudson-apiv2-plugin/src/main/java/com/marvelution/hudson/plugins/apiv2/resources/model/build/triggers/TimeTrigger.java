@@ -67,8 +67,20 @@ public class TimeTrigger extends Trigger {
 	 * @return the {@link TimeTrigger}
 	 */
 	public static TimeTrigger create(long timestamp) {
+		return create(timestamp, "");
+	}
+
+	/**
+	 * Static helper method to create a {@link TimeTrigger} for the given timestamp
+	 * 
+	 * @param timestamp the timestamp of the {@link TimeTrigger}
+	 * @param shortDescription the short description of the trigger
+	 * @return the {@link TimeTrigger}
+	 */
+	public static TimeTrigger create(long timestamp, String shortDescription) {
 		TimeTrigger trigger = new TimeTrigger();
 		trigger.setTimestamp(timestamp);
+		trigger.setShortDescription(shortDescription);
 		return trigger;
 	}
 

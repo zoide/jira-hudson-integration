@@ -109,10 +109,24 @@ public class ProjectTrigger extends Trigger {
 	 * @return the {@link ProjectTrigger}
 	 */
 	public static ProjectTrigger create(String name, String url, int buildNumber) {
+		return create(name, url, buildNumber, "");
+	}
+
+	/**
+	 * Static helper method to create a {@link ProjectTrigger}
+	 * 
+	 * @param name the project name of the triggering project
+	 * @param url the project url of the triggering project
+	 * @param buildNumber the build number of the triggering project
+	 * @param shortDescription the short description of the trigger
+	 * @return the {@link ProjectTrigger}
+	 */
+	public static ProjectTrigger create(String name, String url, int buildNumber, String shortDescription) {
 		ProjectTrigger trigger = new ProjectTrigger();
 		trigger.setName(name);
 		trigger.setUrl(url);
 		trigger.setBuildNumber(buildNumber);
+		trigger.setShortDescription(shortDescription);
 		return trigger;
 	}
 

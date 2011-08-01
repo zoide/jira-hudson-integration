@@ -21,12 +21,11 @@ package com.marvelution.hudson.plugins.apiv2.client.services;
 
 import org.apache.commons.codec.net.URLCodec;
 
-import com.marvelution.hudson.plugins.apiv2.client.connectors.Connector;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
 /**
  * HTTP GET Query interface
- * Interface for all Queries that can be executed using a {@link Connector}
+ * Interface for all Queries that can be executed
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
@@ -38,11 +37,28 @@ public interface Query<MODEL extends Model> {
 	URLCodec URLCODEC = new URLCodec();
 
 	/**
+	 * Get the {@link QueryType} of this query
+	 * 
+	 * @return the {@link QueryType}
+	 * @since 4.1.0
+	 */
+	QueryType getQueryType();
+
+	/**
 	 * Get the URL string where the query can be executed at
 	 * 
-	 * @return the URL, should start with a slash, but if not present the {@link Connector} should add it.
+	 * @return the URL, should start with a slash
 	 */
-	public String getUrl();
+	String getUrl();
+
+	/**
+	 * Get the Data f the query, usually used in POST and PUT queryies
+	 * 
+	 * @param <T> the type of the data object
+	 * @return the data obejct
+	 * @since 4.1.0
+	 */
+	<T> T getData();
 
 	/**
 	 * Get the {@link Model} class that this Query returns.
@@ -50,6 +66,6 @@ public interface Query<MODEL extends Model> {
 	 * 
 	 * @return the {@link Model} class
 	 */
-	public Class<MODEL> getModelClass();
+	Class<MODEL> getModelClass();
 
 }

@@ -160,4 +160,13 @@ public class TestCaseResult extends Model {
 		this.errorDetails = errorDetails;
 	}
 
+	/**
+	 * Getter method to get the test case name
+	 * 
+	 * @return the test case name
+	 */
+	public String getTestCaseName() {
+		return getClassName() + "." + getTestName();
+	}
+
 }

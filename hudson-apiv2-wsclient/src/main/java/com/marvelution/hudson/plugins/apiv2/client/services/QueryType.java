@@ -19,39 +19,16 @@
 
 package com.marvelution.hudson.plugins.apiv2.client.services;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.Version;
 
 /**
- * {@link AbstractQuery} implementation for the {@link Version} endpoint
+ * Enumeration of the different Query types supported
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
+ * 
+ * @since 4.1.0
  */
-public class VersionQuery extends AbstractQuery<Version> {
+public enum QueryType {
 
-	/**
-	 * Constructor
-	 */
-	protected VersionQuery() {
-		super(Version.class, QueryType.GET);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected String getSpecificUrl() {
-		final StringBuilder url = new StringBuilder();
-		url.append("plugin").append("/version");
-		return url.toString();
-	}
-
-	/**
-	 * Create a {@link VersionQuery} to get the plugin version
-	 * 
-	 * @return the {@link VersionQuery}
-	 */
-	public static VersionQuery createForPluginVersion() {
-		return new VersionQuery();
-	}
+	GET, POST, PUT, DELETE, OPTIONS;
 
 }

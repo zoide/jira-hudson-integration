@@ -19,7 +19,7 @@
 
 package com.marvelution.hudson.plugins.apiv2.client;
 
-import com.marvelution.hudson.plugins.apiv2.client.connectors.Connector;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Host configuration class.
@@ -107,6 +107,16 @@ public class Host {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * Check if this {@link Host} is a securd host.
+	 * Only <code>true</code> if {@link #username} and {@link #password} are both not Blank
+	 * 
+	 * @return <code>true</code> if secured, <code>false</code> otherwise
+	 */
+	public boolean isSecured() {
+		return StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password);
 	}
 
 	/**

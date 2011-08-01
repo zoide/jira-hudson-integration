@@ -38,7 +38,7 @@ public class ChangeLogQuery extends AbstractListableQuery<ChangeLog.Entry, Chang
 	 * @param buildNumber the build number
 	 */
 	private ChangeLogQuery(String jobname, Integer buildNumber) {
-		super(ChangeLog.Entry.class, ChangeLog.class);
+		super(ChangeLog.Entry.class, ChangeLog.class, QueryType.GET);
 		this.jobname = jobname;
 		this.buildNumber = buildNumber;
 	}

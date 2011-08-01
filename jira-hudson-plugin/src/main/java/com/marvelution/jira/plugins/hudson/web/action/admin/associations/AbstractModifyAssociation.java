@@ -37,7 +37,7 @@ import com.marvelution.jira.plugins.hudson.web.action.admin.ModifyActionType;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @SuppressWarnings("unchecked")
-public abstract class AbstractModityAssociation extends AbstractHudsonAdminWebActionSupport {
+public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
 
@@ -52,7 +52,7 @@ public abstract class AbstractModityAssociation extends AbstractHudsonAdminWebAc
 	 * @param associationFactory the {@link HudsonAssociationFactory} implementation
 	 * @param associationManager the {@link HudsonAssociationManager} implementation
 	 */
-	protected AbstractModityAssociation(HudsonServerManager serverManager, HudsonAssociationFactory associationFactory,
+	protected AbstractModifyAssociation(HudsonServerManager serverManager, HudsonAssociationFactory associationFactory,
 			HudsonAssociationManager associationManager) {
 		super(serverManager);
 		this.associationFactory = associationFactory;

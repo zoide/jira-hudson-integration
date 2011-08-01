@@ -60,7 +60,8 @@ public class TestResultsDozerConverter extends DozerConverter<hudson.model.Abstr
 				return mapper.map(buildAction.getResults(), TestResult.class);
 			}
 		}
-		return null;
+		// Return an empty TestResult
+		return new TestResult();
 	}
 
 	/**

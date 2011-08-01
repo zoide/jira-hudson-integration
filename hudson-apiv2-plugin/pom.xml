@@ -38,10 +38,6 @@
 		<url>http://fisheye.marvelution.com/browse/public/atlassian/jira-hudson-integration/trunk/hudson-apiv2-plugin</url>
 	</scm>
 
-	<properties>		
-		<apache.wink.version>1.1.2-incubating</apache.wink.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.wink</groupId>

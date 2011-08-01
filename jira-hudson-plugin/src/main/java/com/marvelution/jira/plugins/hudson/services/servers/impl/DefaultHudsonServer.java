@@ -21,6 +21,7 @@ package com.marvelution.jira.plugins.hudson.services.servers.impl;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.marvelution.hudson.plugins.apiv2.client.Host;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
 /**
@@ -28,21 +29,18 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class DefaultHudsonServer implements HudsonServer, Comparable<HudsonServer> {
+public class DefaultHudsonServer extends Host implements HudsonServer, Comparable<HudsonServer> {
 
-	private int serverId;
+	private int serverId = 0;
 	private String name;
 	private String description;
-	private String host;
 	private String publicHost;
-	private String username;
-	private String password;
 
 	/**
 	 * Default Constructor
 	 */
 	public DefaultHudsonServer() {
-		setServerId(0);
+		super("");
 	}
 
 	/**
@@ -52,10 +50,9 @@ public class DefaultHudsonServer implements HudsonServer, Comparable<HudsonServe
 	 * @param url the server base url
 	 */
 	public DefaultHudsonServer(String name, String url) {
-		this();
+		super(url);
 		setName(name);
 		setDescription("");
-		setHost(url);
 	}
 
 	/**
@@ -92,13 +89,11 @@ public class DefaultHudsonServer implements HudsonServer, Comparable<HudsonServe
 	 * @param server a {@link HudsonServer} to use as a base to copy the fields from
 	 */
 	public DefaultHudsonServer(HudsonServer server) {
+		super(server.getHost(), server.getUsername(), server.getPassword());
 		setServerId(server.getServerId());
 		setName(server.getName());
 		setDescription(server.getDescription());
-		setHost(server.getHost());
 		setPublicHost(server.getPublicHost());
-		setUsername(server.getUsername());
-		setPassword(server.getPassword());
 	}
 
 	/**
@@ -153,27 +148,11 @@ public class DefaultHudsonServer implements HudsonServer, Comparable<HudsonServe
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getHost() {
-		return host;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setHost(String host) {
-		this.host = host;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public String getPublicHost() {
 		if (StringUtils.isNotBlank(publicHost)) {
 			return publicHost;
 		}
-		return host;
+		return getHost();
 	}
 
 	/**
@@ -181,7 +160,7 @@ public class DefaultHudsonServer implements HudsonServer, Comparable<HudsonServe
 	 */
 	@Override
 	public void setPublicHost(String publicHost) {
-		if (publicHost != null && !publicHost.equals(host)) {
+		if (publicHost != null && !publicHost.equals(getHost())) {
 			this.publicHost = publicHost;
 		}
 	}
@@ -190,52 +169,18 @@ public class DefaultHudsonServer implements HudsonServer, Comparable<HudsonServe
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getUsername() {
-		return username;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getPassword() {
-		return password;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean isSecured() {
-		if (host == null) {
-			return false;
-		}
-		return (StringUtils.isNotBlank(getUsername()) && StringUtils.isNotBlank(getPassword()));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof HudsonServer) {
-			// TODO Write Equals
+			HudsonServer other = (HudsonServer) obj;
+			if (other.getServerId() > 0 && getServerId() > 0) {
+				// ID's are set, compare using those
+				if (getServerId() == other.getServerId()) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+			// TODO Implement other equals?
 		}
 		return false;
 	}

@@ -64,11 +64,13 @@ public class UnknownTrigger extends Trigger {
 	 * Create a {@link UnknownTrigger} object for the class name given
 	 * 
 	 * @param className
+	 * @param shortDescription the short description of the trigger
 	 * @return {@link UnknownTrigger}
 	 */
-	public static UnknownTrigger create(String className) {
+	public static UnknownTrigger create(String className, String shortDescription) {
 		UnknownTrigger trigger = new UnknownTrigger();
 		trigger.setName(className);
+		trigger.setShortDescription(shortDescription);
 		return trigger;
 	}
 

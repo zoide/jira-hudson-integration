@@ -32,13 +32,13 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
 public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 
 	private String name = null;
-	private QueryType type;
+	private JobQueryType type;
 
 	/**
 	 * Private constructor to force the use of the static method below
 	 */
-	private JobQuery(QueryType type) {
-		super(Job.class, Jobs.class);
+	private JobQuery(JobQueryType type) {
+		super(Job.class, Jobs.class, QueryType.GET);
 		this.type = type;
 	}
 
@@ -65,7 +65,7 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * 
 	 * @return the type
 	 */
-	public QueryType getType() {
+	public JobQueryType getType() {
 		return type;
 	}
 
@@ -76,16 +76,16 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	protected String getSpecificUrl() {
 		final StringBuilder url = new StringBuilder();
 		url.append("jobs");
-		if (QueryType.SPECIFIC.equals(getType()) && name != null) {
+		if (JobQueryType.SPECIFIC.equals(getType()) && name != null) {
 			url.append("?name=").append(urlEncode(name));
-		} else if (QueryType.STATUS.equals(getType()) && name != null) {
+		} else if (JobQueryType.STATUS.equals(getType()) && name != null) {
 			url.append("/status?name=").append(urlEncode(name));
-		} else if (QueryType.LIST.equals(getType()) || QueryType.NAME_ONLY.equals(getType())) {
+		} else if (JobQueryType.LIST.equals(getType()) || JobQueryType.NAME_ONLY.equals(getType())) {
 			url.append("/list");
-			if (QueryType.NAME_ONLY.equals(getType())) {
+			if (JobQueryType.NAME_ONLY.equals(getType())) {
 				url.append("?nameOnly=true");
 			}
-		} else if (QueryType.ALL.equals(getType())) {
+		} else if (JobQueryType.ALL.equals(getType())) {
 			url.append("/all");
 		}
 		return url.toString();
@@ -98,7 +98,7 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * @return the {@link JobQuery}
 	 */
 	public static JobQuery createForJobByName(String jobName) {
-		JobQuery query = new JobQuery(QueryType.SPECIFIC);
+		JobQuery query = new JobQuery(JobQueryType.SPECIFIC);
 		query.setName(jobName);
 		return query;
 	}
@@ -110,7 +110,7 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * @return the {@link JobQuery}
 	 */
 	public static JobQuery createForJobStatusByName(String jobName) {
-		JobQuery query = new JobQuery(QueryType.STATUS);
+		JobQuery query = new JobQuery(JobQueryType.STATUS);
 		query.setName(jobName);
 		return query;
 	}
@@ -126,9 +126,9 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	public static JobQuery createForJobList(boolean nameOnly) {
 		JobQuery query;
 		if (nameOnly) {
-			query = new JobQuery(QueryType.NAME_ONLY);
+			query = new JobQuery(JobQueryType.NAME_ONLY);
 		} else {
-			query = new JobQuery(QueryType.LIST);
+			query = new JobQuery(JobQueryType.LIST);
 		}
 		return query;
 	}
@@ -140,10 +140,15 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * @return the {@link JobQuery}
 	 */
 	public static JobQuery createForAllJobs() {
-		return new JobQuery(QueryType.ALL);
+		return new JobQuery(JobQueryType.ALL);
 	}
 
-	private static enum QueryType {
+	/**
+	 * Enumeration of the different Joq QueryTypes supported
+	 * 
+	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
+	 */
+	private static enum JobQueryType {
 		SPECIFIC, LIST, ALL, STATUS, NAME_ONLY;
 	}
 

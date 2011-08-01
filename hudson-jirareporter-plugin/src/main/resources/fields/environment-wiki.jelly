@@ -27,7 +27,7 @@ Build: #${build.number}
 Build On: <j:choose><j:when test="${build.getBuiltOnStr() != ''}">${build.getBuiltOnStr()}</j:when><j:otherwise>Master</j:otherwise></j:choose>
 Duration: ${build.getTimestampString()}
 <j:forEach items="${environment.entrySet()}" var="entry">
-<j:whitespace>{{${entry.getKey()}}}: {{{nl:${entry.getValue()}}}}
+<j:whitespace>{{${entry.getKey()}}}: {{${entry.getValue()}}}
 </j:whitespace>
 </j:forEach>
 </j:jelly>

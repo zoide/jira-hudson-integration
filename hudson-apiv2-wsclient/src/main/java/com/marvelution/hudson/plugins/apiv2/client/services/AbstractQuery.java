@@ -32,15 +32,25 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
  */
 public abstract class AbstractQuery<MODEL extends Model> implements Query<MODEL> {
 
-	private Class<MODEL> modelClass;
+	private final Class<MODEL> modelClass;
+	private final QueryType type;
 
 	/**
 	 * Protected constructor so this class must be subclassed
 	 *  
 	 * @param modelClass the {@link Class}
 	 */
-	protected AbstractQuery(Class<MODEL> modelClass) {
+	protected AbstractQuery(Class<MODEL> modelClass, QueryType type) {
 		this.modelClass = modelClass;
+		this.type = type;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final QueryType getQueryType() {
+		return type;
 	}
 
 	/**
@@ -49,6 +59,15 @@ public abstract class AbstractQuery<MODEL extends Model> implements Query<MODEL>
 	@Override
 	public final String getUrl() {
 		return "/apiv2/" + getSpecificUrl();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <T> T getData() {
+		// Default implementation for the Queries. Most don't need this as they are GET Queries
+		return null;
 	}
 
 	/**

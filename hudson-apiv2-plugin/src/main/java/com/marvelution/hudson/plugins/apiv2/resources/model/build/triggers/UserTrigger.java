@@ -67,8 +67,20 @@ public class UserTrigger extends Trigger {
 	 * @return the {@link UserTrigger}
 	 */
 	public static UserTrigger create(String username) {
+		return create(username, "");
+	}
+
+	/**
+	 * Static helper method to create a {@link UserTrigger}
+	 * 
+	 * @param username the username of the user to put in the {@link UserTrigger}
+	 * @param shortDescription the short description of the trigger
+	 * @return the {@link UserTrigger}
+	 */
+	public static UserTrigger create(String username, String shortDescription) {
 		UserTrigger trigger = new UserTrigger();
 		trigger.setUsername(username);
+		trigger.setShortDescription(shortDescription);
 		return trigger;
 	}
 

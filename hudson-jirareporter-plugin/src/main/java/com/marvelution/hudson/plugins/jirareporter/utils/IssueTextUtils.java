@@ -28,6 +28,9 @@ import org.apache.commons.jelly.JellyContext;
 import org.apache.commons.jelly.JellyException;
 import org.apache.commons.jelly.XMLOutput;
 
+import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.ChangeLog;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.TestResult;
 import com.marvelution.hudson.plugins.jirareporter.JIRASite;
 
 import hudson.model.AbstractBuild;
@@ -55,6 +58,7 @@ public class IssueTextUtils {
 		final StringWriter writer = new StringWriter();
 		final XMLOutput output = XMLOutput.createXMLOutput(writer);
 		final JellyContext context = new JellyContext();
+		context.setVariable("rootURL", Hudson.getInstance().getRootUrl());
 		context.setVariable("build", build);
 		context.setVariable("site", site);
 		try {
@@ -69,6 +73,9 @@ public class IssueTextUtils {
 		} catch (Exception e) {
 			context.setVariable("environment", Collections.emptyMap());
 		}
+		// Utilize the Dozer Mapper and its convertors of the API V2 plugin to get the ChangeLog and TestResults
+		context.setVariable("changelog", DozerUtils.getMapper().map(build.getChangeSet(), ChangeLog.class));
+		context.setVariable("testresults", DozerUtils.getMapper().map(build, TestResult.class));
 		try {
 			// TODO Support custom templates
 			context.runScript(HudsonPluginUtils.getPluginClassloader().getResource("fields/" + type.field(site)

@@ -27,6 +27,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.marvelution.hudson.plugins.apiv2.client.ClientException;
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
 import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
@@ -75,10 +76,11 @@ public class HudsonServerRestResource {
 	 * 
 	 * @param serverId the {@link HudsonServer} Id
 	 * @return the {@link Jobs}
+	 * @throws ClientException in case of {@link HudsonClient} communication issues
 	 */
 	@GET
 	@Path("{serverId}/listJobs")
-	public Jobs listAllJobs(@PathParam("serverId") Integer serverId) {
+	public Jobs listAllJobs(@PathParam("serverId") Integer serverId) throws ClientException {
 		if (serverManager.hasServer(serverId)) {
 			final HudsonClient client = clientFactory.create(serverManager.getServer(serverId));
 			return client.findAll(JobQuery.createForJobList(true));
@@ -92,10 +94,11 @@ public class HudsonServerRestResource {
 	 * 
 	 * @param associationId the {@link HudsonAssociation} Id to get the Job Data for
 	 * @return the {@link Job}
+	 * @throws ClientException in case of {@link HudsonClient} communication issues
 	 */
 	@GET
 	@Path("job/{associationId}")
-	public Job getJobData(@PathParam("associationId") Integer associationId) {
+	public Job getJobData(@PathParam("associationId") Integer associationId) throws ClientException {
 		if (associationManager.hasAssociation(associationId)) {
 			final HudsonAssociation association = associationManager.getAssociation(associationId);
 			final HudsonClient client = clientFactory.create(serverManager.getServer(association.getServerId()));

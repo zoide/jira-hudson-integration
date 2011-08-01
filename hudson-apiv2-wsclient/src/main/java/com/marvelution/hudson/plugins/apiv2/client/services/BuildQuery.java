@@ -41,7 +41,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @param jobName the name of the Job on hudson to get the builds for
 	 */
 	private BuildQuery(String jobName) {
-		super(Build.class, Builds.class);
+		super(Build.class, Builds.class, QueryType.GET);
 		this.jobName = jobName;
 	}
 

@@ -44,11 +44,11 @@ import com.marvelution.hudson.plugins.apiv2.servlet.HudsonAPIV2ServletConfig;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark rekveld</a>
  * 
- * @see 1.0.0
+ * @since 1.0.0
  */
 public class HudsonAPIV2ServletFilter extends RestFilter {
 
-	private static final Logger logger = Logger.getLogger(HudsonAPIV2ServletFilter.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(HudsonAPIV2ServletFilter.class.getName());
 
 	private RestServlet restServlet;
 
@@ -62,7 +62,7 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 			restServlet = new HudsonRestServletForFilter(restFilterConfig);
 			restServlet.init(new HudsonAPIV2ServletConfig(restFilterConfig));
 		} catch (IOException e) {
-			logger.log(Level.SEVERE, "Failed to create HudsonRestFilterConfig", e);
+			LOGGER.log(Level.SEVERE, "Failed to create HudsonRestFilterConfig", e);
 			throw new ServletException("Failed to create HudsonRestFilterConfig", e);
 		}
 	}
@@ -72,7 +72,7 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 	 */
 	@Override
 	public void destroy() {
-		logger.log(Level.FINE, "Destroying RestFilter {}", this);
+		LOGGER.log(Level.FINE, "Destroying RestFilter {}", this);
 		restServlet.destroy();
 	}
 
@@ -91,25 +91,25 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 			if (requestUri.startsWith("/")) {
 				requestUri = requestUri.substring(1);
 			}
-			logger.log(Level.FINE, "Got a request from URI + " + requestUri);
+			LOGGER.log(Level.FINE, "Got a request from URI: " + requestUri);
 			// Make sure it is a REST call
 			if (requestUri.startsWith(BaseRestResource.BASE_REST_URI)) {
-				logger.log(Level.FINE, "Got a REST request, forwarding it to the Wink RestFilter");
+				LOGGER.log(Level.FINE, "Got a REST request, forwarding it to the Wink RestFilter");
 				FilteredHttpServletResponse servletResponse = new FilteredHttpServletResponse((HttpServletResponse) response);
 				restServlet.service(servletRequest, servletResponse);
 				if ((!(servletResponse.isCommitted())) && (servletResponse.getStatusCode() == 404)) {
-					logger.log(Level.FINE, "Filter " + this.getClass().getName() + " did not match a resource so letting request continue on FilterChain");
+					LOGGER.log(Level.FINE, "Filter " + this.getClass().getName() + " did not match a resource so letting request continue on FilterChain");
 					servletResponse.setStatus(200);
 					filterChain.doFilter(request, response);
 				}
 			// Otherwise forward the request to the next Filter in the chain
 			} else {
-				logger.log(Level.FINE, "No REST request, forwarding request to the next ServletFilter");
+				LOGGER.log(Level.FINE, "No REST request, forwarding request to the next ServletFilter");
 				filterChain.doFilter(request, response);
 			}
 		// If we don't have a HttpServletRequest and HttpServletResponse then forward to the next Filter in the chain
 		} else {
-			logger.log(Level.FINE, "No HttpServletRequest and HttpServletResponse, forwarding request to the next ServletFilter");
+			LOGGER.log(Level.FINE, "No HttpServletRequest and HttpServletResponse, forwarding request to the next ServletFilter");
 			filterChain.doFilter(request, response);
 		}
 	}
@@ -120,7 +120,7 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 	 * 
 	 * @author <a href="mailto:markrekveld@marvelution.com">Mark rekveld</a>
 	 * 
-	 * @see 1.0.0
+	 * @since 1.0.0
 	 */
 	protected static class HudsonRestServletForFilter extends RestServletForFilter {
 
@@ -142,11 +142,11 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 	 * 
 	 * @author <a href="mailto:markrekveld@marvelution.com">Mark rekveld</a>
 	 * 
-	 * @see 1.0.0
+	 * @since 1.0.0
 	 */
 	private static class FilteredHttpServletResponse extends HttpServletResponseWrapper {
 
-		private static final Logger logger = Logger.getLogger(FilteredHttpServletResponse.class.getName());
+		private static final Logger LOGGER = Logger.getLogger(FilteredHttpServletResponse.class.getName());
 
 		private int statusCode;
 
@@ -166,7 +166,7 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 		public void setStatus(int statusCode) {
 			super.setStatus(statusCode);
 			this.statusCode = statusCode;
-			logger.log(Level.FINE, "FilteredHttpServletResponse set status code to " + Integer.valueOf(statusCode));
+			LOGGER.log(Level.FINE, "FilteredHttpServletResponse set status code to " + Integer.valueOf(statusCode));
 		}
 
 		/**
@@ -176,7 +176,7 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 		public void setStatus(int statusCode, String msg) {
 			super.setStatus(statusCode, msg);
 			this.statusCode = statusCode;
-			logger.log(Level.FINE, "FilteredHttpServletResponse set status code to " + Integer.valueOf(statusCode));
+			LOGGER.log(Level.FINE, "FilteredHttpServletResponse set status code to " + Integer.valueOf(statusCode));
 		}
 
 		/**

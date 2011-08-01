@@ -23,6 +23,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.marvelution.hudson.plugins.apiv2.client.ClientException;
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.VersionQuery;
 import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
@@ -39,7 +40,7 @@ import com.marvelution.jira.plugins.hudson.web.action.admin.ModifyActionType;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @SuppressWarnings("unchecked")
-public abstract class AbstractModityServer extends AbstractHudsonAdminWebActionSupport {
+public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,7 +55,7 @@ public abstract class AbstractModityServer extends AbstractHudsonAdminWebActionS
 	 * @param serverFactory the {@link HudsonServerFactory} implementation
 	 * @param clientFactory the {@link HudsonClientFactory} implementation
 	 */
-	protected AbstractModityServer(HudsonServerManager serverManager, HudsonServerFactory serverFactory,
+	protected AbstractModifyServer(HudsonServerManager serverManager, HudsonServerFactory serverFactory,
 			HudsonClientFactory clientFactory) {
 		super(serverManager);
 		this.serverFactory = serverFactory;
@@ -76,7 +77,11 @@ public abstract class AbstractModityServer extends AbstractHudsonAdminWebActionS
 			addError("host", getText("hudson.server.host.invalid"));
 		} else {
 			HudsonClient client = clientFactory.create(server);
-			if (client.find(VersionQuery.createForPluginVersion()) == null) {
+			try {
+				if (client.find(VersionQuery.createForPluginVersion()) == null) {
+					addError("host", getText("hudson.server.host.apiv2.failed"));
+				}
+			} catch (ClientException e) {
 				addError("host", getText("hudson.server.host.apiv2.failed"));
 			}
 		}

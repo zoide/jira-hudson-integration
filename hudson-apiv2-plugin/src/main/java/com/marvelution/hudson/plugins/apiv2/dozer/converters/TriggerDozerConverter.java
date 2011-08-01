@@ -64,11 +64,11 @@ public class TriggerDozerConverter extends DozerConverter<Cause, Trigger> {
 	@Override
 	public Trigger convertTo(Cause source, Trigger destination) {
 		if (source instanceof UserCause) {
-			return UserTrigger.create(((UserCause) source).getUserName());
+			return UserTrigger.create(((UserCause) source).getUserName(), source.getShortDescription());
 		} else if (source instanceof UpstreamCause) {
 			UpstreamCause upstreamCause = (UpstreamCause) source;
 			return ProjectTrigger.create(upstreamCause.getUpstreamProject(), upstreamCause.getUpstreamUrl(),
-					upstreamCause.getUpstreamBuild());
+					upstreamCause.getUpstreamBuild(), source.getShortDescription());
 		} else if (source instanceof RemoteCause) {
 			RemoteCause remoteCause = (RemoteCause) source;
 			String host = "";
@@ -77,15 +77,15 @@ public class TriggerDozerConverter extends DozerConverter<Cause, Trigger> {
 				hostField.setAccessible(true);
 				host = hostField.get(remoteCause).toString();
 			} catch (Exception e) {
-				LOGGER.log(Level.FINE, "Failed to get the Remote Host information form the RemoteCause.");
+				LOGGER.log(Level.FINEST, "Failed to get the Remote Host information form the RemoteCause.");
 			}
 			return RemoteTrigger.create(remoteCause.getShortDescription(), host);
 		} else if (source instanceof TimerTriggerCause) {
-			return new TimeTrigger();
+			return TimeTrigger.create(-1L, source.getShortDescription());
 		} else if (source instanceof SCMTriggerCause) {
-			return new SCMTrigger();
+			return SCMTrigger.create(source.getShortDescription());
 		}
-		return UnknownTrigger.create(source.getClass().getSimpleName());
+		return UnknownTrigger.create(source.getClass().getSimpleName(), source.getShortDescription());
 	}
 
 	/**

@@ -20,6 +20,7 @@
 package com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 
@@ -29,6 +30,27 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
 public abstract class Trigger extends Model {
+
+	@XmlElement(name = "shortDescription")
+	private String shortDescription;
+
+	/**
+	 * Getter for shortDescription
+	 * 
+	 * @return the shortDescription
+	 */
+	public String getShortDescription() {
+		return shortDescription;
+	}
+
+	/**
+	 * Setter for shortDescription
+	 * 
+	 * @param shortDescription the shortDescription to set
+	 */
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
+	}
 
 	/**
 	 * Getter for the type

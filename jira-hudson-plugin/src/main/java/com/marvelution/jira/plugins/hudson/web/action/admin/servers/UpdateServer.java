@@ -35,7 +35,7 @@ import com.marvelution.jira.plugins.hudson.web.action.admin.ModifyActionType;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @SuppressWarnings("unchecked")
-public class UpdateServer extends AbstractModityServer {
+public class UpdateServer extends AbstractModifyServer {
 
 	private static final long serialVersionUID = 1L;
 

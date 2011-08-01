@@ -35,7 +35,7 @@ public class ViewQuery extends AbstractListableQuery<View, Views> {
 	 * Private constructor to force the use of the static method below
 	 */
 	private ViewQuery() {
-		super(View.class, Views.class);
+		super(View.class, Views.class, QueryType.GET);
 	}
 
 	/**
