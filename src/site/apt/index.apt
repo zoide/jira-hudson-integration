@@ -27,7 +27,7 @@ Introduction
 ~~~~~~~~~~~~
 
   This project features two plugins to integrate {{{http://www.atlassian.com/software/jira}Jira}} with
-  {{{https://hudson.dev.java.net}Hudson}}.
+  {{{http://hudson-ci.org}Hudson}} or {{{http://jenkins-ci.org}Jenkins}}.
   
   For the complete documentation please refer to the 
   {{{http://docs.marvelution.com/display/MARVJIRAHUDSON}project wiki space}}.
