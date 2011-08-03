@@ -19,7 +19,7 @@ JIRA - Quick Installation Guide
 -------------------------------
 1. Shutdown the JIRA server instance
 2. Remove any existing Jira Hudson Integration plugins of previous versions
-3. Install the new plugin (jira-hudson-plugin-${prject.version}.jar) in the {JIRA_HOME]/plugins/installed-plugins directory
+3. Install the new plugin (jira-hudson-plugin-${project.version}.jar) in the {JIRA_HOME]/plugins/installed-plugins directory
 4. Start the JIRA server instance
 
 
