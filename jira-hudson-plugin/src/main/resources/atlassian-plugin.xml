@@ -268,6 +268,7 @@
 
 	<!-- I M P O R T E D   C O M P O N E N T S -->
 	<component-import key="i18nResolver" interface="com.atlassian.sal.api.message.I18nResolver" />
+	<component-import key="crowdService" interface="com.atlassian.crowd.embedded.api.CrowdService" />
 
 	<!-- U P G R A D E   T A S K S -->
 	<component key="hudsonServerUpgradeTask" name="Gadget Upgrade Task" class="com.marvelution.jira.plugins.hudson.upgrade.HudsonServerUpgradeTask" public="true">

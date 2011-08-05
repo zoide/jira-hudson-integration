@@ -20,7 +20,6 @@
 package com.marvelution.jira.plugins.hudson.web.action;
 
 import com.atlassian.jira.ComponentManager;
-import com.atlassian.jira.ManagerFactory;
 import com.atlassian.jira.bc.project.component.ProjectComponentManager;
 import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.issue.search.SearchProvider;
@@ -59,7 +58,7 @@ public class HudsonWebActionSupport extends JiraWebActionSupport {
 	 */
 	protected IssueManager getIssueManager() {
 		if (issueManager == null) {
-			issueManager = ManagerFactory.getIssueManager();
+			issueManager = ComponentManager.getInstance().getIssueManager();
 		}
 		return issueManager;
 	}
@@ -113,7 +112,7 @@ public class HudsonWebActionSupport extends JiraWebActionSupport {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String getText0(String i18nKey) {
+	public String getText(String i18nKey) {
 		return getI18nHelper().getText(i18nKey);
 	}
 

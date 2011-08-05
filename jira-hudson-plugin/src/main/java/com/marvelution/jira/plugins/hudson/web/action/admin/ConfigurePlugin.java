@@ -21,14 +21,13 @@ package com.marvelution.jira.plugins.hudson.web.action.admin;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-import com.atlassian.core.user.GroupUtils;
+import com.atlassian.crowd.embedded.api.Group;
 import com.atlassian.jira.issue.issuetype.IssueType;
+import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.security.roles.ProjectRole;
 import com.marvelution.jira.plugins.hudson.services.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
-import com.opensymphony.user.Group;
 
 /**
  * {@link AbstractHudsonAdminWebActionSupport} implementation for the administrative page ConfigureHudsonPlugin.jspa
@@ -39,16 +38,19 @@ public class ConfigurePlugin extends AbstractHudsonAdminWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
 	private final HudsonConfigurationManager configurationManager;
+	private final GroupManager groupManager;
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param configurationManager the {@link HudsonConfigurationManager} implementation
 	 * @param serverManager the {@link HudsonServerManager} implementation
+	 * @param groupManager the {@link GroupManager} implementation
 	 */
-	public ConfigurePlugin(HudsonConfigurationManager configurationManager, HudsonServerManager serverManager) {
+	public ConfigurePlugin(HudsonConfigurationManager configurationManager, HudsonServerManager serverManager, GroupManager groupManager) {
 		super(serverManager);
 		this.configurationManager = configurationManager;
+		this.groupManager = groupManager;
 	}
 
 	/**
@@ -65,11 +67,8 @@ public class ConfigurePlugin extends AbstractHudsonAdminWebActionSupport {
 	 * 
 	 * @return {@link Collection} of {@link Group} objects
 	 */
-	@SuppressWarnings( { "rawtypes", "unchecked" } )
 	public Collection<Group> getGroups() {
-		List groups = (List) GroupUtils.getGroups();
-		GroupUtils.sortGroups(groups);
-		return groups;
+		return groupManager.getAllGroups();
 	}
 
 	/**

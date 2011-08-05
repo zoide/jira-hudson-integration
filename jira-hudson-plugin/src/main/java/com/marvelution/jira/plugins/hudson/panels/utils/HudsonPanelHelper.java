@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.atlassian.crowd.embedded.api.CrowdService;
+import com.atlassian.crowd.embedded.api.User;
+import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.issuetype.IssueType;
 import com.atlassian.jira.plugin.componentpanel.BrowseComponentContext;
@@ -40,7 +43,6 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.utils.JiraPluginUtils;
 import com.marvelution.jira.plugins.hudson.utils.RequestAndSessionUtils;
 import com.marvelution.jira.plugins.hudson.utils.UserUtils;
-import com.opensymphony.user.User;
 
 /**
  * Utility class for Hudson Panels
@@ -161,14 +163,32 @@ public class HudsonPanelHelper {
 		velocityParams.put("resourceBaseUrl", "/download/resources/" + module.getFullKey());
 		velocityParams.put("user", context.getUser());
 		velocityParams.put("isProjectAdmin", permissionManager.hasPermission(Permissions.PROJECT_ADMIN,
-				context.getProject(), context.getUser()));
+				context.getProject(), getUserFromContext(context)));
 		velocityParams.put("isSystemAdmin", permissionManager.hasPermission(Permissions.SYSTEM_ADMIN,
-				context.getUser()));
+			getUserFromContext(context)));
 		if (module.supportsTabs()) {
 			velocityParams.put("availableViews", VIEWS);
 		}
 		velocityParams.put(SELECTED_VIEW, RequestAndSessionUtils.retrieveFromRequestOrSession(SELECTED_VIEW,
 			PanelView.BUILDS_BY_JOB.getViewName()));
+	}
+
+	/**
+	 * Helper method to get the {@link User} from the given Context
+	 * 
+	 * @param <CONTEXT> the Context type
+	 * @param context the Context
+	 * @return the {@link User}
+	 */
+	@SuppressWarnings("deprecation")
+	private <CONTEXT extends BrowseContext> User getUserFromContext(CONTEXT context) {
+		if (context.getUser() instanceof User) {
+			return (User) context.getUser();
+		} else {
+			// TODO This should be removed when no longer needed
+			CrowdService crowdService = ComponentManager.getInstance().getCrowdService();
+			return crowdService.getUser(context.getUser().getName());
+		}
 	}
 
 	/**

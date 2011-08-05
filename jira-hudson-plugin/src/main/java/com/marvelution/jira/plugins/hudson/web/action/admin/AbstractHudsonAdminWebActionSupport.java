@@ -60,7 +60,7 @@ public class AbstractHudsonAdminWebActionSupport extends HudsonWebActionSupport 
 	 *         <code>false</code> otherwise
 	 */
 	public boolean hasPermissions() {
-		return getPermissionManager().hasPermission(Permissions.ADMINISTER, getRemoteUser());
+		return getPermissionManager().hasPermission(Permissions.ADMINISTER, getLoggedInUser());
 	}
 
 	/**

@@ -111,7 +111,7 @@
         <dependency>
             <groupId>org.jvnet.hudson.main</groupId>
             <artifactId>hudson-test-harness</artifactId>
-            <version>${hudson.version}</version>
+            <version>${hudson.test.harness.version}</version>
             <scope>test</scope>
         </dependency>
 		<dependency>

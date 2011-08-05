@@ -116,7 +116,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 			return ERROR;
 		}
 		final Project project = getProjectManager().getProjectObj(association.getProjectId());
-		if (!getPermissionManager().hasPermission(Permissions.VIEW_VERSION_CONTROL, project, getRemoteUser())) {
+		if (!getPermissionManager().hasPermission(Permissions.VIEW_VERSION_CONTROL, project, getLoggedInUser())) {
 			addErrorMessage(getText("hudson.panel.error.permissions.violation"));
 			return ERROR;
 		}
@@ -318,8 +318,8 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 * @throws SearchException in case of errors during the execution of the {@link JqlQueryBuilder}
 	 */
 	private Collection<String> getIssueKeys(JqlQueryBuilder queryBuilder) throws SearchException {
-		SearchResults searchResults = getSearchProvider().search(queryBuilder.buildQuery(), getAuthenticationContext()
-				.getUser(), PagerFilter.getUnlimitedFilter());
+		SearchResults searchResults = getSearchProvider().search(queryBuilder.buildQuery(), getLoggedInUser(),
+			PagerFilter.getUnlimitedFilter());
 		Collection<?> issues = searchResults.getIssues();
 		Collection<String> issueKeys = new ArrayList<String>();
 		for (Object issue : issues) {

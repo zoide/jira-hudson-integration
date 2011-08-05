@@ -19,17 +19,18 @@
 
 package com.marvelution.jira.plugins.hudson.conditions;
 
-import com.atlassian.jira.plugin.webfragment.conditions.AbstractJiraCondition;
-import com.atlassian.jira.plugin.webfragment.model.JiraHelper;
+import java.util.Map;
+
+import com.atlassian.plugin.PluginParseException;
+import com.atlassian.plugin.web.Condition;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
-import com.opensymphony.user.User;
 
 /**
  * Is Hudson Configured Webfragment {@link AbstractJiraCondition}
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class IsHudsonConfigured extends AbstractJiraCondition {
+public class IsHudsonConfigured implements Condition {
 
 	private final HudsonServerManager serverManager;
 
@@ -46,7 +47,15 @@ public class IsHudsonConfigured extends AbstractJiraCondition {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean shouldDisplay(User user, JiraHelper jiraHelper) {
+	public void init(Map<String, String> params) throws PluginParseException {
+		// Not needed for this Condition
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean shouldDisplay(Map<String, Object> context) {
 		return serverManager.hasServers();
 	}
 

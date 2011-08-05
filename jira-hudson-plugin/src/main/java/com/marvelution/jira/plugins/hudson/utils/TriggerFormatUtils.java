@@ -21,6 +21,7 @@ package com.marvelution.jira.plugins.hudson.utils;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.util.I18nHelper;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.ProjectTrigger;
@@ -30,8 +31,6 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.TimeT
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.Trigger;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.triggers.UserTrigger;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
-import com.opensymphony.user.EntityNotFoundException;
-import com.opensymphony.user.User;
 
 /**
  * Utility class for formatting {@link Trigger} objects
@@ -113,15 +112,11 @@ public class TriggerFormatUtils {
 	 * @return the formatted {@link UserTrigger}
 	 */
 	public String format(UserTrigger trigger) {
-		if (UserUtils.existsUser(trigger.getUsername())) {
+		if (UserUtils.userExists(trigger.getUsername())) {
 			// We have a JIRA user that triggered the build create link to that users profile page
-			try {
-				final User user = UserUtils.getUser(trigger.getUsername());
-				return i18nHelper.getText("hudson.panel.build.trigger.jira.user", contextPath, user.getName(),
-						user.getFullName());
-			} catch (EntityNotFoundException e) {
-				// We failed to get the User. This shouldn't happen but when it does just return the Hudson User link
-			}
+			final User user = UserUtils.getUser(trigger.getUsername());
+			return i18nHelper.getText("hudson.panel.build.trigger.jira.user", contextPath, user.getName(),
+				user.getDisplayName());
 		}
 		// It was a Hudson user that triggered the build
 		return i18nHelper.getText("hudson.panel.build.trigger.hudson.user", server.getPublicHost(), trigger.getUsername());
