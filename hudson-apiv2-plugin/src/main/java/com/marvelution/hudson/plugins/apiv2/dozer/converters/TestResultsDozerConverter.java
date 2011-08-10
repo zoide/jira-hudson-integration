@@ -19,6 +19,8 @@
 
 package com.marvelution.hudson.plugins.apiv2.dozer.converters;
 
+import hudson.tasks.test.AggregatedTestResultAction;
+
 import org.dozer.DozerConverter;
 import org.dozer.Mapper;
 import org.dozer.MapperAware;
@@ -34,7 +36,8 @@ import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @SuppressWarnings("rawtypes")
-public class TestResultsDozerConverter extends DozerConverter<hudson.model.AbstractBuild, TestResult> implements MapperAware {
+public class TestResultsDozerConverter extends DozerConverter<hudson.model.AbstractBuild, TestResult> implements
+		MapperAware {
 
 	private Mapper mapper;
 
@@ -50,12 +53,15 @@ public class TestResultsDozerConverter extends DozerConverter<hudson.model.Abstr
 	 */
 	@Override
 	public TestResult convertTo(hudson.model.AbstractBuild source, TestResult destination) {
-		if (source.getTestResultAction() != null) {
+		// For now disable AggregatedTestResultAction
+		if (source.getTestResultAction() != null
+			&& !(source.getTestResultAction() instanceof AggregatedTestResultAction)) {
 			// We have Surefire test results, map these to the TestResult object
 			return mapper.map(source.getTestResultAction(), TestResult.class);
 		} else if (HudsonPluginUtils.hasTestNGPlugin()) {
 			// We have the TestNG plugin installed, maybe there are TestNG test results?
-			hudson.plugins.testng.TestNGBuildAction buildAction = source.getAction(hudson.plugins.testng.TestNGBuildAction.class);
+			hudson.plugins.testng.TestNGBuildAction buildAction =
+				source.getAction(hudson.plugins.testng.TestNGBuildAction.class);
 			if (buildAction != null) {
 				return mapper.map(buildAction.getResults(), TestResult.class);
 			}
