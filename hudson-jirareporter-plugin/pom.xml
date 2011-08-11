@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>com.marvelution.jira.plugins</groupId>
 		<artifactId>jira-hudson-integration</artifactId>
-		<version>4.1.0-SNAPSHOT</version>
+		<version>4.1.0</version>
 	</parent>
 	<artifactId>hudson-jirareporter-plugin</artifactId>
 	<packaging>hpi</packaging>
@@ -33,9 +33,9 @@
 	<url>http://apidocs.marvelution.com/${project.parent.artifactId}/${project.version}/${project.artifactId}/</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk/hudson-jirareporter-plugin</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk/hudson-jirareporter-plugin</developerConnection>
-		<url>http://fisheye.marvelution.com/browse/public/atlassian/jira-hudson-integration/trunk/hudson-jirareporter-plugin</url>
+		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/tags/jira-hudson-integration-4.1.0/hudson-jirareporter-plugin</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/tags/jira-hudson-integration-4.1.0/hudson-jirareporter-plugin</developerConnection>
+		<url>http://fisheye.marvelution.com/browse/public/atlassian/jira-hudson-integration/tags/jira-hudson-integration-4.1.0/hudson-jirareporter-plugin</url>
 	</scm>
 
 	<properties>
@@ -221,8 +221,7 @@
 								</goals>
 								<configuration>
 									<target>
-										<get src="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2?wsdl"
-											 dest="${basedir}/src/main/wsdl/jirasoapservice-v2.wsdl" />
+										<get src="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2?wsdl" dest="${basedir}/src/main/wsdl/jirasoapservice-v2.wsdl" />
 									</target>
 								</configuration>
 							</execution>
