@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wink.server.internal.servlet.RestFilter;
 import org.apache.wink.server.internal.servlet.RestServlet;
 
@@ -85,20 +86,23 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 		// The Wink RestFilter can only handle HttpServletRequests so make sure we have one
 		if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
 			// Put the original HttpServletRequest in the HttpServletRequestWrapper
-			final HttpServletRequestWrapper servletRequest = new HttpServletRequestWrapper((HttpServletRequest) request);
+			final HttpServletRequestWrapper servletRequest =
+				new HttpServletRequestWrapper((HttpServletRequest) request);
 			// Get the requestUri without the context path and the leading slash
 			String requestUri = servletRequest.getPathInfo();
-			if (requestUri.startsWith("/")) {
+			if (StringUtils.isNotBlank(requestUri) && requestUri.startsWith("/")) {
 				requestUri = requestUri.substring(1);
 			}
 			LOGGER.log(Level.FINE, "Got a request from URI: " + requestUri);
 			// Make sure it is a REST call
-			if (requestUri.startsWith(BaseRestResource.BASE_REST_URI)) {
+			if (StringUtils.isNotBlank(requestUri) && requestUri.startsWith(BaseRestResource.BASE_REST_URI)) {
 				LOGGER.log(Level.FINE, "Got a REST request, forwarding it to the Wink RestFilter");
-				FilteredHttpServletResponse servletResponse = new FilteredHttpServletResponse((HttpServletResponse) response);
+				FilteredHttpServletResponse servletResponse =
+					new FilteredHttpServletResponse((HttpServletResponse) response);
 				restServlet.service(servletRequest, servletResponse);
 				if ((!(servletResponse.isCommitted())) && (servletResponse.getStatusCode() == 404)) {
-					LOGGER.log(Level.FINE, "Filter " + this.getClass().getName() + " did not match a resource so letting request continue on FilterChain");
+					LOGGER.log(Level.FINE, "Filter " + this.getClass().getName()
+						+ " did not match a resource so letting request continue on FilterChain");
 					servletResponse.setStatus(200);
 					filterChain.doFilter(request, response);
 				}
@@ -109,7 +113,8 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 			}
 		// If we don't have a HttpServletRequest and HttpServletResponse then forward to the next Filter in the chain
 		} else {
-			LOGGER.log(Level.FINE, "No HttpServletRequest and HttpServletResponse, forwarding request to the next ServletFilter");
+			LOGGER.log(Level.FINE,
+				"No HttpServletRequest and HttpServletResponse, forwarding request to the next ServletFilter");
 			filterChain.doFilter(request, response);
 		}
 	}
