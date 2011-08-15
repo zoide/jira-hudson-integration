@@ -54,9 +54,7 @@ public class BuildTestResultsRatioChartGenerator extends AbstractHudsonChartGene
 	private final String[] seriesNames;
 
 	/**
-	 * Constructor
-	 * 
-	 * @param i18nHelper the {@link I18nHelper} implementation
+	 * Default Constructor
 	 */
 	public BuildTestResultsRatioChartGenerator() {
 		this(null);

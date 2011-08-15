@@ -20,7 +20,7 @@
 <mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
-	<mapping wildcard="false" type="one-way">
+	<mapping wildcard="false" type="one-way" map-id="list">
 		<class-a>hudson.model.View</class-a>
 		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.view.View</class-b>
 		<field>
@@ -36,6 +36,27 @@
 			<b>url</b>
 		</field>
 		<field map-id="list">
+			<a get-method="getItems">items</a>
+			<b>jobs</b>
+		</field>
+	</mapping>
+
+	<mapping wildcard="false" type="one-way" map-id="nameOnly">
+		<class-a>hudson.model.View</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.view.View</class-b>
+		<field>
+			<a get-method="getViewName">name</a>
+			<b>name</b>
+		</field>
+		<field>
+			<a get-method="getDescription">description</a>
+			<b>description</b>
+		</field>
+		<field>
+			<a get-method="getUrl">url</a>
+			<b>url</b>
+		</field>
+		<field map-id="nameOnly">
 			<a get-method="getItems">items</a>
 			<b>jobs</b>
 		</field>

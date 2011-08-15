@@ -47,7 +47,7 @@ public class ViewResourceRestImpl extends BaseRestResource implements ViewResour
 	public View getView(String name) {
 		hudson.model.View view = Hudson.getInstance().getView(name);
 		if (view != null) {
-			return DozerUtils.getMapper().map(view, View.class);
+			return DozerUtils.getMapper().map(view, View.class, "list");
 		}
 		throw new NoSuchViewException(name);
 	}
@@ -59,7 +59,7 @@ public class ViewResourceRestImpl extends BaseRestResource implements ViewResour
 	public Views getViews() {
 		Views views = new Views();
 		for (hudson.model.View view : Hudson.getInstance().getViews()) {
-			views.add(DozerUtils.getMapper().map(view, View.class));
+			views.add(DozerUtils.getMapper().map(view, View.class, "nameOnly"));
 		}
 		return views;
 	}

@@ -354,14 +354,14 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
      </extension>
     </complexContent>
    </complexType>
-   <complexType name="RemoteAuthenticationException">
+   <complexType name="RemoteValidationException">
     <complexContent>
      <extension base="tns2:RemoteException">
       <sequence/>
      </extension>
     </complexContent>
    </complexType>
-   <complexType name="RemoteValidationException">
+   <complexType name="RemoteAuthenticationException">
     <complexContent>
      <extension base="tns2:RemoteException">
       <sequence/>
