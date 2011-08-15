@@ -42,8 +42,12 @@ public class DozerUtils {
 
 	private static final String DOZER_CONFIG_LOCATION = "META-INF/dozer";
 	private static final Logger LOGGER = Logger.getLogger(DozerUtils.class.getName());
+
 	private static DozerBeanMapper mapper = null;
 	private static List<String> mappingFiles = null;
+
+	public static final String FULL_MAP_ID = "full";
+	public static final String NAMEONLY_MAP_ID = "nameOnly";
 
 	/**
 	 * Get the {@link Mapper} implementation

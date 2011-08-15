@@ -33,13 +33,18 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 
 	private String name = null;
 	private JobQueryType type;
+	private boolean includeAllBuilds = false;
 
 	/**
 	 * Private constructor to force the use of the static method below
+	 * 
+	 * @param type the {@link JobQueryType}
+	 * @param includeAllBuilds flag to include all the builds
 	 */
-	private JobQuery(JobQueryType type) {
+	private JobQuery(JobQueryType type, boolean includeAllBuilds) {
 		super(Job.class, Jobs.class, QueryType.GET);
 		this.type = type;
+		this.includeAllBuilds = includeAllBuilds;
 	}
 
 	/**
@@ -88,6 +93,14 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 		} else if (JobQueryType.ALL.equals(getType())) {
 			url.append("/all");
 		}
+		if (includeAllBuilds) {
+			if (url.indexOf("?") > -1) {
+				url.append("&");
+			} else {
+				url.append("?");
+			}
+			url.append("includeAllBuilds=true");
+		}
 		return url.toString();
 	}
 
@@ -95,10 +108,11 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * Method to create a {@link JobQuery} that will result in a {@link Job} from the Hudson server
 	 * 
 	 * @param jobName the name of the {@link Job} on the Hudson server
+	 * @param includeAllBuilds flag to include all the builds
 	 * @return the {@link JobQuery}
 	 */
-	public static JobQuery createForJobByName(String jobName) {
-		JobQuery query = new JobQuery(JobQueryType.SPECIFIC);
+	public static JobQuery createForJobByName(String jobName, boolean includeAllBuilds) {
+		JobQuery query = new JobQuery(JobQueryType.SPECIFIC, includeAllBuilds);
 		query.setName(jobName);
 		return query;
 	}
@@ -107,10 +121,11 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * Method to create a {@link JobQuery} that will result in a {@link Job} status overview from the Hudson server
 	 * 
 	 * @param jobName the name of the {@link Job} on the Hudson server
+	 * @param includeAllBuilds flag to include all the builds
 	 * @return the {@link JobQuery}
 	 */
-	public static JobQuery createForJobStatusByName(String jobName) {
-		JobQuery query = new JobQuery(JobQueryType.STATUS);
+	public static JobQuery createForJobStatusByName(String jobName, boolean includeAllBuilds) {
+		JobQuery query = new JobQuery(JobQueryType.STATUS, includeAllBuilds);
 		query.setName(jobName);
 		return query;
 	}
@@ -121,14 +136,15 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * 
 	 * @param nameOnly {@link Boolean} flag to specify if you want Job Names only or a more complete mapping of each
 	 * 				   Job
+	 * @param includeAllBuilds flag to include all the builds
 	 * @return the {@link JobQuery}
 	 */
-	public static JobQuery createForJobList(boolean nameOnly) {
+	public static JobQuery createForJobList(boolean nameOnly, boolean includeAllBuilds) {
 		JobQuery query;
 		if (nameOnly) {
-			query = new JobQuery(JobQueryType.NAME_ONLY);
+			query = new JobQuery(JobQueryType.NAME_ONLY, false);
 		} else {
-			query = new JobQuery(JobQueryType.LIST);
+			query = new JobQuery(JobQueryType.LIST, includeAllBuilds);
 		}
 		return query;
 	}
@@ -137,10 +153,11 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * Method to create a {@link JobQuery} that will result in a {@link List} of all {@link Job} objects on the
 	 * Hudson server
 	 * 
+	 * @param includeAllBuilds flag to include all the builds
 	 * @return the {@link JobQuery}
 	 */
-	public static JobQuery createForAllJobs() {
-		return new JobQuery(JobQueryType.ALL);
+	public static JobQuery createForAllJobs(boolean includeAllBuilds) {
+		return new JobQuery(JobQueryType.ALL, includeAllBuilds);
 	}
 
 	/**

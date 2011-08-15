@@ -140,7 +140,7 @@ public class HudsonChartsRestResource {
 		if (serverManager.hasServer(serverId)) {
 			final HudsonServer server = serverManager.getServer(serverId);
 			final HudsonClient client = clientFactory.create(server);
-			final Job job = client.find(JobQuery.createForJobByName(jobname));
+			final Job job = client.find(JobQuery.createForJobByName(jobname, true));
 			if (job != null && StringUtils.isNotBlank(job.getName())) {
 				ChartHelper chartHelper = null;
 				if (charts.containsKey(type)) {

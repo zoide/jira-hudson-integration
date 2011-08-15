@@ -20,6 +20,7 @@
 package com.marvelution.jira.plugins.hudson.rest;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -83,7 +84,7 @@ public class HudsonServerRestResource {
 	public Jobs listAllJobs(@PathParam("serverId") Integer serverId) throws ClientException {
 		if (serverManager.hasServer(serverId)) {
 			final HudsonClient client = clientFactory.create(serverManager.getServer(serverId));
-			return client.findAll(JobQuery.createForJobList(true));
+			return client.findAll(JobQuery.createForJobList(true, false));
 		} else {
 			throw new NoSuchServerException(serverId);
 		}
@@ -93,16 +94,19 @@ public class HudsonServerRestResource {
 	 * Helper method to get the {@link Job} data of a Hudson Job via its {@link HudsonAssociation} Id
 	 * 
 	 * @param associationId the {@link HudsonAssociation} Id to get the Job Data for
+	 * @param includeAllBuilds flag to include all builds in the job response
 	 * @return the {@link Job}
 	 * @throws ClientException in case of {@link HudsonClient} communication issues
 	 */
 	@GET
 	@Path("job/{associationId}")
-	public Job getJobData(@PathParam("associationId") Integer associationId) throws ClientException {
+	public Job getJobData(@PathParam("associationId") Integer associationId,
+					@QueryParam("includeAllBuilds") @DefaultValue("false") boolean includeAllBuilds)
+					throws ClientException {
 		if (associationManager.hasAssociation(associationId)) {
 			final HudsonAssociation association = associationManager.getAssociation(associationId);
 			final HudsonClient client = clientFactory.create(serverManager.getServer(association.getServerId()));
-			return client.find(JobQuery.createForJobByName(association.getJobName()));
+			return client.find(JobQuery.createForJobByName(association.getJobName(), includeAllBuilds));
 		} else {
 			throw new NoSuchAssociationException(associationId);
 		}

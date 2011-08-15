@@ -169,7 +169,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 		switch (view) {
 		case JOB_STATUS:
 			resultSet = new JobStatusResultSet(server, client.find(JobQuery.createForJobByName(
-					association.getJobName())), getI18nHelper());
+					association.getJobName(), true)), getI18nHelper());
 			break;
 		case BUILDS_BY_ISSUE:
 			// See MARVJIRAHUDSON-130, simply use the project key followed by a '-' as the search term
@@ -195,7 +195,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 		switch (view) {
 		case JOB_STATUS:
 			resultSet = new JobStatusResultSet(server, client.find(JobQuery.createForJobByName(
-					association.getJobName())), getI18nHelper());
+					association.getJobName(), true)), getI18nHelper());
 			break;
 		case BUILDS_BY_ISSUE:
 			Collection<String> issueKeys = getIssueKeys(version);

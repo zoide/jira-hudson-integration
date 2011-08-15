@@ -28,6 +28,7 @@ import org.apache.wink.common.annotations.Parent;
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.JobResource;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
 import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
 
@@ -44,10 +45,10 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Job getJob(String name) {
+	public Job getJob(String name, Boolean includeAllBuilds) {
 		hudson.model.Job<?, ?> job = getHudsonJob(name);
 		if (job != null) {
-			return DozerUtils.getMapper().map(job, Job.class, "full");
+			return mapJob(job, DozerUtils.FULL_MAP_ID, includeAllBuilds);
 		}
 		throw new NoSuchJobException(name);
 	}
@@ -56,10 +57,10 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Job getJobStatus(String name) throws NoSuchJobException {
+	public Job getJobStatus(String name, Boolean includeAllBuilds) throws NoSuchJobException {
 		hudson.model.Job<?, ?> job = getHudsonJob(name);
 		if (job != null) {
-			return DozerUtils.getMapper().map(job, Job.class, "status");
+			return mapJob(job, DozerUtils.FULL_MAP_ID, includeAllBuilds);
 		}
 		throw new NoSuchJobException(name);
 	}
@@ -68,10 +69,10 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Jobs getJobs() {
+	public Jobs getJobs(Boolean includeAllBuilds) {
 		Jobs jobs = new Jobs();
 		for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
-			jobs.add(DozerUtils.getMapper().map(item, Job.class, "full"));
+			jobs.add(mapJob(item, DozerUtils.FULL_MAP_ID, includeAllBuilds));
 		}
 		return jobs;
 	}
@@ -80,16 +81,33 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Jobs listJobs(Boolean nameOnly) {
-		String mapperContext = "list";
-		if (nameOnly) {
-			mapperContext = "nameOnly";
+	public Jobs listJobs(Boolean nameOnly, Boolean includeAllBuilds) {
+		String mapperContext = DozerUtils.FULL_MAP_ID;
+		if (nameOnly != null && Boolean.TRUE.equals(nameOnly)) {
+			mapperContext = DozerUtils.NAMEONLY_MAP_ID;
+			includeAllBuilds = Boolean.FALSE;
 		}
 		Jobs jobs = new Jobs();
 		for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
-			jobs.add(DozerUtils.getMapper().map(item, Job.class, mapperContext));
+			jobs.add(mapJob(item, mapperContext, includeAllBuilds));
 		}
 		return jobs;
+	}
+
+	/**
+	 * Internal method to map a given Hudson {@link hudson.model.Job} to a {@link Job}
+	 * 
+	 * @param item the {@link hudson.model.Job} to map
+	 * @param mapperContext the mapper context
+	 * @param includeAllBuilds flag to include all the builds or just the first and latest
+	 * @return the {@link Job}
+	 */
+	private Job mapJob(hudson.model.Job<?, ?> item, String mapperContext, Boolean includeAllBuilds) {
+		Job job = DozerUtils.getMapper().map(item, Job.class, mapperContext);
+		if (includeAllBuilds != null && Boolean.TRUE.equals(includeAllBuilds)) {
+			job.setBuilds(DozerUtils.getMapper().map(item.getBuilds(), Builds.class));
+		}
+		return job;
 	}
 
 }

@@ -39,39 +39,50 @@ public interface JobResource {
 	 * Get the {@link Job} identified by the given name
 	 * 
 	 * @param name the name of the {@link Job} to get
+	 * @param includeAllBuilds flag to include all the builds
 	 * @return the {@link Job}
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 */
 	@GET
-	Job getJob(@QueryParam("name") String name) throws NoSuchJobException;
+	Job getJob(@QueryParam("name") String name,
+					@QueryParam("includeAllBuilds") @DefaultValue("false") Boolean includeAllBuilds)
+					throws NoSuchJobException;
 
 	/**
 	 * Get the status of a {@link Job} identified by the given name
 	 * 
 	 * @param name the name of the {@link Job} to get
+	 * @param includeAllBuilds flag to include all the builds
 	 * @return the {@link Job}
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 */
 	@GET
 	@Path("status")
-	Job getJobStatus(@QueryParam("name") String name) throws NoSuchJobException;
+	Job getJobStatus(@QueryParam("name") String name,
+					@QueryParam("includeAllBuilds") @DefaultValue("false") Boolean includeAllBuilds)
+					throws NoSuchJobException;
 
 	/**
 	 * Get all the {@link Job} objects on the Hudson server
 	 * 
+	 * @param includeAllBuilds flag to include all the builds
 	 * @return the {@link Jobs} collection
 	 */
 	@GET
 	@Path("all")
-	Jobs getJobs();
+	Jobs getJobs(@QueryParam("includeAllBuilds") @DefaultValue("false") Boolean includeAllBuilds);
 
 	/**
 	 * Get all {@link Job} objects on the Hudson server, but with minimal data
 	 * 
+	 * @param nameOnly flag to include only names in the response, when set to <code>true</code>, this will override
+	 *            the includeAllBuilds flag
+	 * @param includeAllBuilds flag to include all the builds
 	 * @return the {@link Jobs} collection
 	 */
 	@GET
 	@Path("list")
-	Jobs listJobs(@QueryParam("nameOnly") @DefaultValue("false") Boolean nameOnly);
+	Jobs listJobs(@QueryParam("nameOnly") @DefaultValue("false") Boolean nameOnly,
+					@QueryParam("includeAllBuilds") @DefaultValue("false") Boolean includeAllBuilds);
 
 }

@@ -166,6 +166,9 @@ public class Job extends Model {
 	 * @return the builds
 	 */
 	public Builds getBuilds() {
+		if (builds == null) {
+			builds = new Builds();
+		}
 		return builds;
 	}
 
@@ -374,7 +377,7 @@ public class Job extends Model {
 	 * @return the specific {@link Build}, may be <code>null</code>
 	 */
 	public Build getBuild(int number) {
-		for (Build build : builds) {
+		for (Build build : getBuilds()) {
 			if (build.getBuildNumber() == number) {
 				return build;
 			}
@@ -406,6 +409,9 @@ public class Job extends Model {
 	 * @return the modules
 	 */
 	public Jobs getModules() {
+		if (modules == null) {
+			modules = new Jobs();
+		}
 		return modules;
 	}
 

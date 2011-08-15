@@ -106,7 +106,7 @@ public class UpdateAssociation extends AbstractModifyAssociation {
 		HudsonClient client = clientFactory.create(serverManager.getServer(getHudsonId()));
 		Collection<String> options = new ArrayList<String>();
 		try {
-			for (Job job : client.findAll(JobQuery.createForJobList(true))) {
+			for (Job job : client.findAll(JobQuery.createForJobList(true, false))) {
 				options.add(job.getName());
 			}
 		} catch (ClientException e) {

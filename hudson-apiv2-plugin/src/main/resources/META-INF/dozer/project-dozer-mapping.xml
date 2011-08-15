@@ -58,10 +58,6 @@
 			<b>buildable</b>
 		</field>
 		<field>
-			<a get-method="getBuilds">builds</a>
-			<b>builds</b>
-		</field>
-		<field>
 			<a get-method="getFirstBuild">firstBuild</a>
 			<b>firstBuild</b>
 		</field>
@@ -94,120 +90,6 @@
 			<b>healthReports</b>
 		</field>
 		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ItemGroupDozerConverter" custom-converter-param="full">
-			<a>this</a>
-			<b>modules</b>
-		</field>
-	</mapping>
-
-	<mapping wildcard="false" type="one-way" map-id="list">
-		<class-a>hudson.model.Job</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>
-		<field>
-			<a>name</a>
-			<b>name</b>
-		</field>
-		<field>
-			<a get-method="getUrl">url</a>
-			<b>url</b>
-		</field>
-		<field>
-			<a>description</a>
-			<b>description</b>
-		</field>
-		<field>
-			<a get-method="isBuildable">buildable</a>
-			<b>buildable</b>
-		</field>
-		<field>
-			<a get-method="getFirstBuild">firstBuild</a>
-			<b>firstBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastBuild">lastBuild</a>
-			<b>lastBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastSuccessfulBuild">lastSuccessfulBuild</a>
-			<b>lastSuccessfulBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastUnstableBuild">lastUnstableBuild</a>
-			<b>lastUnstableBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastStableBuild">lastStableBuild</a>
-			<b>lastStableBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastFailedBuild">lastFailedBuild</a>
-			<b>lastFailedBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastCompletedBuild">lastCompletedBuild</a>
-			<b>lastCompletedBuild</b>
-		</field>
-		<field>
-			<a get-method="getBuildHealthReports">healthReports</a>
-			<b>healthReports</b>
-		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ItemGroupDozerConverter" custom-converter-param="list">
-			<a>this</a>
-			<b>modules</b>
-		</field>
-	</mapping>
-
-	<mapping wildcard="false" type="one-way" map-id="status">
-		<class-a>hudson.model.Job</class-a>
-		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>
-		<field>
-			<a>name</a>
-			<b>name</b>
-		</field>
-		<field>
-			<a get-method="getUrl">url</a>
-			<b>url</b>
-		</field>
-		<field>
-			<a>description</a>
-			<b>description</b>
-		</field>
-		<field>
-			<a get-method="isBuildable">buildable</a>
-			<b>buildable</b>
-		</field>
-		<field>
-			<a get-method="getFirstBuild">firstBuild</a>
-			<b>firstBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastBuild">lastBuild</a>
-			<b>lastBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastSuccessfulBuild">lastSuccessfulBuild</a>
-			<b>lastSuccessfulBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastUnstableBuild">lastUnstableBuild</a>
-			<b>lastUnstableBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastStableBuild">lastStableBuild</a>
-			<b>lastStableBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastFailedBuild">lastFailedBuild</a>
-			<b>lastFailedBuild</b>
-		</field>
-		<field>
-			<a get-method="getLastCompletedBuild">lastCompletedBuild</a>
-			<b>lastCompletedBuild</b>
-		</field>
-		<field>
-			<a get-method="getBuildHealthReports">healthReports</a>
-			<b>healthReports</b>
-		</field>
-		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ItemGroupDozerConverter" custom-converter-param="status">
 			<a>this</a>
 			<b>modules</b>
 		</field>
