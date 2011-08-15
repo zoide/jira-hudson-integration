@@ -39,6 +39,7 @@
 	</scm>
 
 	<properties>
+		<atlassian.streams.version>4.1</atlassian.streams.version>
 		<atlassian.plugin.key>${project.groupId}.hudson</atlassian.plugin.key>
 	</properties>
 
@@ -96,8 +97,32 @@
 		<dependency>
 			<groupId>com.atlassian.sal</groupId>
 			<artifactId>sal-api</artifactId>
-			<version>2.1.0</version>
+			<version>2.6.1</version>
 			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.streams</groupId>
+			<artifactId>streams-api</artifactId>
+			<version>${atlassian.streams.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.streams</groupId>
+			<artifactId>streams-core-plugin</artifactId>
+			<version>${atlassian.streams.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.streams</groupId>
+			<artifactId>streams-aggregator-plugin</artifactId>
+			<version>${atlassian.streams.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.streams</groupId>
+			<artifactId>streams-spi</artifactId>
+			<version>${atlassian.streams.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

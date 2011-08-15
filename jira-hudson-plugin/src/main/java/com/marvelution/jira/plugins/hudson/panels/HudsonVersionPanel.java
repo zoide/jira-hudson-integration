@@ -25,6 +25,7 @@ import com.atlassian.jira.issue.search.SearchProvider;
 import com.atlassian.jira.plugin.versionpanel.BrowseVersionContext;
 import com.atlassian.jira.plugin.versionpanel.impl.GenericTabPanel;
 import com.atlassian.jira.security.JiraAuthenticationContext;
+import com.atlassian.jira.web.FieldVisibilityManager;
 import com.marvelution.jira.plugins.hudson.panels.utils.HudsonPanelHelper;
 
 /**
@@ -42,10 +43,11 @@ public class HudsonVersionPanel extends GenericTabPanel {
 	 * @param authenticationContext the {@link JiraAuthenticationContext} implementation
 	 * @param searchProvider the {@link SearchProvider} implementation
 	 * @param panelHelper the {@link HudsonPanelHelper} helper class
+	 * @param fieldVisibilityManager the {@link FieldVisibilityManager} implementation
 	 */
 	public HudsonVersionPanel(JiraAuthenticationContext authenticationContext, SearchProvider searchProvider,
-			HudsonPanelHelper panelHelper) {
-		super(authenticationContext, searchProvider);
+			HudsonPanelHelper panelHelper, FieldVisibilityManager fieldVisibilityManager) {
+		super(authenticationContext, searchProvider, fieldVisibilityManager);
 		this.panelHelper = panelHelper;
 	}
 

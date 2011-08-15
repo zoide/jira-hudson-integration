@@ -25,6 +25,7 @@ import com.atlassian.jira.plugin.componentpanel.BrowseComponentContext;
 import com.atlassian.jira.plugin.componentpanel.impl.GenericTabPanel;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.JiraAuthenticationContext;
+import com.atlassian.jira.web.FieldVisibilityManager;
 import com.marvelution.jira.plugins.hudson.panels.utils.HudsonPanelHelper;
 
 /**
@@ -42,10 +43,11 @@ public class HudsonComponentPanel extends GenericTabPanel {
 	 * @param projectManager the {@link ProjectManager} implementation
 	 * @param authenticationContext the {@link JiraAuthenticationContext} implementation
 	 * @param panelHelper the {@link HudsonPanelHelper} helper class
+	 * @param fieldVisibilityManager the {@link FieldVisibilityManager} implementation
 	 */
 	public HudsonComponentPanel(ProjectManager projectManager, JiraAuthenticationContext authenticationContext,
-			HudsonPanelHelper panelHelper) {
-		super(projectManager, authenticationContext);
+			HudsonPanelHelper panelHelper, FieldVisibilityManager fieldVisibilityManager) {
+		super(projectManager, authenticationContext, fieldVisibilityManager);
 		this.panelHelper = panelHelper;
 	}
 

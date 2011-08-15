@@ -89,7 +89,7 @@ public class BuildResultsRatioChartGenerator extends AbstractHudsonChartGenerato
 		renderer.setMargin(0.0D);
 		renderer.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.BOTTOM_CENTER));
 		renderer.setBaseItemLabelGenerator(new StandardXYItemLabelGenerator());
-		renderer.setToolTipGenerator(renderer);
+		renderer.setBaseToolTipGenerator(renderer);
 		renderer.setURLGenerator(renderer);
 		final XYPlot xyPlot = chart.getXYPlot();
 		xyPlot.setAxisOffset(new RectangleInsets(1.0D, 1.0D, 1.0D, 1.0D));

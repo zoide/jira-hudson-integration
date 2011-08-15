@@ -108,14 +108,14 @@ public class BuildTestResultsRatioChartGenerator extends AbstractHudsonChartGene
 			shapeRenderer.setSeriesShape(0, new Ellipse2D.Double(-1.5D, -1.5D, 3.0D, 3.0D));
 			shapeRenderer.setSeriesPaint(0, GREEN_OUTLINE);
 			shapeRenderer.setSeriesShapesFilled(0, true);
-			shapeRenderer.setToolTipGenerator(this);
+			shapeRenderer.setBaseToolTipGenerator(this);
 			xyPlot.setRenderer(0, shapeRenderer);
 			StackedXYAreaRenderer2 renderer = new StackedXYAreaRenderer2();
 			renderer.setSeriesPaint(0, GREEN_PAINT);
 			renderer.setSeriesPaint(1, RED_PAINT);
 			renderer.setSeriesPaint(2, YELLOW_PAINT);
 			xyPlot.setRenderer(1, renderer);
-			renderer.setToolTipGenerator(this);
+			renderer.setBaseToolTipGenerator(this);
 		}
 
 		ValueAxis rangeAxis = xyPlot.getRangeAxis();

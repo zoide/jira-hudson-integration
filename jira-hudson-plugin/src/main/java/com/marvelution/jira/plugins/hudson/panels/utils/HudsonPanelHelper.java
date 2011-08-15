@@ -180,7 +180,6 @@ public class HudsonPanelHelper {
 	 * @param context the Context
 	 * @return the {@link User}
 	 */
-	@SuppressWarnings("deprecation")
 	private <CONTEXT extends BrowseContext> User getUserFromContext(CONTEXT context) {
 		if (context.getUser() instanceof User) {
 			return (User) context.getUser();
