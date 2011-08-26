@@ -70,9 +70,11 @@ public class HudsonWinkApplication extends WinkApplication {
 						if (resource.getProtocol().equalsIgnoreCase("jar")) {
 							// Load resources from the JAR file
 							JarURLConnection connection = (JarURLConnection) resource.openConnection();
+							LOGGER.info("Loading classes from JAR file: " + resource.toString());
 							classes.addAll(getClassesFromJarFile(connection.getJarFile(), resourcePackageName));
 						} else if (resource.getProtocol().equalsIgnoreCase("file")) {
 							// Load resources form File system
+							LOGGER.info("Loading classes from Classpath Package: " + resource.toString());
 							classes.addAll(getClassesFromPackage(new File(resource.getFile()), resourcePackageName));
 						} else {
 							LOGGER.info("Skipping resource [" + resource.toString() + "]; Unsupport resource protocol");
