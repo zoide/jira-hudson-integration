@@ -15,13 +15,26 @@
 ## specific language governing permissions and limitations
 ## under the License.
 
+<head>
+	<meta name="decorator" content="admin"/>
+	<meta name="admin.active.section" content="admin_plugins_menu/hudson-section">
+	<meta name="admin.active.tab" content="hudson_associations_administer">
+</head>
+
+<script type="text/javascript">
+    function init()
+    {
+        document.title='$i18n.getText("hudson.associations.delete.header.title")';
+    }
+    window.onload=init;
+</script>
+
 #set($i18n = $action)
 <form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="DeleteAssociation.jspa">
 <input type="hidden" name="associationId" value="${associationId}" />
 <div class="jiraform maxWidth">
 	<div class="jiraformheader">
 		<h3 class="formtitle">
-			<img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson/images/hudson-icon-24.png" align="absmiddle" border="0" height="24" width="24" />
 			$i18n.getText("hudson.associations.delete.title")
 		</h3>
 		<br/>

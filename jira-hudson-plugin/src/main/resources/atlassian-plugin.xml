@@ -122,7 +122,7 @@
 	</issue-tabpanel>
 
 	<!-- W E B   S E C T I O N S -->
-	<web-section key="hudson-section" name="Hudson Section" location="system.admin" weight="110">
+	<web-section key="hudson-section" name="Hudson Section" location="admin_plugins_menu" weight="110">
 		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
 			<param name="permission">admin</param>
 		</condition>
@@ -130,28 +130,28 @@
 	</web-section>
 
 	<!-- W E B   I T E M S -->
-	<web-item key="hudson-plugin-configuration" name="Hudson Plugin Configuration" section="system.admin/hudson-section" weight="10">
+	<web-item key="hudson-plugin-configuration" name="Hudson Plugin Configuration" section="admin_plugins_menu/hudson-section" weight="10">
 		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
 			<param name="permission">admin</param>
 		</condition>
 		<label key="hudson.plugin.config"/>
 		<link linkId="hudson_plugin_config">/secure/admin/hudson/ConfigurePlugin.jspa</link>
 	</web-item>
-	<web-item key="hudson-servers-administer" name="Hudson Servers Admnistration" section="system.admin/hudson-section" weight="20">
+	<web-item key="hudson-servers-administer" name="Hudson Servers Admnistration" section="admin_plugins_menu/hudson-section" weight="20">
 		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
 			<param name="permission">admin</param>
 		</condition>
 		<label key="hudson.servers.admin"/>
 		<link linkId="hudson_servers_administer">/secure/admin/hudson/AdministerServers.jspa</link>
 	</web-item>
-	<web-item key="hudson-add-server" name="Hudson Add Server" section="system.admin/hudson-section" weight="30">
+	<web-item key="hudson-add-server" name="Hudson Add Server" section="admin_plugins_menu/hudson-section" weight="30">
 		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
 			<param name="permission">admin</param>
 		</condition>
 		<label key="hudson.server.admin.add"/>
 		<link linkId="hudson_servers_add">/secure/admin/hudson/AddServer!default.jspa</link>
 	</web-item>
-	<web-item key="hudson-associations-administer" name="Hudson Associations Admnistration" section="system.admin/hudson-section" weight="40">
+	<web-item key="hudson-associations-administer" name="Hudson Associations Admnistration" section="admin_plugins_menu/hudson-section" weight="40">
 		<conditions type="AND">
 			<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
 				<param name="permission">admin</param>
@@ -161,7 +161,7 @@
 		<label key="hudson.associations.admin"/>
 		<link linkId="hudson_associations_administer">/secure/admin/hudson/AdministerAssociations.jspa</link>
 	</web-item>
-	<web-item key="hudson-add-association" name="Hudson Add Association" section="system.admin/hudson-section" weight="50">
+	<web-item key="hudson-add-association" name="Hudson Add Association" section="admin_plugins_menu/hudson-section" weight="50">
 		<conditions type="AND">
 			<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
 				<param name="permission">admin</param>
@@ -180,7 +180,7 @@
 			<condition class="com.marvelution.jira.plugins.hudson.conditions.IsHudsonConfigured" />
 		</conditions>
 		<label key="hudson.association.project.add" />
-		<link linkId="hudson_association_add">/secure/admin/hudson/AddAssociation!default.jspa?pid=$helper.project.id</link>
+		<link linkId="hudson_association_add">/secure/admin/hudson/AddAssociation!default.jspa?projectId=$helper.project.id</link>
 	</web-item>
 
 	<!-- H U D S O N   P L U G I N   C O N F I G U R A T I O N -->
