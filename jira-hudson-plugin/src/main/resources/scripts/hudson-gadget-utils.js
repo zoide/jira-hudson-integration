@@ -30,18 +30,24 @@ AJS.$.namespace("AJS.hudson.gadget.utils");
 AJS.hudson.gadget.utils.getAjaxOptions = function(server, apiUrl, successHandler, errorHandler) {
 	var options = {
 		type : "GET",
-		dataTpe : "json",
-		url: server.host + apiUrl
+		dataTpe : "json"
 	};
+	if (server.secured) {
+		// The makeRequest servlet of Atlassian doesn't handle the authenticate correctly for Hudson instances
+		// So redirect the call to the Hudson Make Request servlet that does it
+		options.url = server.baseUrl + "/plugins/servlet/hudson/makeRequest";
+		options.data = {
+			url: server.host + apiUrl,
+			type: "json"
+		};
+	} else {
+		options.url = server.host + apiUrl;
+	}
 	if (errorHandler !== undefined) {
 		options.error = errorHandler;
 	}
 	if (successHandler !== undefined) {
 		options.success = successHandler;
-	}
-	if (server.secured && server.username !== undefined && server.password !== undefined) {
-		options.username = server.username;
-		options.password = server.password;
 	}
 	return options;
 }
@@ -49,20 +55,21 @@ AJS.hudson.gadget.utils.getAjaxOptions = function(server, apiUrl, successHandler
 /**
  * Parse a given string into a Hudson Server object
  * 
+ * @param baseUrl the base URL of JIRA
  * @param serverString the server string to parse
  * @return the Server object
  */
-AJS.hudson.gadget.utils.parseServer = function(serverString) {
+AJS.hudson.gadget.utils.parseServer = function(baseUrl, serverString) {
 	var matches = serverString.match(/(http|https):\/\/(.*):(.*)@(.*)/);
 	if (matches !== null) {
 		return {
-			username : matches[2],
-			password : matches[3],
-			host : matches[1] + "://" + matches[4],
+			baseUrl: baseUrl,
+			host : serverString,
 			secured : true
 		};
 	} else {
 		return {
+			baseUrl: baseUrl,
 			host : serverString,
 			secured : false
 		};

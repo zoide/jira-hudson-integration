@@ -20,6 +20,8 @@
 package com.marvelution.hudson.plugins.apiv2.client.connectors;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
@@ -93,12 +95,37 @@ public class HttpClient3Connector implements Connector {
 	 * Configure the credentials of the {@link #server} in the {@link #httpClient}
 	 */
 	private void configureCredentials() {
-		if (this.server.getUsername() != null) {
+		if (this.server.isSecured()) {
 			this.httpClient.getParams().setAuthenticationPreemptive(true);
 			Credentials defaultcreds = new UsernamePasswordCredentials(this.server.getUsername(),
 				this.server.getPassword());
-			this.httpClient.getState().setCredentials(AuthScope.ANY, defaultcreds);
+			this.httpClient.getState().setCredentials(getAuthScope(), defaultcreds);
 		}
+	}
+
+	/**
+	 * Get the {@link AuthScope} for the {@link #server}
+	 * 
+	 * @return the {@link AuthScope}
+	 */
+	private AuthScope getAuthScope() {
+		String host = AuthScope.ANY_HOST;
+		int port = AuthScope.ANY_PORT;
+		try {
+			final URI hostUri = new URI(server.getHost());
+			host = hostUri.getHost();
+			if (hostUri.getPort() > -1) {
+				port = hostUri.getPort();
+			} else if ("http".equalsIgnoreCase(hostUri.getScheme())) {
+				port = 80;
+			} else if ("https".equalsIgnoreCase(hostUri.getScheme())) {
+				port = 443;
+			}
+		} catch (URISyntaxException e) {
+			// Failed to parse the server host URI
+			// Fall-back on preset defaults
+		}
+		return new AuthScope(host, port, "realm");
 	}
 
 	/**
