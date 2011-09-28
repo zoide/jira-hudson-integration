@@ -282,5 +282,9 @@
 	<component key="hudsonConfigUpgradeTask" name="Gadget Upgrade Task" class="com.marvelution.jira.plugins.hudson.upgrade.HudsonConfigurationUpgradeTask" public="true">
 		<interface>com.atlassian.sal.api.upgrade.PluginUpgradeTask</interface>
 	</component>
+	<component key="hudsonWhitelistEntriesUpgradeTask" name="Hudson Whitelist Entries Upgrade Task"
+		class="com.marvelution.jira.plugins.hudson.upgrade.HudsonWhitelistEntriesUpgradeTask" public="true">
+		<interface>com.atlassian.sal.api.upgrade.PluginUpgradeTask</interface>
+	</component>
 
 </atlassian-plugin>

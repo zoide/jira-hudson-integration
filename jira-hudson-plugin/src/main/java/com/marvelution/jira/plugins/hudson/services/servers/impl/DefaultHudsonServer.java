@@ -148,6 +148,30 @@ public class DefaultHudsonServer extends Host implements HudsonServer, Comparabl
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String getHostWhitelistUrl() {
+		if (getHost().endsWith("/")) {
+			return getHost() + "*";
+		} else {
+			return getHost() + "/*";
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getPublicHostWhitelistUrl() {
+		if (getPublicHost().endsWith("/")) {
+			return getPublicHost() + "*";
+		} else {
+			return getPublicHost() + "/*";
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public String getPublicHost() {
 		if (StringUtils.isNotBlank(publicHost)) {
 			return publicHost;

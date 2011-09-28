@@ -78,6 +78,13 @@ public interface HudsonServer {
 	String getHost();
 
 	/**
+	 * Getter for the Server Host Whitelist URL
+	 * 
+	 * @return the Server Host Whitelist URL
+	 */
+	String getHostWhitelistUrl();
+
+	/**
 	 * Setter for the Server Host
 	 * 
 	 * @param host the Server Host
@@ -90,6 +97,13 @@ public interface HudsonServer {
 	 * @return the Server Public Host
 	 */
 	String getPublicHost();
+
+	/**
+	 * Getter for the Server Host Public Whitelist URL
+	 * 
+	 * @return the Server Host Public Whitelist URL
+	 */
+	String getPublicHostWhitelistUrl();
 
 	/**
 	 * Setter for the Server Public Host

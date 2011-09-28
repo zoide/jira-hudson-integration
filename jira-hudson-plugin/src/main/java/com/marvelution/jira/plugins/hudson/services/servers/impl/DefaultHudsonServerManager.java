@@ -19,14 +19,17 @@
 
 package com.marvelution.jira.plugins.hudson.services.servers.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 
+import com.atlassian.jira.bc.whitelist.WhitelistManager;
 import com.marvelution.jira.plugins.hudson.encryption.StringEncrypter;
 import com.marvelution.jira.plugins.hudson.services.HudsonPropertyManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
@@ -58,6 +61,7 @@ public class DefaultHudsonServerManager implements HudsonServerManager, Initiali
 	private final HudsonPropertyManager propertyManager;
 	private final HudsonServerFactory serverFactory;
 	private final HudsonServerIdGenerator idGenerator;
+	private final WhitelistManager whitelistManager;
 
 	private int defaultServerId = 0;
 	private Map<Integer, HudsonServer> servers = new HashMap<Integer, HudsonServer>();
@@ -69,12 +73,14 @@ public class DefaultHudsonServerManager implements HudsonServerManager, Initiali
 	 * @param propertyManager the {@link HudsonPropertyManager} implementation
 	 * @param serverFactory the {@link HudsonServerFactory} implementation
 	 * @param idGenerator the {@link HudsonServerIdGenerator} implementation
+	 * @param whitelistManager the {@link WhitelistManager} implementation
 	 */
 	public DefaultHudsonServerManager(HudsonPropertyManager propertyManager, HudsonServerFactory serverFactory,
-			HudsonServerIdGenerator idGenerator) {
+			HudsonServerIdGenerator idGenerator, WhitelistManager whitelistManager) {
 		this.propertyManager = propertyManager;
 		this.serverFactory = serverFactory;
 		this.idGenerator = idGenerator;
+		this.whitelistManager = whitelistManager;
 	}
 
 	/**
@@ -189,6 +195,15 @@ public class DefaultHudsonServerManager implements HudsonServerManager, Initiali
 		if (server.getServerId() == 0) {
 			server.setServerId(idGenerator.next());
 		}
+		List<String> rules = whitelistManager.getRules();
+		if (!rules.contains(server.getHostWhitelistUrl())) {
+			List<String> newRules = new ArrayList<String>(rules);
+			newRules.add(server.getHostWhitelistUrl());
+			if (!rules.contains(server.getPublicHostWhitelistUrl())) {
+				newRules.add(server.getPublicHostWhitelistUrl());
+			}
+			whitelistManager.updateRules(newRules, whitelistManager.isDisabled());
+		}
 		store(server);
 		add(server);
 	}
@@ -211,6 +226,15 @@ public class DefaultHudsonServerManager implements HudsonServerManager, Initiali
 	public void removeServer(HudsonServer server) {
 		if (server == null || server.getServerId() == 0) {
 			return;
+		}
+		List<String> rules = whitelistManager.getRules();
+		if (rules.contains(server.getHostWhitelistUrl())) {
+			List<String> newRules = new ArrayList<String>(rules);
+			newRules.remove(server.getHostWhitelistUrl());
+			if (rules.contains(server.getPublicHostWhitelistUrl())) {
+				newRules.remove(server.getPublicHostWhitelistUrl());
+			}
+			whitelistManager.updateRules(newRules, whitelistManager.isDisabled());
 		}
 		remove(server.getServerId());
 		servers.remove(server.getServerId());
