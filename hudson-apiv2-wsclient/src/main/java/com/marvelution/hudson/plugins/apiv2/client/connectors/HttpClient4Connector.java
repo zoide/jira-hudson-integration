@@ -20,14 +20,29 @@
 package com.marvelution.hudson.plugins.apiv2.client.connectors;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScheme;
 import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.AuthState;
+import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HttpContext;
 
 import com.marvelution.hudson.plugins.apiv2.client.Host;
 import com.marvelution.hudson.plugins.apiv2.client.services.Query;
@@ -41,6 +56,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
 public class HttpClient4Connector implements Connector {
 
 	private final Host server;
+	private BasicHttpContext localContext = null;
 
 	/**
 	 * Default Constructor
@@ -59,7 +75,12 @@ public class HttpClient4Connector implements Connector {
 		DefaultHttpClient client = createClient();
 		HttpGet get = createGetMethod(query);
 		try {
-			HttpResponse response = client.execute(get);
+			HttpResponse response;
+			if (localContext != null) {
+				response = client.execute(get, localContext);
+			} else {
+				response = client.execute(get);
+			}
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
 				return getConnectorResponseFromEntity(response);
@@ -91,11 +112,42 @@ public class HttpClient4Connector implements Connector {
 	 */
 	private DefaultHttpClient createClient() {
 		DefaultHttpClient client = new DefaultHttpClient();
-		if (this.server.getUsername() != null) {
-			client.getCredentialsProvider().setCredentials(AuthScope.ANY,
+		if (this.server.isSecured()) {
+			client.getCredentialsProvider().setCredentials(getAuthScope(),
 				new UsernamePasswordCredentials(this.server.getUsername(), this.server.getPassword()));
+			localContext = new BasicHttpContext();
+            // Generate BASIC scheme object and stick it to the local execution context
+            BasicScheme basicAuth = new BasicScheme();
+            localContext.setAttribute("preemptive-auth", basicAuth);
+            // Add as the first request intercepter
+            client.addRequestInterceptor(new PreemptiveAuth(), 0);
 		}
 		return client;
+	}
+
+	/**
+	 * Get the {@link AuthScope} for the {@link #server}
+	 * 
+	 * @return the {@link AuthScope}
+	 */
+	private AuthScope getAuthScope() {
+		String host = AuthScope.ANY_HOST;
+		int port = AuthScope.ANY_PORT;
+		try {
+			final URI hostUri = new URI(server.getHost());
+			host = hostUri.getHost();
+			if (hostUri.getPort() > -1) {
+				port = hostUri.getPort();
+			} else if ("http".equalsIgnoreCase(hostUri.getScheme())) {
+				port = 80;
+			} else if ("https".equalsIgnoreCase(hostUri.getScheme())) {
+				port = 443;
+			}
+		} catch (URISyntaxException e) {
+			// Failed to parse the server host URI
+			// Fall-back on preset defaults
+		}
+		return new AuthScope(host, port, "realm");
 	}
 
 	/**
@@ -116,4 +168,39 @@ public class HttpClient4Connector implements Connector {
 		}
 		return response;
 	}
+
+	/**
+	 * {@link HttpRequestInterceptor} implementation for preemptive authentication
+	 * 
+	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
+	 * 
+	 * @since 4.2.0
+	 */
+	static class PreemptiveAuth implements HttpRequestInterceptor {
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+			AuthState authState = (AuthState) context.getAttribute(ClientContext.TARGET_AUTH_STATE);
+			// If no auth scheme available yet, try to initialize it preemptively
+			if (authState.getAuthScheme() == null) {
+				AuthScheme authScheme = (AuthScheme) context.getAttribute("preemptive-auth");
+				CredentialsProvider credsProvider =
+					(CredentialsProvider) context.getAttribute(ClientContext.CREDS_PROVIDER);
+				HttpHost targetHost = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+				if (authScheme != null) {
+					Credentials creds = credsProvider.getCredentials(new AuthScope(targetHost.getHostName(),
+						targetHost.getPort(), "realm"));
+					if (creds == null) {
+						throw new HttpException("No credentials for preemptive authentication");
+					}
+					authState.setAuthScheme(authScheme);
+					authState.setCredentials(creds);
+				}
+			}
+		}
+	}
+
 }

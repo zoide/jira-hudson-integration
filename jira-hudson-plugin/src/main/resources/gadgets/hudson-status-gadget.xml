@@ -70,7 +70,7 @@
 					template: function (args) {
 						var gadget = this;
 						gadget.getView().empty();
-						var hudsonServer = AJS.hudson.gadget.utils.parseServer(gadget.getPref("server"));
+						var hudsonServer = AJS.hudson.gadget.utils.parseServer(gadget.getBaseUrl(), gadget.getPref("server"));
 						for (var index in args.jobs) {
 							var job = args.jobs[index];
 							var jobDiv = AJS.hudson.utils.createDiv();
@@ -113,7 +113,7 @@
 						key: "jobs",
 						ajaxOptions: function () {
 							var gadget = this;
-							var hudsonServer = AJS.hudson.gadget.utils.parseServer(gadget.getPref("server"));
+							var hudsonServer = AJS.hudson.gadget.utils.parseServer(gadget.getBaseUrl(), gadget.getPref("server"));
 							return AJS.hudson.gadget.utils.getAjaxOptions(hudsonServer, "/apiv2/jobs/all");
 						}
 					}]

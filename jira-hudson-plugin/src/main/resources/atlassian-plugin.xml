@@ -86,6 +86,11 @@
 		<package>com.marvelution.jira.plugins.hudson</package>
 	</rest>
 
+	<!-- S E R V L E T S -->
+	<servlet name="Hudson Make Request Servlet" key="hudson-make-request-servlet" class="com.marvelution.jira.plugins.hudson.servlets.HudsonMakeRequestServlet">
+		<url-pattern>/hudson/makeRequest</url-pattern>
+	</servlet>
+
 	<!-- T A B   P A N E L S -->
 	<project-tabpanel key="hudson-project-panel" name="Hudson Project Panel"
 		class="com.marvelution.jira.plugins.hudson.panels.HudsonProjectPanel">
