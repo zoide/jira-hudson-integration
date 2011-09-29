@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.  See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~  http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<Module>
+	<ModulePrefs title="__MSG_hudson.gadget.chart.title__" directory_title="__MSG_hudson.gadget.chart.title__"
+		description="__MSG_hudson.gadget.chart.description__"
+		author="Marvelution" author_email="info@marvelution.com" author_affiliation="Marvelution"
+		author_location="Beverwijk, The Netherlands" title_url="http://www.marvelution.com/" height="100"
+		creenshot='#staticResourceUrl("${atlassian.plugin.key}:hudson-chart-gadget", "chart-screenshot.png")'
+		thumbnail='#staticResourceUrl("${atlassian.plugin.key}:hudson-chart-gadget", "chart-thumb.png")'>
+		<Optional feature="gadget-directory">
+			<Param name="categories">
+				JIRA
+			</Param>
+		</Optional>
+		<Require feature="setprefs" />
+		<Require feature="settitle" />
+		<Require feature="dynamic-height" />
+		<Require feature="views" />
+		<Optional feature="atlassian.util" />
+		<Require feature="oauthpopup" />
+		#oauth
+		#supportedLocales("gadget.common,hudson.gadget,hudson.charts")
+	</ModulePrefs>
+	<UserPref name="association" datatype="hidden" default_value="0" />
+	<UserPref name="chart" datatype="hidden" default_value="false" />
+	<UserPref name="refresh" datatype="hidden" default_value="false" />
+	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
+	<UserPref name="titleRequired" datatype="hidden" default_value="true" />
+	<Content type="html"><![CDATA[
+		#requireResource("${atlassian.plugin.key}:hudson-gadget")
+		#includeResources()
+		<script type="text/javascript">
+		gadgets.window.setTitle("__MSG_hudson.gadget.chart.title__");
+		(function () {
+			AJS.Gadget({
+				baseUrl: "__ATLASSIAN_BASE_URL__",
+				useOauth: "/rest/gadget/1.0/currentUser",
+				config: {
+					descriptor: function (args) {
+						var gadget = this;
+						gadgets.window.setTitle("__MSG_hudson.gadget.chart.title__");
+						return  {
+							action: "",
+							theme : AJS.hudson.gadget.config.getThemeConfiguration(gadgets),
+							fields: AJS.hudson.gadget.config.getChartFields(gadget, args)
+						};
+					},
+					args: [{
+						key: "associations",
+						ajaxOptions: function() {
+							var gadget = this;
+							return {
+								url: gadget.getBaseUrl() + "/rest/hudson/2.0/associations"
+							};
+						}
+					}, {
+						key: "charts",
+						ajaxOptions: function() {
+							var gadget = this;
+							return {
+								url: gadget.getBaseUrl() + "/rest/hudson/2.0/charts"
+							};
+						}
+					}]
+				},
+				view: {
+					enableReload: true,
+					onResizeReload: true,
+					template: function (args) {
+						var gadget = this;
+						gadgets.window.setTitle(gadget.getMsg("hudson.charts." + gadget.getPref("chart") + ".title"));
+						gadget.getView().empty();
+						var headerDiv = AJS.hudson.utils.createDiv();
+						headerDiv.addClass('chartHeader');
+						headerDiv.html(gadget.getMsg("hudson.charts." + gadget.getPref("chart") + ".description"));
+						gadget.getView().append(headerDiv);
+						gadget.getView().append(AJS.hudson.utils.createChart(gadget, args.chart));
+						gadget.resize();
+					},
+					args: [{
+						key: "chart",
+						ajaxOptions: function () {
+							var gadget = this;
+							return {
+								url: gadget.getBaseUrl() + "/rest/hudson/2.0/charts/generate/" + gadget.getPref("chart") + "/" + gadget.getPref("association")
+							};
+						}
+					}]
+				}
+			});
+		})();
+		</script>
+	]]></Content>
+</Module>

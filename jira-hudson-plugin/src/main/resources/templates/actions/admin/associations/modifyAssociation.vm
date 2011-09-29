@@ -1,0 +1,140 @@
+## Licensed to Marvelution under one or more contributor license
+## agreements.  See the NOTICE file distributed with this work
+## for additional information regarding copyright ownership.
+## Marvelution licenses this file to you under the Apache License,
+## Version 2.0 (the "License"); you may not use this file except
+## in compliance with the License.
+## You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied. See the License for the
+## specific language governing permissions and limitations
+## under the License.
+
+#set($i18n = $action)
+<form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="$actionType.formAction()">
+#if ($associationId > 0)
+<input type="hidden" name="associationId" value="${associationId}" />
+#end
+#if ($extraHiddenInput)
+#foreach ($extra in $extraHiddenInput)
+<input type="hidden" name="$extra.key" value="$extra.value" />
+#end
+#end
+<div class="jiraform maxWidth">
+	<div class="jiraformheader">
+		<h3 class="formtitle">
+			<img src="${req.contextPath}/download/resources/com.marvelution.jira.plugins.hudson/images/hudson-icon-24.png" align="absmiddle" border="0" height="24" width="24" />
+			$i18n.getText("hudson.associations.${actionType.type()}.title")
+		</h3>
+		<br/>
+		$i18n.getText("hudson.associations.${actionType.type()}.description")<br />
+	</div>
+	<div class="jiraformcontents">
+		<table class="grid maxWidth">
+	        #if ($action.hasAnyErrors())
+	        <tr>
+	            <td colspan="2" class="formErrors">
+	                <div class="errorArea">
+	                    <h4>Errors</h4>
+	                    <ul>
+	                        #foreach ($error in $action.getErrorMessages())
+	                        <li>$error</li>
+	                        #end
+	                        #foreach ($error in $action.errors)
+	                        <li>$error</li>
+	                        #end
+	                    </ul>
+	                </div>
+	            </td>
+	        </tr>
+	        #end
+	        <tr>
+	            <td class="fieldLabelArea">$i18n.getText("hudson.association.server.label"):</td>
+	            <td bgcolor="#ffffff" class="fieldValueArea">
+	            	<select size="1" name="hudsonId" id="hudsonId">
+	            		<option value="">${i18n.getText("hudson.association.select.server")}</option>
+	            		#foreach ($server in $sorter.sort($serverManager.getServers(), "name"))
+	            		<option value="$server.serverId" #if ($hudsonId == $server.serverId) selected #end >$server.name</option>
+	            		#end
+	            	</select>
+	                <br /><font size="1">$i18n.getText("hudson.association.server.hint")</font>
+	            </td>
+	        </tr>
+	        <tr>
+	            <td class="fieldLabelArea">$i18n.getText("hudson.association.project.label"):</td>
+	            <td bgcolor="#ffffff" class="fieldValueArea">
+	            	<select size="1" name="projectId" id="projectId">
+	            		<option value="">${i18n.getText("hudson.association.select.project")}</option>
+	            		#foreach ($project in $sorter.sort($projectManager.getProjectObjects(), "name"))
+	            		<option value="$project.id" #if ($projectId == $project.id) selected #end >$project.name</option>
+	            		#end
+	            	</select>
+	                <br /><font size="1">$i18n.getText("hudson.association.project.hint")</font>
+	            </td>
+	        </tr>
+	        <tr>
+	            <td class="fieldLabelArea">$i18n.getText("hudson.association.jobname.label"):</td>
+	            <td bgcolor="#ffffff" class="fieldValueArea">
+	                <select size="1" name="jobName" id="jobName">
+	            		<option value="">${i18n.getText("hudson.association.select.jobname")}</option>
+	                	#if ($jobOptions)
+	            		#foreach ($jobOption in $jobOptions)
+	            		<option value="$jobOption" #if ($jobOption.equals($jobName)) selected #end >$jobOption</option>
+	            		#end
+	            		#end
+	            	</select>
+	            	<img src="${req.contextPath}/images/icons/wait.gif" border="0" class="waiting-image" id="waitImage" style="display: none;" />
+	                <br /><font size="1">$i18n.getText("hudson.association.jobname.hint")</font>
+	            </td>
+	        </tr>
+	        <tr>
+	            <tr>
+	                <td colspan="2" class="fullyCentered jiraformfooter">
+	                    <input type="submit" id=" $i18n.getText("hudson.associations.${actionType.type()}.label") "
+	                    		name=" $i18n.getText("hudson.associations.${actionType.type()}.label") "
+	                    		value=" $i18n.getText("hudson.servers.${actionType.type()}.label") "
+	                    		accesskey="S" title="Press Alt+S to submit form" class="spaced" />
+	                    <input type="button" id="cancelButton" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt + `)"
+	                           name="AdministerHAssociations.jspa" value="$i18n.getText("common.forms.cancel")" 
+	                           onclick="location.href='AdministerAssociations.jspa'" />
+	                </td>
+	            </tr>
+	        </tr>
+		</table>
+	</div>
+</div>
+</form>
+<script type="text/javascript">
+function updateJobList() {
+	jQuery('#jobName').attr("disabled", false);
+	jQuery('#jobName').css("display", "none");
+	jQuery('#waitImage').css("display", "block");
+	jQuery.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: '${req.contextPath}/rest/hudson/2.0/server/' + jQuery('#hudsonId').val() + '/listJobs',
+		success: function(data) {
+			var jobName = jQuery('#jobName');
+			jobName.empty();
+			if (data !== undefined) {
+				jQuery(data).each(function() {
+					jQuery('<option/>')
+						.attr({value: this.name})
+						.text(this.name)
+						.appendTo(jobName);
+				});
+			}
+			jQuery('#waitImage').css("display", "none");
+			jQuery('#jobName').css("display", "block");
+		}
+	});
+}
+jQuery('#hudsonId').change(function() {
+	updateJobList();
+});
+</script>

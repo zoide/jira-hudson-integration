@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.  See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~  http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping type="one-way">
+		<class-a>hudson.model.AbstractBuild</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.Build</class-b>
+		<field>
+			<a>number</a>
+			<b>buildNumber</b>
+		</field>
+		<field>
+			<a get-method="getUrl">url</a>
+			<b>url</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildParentToJobNameDozerConverter"> 
+			<a get-method="getParent">project</a>
+			<b>jobName</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.BuildParentToJobUrlDozerConverter"> 
+			<a get-method="getParent">project</a>
+			<b>jobUrl</b>
+		</field>
+		<field>
+			<a>duration</a>
+			<b>duration</b>
+		</field>
+		<field>
+			<a get-method="getTimeInMillis">time</a>
+			<b>timestamp</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.TestResultsDozerConverter">
+			<a>this</a>
+			<b>testResult</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ResultDozerConverter">
+			<a>result</a>
+			<b>result</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.StateDozerConverter">
+			<a>this</a>
+			<b>state</b>
+		</field>
+		<!-- TODO Update this mapping to include all submodule artifacts in case of a ItemGroup build -->
+		<field>
+			<a get-method="getArtifacts">artifacts</a>
+			<b>buildArtifacts</b>
+		</field>
+		<!-- TODO Update this mapping to include all triggers of the Parent ItemGroups -->
+		<field>
+			<a get-method="getCauses">causes</a>
+			<b>triggers</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.RelatedIssueKeysDozerConverter">
+			<a get-method="getChangeSet">changeSet</a>
+			<b>relatedIssueKeys</b>
+		</field>
+		<field>
+			<a get-method="getChangeSet">changeSet</a>
+			<b>changeLog</b>
+		</field>
+		<field>
+			<a get-method="getCulprits">culprits</a>
+			<b>culprits</b>
+		</field>
+	</mapping>
+
+	<mapping type="one-way">
+		<class-a>hudson.model.Run$Artifact</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.build.BuildArtifact</class-b>
+		<field>
+			<a get-method="getFileName">name</a>
+			<b>name</b>
+		</field>
+		<field>
+			<a get-method="toString">relativePath</a>
+			<b>url</b>
+		</field>
+	</mapping>
+
+</mappings>

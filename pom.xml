@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.  See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~  http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.marvelution</groupId>
+		<artifactId>marvelution</artifactId>
+		<version>10</version>
+	</parent>
+	<groupId>com.marvelution.jira.plugins</groupId>
+	<artifactId>jira-hudson-integration</artifactId>
+	<version>4.1.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>hudson-apiv2-plugin</module>
+		<module>hudson-jirareporter-plugin</module>
+		<module>hudson-apiv2-wsclient</module>
+		<module>jira-hudson-plugin</module>
+		<module>jira-hudson</module>
+	</modules>
+
+	<name>JIRA Hudson Integration</name>
+	<description>Project to integrate Jira with Hudson by use of Gadgets and Tab Panels</description>
+	<url>http://apidocs.marvelution.com/${project.artifactId}/${project.version}</url>
+	<inceptionYear>2009</inceptionYear>
+	<organization>
+		<name>Marvelution</name>
+		<url>http://www.marvelution.com/</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/branches/jira-4.3.x</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/branches/jira-4.3.x</developerConnection>
+		<url>http://fisheye.marvelution.com/browse/public/atlassian/jira-hudson-integration/branches/jira-4.3.x</url>
+	</scm>
+	<issueManagement>
+		<system>JIRA</system>
+		<url>http://issues.marvelution.com/browse/MARVJIRAHUDSON</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Bamboo</system>
+		<url>http://builds.marvelution.com/browse/MARVJIRAHUDSON</url>
+		<notifiers>
+			<notifier>
+				<type>mail</type>
+				<configuration>
+					<address>ci@lists.marvelution.com</address>
+				</configuration>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+	<distributionManagement>
+		<site>
+			<id>marvelution.website</id>
+			<url>dav:http://repository.marvelution.com/content/sites/apidocs/jira-hudson-integration/${project.version}/</url>
+		</site>
+	</distributionManagement>
+
+	<properties>
+		<project.jdk.revision>1.6</project.jdk.revision>
+		<hudson.version>1.395</hudson.version>
+		<hudson.test.harness.version>1.395</hudson.test.harness.version>
+		<atlassian.jira.version>4.3</atlassian.jira.version>
+		<javax.xml.bind.version>2.2</javax.xml.bind.version>
+		<enunciate.version>1.22</enunciate.version>
+		<apache.wink.version>1.1.3-incubating</apache.wink.version>
+		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/apidocs-staging/jira-hudson-integration/${project.version}</stagingSiteURL>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.powermock.modules</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock.api</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.7</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- preparation goals need to be clean because of Maven Release plugin issue MRELEASE-285 -->
+			<plugin>
+				<inherited>true</inherited>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<preparationGoals>clean</preparationGoals>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<developers>
+		<developer>
+			<id>markrekveld</id>
+			<name>Mark Rekveld</name>
+			<url>http://www.marvelution.com</url>
+			<organization>Marvelution</organization>
+			<email>markrekveld@marvelution.com</email>
+			<organizationUrl>http://www.marvelution.com</organizationUrl>
+			<timezone>+1</timezone>
+			<roles>
+				<role>Marvelution Member</role>
+			</roles>
+		</developer>
+	</developers>
+</project>

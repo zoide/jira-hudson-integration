@@ -1,0 +1,95 @@
+## Licensed to Marvelution under one or more contributor license
+## agreements.  See the NOTICE file distributed with this work
+## for additional information regarding copyright ownership.
+## Marvelution licenses this file to you under the Apache License,
+## Version 2.0 (the "License"); you may not use this file except
+## in compliance with the License.
+## You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied. See the License for the
+## specific language governing permissions and limitations
+## under the License.
+
+#set ($server = $resultSet.getServer())
+#set ($job = $resultSet.getResults())
+#set ($build = $job.getLastBuild())
+#if($build)
+#set ($result = "${build.result.name().toLowerCase()}")
+#else
+#set ($result = "notbuild")
+#end
+<ol id="jobStatus">
+	<li>
+		<ul class="header ${result}Header">
+			#if($build)
+			<li class="ratio">${i18n.getText("hudson.panel.job.success.ratio", $jobUtils.getJobSuccessRatio($job))}</li>
+			<li class="title">${i18n.getText("hudson.panel.job.header.title")} <a href="${server.publicHost}/${job.url}">${job.name}</a> <a href="${server.publicHost}/${build.url}">${i18n.getText("hudson.panel.build.number", $build.buildNumber)}</a> ${i18n.getText("hudson.panel.job.header.was")} ${i18n.getText("hudson.panel.job.header.$result")}</li>
+			<li class="description">
+				<ul>
+					<li class="label">${i18n.getText("hudson.panel.build.reason")}:</li>
+					#foreach ($trigger in $build.triggers)
+					<li>${triggerFormatUtils.format($trigger)}</li>
+					#end
+					<li class="label">${i18n.getText("hudson.panel.build.date")}:</li>
+					<li>${dateFormatUtils.format(${build.timestamp})}</li>
+					<li class="label">${i18n.getText("hudson.panel.build.duration")}:</li>
+					<li>${dateFormatUtils.getTimeSpanString(${build.duration})}</li>
+				</ul>
+			</li>
+			#else
+			<li class="title"><a href="${server.publicHost}/${job.url}">${job.name}</a> ${i18n.getText("hudson.panel.job.not.yet.build")}</li>
+			#end
+		</ul>
+	</li>
+	<li class="clear">&nbsp;</li>
+	#if ($build)
+	<li>
+		<ul class="charts">
+			#set ($chart = $resultSet.getBuildResultsRatioChart())
+			<li class="chart">
+				<h2>${i18n.getText("hudson.panel.job.chart.build.duration")}</h2>
+				${chart.getImageMap()}
+				<img usemap="${chart.getImageMapName()}" src="${req.contextPath}/charts?filename=${chart.location}" height="${chart.getRenderingInfo().getChartArea().getHeight()}" width="${chart.getRenderingInfo().getChartArea().getWidth()}">
+			</li>
+			#set ($chart = $resultSet.getBuildTestResultsRatioChart())
+			<li class="chart">
+				<h2>${i18n.getText("hudson.panel.job.chart.test.results")}</h2>
+				${chart.getImageMap()}
+				<img usemap="${chart.getImageMapName()}" src="${req.contextPath}/charts?filename=${chart.location}" height="${chart.getRenderingInfo().getChartArea().getHeight()}" width="${chart.getRenderingInfo().getChartArea().getWidth()}">
+			</li>
+		</ul>
+	</li>
+	<li class="clear">&nbsp;</li>
+	<li class="testResults">
+		<ul>
+			<li class="header">${i18n.getText("common.words.latest")} <a href="${server.publicHost}/${job.url}/lastCompletedBuild/testReport/">${i18n.getText("hudson.panel.build.tests.results")}</a> (${i18n.getText("hudson.panel.build.tests.failed", $build.testResults.failed)}):</li>
+			#if ($build.testResults && $build.testResults.failed > 0)
+			#foreach ($test in $build.testResults.failedTests)
+			<li #if (!${foreach.hasNext})class="last"#end>${test.className}.${test.testName}</li>
+			#end
+			#else
+			<li class="last">${i18n.getText("hudson.panel.build.tests.no.results")}</li>
+			#end
+		</ul>
+	</li>
+	<li class="clear">&nbsp;</li>
+	<li class="buildArtifacts">
+		<ul>
+			<li class="header">${i18n.getText("common.words.latest")} ${i18n.getText("hudson.panel.build.artifacts")}:</li>
+			#if ($build.buildArtifacts.size() > 0)
+			#foreach ($artifact in $build.buildArtifacts)
+			<li #if (!${foreach.hasNext})class="last"#end><a href="${server.publicHost}/${job.url}/lastBuild/${artifact.url}">${artifact.name}</a></li>
+			#end
+			#else
+			<li class="last">${i18n.getText("hudson.panel.build.no.build.artifacts")}</li>
+			#end
+		</ul>
+	</li>
+	<li class="clear">&nbsp;</li>
+	#end
+</ol>

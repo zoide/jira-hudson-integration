@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.  See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~  http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<atlassian-plugin name="${project.name}" key="${atlassian.plugin.key}" system="false" pluginsVersion="2">
+	<plugin-info>
+		<description>${project.description}</description>
+		<vendor name="${project.organization.name}" url="${project.organization.url}" />
+		<version>${project.version}</version>
+		<application-version min="${atlassian.jira.version}" max="${atlassian.jira.version}"/>
+	</plugin-info>
+
+	<!-- I 1 8 N   R E S O U R C E S -->
+	<resource type="i18n" name="i18n-hudson-commons-words" location="i18n.common-words"/>
+	<resource type="i18n" name="i18n-hudson-admin" location="i18n.hudson-admin"/>
+	<resource type="i18n" name="i18n-hudson-charts" location="i18n.hudson-charts"/>
+	<resource type="i18n" name="i18n-hudson-gadgets" location="i18n.hudson-gadgets"/>
+	<resource type="i18n" name="i18n-hudson-panels" location="i18n.hudson-panels"/>
+	<resource type="i18n" name="i18n-hudson-plugin" location="i18n.hudson-plugin"/>
+	<resource type="i18n" name="i18n-hudson-time" location="i18n.hudson-time"/>
+
+	<!-- W E B   R E S O U R C E S -->
+	<web-resource key="hudson-common" name="Hudson Common">
+		<resource type="download" name="common.css" location="styles/common.css" />
+		<resource type="download" name="date.js" location="scripts/date.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+		<resource type="download" name="hudson-utils.js" location="scripts/hudson-utils.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+		<resource type="download" name="hudson-trigger-parser.js" location="scripts/hudson-trigger-parser.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+	</web-resource>
+	<web-resource key="hudson-panel" name="Hudson Panel Resources">
+		<dependency>${atlassian.plugin.key}:hudson-common</dependency>
+		<resource type="download" name="panel.css" location="styles/panel.css" />
+		<resource type="download" name="hudson-panel.js" location="scripts/hudson-panel.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+	</web-resource>
+	<web-resource key="hudson-gadget" name="Hudson Gadget Resources">
+		<dependency>com.atlassian.jira.gadgets:jira-global</dependency>
+		<dependency>${atlassian.plugin.key}:hudson-common</dependency>
+		<resource type="download" name="gadget.css" location="styles/gadget.css" />
+		<resource type="download" name="hudson-gadget-config.js" location="scripts/hudson-gadget-config.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+		<resource type="download" name="hudson-gadget-utils.js" location="scripts/hudson-gadget-utils.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+	</web-resource>
+
+	<!-- I M A G E   R E S O U R C E S -->
+	<resource type="download" name="images/" location="images/" />
+	<resource type="download" name="status-screenshot.png" location="images/gadgets/status-screenshot.png"/>
+	<resource type="download" name="status-thumb.png" location="images/gadgets/status-thumb.png"/>
+	<resource type="download" name="job-status-screenshot.png" location="images/gadgets/job-status-screenshot.png"/>
+	<resource type="download" name="job-status-thumb.png" location="images/gadgets/job-status-thumb.png"/>
+	<resource type="download" name="chart-screenshot.png" location="images/gadgets/chart-screenshot.png"/>
+	<resource type="download" name="chart-thumb.png" location="images/gadgets/chart-thumb.png"/>
+
+	<!-- G A D G E T S -->
+	<gadget key="hudson-status-gadget" name="Hudson Status Gadget" location="gadgets/hudson-status-gadget.xml" />
+	<gadget key="hudson-job-status-gadget" name="Hudson Job Status Gadget" location="gadgets/hudson-job-status-gadget.xml" />
+	<gadget key="hudson-chart-gadget" name="Hudson Chart Gadget" location="gadgets/hudson-chart-gadget.xml" />
+
+	<!-- R E S T   R E S O U R C E S -->
+	<rest key="${atlassian.plugin.key}.resource" path="/hudson" version="2.0">
+		<description>Provides REST endpoints used to display Hudson gadget and panel contents.</description>
+		<package>com.marvelution.jira.plugins.hudson</package>
+	</rest>
+
+	<!-- T A B   P A N E L S -->
+	<project-tabpanel key="hudson-project-panel" name="Hudson Project Panel"
+		class="com.marvelution.jira.plugins.hudson.panels.HudsonProjectPanel">
+		<description key="hudson.panel.project.description" />
+		<label key="hudson.panel.label" />
+		<order>101</order>
+		<resource type="velocity" name="view" location="templates/panels/hudsonPanel.vm" />
+	</project-tabpanel>
+	<version-tabpanel key="hudson-version-panel" name="Hudson Project Version Panel"
+		class="com.marvelution.jira.plugins.hudson.panels.HudsonVersionPanel">
+		<description key="hudson.panel.version.description" />
+		<label key="hudson.panel.label" />
+		<order>101</order>
+		<resource type="velocity" name="view" location="templates/panels/hudsonPanel.vm" />
+	</version-tabpanel>
+	<component-tabpanel key="hudson-component-panel" name="Hudson Project Component Panel"
+		class="com.marvelution.jira.plugins.hudson.panels.HudsonComponentPanel">
+		<description key="hudson.panel.component.description" />
+		<label key="hudson.panel.label" />
+		<order>101</order>
+		<resource type="velocity" name="view" location="templates/panels/hudsonPanel.vm" />
+	</component-tabpanel>
+	<issue-tabpanel key="hudson-issue-panel" name="Hudson Issue Panel"
+		class="com.marvelution.jira.plugins.hudson.panels.HudsonIssuePanel">
+		<description key="hudson.panel.issue.description" />
+		<label key="hudson.panel.label" />
+		<order>101</order>
+		<resource type="velocity" name="view" location="templates/panels/hudsonPanel.vm" />
+	</issue-tabpanel>
+
+	<!-- W E B   S E C T I O N S -->
+	<web-section key="hudson-section" name="Hudson Section" location="system.admin" weight="110">
+		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+			<param name="permission">admin</param>
+		</condition>
+		<label key="hudson.section"/>
+	</web-section>
+
+	<!-- W E B   I T E M S -->
+	<web-item key="hudson-plugin-configuration" name="Hudson Plugin Configuration" section="system.admin/hudson-section" weight="10">
+		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+			<param name="permission">admin</param>
+		</condition>
+		<label key="hudson.plugin.config"/>
+		<link linkId="hudson_plugin_config">/secure/admin/hudson/ConfigurePlugin.jspa</link>
+	</web-item>
+	<web-item key="hudson-servers-administer" name="Hudson Servers Admnistration" section="system.admin/hudson-section" weight="20">
+		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+			<param name="permission">admin</param>
+		</condition>
+		<label key="hudson.servers.admin"/>
+		<link linkId="hudson_servers_administer">/secure/admin/hudson/AdministerServers.jspa</link>
+	</web-item>
+	<web-item key="hudson-add-server" name="Hudson Add Server" section="system.admin/hudson-section" weight="30">
+		<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+			<param name="permission">admin</param>
+		</condition>
+		<label key="hudson.server.admin.add"/>
+		<link linkId="hudson_servers_add">/secure/admin/hudson/AddServer!default.jspa</link>
+	</web-item>
+	<web-item key="hudson-associations-administer" name="Hudson Associations Admnistration" section="system.admin/hudson-section" weight="40">
+		<conditions type="AND">
+			<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+				<param name="permission">admin</param>
+			</condition>
+			<condition class="com.marvelution.jira.plugins.hudson.conditions.IsHudsonConfigured" />
+		</conditions>
+		<label key="hudson.associations.admin"/>
+		<link linkId="hudson_associations_administer">/secure/admin/hudson/AdministerAssociations.jspa</link>
+	</web-item>
+	<web-item key="hudson-add-association" name="Hudson Add Association" section="system.admin/hudson-section" weight="50">
+		<conditions type="AND">
+			<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+				<param name="permission">admin</param>
+			</condition>
+			<condition class="com.marvelution.jira.plugins.hudson.conditions.IsHudsonConfigured" />
+		</conditions>
+		<label key="hudson.association.admin.add"/>
+		<link linkId="hudson_association_add">/secure/admin/hudson/AddAssociation!default.jspa</link>
+	</web-item>
+	<!-- Extra Web-item to add a link in the ViewProject.jsp page -->
+	<web-item key="hudson-add-project-association" name="Hudson Add Project Association" section="system.view.project.operations" weight="10">
+		<conditions type="AND">
+			<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+				<param name="permission">admin</param>
+			</condition>
+			<condition class="com.marvelution.jira.plugins.hudson.conditions.IsHudsonConfigured" />
+		</conditions>
+		<label key="hudson.association.project.add" />
+		<link linkId="hudson_association_add">/secure/admin/hudson/AddAssociation!default.jspa?pid=$helper.project.id</link>
+	</web-item>
+
+	<!-- H U D S O N   P L U G I N   C O N F I G U R A T I O N -->
+	<webwork1 key="hudson-plugin-webworks" name="Hudson Plugin Webwork Configuration">
+		<actions>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.admin.ConfigurePlugin" alias="ConfigurePlugin">
+				<view name="success">/templates/actions/admin/configurePlugin.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.admin.servers.AdministerServers" alias="AdministerServers">
+				<view name="success">/templates/actions/admin/servers/administerServers.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.admin.servers.AddServer" alias="AddServer">
+				<view name="input">/templates/actions/admin/servers/modifyServer.vm</view>
+				<view name="error">/templates/actions/admin/servers/modifyServer.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.admin.servers.UpdateServer" alias="UpdateServer">
+				<view name="input">/templates/actions/admin/servers/modifyServer.vm</view>
+				<view name="error">/templates/actions/admin/servers/modifyServer.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.admin.servers.DeleteServer" alias="DeleteServer">
+				<view name="input">/templates/actions/admin/servers/deleteServer.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.admin.associations.AdministerAssociations" alias="AdministerAssociations">
+				<view name="success">/templates/actions/admin/associations/administerAssociations.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.admin.associations.AddAssociation" alias="AddAssociation">
+				<view name="input">/templates/actions/admin/associations/modifyAssociation.vm</view>
+				<view name="error">/templates/actions/admin/associations/modifyAssociation.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.admin.associations.UpdateAssociation" alias="UpdateAssociation">
+				<view name="input">/templates/actions/admin/associations/modifyAssociation.vm</view>
+				<view name="error">/templates/actions/admin/associations/modifyAssociation.vm</view>
+			</action>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.admin.associations.DeleteAssociation" alias="DeleteAssociation">
+				<view name="input">/templates/actions/admin/associations/deleteAssociation.vm</view>
+			</action>
+		</actions>
+	</webwork1>
+	<webwork1 key="hudson-panel-actions" name="Hudson Server TabPanel Actions">
+		<actions>
+			<action name="com.marvelution.jira.plugins.hudson.web.action.build.ViewHudsonPanelContent" alias="ViewHudsonPanelContent">
+				<view name="jobstatus">/templates/actions/build/jobStatus.vm</view>
+				<view name="builds">/templates/actions/build/buildList.vm</view>
+				<view name="error">/templates/actions/build/panelError.vm</view>
+			</action>
+		</actions>
+	</webwork1>
+
+	<!-- C O M P O N E N T S -->
+	<component key="hudsonPropertyManager" name="Default Hudson Property Manager"
+			class="com.marvelution.jira.plugins.hudson.services.impl.DefaultHudsonPropertyManager">
+		<interface>com.marvelution.jira.plugins.hudson.service.HudsonPropertyManager</interface>
+	</component>
+	<component key="hudsonConfigurationManager" name="Default Hudson Configuration Manager"
+			class="com.marvelution.jira.plugins.hudson.services.impl.DefaultHudsonConfigurationManager">
+		<interface>com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager</interface>
+	</component>
+	<component key="hudsonClientFactory" name="Default Hudson Client Factory"
+			class="com.marvelution.jira.plugins.hudson.services.impl.DefaultHudsonClientFactory">
+		<interface>com.marvelution.jira.plugins.hudson.service.HudsonClientFactory</interface>
+	</component>
+	<component key="hudsonServerFactory" name="Default Hudson Server Factory"
+			class="com.marvelution.jira.plugins.hudson.services.servers.impl.DefaultHudsonServerFactory">
+		<interface>com.marvelution.jira.plugins.hudson.service.servers.HudsonServerFactory</interface>
+	</component>
+	<component key="hudsonServerManager" name="Default Hudson Server Manager"
+			class="com.marvelution.jira.plugins.hudson.services.servers.impl.DefaultHudsonServerManager">
+		<interface>com.marvelution.jira.plugins.hudson.service.servers.HudsonServerManager</interface>
+	</component>
+	<component key="hudsonServerIdGenerator" name="Default Hudson Server Id Generator"
+			class="com.marvelution.jira.plugins.hudson.services.servers.impl.DefaultHudsonServerIdGenerator">
+		<interface>com.marvelution.jira.plugins.hudson.service.servers.HudsonServerIdGenerator</interface>
+	</component>
+	<component key="hudsonAssociationFactory" name="Default Hudson Association Factory"
+			class="com.marvelution.jira.plugins.hudson.services.associations.impl.DefaultHudsonAssociationFactory">
+		<interface>com.marvelution.jira.plugins.hudson.service.associations.HudsonAssociationFactory</interface>
+	</component>
+	<component key="hudsonAssociationManager" name="Default Hudson Association Manager"
+			class="com.marvelution.jira.plugins.hudson.services.associations.impl.DefaultHudsonAssociationManager">
+		<interface>com.marvelution.jira.plugins.hudson.service.associations.HudsonAssociationManager</interface>
+	</component>
+	<component key="hudsonAssociationIdGenerator" name="Default Hudson Association Id Generator"
+			class="com.marvelution.jira.plugins.hudson.services.associations.impl.DefaultHudsonAssociationIdGenerator">
+		<interface>com.marvelution.jira.plugins.hudson.service.associations.HudsonAssociationIdGenerator</interface>
+	</component>
+	<component key="hudsonPanelHelper" name="Default Hudson Panel Helper"
+			class="com.marvelution.jira.plugins.hudson.panels.utils.HudsonPanelHelper">
+		<interface>com.marvelution.jira.plugins.hudson.panels.utils.HudsonPanelHelper</interface>
+	</component>
+
+	<!-- I M P O R T E D   C O M P O N E N T S -->
+	<component-import key="i18nResolver" interface="com.atlassian.sal.api.message.I18nResolver" />
+	<component-import key="crowdService" interface="com.atlassian.crowd.embedded.api.CrowdService" />
+
+	<!-- U P G R A D E   T A S K S -->
+	<component key="hudsonServerUpgradeTask" name="Gadget Upgrade Task" class="com.marvelution.jira.plugins.hudson.upgrade.HudsonServerUpgradeTask" public="true">
+		<interface>com.atlassian.sal.api.upgrade.PluginUpgradeTask</interface>
+	</component>
+	<component key="hudsonConfigUpgradeTask" name="Gadget Upgrade Task" class="com.marvelution.jira.plugins.hudson.upgrade.HudsonConfigurationUpgradeTask" public="true">
+		<interface>com.atlassian.sal.api.upgrade.PluginUpgradeTask</interface>
+	</component>
+
+</atlassian-plugin>

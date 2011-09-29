@@ -1,0 +1,361 @@
+/*
+ * Licensed to Marvelution under one or more contributor license 
+ * agreements.  See the NOTICE file distributed with this work 
+ * for additional information regarding copyright ownership.
+ * Marvelution licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+*/
+
+a {
+	text-decoration: none;
+}
+
+li {
+	display: block;
+}
+
+.clear {
+	clear: both;
+}
+
+.space {
+	height: 5px;
+}
+
+/* Tab related styles */
+#tabs {
+	list-style-type: none;
+	list-style-image: none;
+	list-style-position: outside;
+	padding: 0px;
+	margin: 0px;
+}
+
+.tab {
+	padding: 2px 10px;
+	border: 1px solid #CCC;
+	background-color: #CCC;
+	cursor: pointer;
+	display: inline;
+	position: relative;
+}
+
+.selected {
+	background-color: #FFF;
+	border-bottom: 1px solid #FFF;
+	cursor: default;
+}
+
+#tabsContent {
+	border: 1px solid #CCC;
+	margin: 1px 0px;
+	padding: 10px;
+}
+
+#tabsContent .content {
+}
+
+/* Build summary related styles */
+
+.summary, .summary ul,.summary ol {
+	list-style-type: none;
+	list-style-position: outside;
+	list-style-image: none;
+	font-family: arial, FreeSans, Helvetica, sans-serif;
+	font-size: 10px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+}
+
+.summary ul,.summary ol {
+	margin: 0px;
+}
+
+.summary li .last {
+	border-right: 0px solid black;
+}
+
+.leftSummary, .centerSummary {
+	float: left;
+	margin: 0px 10px;
+}
+
+.leftSummary li, .centerSummary li {
+	display: inline;
+}
+
+.leftSummary, .leftSummary ul, .leftSummary ol {
+	padding: 0px;
+}
+
+.leftSummary {
+	width: 50px;
+}
+
+.centerSummary {
+	width: 70%;
+}
+
+.centerSummary, .centerSummary ul, .centerSummary ol {
+	padding: 0px;
+}
+
+.rightSummary, .rightSummary ul, .rightSummary li {
+	width: 150px;
+	float: right;
+	text-align: right;
+	padding: 0px;
+}
+
+.rightSummary .buildDate {
+	font-size: 16px;
+}
+
+.summaryInfo, .summaryInfo a {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.summaryDetails {
+	line-height: 16px;
+	font-size: 10px;
+}
+
+.summaryDetails li {
+	padding: 0px 5px;
+	border-right: 1px solid gray;
+}
+
+.summaryDetails .artifactList {
+	width: 50%;
+}
+
+.summaryDetails .relatedIssues {
+	float: right;
+	width: 45%;
+}
+
+.summaryDetails .relatedIssues .label{
+	float: left;
+	font-size: 12px;
+}
+
+.summaryDetails .relatedIssues li {
+	float: right;
+	font-weight: bold;
+	font-size: 11px;
+}
+
+.summaryDetails .label {
+	border-right: 0px solid #000;
+	padding: 0px 0px 0px 5px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.summaryDetails .changeLog .label {
+	list-style-type: none;
+	margin-left: 0px;
+}
+
+.summaryDetails .changeLog {
+	list-style-type: square;
+	width: 50%;
+}
+
+.summaryDetails .changeLog li {
+	display: list-item;
+	border: 0px solid #000;
+	margin-left: 20px;
+}
+
+/* Build result colors */
+
+.successfulSummary, .successfulSummary a,
+.successfulSummary a:hover, .successfulSummary a:active,
+.successfulSummary a:link, .successfulSummary a:visited {
+	color: #393;
+}
+
+.failedSummary, .failedSummary a,
+.failedSummary a:hover, .failedSummary a:active,
+.failedSummary a:link, .failedSummary a:visited {
+	color: #A00;
+}
+
+.unstableSummary, .unstableSummary a,
+.unstableSummary a:hover, .unstableSummary a:active,
+.unstableSummary a:link, .unstableSummary a:visited {
+	color: #FFDD00;
+}
+
+.notbuildSummary, .notbuildSummary a,
+.notbuildSummary a:hover, .notbuildSummary a:active,
+.notbuildSummary a:link, .notbuildSummary a:visited,
+.abortedSummary, .abortedSummary a,
+.abortedSummary a:hover, .abortedSummary a:active,
+.abortedSummary a:link, .abortedSummary a:visited {
+	color: #999;
+}
+
+/* Job Status related styles */
+
+#jobStatus {
+	padding: 0px;
+}
+
+#jobStatus .header {
+	margin: 10px;
+	padding: 10px;
+}
+
+#jobStatus .header, #jobStatus .header a,
+#jobStatus .header a:hover, #jobStatus .header a:active,
+#jobStatus .header a:link, #jobStatus .header a:visited {
+	color: #FFF;
+}
+
+#jobStatus .header .image {
+	float: left;
+	left: -5px;
+	top: -5px;
+	position: relative;
+}
+
+#jobStatus .header .ratio {
+	float: right;
+	right: -5px;
+	top: 10px;
+	position: relative;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+#jobStatus .header .title {
+	font-weight: bold;
+	font-size: 18px;
+}
+
+#jobStatus .header .description {
+	padding: 5px 0px;
+}
+
+#jobStatus .header .description ul {
+	list-style-type: none;
+	list-style-image: none;
+	list-style-position: outside;
+}
+
+#jobStatus .header .description li {
+	display: inline;
+	padding: 0px 20px 0px 0px;
+}
+
+#jobStatus .header .description .label {
+	font-weight: bold;
+	padding: 0px 5px 0px 0px;
+}
+
+.successfulHeader {
+	background-color: #393;
+	border: 1px solid #393;
+}
+
+.failedHeader {
+	background-color: #A00;
+	border: 1px solid #A00;
+}
+
+.unstableHeader {
+	background-color: #FFDD00;
+	border: 1px solid #FFDD00;
+}
+
+.notbuildHeader, .abortedHeader {
+	background-color: #999;
+	border: 1px solid #999;
+}
+
+#jobStatus .charts {
+	padding: 0px;
+	clear: both;
+}
+
+#jobStatus .testResults,
+#jobStatus .buildArtifacts {
+}
+
+#jobStatus .testResults ul,
+#jobStatus .buildArtifacts ul {
+	margin: 0px 5px;
+	padding: 10px;
+	list-style: circle;
+	list-style-position: inside;
+}
+
+#jobStatus .testResults li,
+#jobStatus .buildArtifacts li {
+	border: 1px solid #BBD0E5;
+	border-bottom: 0px;
+	padding: 5px;
+}
+
+#jobStatus .testResults .header,
+#jobStatus .buildArtifacts .header {
+	margin: 0px;
+	font-weight: bold;
+	background-color: #EBF1F7;
+	color: #036;
+}
+
+#jobStatus .testResults .header a,
+#jobStatus .buildArtifacts .header a {
+	color: #036;
+}
+
+#jobStatus .testResults .last,
+#jobStatus .buildArtifacts .last {
+	border-bottom: 1px solid #BBD0E5;
+}
+
+.charts {
+	padding: 0px;
+	list-style-type: none;
+	list-style-position: outside;
+	list-style-image: none;
+	display: inline;
+}
+
+.charts .chart {
+	float: left;
+	width: 46%;
+	text-align: center;
+	border: 1px solid #BBD0E5;
+	margin: 0px 15px;
+}
+
+.charts .chart h2 {
+	font-size: 100%;
+	background-color: #EBF1F7;
+	border-bottom: 1px solid #BBD0E5;
+	color: #036;
+	padding: 0px 0px 0px 10px;
+	line-height: 2.5;
+	margin: 0px 0px 15px;
+}
+
+.charts .chart img {
+	vertical-align: baseline;
+}

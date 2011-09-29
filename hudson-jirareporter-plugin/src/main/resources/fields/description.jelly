@@ -1,0 +1,79 @@
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.	See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~	http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+GENERAL INFORMATION
+
+Result: ${build.getResult()}
+Build URL: ${rootURL}${build.getUrl()}
+Project: ${build.project.getDisplayName()}
+Build duration: ${build.getTimestampString()}
+<j:forEach items="${build.getCauses()}" var="cause">
+<j:whitespace>Build Reason: ${cause.getShortDescription()}
+</j:whitespace>
+</j:forEach>
+
+CHANGE LOG
+<j:choose>
+<j:when test="${changelog.isEmpty()}">
+No changes affect this build
+</j:when>
+<j:otherwise>
+<j:forEach items="${changelog.getItems()}" var="entry">
+<j:whitespace>* ${entry.getUser()} - ${entry.getMessage()}
+<j:forEach items="${entry.getAffectedFiles()}" var="affectedFile">
+  * ${affectedFile.getType()}: ${affectedFile.getFile()}
+</j:forEach>
+</j:whitespace>
+</j:forEach>
+</j:otherwise>
+</j:choose>
+
+ARTIFACTS
+<j:choose>
+<j:when test="${build.getArtifacts().isEmpty()}">
+Build didn't produce any Artifacts
+</j:when>
+<j:otherwise>
+<j:forEach items="${build.getArtifacts()}" var="artifact">
+<j:whitespace>* ${artifact.getFileName()}
+</j:whitespace>
+</j:forEach>
+</j:otherwise>
+</j:choose>
+
+TEST RESULTS
+<j:choose>
+<j:when test="$testresults.total &gt; 0">
+Passed Tests: ${testresults.getPassed()}
+Skipped Tests: ${testresults.getSkipped()}
+Failed Tests: ${testresults.getFailed()}
+
+<j:forEach items="${testresults.getFailedTests()}" var="test">
+<j:if test="${test.isSkipped()==false}">
+<j:whitespace>* ${test.getTestCaseName()}
+</j:whitespace>
+</j:if>
+</j:forEach>
+</j:when>
+<j:otherwise>
+No tests where executed in this build
+</j:otherwise>
+</j:choose>
+
+</j:jelly>

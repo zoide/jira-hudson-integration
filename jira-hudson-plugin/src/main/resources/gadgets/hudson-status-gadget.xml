@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.  See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~  http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<Module>
+	<ModulePrefs title="__MSG_hudson.gadget.status.title__" directory_title="__MSG_hudson.gadget.status.title__"
+		description="__MSG_hudson.gadget.status.description__"
+		author="Marvelution" author_email="info@marvelution.com" author_affiliation="Marvelution"
+		author_location="Beverwijk, The Netherlands" title_url="http://www.marvelution.com/" height="100"
+		creenshot='#staticResourceUrl("${atlassian.plugin.key}:hudson-status-gadget", "status-screenshot.png")'
+		thumbnail='#staticResourceUrl("${atlassian.plugin.key}:hudson-status-gadget", "status-thumb.png")'>
+		<Optional feature="gadget-directory">
+			<Param name="categories">
+				JIRA
+			</Param>
+		</Optional>
+		<Require feature="setprefs" />
+		<Require feature="settitle" />
+		<Require feature="dynamic-height" />
+		<Require feature="views" />
+		<Optional feature="atlassian.util" />
+		<Require feature="oauthpopup" />
+		#oauth
+		#supportedLocales("gadget.common,hudson.gadget")
+	</ModulePrefs>
+	<UserPref name="server" datatype="hidden" default_value="" />
+	<UserPref name="dateFormat" datatype="hidden" default_value="m-d-Y H:i:s" />
+	<UserPref name="refresh" datatype="hidden" default_value="false" />
+	<UserPref name="isConfigured" datatype="hidden" default_value="false" />
+	<UserPref name="titleRequired" datatype="hidden" default_value="true" />
+	<Content type="html"><![CDATA[
+		#requireResource("${atlassian.plugin.key}:hudson-gadget")
+		#includeResources()
+		<script type="text/javascript">
+		gadgets.window.setTitle("__MSG_hudson.gadget.status.title__");
+		(function () {
+			AJS.Gadget({
+				baseUrl: "__ATLASSIAN_BASE_URL__",
+				useOauth: "/rest/gadget/1.0/currentUser",
+				config: {
+					descriptor: function (args) {
+						var gadget = this;
+						gadgets.window.setTitle("__MSG_hudson.gadget.status.title__");
+						return  {
+							action: "",
+							theme : AJS.hudson.gadget.config.getThemeConfiguration(gadgets),
+							fields: AJS.hudson.gadget.config.getServerOnlyFields(gadget)
+						};
+					},
+					args: []
+				},
+				view: {
+					enableReload: true,
+					onResizeReload: true,
+					template: function (args) {
+						var gadget = this;
+						gadget.getView().empty();
+						var hudsonServer = AJS.hudson.gadget.utils.parseServer(gadget.getPref("server"));
+						for (var index in args.jobs) {
+							var job = args.jobs[index];
+							var jobDiv = AJS.hudson.utils.createDiv();
+							jobDiv.addClass('job');
+							var resultsDiv = AJS.hudson.utils.createDiv();
+							resultsDiv.addClass('result');
+							if (job.lastBuild !== undefined && job.lastBuild.result !== undefined) {
+								resultsDiv.addClass(job.lastBuild.result.toLowerCase());
+							} else {
+								resultsDiv.addClass('notbuild');
+							}
+							var nameDiv = AJS.hudson.utils.createDiv();
+							nameDiv.addClass('name');
+							resultsDiv.append(nameDiv);
+							var detailsDiv = AJS.hudson.utils.createDiv().addClass('details');
+							if (job.lastBuild !== undefined) {
+								var details = [{
+									"label": "__MSG_hudson.gadget.build.on__",
+									"value": new Date(job.lastBuild.timestamp).format(gadget.getPref("dateFormat"))
+								},{
+									"label": "__MSG_hudson.gadget.build.in__",
+									"value": Date.duration(job.lastBuild.duration)
+								},{
+									"label": "__MSG_hudson.gadget.build.because__",
+									"value": AJS.hudson.trigger.parser.parse(gadget, hudsonServer, job, job.lastBuild)
+								}];
+								nameDiv.append(AJS.hudson.utils.createLink(hudsonServer.host + "/" + job.lastBuild.url, job.name + " #" + job.lastBuild.number));
+								detailsDiv.append(AJS.hudson.utils.createDetailsTable(details));
+							} else {
+								nameDiv.append(AJS.hudson.utils.createLink(hudsonServer.host + "/" + job.url, job.name));
+								detailsDiv.text("__MSG_hudson.gadget.no.build.info__");
+							}
+							resultsDiv.append(detailsDiv);
+							jobDiv.append(resultsDiv);
+							gadget.getView().append(jobDiv);
+						}
+						gadget.resize();
+					},
+					args: [{
+						key: "jobs",
+						ajaxOptions: function () {
+							var gadget = this;
+							var hudsonServer = AJS.hudson.gadget.utils.parseServer(gadget.getPref("server"));
+							return AJS.hudson.gadget.utils.getAjaxOptions(hudsonServer, "/apiv2/jobs/all");
+						}
+					}]
+				}
+			});
+		})();
+		</script>
+	]]></Content>
+</Module>

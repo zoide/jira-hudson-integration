@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.  See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~  http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+	<mapping wildcard="false" type="one-way" map-id="nameOnly">
+		<class-a>hudson.model.Job</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>
+		<field>
+			<a>name</a>
+			<b>name</b>
+		</field>
+		<field>
+			<a get-method="getUrl">url</a>
+			<b>url</b>
+		</field>
+	</mapping>
+
+	<mapping wildcard="false" type="one-way" map-id="full">
+		<class-a>hudson.model.Job</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>
+		<field>
+			<a>name</a>
+			<b>name</b>
+		</field>
+		<field>
+			<a get-method="getUrl">url</a>
+			<b>url</b>
+		</field>
+		<field>
+			<a>description</a>
+			<b>description</b>
+		</field>
+		<field>
+			<a get-method="isBuildable">buildable</a>
+			<b>buildable</b>
+		</field>
+		<field>
+			<a get-method="getBuilds">builds</a>
+			<b>builds</b>
+		</field>
+		<field>
+			<a get-method="getFirstBuild">firstBuild</a>
+			<b>firstBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastBuild">lastBuild</a>
+			<b>lastBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastSuccessfulBuild">lastSuccessfulBuild</a>
+			<b>lastSuccessfulBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastUnstableBuild">lastUnstableBuild</a>
+			<b>lastUnstableBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastStableBuild">lastStableBuild</a>
+			<b>lastStableBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastFailedBuild">lastFailedBuild</a>
+			<b>lastFailedBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastCompletedBuild">lastCompletedBuild</a>
+			<b>lastCompletedBuild</b>
+		</field>
+		<field>
+			<a get-method="getBuildHealthReports">healthReports</a>
+			<b>healthReports</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ItemGroupDozerConverter" custom-converter-param="full">
+			<a>this</a>
+			<b>modules</b>
+		</field>
+	</mapping>
+
+	<mapping wildcard="false" type="one-way" map-id="list">
+		<class-a>hudson.model.Job</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>
+		<field>
+			<a>name</a>
+			<b>name</b>
+		</field>
+		<field>
+			<a get-method="getUrl">url</a>
+			<b>url</b>
+		</field>
+		<field>
+			<a>description</a>
+			<b>description</b>
+		</field>
+		<field>
+			<a get-method="isBuildable">buildable</a>
+			<b>buildable</b>
+		</field>
+		<field>
+			<a get-method="getFirstBuild">firstBuild</a>
+			<b>firstBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastBuild">lastBuild</a>
+			<b>lastBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastSuccessfulBuild">lastSuccessfulBuild</a>
+			<b>lastSuccessfulBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastUnstableBuild">lastUnstableBuild</a>
+			<b>lastUnstableBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastStableBuild">lastStableBuild</a>
+			<b>lastStableBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastFailedBuild">lastFailedBuild</a>
+			<b>lastFailedBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastCompletedBuild">lastCompletedBuild</a>
+			<b>lastCompletedBuild</b>
+		</field>
+		<field>
+			<a get-method="getBuildHealthReports">healthReports</a>
+			<b>healthReports</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ItemGroupDozerConverter" custom-converter-param="list">
+			<a>this</a>
+			<b>modules</b>
+		</field>
+	</mapping>
+
+	<mapping wildcard="false" type="one-way" map-id="status">
+		<class-a>hudson.model.Job</class-a>
+		<class-b>com.marvelution.hudson.plugins.apiv2.resources.model.job.Job</class-b>
+		<field>
+			<a>name</a>
+			<b>name</b>
+		</field>
+		<field>
+			<a get-method="getUrl">url</a>
+			<b>url</b>
+		</field>
+		<field>
+			<a>description</a>
+			<b>description</b>
+		</field>
+		<field>
+			<a get-method="isBuildable">buildable</a>
+			<b>buildable</b>
+		</field>
+		<field>
+			<a get-method="getFirstBuild">firstBuild</a>
+			<b>firstBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastBuild">lastBuild</a>
+			<b>lastBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastSuccessfulBuild">lastSuccessfulBuild</a>
+			<b>lastSuccessfulBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastUnstableBuild">lastUnstableBuild</a>
+			<b>lastUnstableBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastStableBuild">lastStableBuild</a>
+			<b>lastStableBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastFailedBuild">lastFailedBuild</a>
+			<b>lastFailedBuild</b>
+		</field>
+		<field>
+			<a get-method="getLastCompletedBuild">lastCompletedBuild</a>
+			<b>lastCompletedBuild</b>
+		</field>
+		<field>
+			<a get-method="getBuildHealthReports">healthReports</a>
+			<b>healthReports</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.ItemGroupDozerConverter" custom-converter-param="status">
+			<a>this</a>
+			<b>modules</b>
+		</field>
+	</mapping>
+
+</mappings>

@@ -1,0 +1,57 @@
+## Licensed to Marvelution under one or more contributor license
+## agreements.  See the NOTICE file distributed with this work
+## for additional information regarding copyright ownership.
+## Marvelution licenses this file to you under the Apache License,
+## Version 2.0 (the "License"); you may not use this file except
+## in compliance with the License.
+## You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied. See the License for the
+## specific language governing permissions and limitations
+## under the License.
+
+<div id="hudsonPanelContent">
+	<p>
+		#set ($i18nDescription = "hudson.panel.${module.getName()}.$!{extraDescriptionKey}description")
+		${i18n.getText($i18nDescription)}
+	</p>
+	#if ($availableViews && !$availableViews.isEmpty())
+	<ul id="views">
+		#foreach ($view in $availableViews)
+		#set ($i18nTitle = "hudson.panel.${module.getName()}.${view.getViewName()}.title")
+		<li id="view_${view.getViewName()}" class="tab">${i18n.getText($i18nTitle)}</li>
+		#end
+	</ul>
+	#end
+	#if ($associations && !$associations.isEmpty())
+	<div id="slider">
+	<div id="sliderLeft" style="display: none;">&laquo;</div>
+	<div id="sliderWrapper">
+		<ul id="associations">
+			#foreach ($association in $associations)
+			<li id="association_${association.associationId}" class="tab">${association.jobName}</li>
+			#end
+		</ul>
+	</div>
+	<div id="sliderRight" style="display: none;">&raquo;</div>
+	</div>
+	#end
+	<div id="hudsonPanelContentHtml">
+		<img src="${req.ContextPath}/images/icons/wait-large.gif" class="waitingImage" />
+	</div>
+</div>
+
+<script type="text/javascript">
+AJS.hudson.panel.initializePanel({
+	contextPath: "${req.contextPath}",
+	view: "${selectedView}",
+	associationId: ${associationId},
+	module: "${module.getName()}",
+	objectId: ${objectId}
+});
+</script>

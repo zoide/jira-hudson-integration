@@ -1,0 +1,33 @@
+<!--
+ ~ Licensed to Marvelution under one or more contributor license 
+ ~ agreements.	See the NOTICE file distributed with this work 
+ ~ for additional information regarding copyright ownership.
+ ~ Marvelution licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~	http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied. See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+${system} version ${version}
+Job: ${build.project.getDisplayName()}
+Build: #${build.number}
+<j:forEach items="${build.getCauses()}" var="cause">
+<j:whitespace>Trigger reason: ${cause.getShortDescription()}
+</j:whitespace>
+</j:forEach>
+Build On: <j:choose><j:when test="${build.getBuiltOnStr() != ''}">${build.getBuiltOnStr()}</j:when><j:otherwise>Master</j:otherwise></j:choose>
+Duration: ${build.getTimestampString()}
+<j:forEach items="${environment.entrySet()}" var="entry">
+<j:whitespace>{{${entry.getKey()}}}: {{${entry.getValue()}}}
+</j:whitespace>
+</j:forEach>
+</j:jelly>
