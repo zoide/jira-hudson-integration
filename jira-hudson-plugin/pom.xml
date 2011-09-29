@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>com.marvelution.jira.plugins</groupId>
 		<artifactId>jira-hudson-integration</artifactId>
-		<version>4.1.1-SNAPSHOT</version>
+		<version>4.1.1</version>
 	</parent>
 	<artifactId>jira-hudson-plugin</artifactId>
 	<packaging>bundle</packaging>
@@ -33,9 +33,9 @@
 	<url>http://apidocs.marvelution.com/${project.parent.artifactId}/${project.version}/${project.artifactId}/</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/branches/jira-4.3.x/jira-hudson-plugin</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/branches/jira-4.3.x/jira-hudson-plugin</developerConnection>
-		<url>http://fisheye.marvelution.com/browse/public/atlassian/jira-hudson-integration/branches/jira-4.3.x/jira-hudson-plugin</url>
+		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/tags/jira-hudson-integration-4.1.1/jira-hudson-plugin</connection>
+		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/tags/jira-hudson-integration-4.1.1/jira-hudson-plugin</developerConnection>
+		<url>http://fisheye.marvelution.com/browse/public/atlassian/jira-hudson-integration/tags/jira-hudson-integration-4.1.1/jira-hudson-plugin</url>
 	</scm>
 
 	<properties>
