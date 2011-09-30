@@ -27,6 +27,7 @@ import org.apache.wink.common.annotations.Parent;
 
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.ViewResource;
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.ForbiddenException;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchViewException;
 import com.marvelution.hudson.plugins.apiv2.resources.model.view.View;
 import com.marvelution.hudson.plugins.apiv2.resources.model.view.Views;
@@ -47,7 +48,11 @@ public class ViewResourceRestImpl extends BaseRestResource implements ViewResour
 	public View getView(String name) {
 		hudson.model.View view = Hudson.getInstance().getView(name);
 		if (view != null) {
-			return DozerUtils.getMapper().map(view, View.class, DozerUtils.FULL_MAP_ID);
+			if (view.hasPermission(Hudson.READ)) {
+				return DozerUtils.getMapper().map(view, View.class, DozerUtils.FULL_MAP_ID);
+			}  else {
+				throw new ForbiddenException();
+			}
 		}
 		throw new NoSuchViewException(name);
 	}
@@ -59,7 +64,9 @@ public class ViewResourceRestImpl extends BaseRestResource implements ViewResour
 	public Views getViews() {
 		Views views = new Views();
 		for (hudson.model.View view : Hudson.getInstance().getViews()) {
-			views.add(DozerUtils.getMapper().map(view, View.class, DozerUtils.NAMEONLY_MAP_ID));
+			if (view.hasPermission(Hudson.READ)) {
+				views.add(DozerUtils.getMapper().map(view, View.class, DozerUtils.NAMEONLY_MAP_ID));
+			}
 		}
 		return views;
 	}

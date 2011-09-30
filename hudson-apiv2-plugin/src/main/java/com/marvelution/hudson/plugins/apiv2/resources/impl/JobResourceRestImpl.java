@@ -20,6 +20,7 @@
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
 import hudson.model.Hudson;
+import hudson.model.Project;
 
 import javax.ws.rs.Path;
 
@@ -72,7 +73,9 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	public Jobs getJobs(Boolean includeAllBuilds) {
 		Jobs jobs = new Jobs();
 		for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
-			jobs.add(mapJob(item, DozerUtils.FULL_MAP_ID, includeAllBuilds));
+			if (item.hasPermission(Project.READ)) {
+				jobs.add(mapJob(item, DozerUtils.FULL_MAP_ID, includeAllBuilds));
+			}
 		}
 		return jobs;
 	}
@@ -89,7 +92,9 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 		}
 		Jobs jobs = new Jobs();
 		for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
-			jobs.add(mapJob(item, mapperContext, includeAllBuilds));
+			if (item.hasPermission(Project.READ)) {
+				jobs.add(mapJob(item, mapperContext, includeAllBuilds));
+			}
 		}
 		return jobs;
 	}

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
+import hudson.model.Project;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
 
@@ -56,10 +57,12 @@ public class SearchRestResourceImpl extends BaseRestResource implements SearchRe
 	public Jobs searchForJobs(String query, boolean nameOnly) {
 		Jobs jobs = new Jobs();
 		for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
-			log.info("Search in Job " + item.getDisplayName());
-			if (stringMatchesQuery(query, item.getDisplayName()) || (!nameOnly && stringMatchesQuery(query,
-					item.getDescription()))) {
-				jobs.add(DozerUtils.getMapper().map(item, Job.class, "full"));
+			if (item.hasPermission(Project.READ)) {
+				log.finer("Search in Job " + item.getDisplayName());
+				if (stringMatchesQuery(query, item.getDisplayName()) || (!nameOnly && stringMatchesQuery(query,
+						item.getDescription()))) {
+					jobs.add(DozerUtils.getMapper().map(item, Job.class, "full"));
+				}
 			}
 		}
 		return jobs;
@@ -75,7 +78,9 @@ public class SearchRestResourceImpl extends BaseRestResource implements SearchRe
 			return searchForBuilds(getHudsonJob(jobName), query);
 		} else {
 			for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
-				builds.addAll(searchForBuilds(item, query).getItems());
+				if (item.hasPermission(Project.READ)) {
+					builds.addAll(searchForBuilds(item, query).getItems());
+				}
 			}
 		}
 		return builds;
@@ -126,7 +131,7 @@ public class SearchRestResourceImpl extends BaseRestResource implements SearchRe
 	 */
 	private boolean stringMatchesQuery(String query, String searchString) {
 		for (String item : StringUtils.split(query, " ")) {
-			log.info("Search for " + item + " in " + searchString);
+			log.finer("Search for " + item + " in " + searchString);
 			if (StringUtils.containsIgnoreCase(searchString, item)) {
 				return true;
 			}

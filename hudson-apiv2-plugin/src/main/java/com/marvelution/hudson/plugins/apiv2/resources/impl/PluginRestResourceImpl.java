@@ -26,6 +26,7 @@ import javax.ws.rs.Path;
 import org.apache.wink.common.annotations.Parent;
 
 import com.marvelution.hudson.plugins.apiv2.resources.PluginResource;
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.ForbiddenException;
 import com.marvelution.hudson.plugins.apiv2.resources.model.HudsonSystem;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Version;
 import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
@@ -44,6 +45,10 @@ public class PluginRestResourceImpl extends BaseRestResource implements PluginRe
 	 */
 	@Override
 	public Version getVersion() {
+		// At-least READ access is required to view this
+		if (!Hudson.getInstance().hasPermission(Hudson.READ)) {
+			throw new ForbiddenException();
+		}
 		HudsonSystem system = HudsonSystem.HUDSON;
 		try {
 			Class.forName("jenkins.model.Jenkins");

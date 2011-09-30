@@ -21,6 +21,7 @@ package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
+import hudson.model.Project;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
@@ -29,6 +30,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.ForbiddenException;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchBuildException;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
 
@@ -60,12 +62,17 @@ public class BaseRestResource {
 		}
 		hudson.model.Job<?, ?> job = Hudson.getInstance().getItemByFullName(jobName, hudson.model.Job.class);
 		if (job != null) {
-			return job;
+			if (job.hasPermission(Project.READ)) {
+				return job;
+			} else {
+				throw new ForbiddenException();
+			}
 		} else {
 			// We failed to get the Job, but it could be a module.
 			// Loop through all the Jobs to locate it.
 			for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
-				if (jobName.equals(item.getName())) {
+				// Only search in the Jobs the user can view
+				if (jobName.equals(item.getName()) && item.hasPermission(Project.READ)) {
 					return item;
 				}
 			}
