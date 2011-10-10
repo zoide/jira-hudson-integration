@@ -34,9 +34,9 @@
 	<inceptionYear>2009</inceptionYear>
 	
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson</developerConnection>
-		<url>http://fisheye.marvelution.com/browse/public/marvelution/marvelution-jira-hudson-integration/trunk/jira-hudson</url>
+		<connection>scm:git:git@github.com:Marvelution/jira-hudson-integration.git/jira-hudson</connection>
+		<developerConnection>scm:git:git@github.com:Marvelution/jira-hudson-integration.git/jira-hudson</developerConnection>
+		<url>http://fisheye.marvelution.com/browse/jira-hudson-integration/jira-hudson</url>
 	</scm>
 
 	<dependencies>

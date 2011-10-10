@@ -55,9 +55,9 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk</developerConnection>
-		<url>http://fisheye.marvelution.com/browse/public/atlassian/jira-hudson-integration/trunk</url>
+		<connection>scm:git:git@github.com:Marvelution/jira-hudson-integration.git</connection>
+		<developerConnection>scm:git:git@github.com:Marvelution/jira-hudson-integration.git</developerConnection>
+		<url>http://fisheye.marvelution.com/browse/jira-hudson-integration</url>
 	</scm>
 	<issueManagement>
 		<system>JIRA</system>
@@ -135,6 +135,64 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.enunciate</groupId>
+										<artifactId>maven-enunciate-slim-plugin</artifactId>
+										<versionRange>[1.22,)</versionRange>
+										<goals>
+											<goal>docs</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.kohsuke</groupId>
+										<artifactId>access-modifier-checker</artifactId>
+										<versionRange>[1.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.jvnet.hudson.tools</groupId>
+										<artifactId>maven-hpi-plugin</artifactId>
+										<versionRange>[2.0.1,)</versionRange>
+										<goals>
+											<goal>insert-test</goal>
+											<goal>apt-compile</goal>
+											<goal>test-hpl</goal>
+											<goal>resolve-test-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<developers>

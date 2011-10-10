@@ -33,9 +33,9 @@
 	<url>http://apidocs.marvelution.com/${project.parent.artifactId}/${project.version}/${project.artifactId}/</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk/hudson-apiv2-wsclient</connection>
-		<developerConnection>scm:svn:http://svn.marvelution.com/atlassian/jira-hudson-integration/trunk/hudson-apiv2-wsclient</developerConnection>
-		<url>http://fisheye.marvelution.com/browse/public/atlassian/jira-hudson-integration/trunk/hudson-apiv2-wsclient</url>
+		<connection>scm:git:git@github.com:Marvelution/jira-hudson-integration.git/hudson-apiv2-wsclient</connection>
+		<developerConnection>scm:git:git@github.com:Marvelution/jira-hudson-integration.git/hudson-apiv2-wsclient</developerConnection>
+		<url>http://fisheye.marvelution.com/browse/jira-hudson-integration/hudson-apiv2-wsclient</url>
 	</scm>
 
 	<dependencies>
