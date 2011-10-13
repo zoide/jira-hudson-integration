@@ -19,11 +19,15 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
+import java.util.logging.Logger;
+
 import hudson.model.Hudson;
 
 import javax.ws.rs.Path;
 
 import org.apache.wink.common.annotations.Parent;
+import org.apache.wink.common.annotations.Scope;
+import org.apache.wink.common.annotations.Scope.ScopeType;
 
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.ViewResource;
@@ -37,9 +41,12 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.view.Views;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
+@Scope(ScopeType.SINGLETON)
 @Parent(BaseRestResource.class)
 @Path("views")
 public class ViewResourceRestImpl extends BaseRestResource implements ViewResource {
+
+	private final Logger log = Logger.getLogger(ViewResourceRestImpl.class.getName());
 
 	/**
 	 * {@inheritDoc}
@@ -48,6 +55,7 @@ public class ViewResourceRestImpl extends BaseRestResource implements ViewResour
 	public View getView(String name) {
 		hudson.model.View view = Hudson.getInstance().getView(name);
 		if (view != null) {
+			log.fine("Found view by name '" + name + "'. checking permissions");
 			if (view.hasPermission(Hudson.READ)) {
 				return DozerUtils.getMapper().map(view, View.class, DozerUtils.FULL_MAP_ID);
 			}  else {
@@ -64,6 +72,7 @@ public class ViewResourceRestImpl extends BaseRestResource implements ViewResour
 	public Views getViews() {
 		Views views = new Views();
 		for (hudson.model.View view : Hudson.getInstance().getViews()) {
+			log.fine("Found view '" + view.getViewName() + "'. checking permissions");
 			if (view.hasPermission(Hudson.READ)) {
 				views.add(DozerUtils.getMapper().map(view, View.class, DozerUtils.NAMEONLY_MAP_ID));
 			}

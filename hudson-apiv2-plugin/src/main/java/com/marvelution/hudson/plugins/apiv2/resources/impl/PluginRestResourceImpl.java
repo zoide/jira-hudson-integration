@@ -19,11 +19,15 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
+import java.util.logging.Logger;
+
 import hudson.model.Hudson;
 
 import javax.ws.rs.Path;
 
 import org.apache.wink.common.annotations.Parent;
+import org.apache.wink.common.annotations.Scope;
+import org.apache.wink.common.annotations.Scope.ScopeType;
 
 import com.marvelution.hudson.plugins.apiv2.resources.PluginResource;
 import com.marvelution.hudson.plugins.apiv2.resources.exceptions.ForbiddenException;
@@ -36,9 +40,12 @@ import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
+@Scope(ScopeType.SINGLETON)
 @Parent(BaseRestResource.class)
 @Path("plugin")
 public class PluginRestResourceImpl extends BaseRestResource implements PluginResource {
+
+	private final Logger log = Logger.getLogger(PluginRestResourceImpl.class.getName());
 
 	/**
 	 * {@inheritDoc}
@@ -49,13 +56,8 @@ public class PluginRestResourceImpl extends BaseRestResource implements PluginRe
 		if (!Hudson.getInstance().hasPermission(Hudson.READ)) {
 			throw new ForbiddenException();
 		}
-		HudsonSystem system = HudsonSystem.HUDSON;
-		try {
-			Class.forName("jenkins.model.Jenkins");
-			system = HudsonSystem.JENKINS;
-		} catch (ClassNotFoundException e) {
-			// Oke not a Jenkins instance so keep the system set to HUDSON
-		}
+		HudsonSystem system = HudsonPluginUtils.getHudsonSystem();
+		log.fine("Request for Plugin information returned: " + system.name() + ", " + Hudson.getVersion().toString());
 		return new Version(system, Hudson.getVersion().toString(), HudsonPluginUtils.getPluginVersion(),
 				HudsonPluginUtils.getPluginGroupId(), HudsonPluginUtils.getPluginArifactId());
 	}

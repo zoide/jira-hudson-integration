@@ -17,39 +17,7 @@
  * under the License.
  */
 
-package com.marvelution.hudson.plugins.apiv2.client.services;
-
-import com.marvelution.hudson.plugins.apiv2.resources.model.Version;
-
-/**
- * {@link AbstractQuery} implementation for the {@link Version} endpoint
- * 
- * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
- */
-public class VersionQuery extends AbstractQuery<Version> {
-
-	/**
-	 * Constructor
-	 */
-	protected VersionQuery() {
-		super(Version.class, QueryType.GET);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected String getSpecificUrl() {
-		return "plugin/version";
-	}
-
-	/**
-	 * Create a {@link VersionQuery} to get the plugin version
-	 * 
-	 * @return the {@link VersionQuery}
-	 */
-	public static VersionQuery createForPluginVersion() {
-		return new VersionQuery();
-	}
-
-}
+@javax.xml.bind.annotation.XmlSchema(
+		namespace = com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils.ACTIVITY_NAMESPACE,
+		elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+package com.marvelution.hudson.plugins.apiv2.resources.model.activity;

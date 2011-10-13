@@ -48,6 +48,7 @@ public class DozerUtils {
 
 	public static final String FULL_MAP_ID = "full";
 	public static final String NAMEONLY_MAP_ID = "nameOnly";
+	public static final String ACTIVITY_MAP_ID = "activity";
 
 	/**
 	 * Get the {@link Mapper} implementation

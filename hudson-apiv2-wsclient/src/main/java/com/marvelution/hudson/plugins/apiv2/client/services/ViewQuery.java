@@ -56,7 +56,8 @@ public class ViewQuery extends AbstractListableQuery<View, Views> {
 		final StringBuilder url = new StringBuilder();
 		url.append("views");
 		if (viewName != null) {
-			url.append("?name=").append(urlEncode(viewName));
+			url.append("?");
+			addUrlParameter(url, "name", viewName);
 		} else {
 			url.append("/all");
 		}

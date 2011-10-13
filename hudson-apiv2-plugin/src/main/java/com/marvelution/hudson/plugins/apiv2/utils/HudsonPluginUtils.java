@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import com.marvelution.hudson.plugins.apiv2.PluginImpl;
+import com.marvelution.hudson.plugins.apiv2.resources.model.HudsonSystem;
 
 /**
  * Helper class to get Plugin properties
@@ -110,6 +111,24 @@ public final class HudsonPluginUtils {
 	 */
 	public static PluginWrapper getPluginWrapper() {
 		return INSTANCE.PLUGIN_WRAPPER;
+	}
+
+	/**
+	 * Getter for the {@link HudsonSystem}
+	 * 
+	 * @return the {@link HudsonSystem}, returns {@link HudsonSystem#JENKINS} in case the class
+	 * 			<code>jenkins.model.Jenkins.class</code> can be loaded, otherwise {@link HudsonSysem#HUDSON} is
+	 * 			returned.
+	 */
+	public static HudsonSystem getHudsonSystem() {
+		HudsonSystem system = HudsonSystem.HUDSON;
+		try {
+			Class.forName("jenkins.model.Jenkins");
+			system = HudsonSystem.JENKINS;
+		} catch (ClassNotFoundException e) {
+			// Oke not a Jenkins instance so keep the system set to HUDSON
+		}
+		return system;
 	}
 
 	/**

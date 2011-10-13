@@ -39,7 +39,7 @@
 	</scm>
 
 	<properties>
-		<atlassian.streams.version>4.1</atlassian.streams.version>
+		<atlassian.streams.version>4.1.2</atlassian.streams.version>
 		<atlassian.plugin.key>${project.groupId}.hudson</atlassian.plugin.key>
 	</properties>
 

@@ -93,6 +93,64 @@ public abstract class AbstractQuery<MODEL extends Model> implements Query<MODEL>
 	}
 
 	/**
+	 * Helper method to add a parameter to the URL builder
+	 * 
+	 * @param url the {@link StringBuilder} with the current URL
+	 * @param paramKey the new parameter key
+	 * @param paramValue the parameter value, this will be URL Encoded before adding it to the URL
+	 * @see #addUrlParameter(StringBuilder, String, Object)
+	 * @see #urlEncode(String)
+	 */
+	protected void addUrlParameter(StringBuilder url, String paramKey, String paramValue) {
+		if (paramKey != null) {
+			url.append(paramKey).append("=").append(urlEncode(paramValue)).append("&");
+		}
+	}
+
+	/**
+	 * Helper method to add a parameter to the URL builder
+	 * 
+	 * @param url the {@link StringBuilder} with the current URL
+	 * @param paramKey the new parameter key
+	 * @param paramValue the parameter value
+	 */
+	protected void addUrlParameter(StringBuilder url, String paramKey, Object paramValue) {
+		if (paramKey != null) {
+			url.append(paramKey).append("=").append(paramValue).append("&");
+		}
+	}
+
+	/**
+	 * Helper method to add a parameter with value array to the URL builder
+	 * 
+	 * @param url the {@link StringBuilder} with the current URL
+	 * @param paramKey the new parameter key, <code>[]</code> will be added after the key to make it an array key
+	 * @param paramValues the value array to add, each value will be URL encoded
+	 * @see #addUrlParameter(StringBuilder, String, String)
+	 */
+	protected void addUrlParameter(StringBuilder url, String paramKey, String[] paramValues) {
+		String arrayKey = paramKey + "[]";
+		for (String value : paramValues) {
+			addUrlParameter(url, arrayKey, value);
+		}
+	}
+
+	/**
+	 * Helper method to add a parameter with value array to the URL builder
+	 * 
+	 * @param url the {@link StringBuilder} with the current URL
+	 * @param paramKey the new parameter key, <code>[]</code> will be added after the key to make it an array key
+	 * @param paramValues the value array to add
+	 * @see #addUrlParameter(StringBuilder, String, Object)
+	 */
+	protected void addUrlParameter(StringBuilder url, String paramKey, Object[] paramValues) {
+		String arrayKey = paramKey + "[]";
+		for (Object value : paramValues) {
+			addUrlParameter(url, arrayKey, value);
+		}
+	}
+
+	/**
 	 * Get the specific url
 	 *  
 	 * @return the specific url, must NOT start with a slash '/'

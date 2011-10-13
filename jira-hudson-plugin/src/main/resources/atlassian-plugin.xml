@@ -33,6 +33,7 @@
 	<resource type="i18n" name="i18n-hudson-panels" location="i18n.hudson-panels"/>
 	<resource type="i18n" name="i18n-hudson-plugin" location="i18n.hudson-plugin"/>
 	<resource type="i18n" name="i18n-hudson-time" location="i18n.hudson-time"/>
+	<resource type="i18n" name="i18n-hudson-streams" location="i18n.hudson-streams"/>
 
 	<!-- W E B   R E S O U R C E S -->
 	<web-resource key="hudson-common" name="Hudson Common">
@@ -64,6 +65,10 @@
 		<resource type="download" name="hudson-gadget-utils.js" location="scripts/hudson-gadget-utils.js">
 			<property key="content-type" value="text/javascript"/>
 		</resource>
+	</web-resource>
+	<web-resource key="hudson-stream-resources" name="Hudson Provider Web Resources">
+		<resource type="download" name="puzzle-piece.gif" location="/images/puzzle-piece.gif" />
+		<resource type="download" name="useravatar.gif" location="/images/useravatar.gif" />
 	</web-resource>
 
 	<!-- I M A G E   R E S O U R C E S -->
@@ -120,6 +125,13 @@
 		<order>101</order>
 		<resource type="velocity" name="view" location="templates/panels/hudsonPanel.vm" />
 	</issue-tabpanel>
+
+	<!-- A C T I V I T Y   S T R E A M S   P R O V I D E R S -->
+	<activity-streams-provider key="hudson-provider" name="Hudson Provider" i18n-name-key="streams.hudson.provider.name"
+		class="com.marvelution.jira.plugins.hudson.streams.HudsonStreamsActivityProvider">
+		<filter-provider class="com.marvelution.jira.plugins.hudson.streams.HudsonStreamsFilterOptionProvider" />
+		<comment-handler class="com.marvelution.jira.plugins.hudson.streams.HudsonStreamsCommentHandler" />
+	</activity-streams-provider>
 
 	<!-- W E B   S E C T I O N S -->
 	<web-section key="hudson-section" name="Hudson Section" location="admin_plugins_menu" weight="110">

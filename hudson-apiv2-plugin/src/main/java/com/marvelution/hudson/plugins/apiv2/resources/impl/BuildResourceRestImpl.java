@@ -19,12 +19,16 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
+import java.util.logging.Logger;
+
 import hudson.model.AbstractBuild;
 import hudson.model.Run;
 
 import javax.ws.rs.Path;
 
 import org.apache.wink.common.annotations.Parent;
+import org.apache.wink.common.annotations.Scope;
+import org.apache.wink.common.annotations.Scope.ScopeType;
 
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.BuildResource;
@@ -38,9 +42,12 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
+@Scope(ScopeType.SINGLETON)
 @Parent(BaseRestResource.class)
 @Path("builds")
 public class BuildResourceRestImpl extends BaseRestResource implements BuildResource {
+
+	private final Logger log = Logger.getLogger(BuildResourceRestImpl.class.getName());
 
 	/**
 	 * {@inheritDoc}
@@ -56,11 +63,10 @@ public class BuildResourceRestImpl extends BaseRestResource implements BuildReso
 	@Override
 	public Builds getBuilds(String jobName) {
 		Builds builds = new Builds();
-		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
-		for (Object object : job.getBuilds()) {
-			if (object instanceof AbstractBuild<?, ?>) {
-				builds.add(DozerUtils.getMapper().map(object, Build.class));
-			}
+		hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job = getHudsonJob(jobName);
+		log.fine("Mapping all builds of job " + job.getFullName());
+		for (AbstractBuild<?, ?> build : job.getBuilds()) {
+			builds.add(DozerUtils.getMapper().map(build, Build.class));
 		}
 		return builds;
 	}
@@ -72,6 +78,7 @@ public class BuildResourceRestImpl extends BaseRestResource implements BuildReso
 	public Build getFirstBuild(String jobName) {
 		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
 		if (job.getFirstBuild() != null) {
+			log.fine("Mapping the first build of job " + job.getFullName());
 			return DozerUtils.getMapper().map(job.getFirstBuild(), Build.class);
 		}
 		throw new NoSuchBuildException(jobName, "First");
@@ -84,6 +91,7 @@ public class BuildResourceRestImpl extends BaseRestResource implements BuildReso
 	public Build getLastBuild(String jobName) {
 		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
 		if (job.getLastBuild() != null) {
+			log.fine("Mapping the last build of job " + job.getFullName());
 			return DozerUtils.getMapper().map(job.getLastBuild(), Build.class);
 		}
 		throw new NoSuchBuildException(jobName, "Last");
@@ -96,6 +104,7 @@ public class BuildResourceRestImpl extends BaseRestResource implements BuildReso
 	public Build getLastSuccessfulBuild(String jobName) {
 		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
 		if (job.getLastSuccessfulBuild() != null) {
+			log.fine("Mapping the last successful build of job " + job.getFullName());
 			return DozerUtils.getMapper().map(job.getLastSuccessfulBuild(), Build.class);
 		}
 		throw new NoSuchBuildException(jobName, "Last Successful");
@@ -108,6 +117,7 @@ public class BuildResourceRestImpl extends BaseRestResource implements BuildReso
 	public Build getLastCompletedBuild(String jobName) {
 		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
 		if (job.getLastCompletedBuild() != null) {
+			log.fine("Mapping the last completed build of job " + job.getFullName());
 			return DozerUtils.getMapper().map(job.getLastCompletedBuild(), Build.class);
 		}
 		throw new NoSuchBuildException(jobName, "Last Completed");
@@ -120,6 +130,7 @@ public class BuildResourceRestImpl extends BaseRestResource implements BuildReso
 	public Build getLastFailedBuild(String jobName) {
 		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
 		if (job.getLastFailedBuild() != null) {
+			log.fine("Mapping the last failed build of job " + job.getFullName());
 			return DozerUtils.getMapper().map(job.getLastFailedBuild(), Build.class);
 		}
 		throw new NoSuchBuildException(jobName, "Last Failed");
@@ -132,6 +143,7 @@ public class BuildResourceRestImpl extends BaseRestResource implements BuildReso
 	public Build getLastUnstableBuild(String jobName) {
 		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
 		if (job.getLastUnstableBuild() != null) {
+			log.fine("Mapping the last unstable build of job " + job.getFullName());
 			return DozerUtils.getMapper().map(job.getLastUnstableBuild(), Build.class);
 		}
 		throw new NoSuchBuildException(jobName, "Last Ustable");
@@ -144,6 +156,7 @@ public class BuildResourceRestImpl extends BaseRestResource implements BuildReso
 	public Build getLastStableBuild(String jobName) {
 		hudson.model.Job<?, ?> job = getHudsonJob(jobName);
 		if (job.getLastStableBuild() != null) {
+			log.fine("Mapping the last stable build of job " + job.getFullName());
 			return DozerUtils.getMapper().map(job.getLastStableBuild(), Build.class);
 		}
 		throw new NoSuchBuildException(jobName, "Last Stable");

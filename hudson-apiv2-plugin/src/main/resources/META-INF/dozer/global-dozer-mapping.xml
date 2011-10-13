@@ -35,6 +35,14 @@
 			<a get-method="getDescription">description</a>
 			<b>description</b>
 		</field>
+		<field>
+			<a get-method="getAbsoluteUrl">url</a>
+			<b>url</b>
+		</field>
+		<field custom-converter="com.marvelution.hudson.plugins.apiv2.dozer.converters.UserEmailAddressDozerConvertor">
+			<a>this</a>
+			<b>email</b>
+		</field>
 	</mapping>
 
 </mappings>

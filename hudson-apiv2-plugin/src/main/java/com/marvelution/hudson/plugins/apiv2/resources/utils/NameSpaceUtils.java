@@ -56,4 +56,9 @@ public final class NameSpaceUtils {
 	 */
 	public static final String VIEW_NAMESPACE = APIV2_NAMESPACE + "/view";
 
+	/**
+	 * The Activity namespace
+	 */
+	public static final String ACTIVITY_NAMESPACE = APIV2_NAMESPACE + "/activity";
+
 }

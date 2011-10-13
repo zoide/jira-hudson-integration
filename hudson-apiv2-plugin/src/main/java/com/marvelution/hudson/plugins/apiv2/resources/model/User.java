@@ -38,12 +38,19 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class User extends Model implements Comparable<User> {
 
+	public static final User ANONYMOUS = new User("anonymous", "Anonymous", "");
+	public static final User UNKNOWN = new User("unknown", "Unknown", "");
+
 	@XmlElement(name = "userId", required = true)
 	private String userId;
 	@XmlElement(name = "userName", required = true)
 	private String username;
 	@XmlElement(name = "userDesc", required = false)
 	private String description;
+	@XmlElement(name = "url")
+	private String url;
+	@XmlElement(name = "email")
+	private String email;
 
 	/**
 	 * Default Constructor
@@ -118,6 +125,46 @@ public class User extends Model implements Comparable<User> {
 	}
 
 	/**
+	 * Getter for url
+	 *
+	 * @return the url
+	 * @since 4.2.0
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * Setter for url
+	 *
+	 * @param url the url to set
+	 * @since 4.2.0
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	/**
+	 * Getter for email
+	 *
+	 * @return the email
+	 * @since 4.2.0
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * Setter for email
+	 *
+	 * @param email the email to set
+	 * @since 4.2.0
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -128,6 +175,8 @@ public class User extends Model implements Comparable<User> {
 		if (obj instanceof User) {
 			User other = (User) obj;
 			return other.getUserId().equals(getUserId()) && other.getUsername().equals(getUsername());
+		} else if (obj instanceof String) {
+			return getUserId().equalsIgnoreCase((String) obj);
 		}
 		return false;
 	}

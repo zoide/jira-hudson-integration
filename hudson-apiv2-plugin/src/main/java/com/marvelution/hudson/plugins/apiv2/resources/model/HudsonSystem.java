@@ -32,10 +32,43 @@ import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
  * 
  * @since 4.1.0
  */
-@XmlType(name = "HudsonSystemType", namespace = NameSpaceUtils.BUILD_NAMESPACE)
+@XmlType(name = "HudsonSystemType", namespace = NameSpaceUtils.APIV2_NAMESPACE)
 @XmlEnum(String.class)
 public enum HudsonSystem {
 
-	HUDSON, JENKINS;
+	HUDSON("Hudson"), JENKINS("Jenkins");
+
+	private final String humanName;
+	private final User systemUser;
+
+	/**
+	 * Constructor
+	 *
+	 * @param systemHumanName the System human readable name
+	 */
+	private HudsonSystem(String systemHumanName) {
+		humanName = systemHumanName;
+		systemUser = new User("SYSTEM", systemHumanName + " System", systemHumanName + " system account.");
+	}
+
+	/**
+	 * Getter for humanName
+	 *
+	 * @return the humanName
+	 * @since 4.2.0
+	 */
+	public String getHumanName() {
+		return humanName;
+	}
+
+	/**
+	 * Getter for the System {@link User}
+	 * 
+	 * @return the System {@link User}
+	 * @since 4.2.0
+	 */
+	public User getSystemUser() {
+		return systemUser;
+	}
 
 }

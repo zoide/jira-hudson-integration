@@ -19,12 +19,16 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
+import java.util.logging.Logger;
+
 import hudson.model.Hudson;
 import hudson.model.Project;
 
 import javax.ws.rs.Path;
 
 import org.apache.wink.common.annotations.Parent;
+import org.apache.wink.common.annotations.Scope;
+import org.apache.wink.common.annotations.Scope.ScopeType;
 
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.JobResource;
@@ -38,9 +42,12 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld<a/>
  */
+@Scope(ScopeType.SINGLETON)
 @Parent(BaseRestResource.class)
 @Path("jobs")
 public class JobResourceRestImpl extends BaseRestResource implements JobResource {
+
+	private final Logger log = Logger.getLogger(JobResourceRestImpl.class.getName());
 
 	/**
 	 * {@inheritDoc}
@@ -49,6 +56,7 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	public Job getJob(String name, Boolean includeAllBuilds) {
 		hudson.model.Job<?, ?> job = getHudsonJob(name);
 		if (job != null) {
+			log.fine("Found job with name: " + name);
 			return mapJob(job, DozerUtils.FULL_MAP_ID, includeAllBuilds);
 		}
 		throw new NoSuchJobException(name);
@@ -61,6 +69,7 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	public Job getJobStatus(String name, Boolean includeAllBuilds) throws NoSuchJobException {
 		hudson.model.Job<?, ?> job = getHudsonJob(name);
 		if (job != null) {
+			log.fine("Found job with name: " + name);
 			return mapJob(job, DozerUtils.FULL_MAP_ID, includeAllBuilds);
 		}
 		throw new NoSuchJobException(name);
@@ -73,6 +82,7 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	public Jobs getJobs(Boolean includeAllBuilds) {
 		Jobs jobs = new Jobs();
 		for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
+			log.fine("Found job with name: " + item.getFullName() + " checking permissions");
 			if (item.hasPermission(Project.READ)) {
 				jobs.add(mapJob(item, DozerUtils.FULL_MAP_ID, includeAllBuilds));
 			}
@@ -92,6 +102,7 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 		}
 		Jobs jobs = new Jobs();
 		for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
+			log.fine("Found job with name: " + item.getFullName() + " checking permissions");
 			if (item.hasPermission(Project.READ)) {
 				jobs.add(mapJob(item, mapperContext, includeAllBuilds));
 			}
@@ -110,6 +121,7 @@ public class JobResourceRestImpl extends BaseRestResource implements JobResource
 	private Job mapJob(hudson.model.Job<?, ?> item, String mapperContext, Boolean includeAllBuilds) {
 		Job job = DozerUtils.getMapper().map(item, Job.class, mapperContext);
 		if (includeAllBuilds != null && Boolean.TRUE.equals(includeAllBuilds)) {
+			log.fine("Adding all builds to mapped job " + job.getName());
 			job.setBuilds(DozerUtils.getMapper().map(item.getBuilds(), Builds.class));
 		}
 		return job;

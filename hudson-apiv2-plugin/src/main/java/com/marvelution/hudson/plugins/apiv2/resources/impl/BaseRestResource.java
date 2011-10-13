@@ -19,6 +19,8 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
+import java.util.logging.Logger;
+
 import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
 import hudson.model.Project;
@@ -44,6 +46,8 @@ import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobExcept
 @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
 public class BaseRestResource {
 
+	private final Logger log = Logger.getLogger(BaseRestResource.class.getName());
+
 	/**
 	 * The base url for all the rest endpoints
 	 */
@@ -56,12 +60,16 @@ public class BaseRestResource {
 	 * @return the {@link hudson.model.Job}
 	 * @throws NoSuchJobException in case there is no {@link hudson.model.Job} configured with the given name
 	 */
-	protected hudson.model.Job<?, ?> getHudsonJob(String jobName) throws NoSuchJobException {
+	@SuppressWarnings("unchecked")
+	protected hudson.model.Job<?, ? extends AbstractBuild<?, ?>> getHudsonJob(String jobName)
+				throws NoSuchJobException {
 		if (jobName == null || StringUtils.isBlank(jobName)) {
 			throw new IllegalArgumentException("Job Name may not me null or empty");
 		}
-		hudson.model.Job<?, ?> job = Hudson.getInstance().getItemByFullName(jobName, hudson.model.Job.class);
+		hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job = Hudson.getInstance().getItemByFullName(jobName,
+			hudson.model.Job.class);
 		if (job != null) {
+			log.fine("Found the job " + job.getFullName() + ", checking permissions");
 			if (job.hasPermission(Project.READ)) {
 				return job;
 			} else {
@@ -70,7 +78,9 @@ public class BaseRestResource {
 		} else {
 			// We failed to get the Job, but it could be a module.
 			// Loop through all the Jobs to locate it.
-			for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
+			log.fine("Could not find the Job using method getItemByFullName, going to loop through all the Job Items");
+			for (hudson.model.Job<?, ? extends AbstractBuild<?, ?>> item : Hudson.getInstance().getAllItems(
+					hudson.model.Job.class)) {
 				// Only search in the Jobs the user can view
 				if (jobName.equals(item.getName()) && item.hasPermission(Project.READ)) {
 					return item;
@@ -90,9 +100,10 @@ public class BaseRestResource {
 	 * @throws NoSuchBuildException in case there is no {@link AbstractBuild} with the given number within the given
 	 *         {@link hudson.model.Job}
 	 */
-	protected AbstractBuild<?, ?> getHudsonBuild(hudson.model.Job<?, ?> job, int number) {
-		final AbstractBuild<?, ?> build = (AbstractBuild<?, ?>) job.getBuildByNumber(number);
+	protected AbstractBuild<?, ?> getHudsonBuild(hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job, int number) {
+		final AbstractBuild<?, ?> build = job.getBuildByNumber(number);
 		if (build != null) {
+			log.fine("Found build " + number + " for job " + job.getFullName());
 			return build;
 		}
 		throw new NoSuchBuildException(job.getFullName(), number);

@@ -31,6 +31,8 @@ import javax.ws.rs.Path;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wink.common.annotations.Parent;
+import org.apache.wink.common.annotations.Scope;
+import org.apache.wink.common.annotations.Scope.ScopeType;
 
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.SearchResource;
@@ -44,6 +46,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
+@Scope(ScopeType.SINGLETON)
 @Parent(BaseRestResource.class)
 @Path("search")
 public class SearchRestResourceImpl extends BaseRestResource implements SearchResource {
@@ -77,7 +80,8 @@ public class SearchRestResourceImpl extends BaseRestResource implements SearchRe
 		if (StringUtils.isNotBlank(jobName)) {
 			return searchForBuilds(getHudsonJob(jobName), query);
 		} else {
-			for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
+			for (hudson.model.Job<?, ? extends AbstractBuild<?, ?>> item : Hudson.getInstance().getAllItems(
+					hudson.model.Job.class)) {
 				if (item.hasPermission(Project.READ)) {
 					builds.addAll(searchForBuilds(item, query).getItems());
 				}
@@ -93,14 +97,11 @@ public class SearchRestResourceImpl extends BaseRestResource implements SearchRe
 	 * @param query the query string to search for within the change log of a build
 	 * @return the {@link Builds} collection of {@link Build} objects that match the query
 	 */
-	private Builds searchForBuilds(hudson.model.Job<?, ?> job, String query) {
+	private Builds searchForBuilds(hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job, String query) {
 		Builds builds = new Builds();
-		for (Object object : job.getBuilds()) {
-			if (object instanceof AbstractBuild<?, ?>) {
-				AbstractBuild<?, ?> build = (AbstractBuild<?, ?>) object;
-				if (searchThroughChangeLog(build.getChangeSet(), query)) {
-					builds.add(DozerUtils.getMapper().map(build, Build.class));
-				}
+		for (AbstractBuild<?, ?> build : job.getBuilds()) {
+			if (searchThroughChangeLog(build.getChangeSet(), query)) {
+				builds.add(DozerUtils.getMapper().map(build, Build.class));
 			}
 		}
 		return builds;

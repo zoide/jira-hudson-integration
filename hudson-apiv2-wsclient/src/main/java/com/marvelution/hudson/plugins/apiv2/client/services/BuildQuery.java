@@ -23,7 +23,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 
 /**
- * {@link Query} implementation for {@link Job} objects
+ * {@link Query} implementation for {@link Build} objects
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
@@ -77,8 +77,9 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * 
 	 * @param from the from to set
 	 * @param to the to to set
+	 * @return this {@link BuildQuery}
 	 */
-	private void setBetween(Long from, Long to) {
+	private BuildQuery setBetween(Long from, Long to) {
 		if (from < 0L) {
 			throw new IllegalArgumentException("From variable must be 0 (zero) or large");
 		} else if (to < from) {
@@ -87,20 +88,23 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 			this.from = from;
 			this.to = to;
 		}
+		return this;
 	}
 
 	/**
 	 * Setter for the after time
 	 * 
 	 * @param from the from to set
+	 * @return this {@link BuildQuery}
 	 */
-	private void setAfter(Long from) {
+	private BuildQuery setAfter(Long from) {
 		if (from < 0L) {
 			throw new IllegalArgumentException("From variable must be 0 (zero) or large");
 		} else {
 			this.from = from;
 			this.to = -1L;
 		}
+		return this;
 	}
 
 	/**
@@ -116,12 +120,14 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * Setter for the buildNUmber
 	 * 
 	 * @param buildNumber the buildNumber to set
+	 * @return this {@link BuildQuery}
 	 */
-	private void setBuildNumber(Integer buildNumber) {
+	private BuildQuery setBuildNumber(Integer buildNumber) {
 		if (buildNumber < 1) {
 			throw new IllegalArgumentException("The Build Number must be larger then zero (0)");
 		}
 		this.buildNumber = buildNumber;
+		return this;
 	}
 
 	/**
@@ -137,9 +143,11 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * Setter for the {@link BuildType}
 	 * 
 	 * @param buildType the buildType to set
+	 * @return this {@link BuildQuery}
 	 */
-	private void setBuildType(BuildType buildType) {
+	private BuildQuery setBuildType(BuildType buildType) {
 		this.buildType = buildType;
+		return this;
 	}
 
 	/**
@@ -150,12 +158,15 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 		final StringBuilder url = new StringBuilder();
 		url.append("builds/").append(urlEncode(jobName));
 		if (buildNumber > 0) {
-			url.append("?buildNumber=").append(buildNumber);
+			url.append("?");
+			addUrlParameter(url, "buildNumber", buildNumber);
 		} else if (from >= 0L && to == -1L) {
-			url.append("/after?from=").append(from);
+			url.append("/after?");
+			addUrlParameter(url, "from", from);
 		} else if (from >= 0L && to >= from) {
-			url.append("/between?from=").append(from);
-			url.append("&to=").append(to);
+			url.append("/between?");
+			addUrlParameter(url, "from", from);
+			addUrlParameter(url, "to", to);
 		} else if (buildType != null) {
 			url.append(buildType.endpoint);
 		} else {
@@ -172,9 +183,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @return the {@link BuildQuery}
 	 */
 	public static BuildQuery createForSpecificBuild(String jobName, Integer buildNumber) {
-		BuildQuery query = new BuildQuery(jobName);
-		query.setBuildNumber(buildNumber);
-		return query;
+		return new BuildQuery(jobName).setBuildNumber(buildNumber);
 	}
 
 	/**
@@ -194,9 +203,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @return the {@link BuildQuery}
 	 */
 	public static BuildQuery createForFirstBuild(String jobName) {
-		BuildQuery query = new BuildQuery(jobName);
-		query.setBuildType(BuildType.FIRST);
-		return query;
+		return new BuildQuery(jobName).setBuildType(BuildType.FIRST);
 	}
 
 	/**
@@ -206,9 +213,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @return the {@link BuildQuery}
 	 */
 	public static BuildQuery createForLastBuild(String jobName) {
-		BuildQuery query = new BuildQuery(jobName);
-		query.setBuildType(BuildType.LAST);
-		return query;
+		return new BuildQuery(jobName).setBuildType(BuildType.LAST);
 	}
 
 	/**
@@ -218,9 +223,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @return the {@link BuildQuery}
 	 */
 	public static BuildQuery createForLastSuccessfulBuild(String jobName) {
-		BuildQuery query = new BuildQuery(jobName);
-		query.setBuildType(BuildType.LAST_SUCCESSFUL);
-		return query;
+		return new BuildQuery(jobName).setBuildType(BuildType.LAST_SUCCESSFUL);
 	}
 
 	/**
@@ -230,9 +233,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @return the {@link BuildQuery}
 	 */
 	public static BuildQuery createForLastFailedBuild(String jobName) {
-		BuildQuery query = new BuildQuery(jobName);
-		query.setBuildType(BuildType.LAST_FAILED);
-		return query;
+		return new BuildQuery(jobName).setBuildType(BuildType.LAST_FAILED);
 	}
 
 	/**
@@ -242,9 +243,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @return the {@link BuildQuery}
 	 */
 	public static BuildQuery createForLastStableBuild(String jobName) {
-		BuildQuery query = new BuildQuery(jobName);
-		query.setBuildType(BuildType.LAST_STABLE);
-		return query;
+		return new BuildQuery(jobName).setBuildType(BuildType.LAST_STABLE);
 	}
 
 	/**
@@ -254,9 +253,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @return the {@link BuildQuery}
 	 */
 	public static BuildQuery createForLastUnstableBuild(String jobName) {
-		BuildQuery query = new BuildQuery(jobName);
-		query.setBuildType(BuildType.LAST_UNSTABLE);
-		return query;
+		return new BuildQuery(jobName).setBuildType(BuildType.LAST_UNSTABLE);
 	}
 
 	/**
@@ -266,9 +263,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @return the {@link BuildQuery}
 	 */
 	public static BuildQuery createForLastCompletedBuild(String jobName) {
-		BuildQuery query = new BuildQuery(jobName);
-		query.setBuildType(BuildType.LAST_COMLETED);
-		return query;
+		return new BuildQuery(jobName).setBuildType(BuildType.LAST_COMLETED);
 	}
 
 	/**
@@ -280,9 +275,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @return the {@link BuildQuery}
 	 */
 	public static BuildQuery createForBetweenTimes(String jobName, Long from, Long to) {
-		BuildQuery query = new BuildQuery(jobName);
-		query.setBetween(from, to);
-		return query;
+		return new BuildQuery(jobName).setBetween(from, to);
 	}
 
 	/**
@@ -293,9 +286,7 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 * @return the {@link BuildQuery}
 	 */
 	public static BuildQuery createForAfterFrom(String jobName, Long from) {
-		BuildQuery query = new BuildQuery(jobName);
-		query.setAfter(from);
-		return query;
+		return new BuildQuery(jobName).setAfter(from);
 	}
 
 	/**

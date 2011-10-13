@@ -19,11 +19,15 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
+import java.util.logging.Logger;
+
 import hudson.model.AbstractBuild;
 
 import javax.ws.rs.Path;
 
 import org.apache.wink.common.annotations.Parent;
+import org.apache.wink.common.annotations.Scope;
+import org.apache.wink.common.annotations.Scope.ScopeType;
 
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.ChangeLogResource;
@@ -36,9 +40,12 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.build.ChangeLog;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
+@Scope(ScopeType.SINGLETON)
 @Parent(BaseRestResource.class)
 @Path("changelog")
 public class ChangeLogResourceRestImpl extends BaseRestResource implements ChangeLogResource {
+
+	private final Logger log = Logger.getLogger(ChangeLogResourceRestImpl.class.getName());
 
 	/**
 	 * {@inheritDoc}
@@ -46,6 +53,7 @@ public class ChangeLogResourceRestImpl extends BaseRestResource implements Chang
 	@Override
 	public ChangeLog getChangeLog(String jobname, Integer buildNumber) throws NoSuchJobException, NoSuchBuildException {
 		final AbstractBuild<?, ?> build = getHudsonBuild(jobname, buildNumber);
+		log.fine("Getting changelog of build: " + build.getNumber() + " of job " + build.getParent().getFullName());
 		return DozerUtils.getMapper().map(build.getChangeSet(), ChangeLog.class);
 	}
 

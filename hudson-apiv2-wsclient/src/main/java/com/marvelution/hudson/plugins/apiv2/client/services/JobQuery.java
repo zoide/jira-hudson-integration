@@ -60,9 +60,11 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * Setter for the name
 	 * 
 	 * @param name the name to set
+	 * @return this {@link JobQuery}
 	 */
-	private void setName(String name) {
+	private JobQuery setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	/**
@@ -82,24 +84,21 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 		final StringBuilder url = new StringBuilder();
 		url.append("jobs");
 		if (JobQueryType.SPECIFIC.equals(getType()) && name != null) {
-			url.append("?name=").append(urlEncode(name));
+			url.append("?");
+			addUrlParameter(url, "name", name);
 		} else if (JobQueryType.STATUS.equals(getType()) && name != null) {
-			url.append("/status?name=").append(urlEncode(name));
+			url.append("/status?");
+			addUrlParameter(url, "name", name);
 		} else if (JobQueryType.LIST.equals(getType()) || JobQueryType.NAME_ONLY.equals(getType())) {
-			url.append("/list");
+			url.append("/list?");
 			if (JobQueryType.NAME_ONLY.equals(getType())) {
-				url.append("?nameOnly=true");
+				addUrlParameter(url, "nameOnly", true);
 			}
 		} else if (JobQueryType.ALL.equals(getType())) {
-			url.append("/all");
+			url.append("/all?");
 		}
 		if (includeAllBuilds) {
-			if (url.indexOf("?") > -1) {
-				url.append("&");
-			} else {
-				url.append("?");
-			}
-			url.append("includeAllBuilds=true");
+			addUrlParameter(url, "includeAllBuilds", true);
 		}
 		return url.toString();
 	}
@@ -112,9 +111,7 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * @return the {@link JobQuery}
 	 */
 	public static JobQuery createForJobByName(String jobName, boolean includeAllBuilds) {
-		JobQuery query = new JobQuery(JobQueryType.SPECIFIC, includeAllBuilds);
-		query.setName(jobName);
-		return query;
+		return new JobQuery(JobQueryType.SPECIFIC, includeAllBuilds).setName(jobName);
 	}
 
 	/**
@@ -125,9 +122,7 @@ public class JobQuery extends AbstractListableQuery<Job, Jobs> {
 	 * @return the {@link JobQuery}
 	 */
 	public static JobQuery createForJobStatusByName(String jobName, boolean includeAllBuilds) {
-		JobQuery query = new JobQuery(JobQueryType.STATUS, includeAllBuilds);
-		query.setName(jobName);
-		return query;
+		return new JobQuery(JobQueryType.STATUS, includeAllBuilds).setName(jobName);
 	}
 
 	/**
