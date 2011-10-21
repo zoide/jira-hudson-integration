@@ -161,7 +161,9 @@ public class HudsonStreamsFilterOptionProvider implements StreamsFilterOptionPro
 	private Map<String, String> getServerOptionsMap() {
 		ImmutableMap.Builder<String, String> options = ImmutableMap.builder();
 		for (HudsonServer server : serverManager.getServers()) {
-			options.put(String.valueOf(server.getServerId()), server.getName());
+			if (server.isIncludeInStreams()) {
+				options.put(String.valueOf(server.getID()), server.getName());
+			}
 		}
 		return options.build();
 	}
@@ -174,9 +176,10 @@ public class HudsonStreamsFilterOptionProvider implements StreamsFilterOptionPro
 	private Map<String, String> getAssociationOptionsMap() {
 		ImmutableMap.Builder<String, String> options = ImmutableMap.builder();
 		for (HudsonAssociation association : associationManager.getAssociations()) {
-			HudsonServer server = serverManager.getServer(association.getServerId());
-			options.put(String.valueOf(association.getAssociationId()), server.getName() + " / "
-				+ association.getJobName());
+			if (association.getServer().isIncludeInStreams()) {
+				options.put(String.valueOf(association.getID()), association.getServer().getName() + " / "
+					+ association.getJobName());
+			}
 		}
 		return options.build();
 	}

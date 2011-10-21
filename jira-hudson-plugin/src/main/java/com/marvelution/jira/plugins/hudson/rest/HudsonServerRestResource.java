@@ -36,9 +36,9 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
 import com.marvelution.jira.plugins.hudson.rest.exceptions.NoSuchAssociationException;
 import com.marvelution.jira.plugins.hudson.rest.exceptions.NoSuchServerException;
 import com.marvelution.jira.plugins.hudson.rest.model.Server;
-import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.sun.jersey.spi.resource.Singleton;
@@ -105,7 +105,7 @@ public class HudsonServerRestResource {
 					throws ClientException {
 		if (associationManager.hasAssociation(associationId)) {
 			final HudsonAssociation association = associationManager.getAssociation(associationId);
-			final HudsonClient client = clientFactory.create(serverManager.getServer(association.getServerId()));
+			final HudsonClient client = clientFactory.create(association.getServer());
 			return client.find(JobQuery.createForJobByName(association.getJobName(), includeAllBuilds));
 		} else {
 			throw new NoSuchAssociationException(associationId);
@@ -137,7 +137,7 @@ public class HudsonServerRestResource {
 	@GET
 	public Server getServerByAssociation(@QueryParam("associationId") Integer associationId) {
 		if (associationManager.hasAssociation(associationId)) {
-			return getServer(associationManager.getAssociation(associationId).getServerId());
+			return new Server(associationManager.getAssociation(associationId).getServer());
 		} else {
 			throw new NoSuchAssociationException(associationId);
 		}

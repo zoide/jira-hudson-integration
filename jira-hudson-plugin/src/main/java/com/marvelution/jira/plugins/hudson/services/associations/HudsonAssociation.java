@@ -19,6 +19,9 @@
 
 package com.marvelution.jira.plugins.hudson.services.associations;
 
+import net.java.ao.Entity;
+import net.java.ao.Preload;
+
 import com.atlassian.jira.project.Project;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
@@ -27,35 +30,22 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public interface HudsonAssociation {
+@Preload
+public interface HudsonAssociation extends Entity {
 
 	/**
-	 * Getter for the Association Id
+	 * Getter for the {@link HudsonServer}
 	 * 
-	 * @return the Association Id
+	 * @return the {@link HudsonServer}
 	 */
-	int getAssociationId();
+	HudsonServer getServer();
 
 	/**
-	 * Setter for the Association Id
+	 * Setter for the {@link HudsonServer}
 	 * 
-	 * @param assicationId the Association Id
+	 * @param server the {@link HudsonServer}
 	 */
-	void setAssociationId(int associationId);
-
-	/**
-	 * Getter for the {@link HudsonServer} Id
-	 * 
-	 * @return the {@link HudsonServer} Id
-	 */
-	int getServerId();
-
-	/**
-	 * Setter for the {@link HudsonServer} Id
-	 * 
-	 * @param serverId the {@link HudsonServer} Id
-	 */
-	void setServerId(int serverId);
+	void setServer(HudsonServer server);
 
 	/**
 	 * Getter for the JIRA {@link Project} Id

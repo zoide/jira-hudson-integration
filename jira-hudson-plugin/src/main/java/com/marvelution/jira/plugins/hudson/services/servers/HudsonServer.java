@@ -19,34 +19,24 @@
 
 package com.marvelution.jira.plugins.hudson.services.servers;
 
-import com.marvelution.hudson.plugins.apiv2.client.Host;
+import net.java.ao.Entity;
+import net.java.ao.Preload;
+import net.java.ao.Searchable;
 
 /**
  * Hudson Server Interface
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public interface HudsonServer {
-
-	/**
-	 * Getter for the Server Id
-	 * 
-	 * @return the Server Id
-	 */
-	int getServerId();
-
-	/**
-	 * Setter for the Server Id
-	 * 
-	 * @param serverId the Server Id
-	 */
-	void setServerId(int serverId);
+@Preload
+public interface HudsonServer extends Entity {
 
 	/**
 	 * Getter for the Server name
 	 * 
 	 * @return the name of the server
 	 */
+	@Searchable
 	String getName();
 
 	/**
@@ -78,13 +68,6 @@ public interface HudsonServer {
 	String getHost();
 
 	/**
-	 * Getter for the Server Host Whitelist URL
-	 * 
-	 * @return the Server Host Whitelist URL
-	 */
-	String getHostWhitelistUrl();
-
-	/**
 	 * Setter for the Server Host
 	 * 
 	 * @param host the Server Host
@@ -97,13 +80,6 @@ public interface HudsonServer {
 	 * @return the Server Public Host
 	 */
 	String getPublicHost();
-
-	/**
-	 * Getter for the Server Host Public Whitelist URL
-	 * 
-	 * @return the Server Host Public Whitelist URL
-	 */
-	String getPublicHostWhitelistUrl();
 
 	/**
 	 * Setter for the Server Public Host
@@ -141,10 +117,34 @@ public interface HudsonServer {
 	void setPassword(String password);
 
 	/**
-	 * Getter for the secured {@link Host} setting
+	 * Setter for the defaultServer
 	 * 
-	 * @return <code>true</code> is the {@link Host} is secure, <code>false</code> otherwise
+	 * @param defaultServer <code>true</code> if the server should be default, <code>false</code> otherwise
 	 */
-	boolean isSecured();
+	void setDefaultServer(boolean defaultServer);
+
+	/**
+	 * Getter for the defaultServer
+	 * 
+	 * @return <code>true</code> if the given {@link HudsonServer} is the default {@link HudsonServer},
+	 *         <code>false</code> otherwise.
+	 */
+	boolean isDefaultServer();
+
+	/**
+	 * Setter for the includeInStreams
+	 * 
+	 * @param includeInStreams <code>true</code> if the server can be included in the activity streams gadget,
+	 * 			<code>false</code> otherwise
+	 */
+	void setIncludeInStreams(boolean includeInStreams);
+
+	/**
+	 * Getter for the includeInStreams
+	 * 
+	 * @return <code>true</code> if the given {@link HudsonServer} is included in the activity streams gadget,
+	 *         <code>false</code> otherwise.
+	 */
+	boolean isIncludeInStreams();
 
 }

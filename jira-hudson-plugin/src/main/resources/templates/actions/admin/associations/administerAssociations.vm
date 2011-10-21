@@ -71,8 +71,8 @@
 					${server.name}: ${association.jobName}
 				</td>
 				<td align="left" valign="top">
-					<a href="UpdateAssociation!default.jspa?associationId=${association.associationId}">$i18n.getText("common.forms.edit")</a>
-					| <a href="DeleteAssociation!default.jspa?associationId=${association.associationId}">$i18n.getText("common.words.delete")</a>
+					<a href="UpdateAssociation!default.jspa?associationId=${association.ID}">$i18n.getText("common.forms.edit")</a>
+					| <a href="DeleteAssociation!default.jspa?associationId=${association.ID}">$i18n.getText("common.words.delete")</a>
 				</td>
 			</tr>
 			#end

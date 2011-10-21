@@ -21,11 +21,14 @@ package com.marvelution.jira.plugins.hudson.services.servers;
 
 import java.util.Collection;
 
+import com.atlassian.activeobjects.tx.Transactional;
+
 /**
  * {@link HudsonServer} Manager interface
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
+@Transactional
 public interface HudsonServerManager {
 
 	/**
@@ -115,12 +118,85 @@ public interface HudsonServerManager {
 	boolean isDefaultServer(HudsonServer server);
 
 	/**
-	 * Add a {@link HudsonServer} to the {@link Collection} of configured {@link HudsonServer}s
+	 * Add a {@link HudsonServer}
 	 * 
-	 * @param server the {@link HudsonServer} to add
-	 * @throws IllegalArgumentException in case server is <code>null</code>
+	 * @param name the name of the {@link HudsonServer}
+	 * @param description the description of the {@link HudsonServer}
+	 * @param host the base host of the {@link HudsonServer}
+	 * @return the new {@link HudsonServer}
 	 */
-	void addServer(HudsonServer server);
+	HudsonServer addServer(String name, String description, String host);
+
+	/**
+	 * Add a {@link HudsonServer}
+	 * 
+	 * @param name the name of the {@link HudsonServer}
+	 * @param description the description of the {@link HudsonServer}
+	 * @param host the base host of the {@link HudsonServer}
+	 * @param publicHost the public base host of the {@link HudsonServer}
+	 * @return the new {@link HudsonServer}
+	 */
+	HudsonServer addServer(String name, String description, String host, String publicHost);
+
+	/**
+	 * Add a {@link HudsonServer}
+	 *
+	 * @param name the name of the {@link HudsonServer}
+	 * @param description the description of the {@link HudsonServer}
+	 * @param host the base host of the {@link HudsonServer} 
+	 * @param username the username to use for authentication
+	 * @param password the password to use for authentication
+	 * @return the new {@link HudsonServer}
+	 */
+	HudsonServer addServer(String name, String description, String host, String username, String password);
+
+	/**
+	 * Add a {@link HudsonServer}
+	 * 
+	 * @param name the name of the {@link HudsonServer}
+	 * @param description the description of the {@link HudsonServer}
+	 * @param host the base host of the {@link HudsonServer}
+	 * @param publicHost the public base host of the {@link HudsonServer}
+	 * @param username the username to use for authentication
+	 * @param password the password to use for authentication
+	 * @param isDefault the default status flag
+	 * @return the new {@link HudsonServer}
+	 */
+	HudsonServer addServer(String name, String description, String host, String publicHost, String username,
+					String password, boolean includeInStreams, boolean isDefault);
+
+	/**
+	 * Add a copy of the given {@link HudsonServer}
+	 * 
+	 * @param server the {@link HudsonServer} to copy
+	 * @return the new {@link HudsonServer}
+	 */
+	HudsonServer addServer(HudsonServer server);
+
+	/**
+	 * Update a {@link HudsonServer}
+	 * 
+	 * @param serverId the Id of the server to update
+	 * @param name the name of the {@link HudsonServer}
+	 * @param description the description of the {@link HudsonServer}
+	 * @param host the base host of the {@link HudsonServer}
+	 * @param publicHost the public base host of the {@link HudsonServer}
+	 * @param username the username to use for authentication
+	 * @param password the password to use for authentication
+	 * @param includeInStreams flag whether the server can be included in the activity streams gadget
+	 * @param isDefault the default status flag
+	 * @return the new {@link HudsonServer}
+	 */
+	HudsonServer updateServer(int serverId, String name, String description, String host, String publicHost,
+					String username, String password, boolean includeInStreams, boolean isDefault);
+
+	/**
+	 * Update a {@link HudsonServer}
+	 * 
+	 * @param server the {@link HudsonServer} to update
+	 * @return the new {@link HudsonServer}
+	 */
+	HudsonServer updateServer(HudsonServer server);
 
 	/**
 	 * Remove a {@link HudsonServer} by its server Id

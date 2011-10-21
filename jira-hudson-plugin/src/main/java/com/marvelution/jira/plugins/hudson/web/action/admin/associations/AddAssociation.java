@@ -21,7 +21,6 @@ package com.marvelution.jira.plugins.hudson.web.action.admin.associations;
 
 import java.util.Collection;
 
-import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationFactory;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
@@ -42,12 +41,10 @@ public class AddAssociation extends AbstractModifyAssociation {
 	 * Constructor
 	 * 
 	 * @param serverManager the {@link HudsonServerManager} implementation
-	 * @param associationFactory the {@link HudsonAssociationFactory} implementation
 	 * @param associationManager the {@link HudsonAssociationManager} implementation
 	 */
-	protected AddAssociation(HudsonServerManager serverManager, HudsonAssociationFactory associationFactory,
-			HudsonAssociationManager associationManager) {
-		super(serverManager, associationFactory, associationManager);
+	protected AddAssociation(HudsonServerManager serverManager, HudsonAssociationManager associationManager) {
+		super(serverManager, associationManager);
 	}
 
 	/**
@@ -57,6 +54,14 @@ public class AddAssociation extends AbstractModifyAssociation {
 	protected void doValidation() {
 		super.doValidation();
 		// TODO check for duplicate association
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void saveAssociation(int hudsonId, long projectId, String jobname) {
+		associationManager.addAssociation(hudsonId, projectId, jobname);
 	}
 
 	/**

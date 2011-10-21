@@ -19,13 +19,30 @@
 
 package com.marvelution.jira.plugins.hudson.services.servers;
 
-import com.marvelution.jira.plugins.hudson.services.HudsonIdGenerator;
+import com.marvelution.hudson.plugins.apiv2.client.Host;
+import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 
 /**
- * Hudson Server Id generator interface
+ * {@link HudsonClient} factory interface
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public interface HudsonServerIdGenerator extends HudsonIdGenerator {
+public interface HudsonClientFactory {
+
+	/**
+	 * Create a {@link HudsonClient} for the given {@link Host}
+	 * 
+	 * @param host the {@link Host} to get the {@link HudsonClient} for
+	 * @return the {@link HudsonClient}
+	 */
+	HudsonClient create(Host host);
+
+	/**
+	 * Create a {@link HudsonClient} for the given {@link HudsonServer}
+	 * 
+	 * @param server the {@link HudsonServer} to get the {@link HudsonClient} for
+	 * @return the {@link HudsonClient}
+	 */
+	HudsonClient create(HudsonServer server);
 
 }

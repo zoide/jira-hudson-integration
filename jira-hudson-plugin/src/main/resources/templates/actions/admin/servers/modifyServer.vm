@@ -100,6 +100,13 @@
 	            </td>
 	        </tr>
 	        <tr>
+	            <td class="fieldLabelArea">$i18n.getText("hudson.server.include.in.streams"):</td>
+	            <td bgcolor="#ffffff" class="fieldValueArea">
+	                <input type="checkbox" name="includeInStreams" label="$i18n.getText("hudson.server.include.in.streams")" value="true" #if (${includeInStreams}) checked="checked" #end />
+	                <br /><font size="1">$i18n.getText("hudson.server.include.in.streams.hint")</font>
+	            </td>
+	        </tr>
+	        <tr>
 	            <td class="fieldLabelArea">$i18n.getText("common.words.password"):</td>
 	            <td bgcolor="#ffffff" class="fieldValueArea">
 	                <input type="password" name="password" label="$i18n.getText("common.words.password")" value="$!password" />

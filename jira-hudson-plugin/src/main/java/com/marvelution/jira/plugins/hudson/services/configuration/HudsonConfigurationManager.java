@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.marvelution.jira.plugins.hudson.services;
+package com.marvelution.jira.plugins.hudson.services.configuration;
 
 import java.util.Collection;
 

@@ -40,6 +40,7 @@
 
 	<properties>
 		<atlassian.streams.version>4.1.2</atlassian.streams.version>
+		<atlassian.ao.version>0.15.8</atlassian.ao.version>
 		<atlassian.plugin.key>${project.groupId}.hudson</atlassian.plugin.key>
 	</properties>
 
@@ -50,6 +51,12 @@
 			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-jdk14</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- needed for the ws-client jar -->
 		<dependency>
@@ -58,6 +65,18 @@
 			<version>2.2.1.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.activeobjects</groupId>
+			<artifactId>activeobjects-plugin</artifactId>
+			<version>${atlassian.ao.version}</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.atlassian.jira</groupId>
@@ -158,6 +177,25 @@
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<!-- Test Dependencies -->
+		<dependency>
+			<groupId>com.atlassian.activeobjects</groupId>
+			<artifactId>activeobjects-test</artifactId>
+			<version>${atlassian.ao.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.5.8</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

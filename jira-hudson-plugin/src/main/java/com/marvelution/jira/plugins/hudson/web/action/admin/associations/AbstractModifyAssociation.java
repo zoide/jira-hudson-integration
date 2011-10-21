@@ -23,8 +23,6 @@ import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
-import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationFactory;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.web.action.admin.AbstractHudsonAdminWebActionSupport;
@@ -41,23 +39,20 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 
 	private static final long serialVersionUID = 1L;
 
-	protected final HudsonAssociationFactory associationFactory;
 	protected final HudsonAssociationManager associationManager;
-	protected HudsonAssociation association;
+	protected int hudsonId = 0;
+	protected long projectId = 0L;
+	protected String jobName;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param serverManager the {@link HudsonServerManager} implementation
-	 * @param associationFactory the {@link HudsonAssociationFactory} implementation
 	 * @param associationManager the {@link HudsonAssociationManager} implementation
 	 */
-	protected AbstractModifyAssociation(HudsonServerManager serverManager, HudsonAssociationFactory associationFactory,
-			HudsonAssociationManager associationManager) {
+	protected AbstractModifyAssociation(HudsonServerManager serverManager, HudsonAssociationManager associationManager) {
 		super(serverManager);
-		this.associationFactory = associationFactory;
 		this.associationManager = associationManager;
-		association = associationFactory.create();
 	}
 
 	/**
@@ -84,9 +79,18 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 		if (hasAnyErrors()) {
 			return INPUT;
 		}
-		associationManager.addAssociation(association);
+		associationManager.addAssociation(getHudsonId(), getProjectId(), getJobName());
 		return getRedirect(ADMINISTER_ASSOCIATIONS);
 	}
+
+	/**
+	 * Internal method to save the Association data
+	 * 
+	 * @param hudsonId the Hudson server Id
+	 * @param projectId the JIRA project Id
+	 * @param jobname the Hudson Job name
+	 */
+	protected abstract void saveAssociation(int hudsonId, long projectId, String jobname);
 
 	/**
 	 * Getter for the action type eg: Add/Update
@@ -110,30 +114,12 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	public abstract Collection<String> getJobOptions();
 
 	/**
-	 * Getter for associationId
-	 * 
-	 * @return the associationId
-	 */
-	public int getAssociationId() {
-		return association.getAssociationId();
-	}
-
-	/**
-	 * Setter for associationId
-	 * 
-	 * @param associationId the associationId to set
-	 */
-	public void setAssociationId(int associationId) {
-		association.setAssociationId(associationId);
-	}
-
-	/**
 	 * Getter for hudsonId
 	 * 
 	 * @return the hudsonId
 	 */
 	public int getHudsonId() {
-		return association.getServerId();
+		return hudsonId;
 	}
 
 	/**
@@ -142,7 +128,7 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	 * @param hudsonId the hudsonId to set
 	 */
 	public void setHudsonId(int hudsonId) {
-		association.setServerId(hudsonId);
+		this.hudsonId = hudsonId;;
 	}
 
 	/**
@@ -151,7 +137,7 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	 * @return the projectId
 	 */
 	public long getProjectId() {
-		return association.getProjectId();
+		return projectId;
 	}
 
 	/**
@@ -160,7 +146,7 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	 * @param projectId the projectId to set
 	 */
 	public void setProjectId(long projectId) {
-		association.setProjectId(projectId);
+		this.projectId = projectId;
 	}
 
 	/**
@@ -169,7 +155,7 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	 * @return the jobname
 	 */
 	public String getJobName() {
-		return association.getJobName();
+		return jobName;
 	}
 
 	/**
@@ -178,7 +164,7 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	 * @param jobname the jobname to set
 	 */
 	public void setJobName(String jobName) {
-		association.setJobName(jobName);
+		this.jobName = jobName;
 	}
 
 }

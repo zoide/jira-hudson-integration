@@ -241,61 +241,53 @@
 		</actions>
 	</webwork1>
 
+	<!-- A C T I V E   O B J E C T S -->
+	<ao key="ao-hudson-module">
+		<description>Active Objects module to configure the Hudson Entities</description>
+		<entity>com.marvelution.jira.plugins.hudson.services.servers.HudsonServer</entity>
+		<entity>com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation</entity>
+	</ao>
+
 	<!-- C O M P O N E N T S -->
-	<component key="hudsonPropertyManager" name="Default Hudson Property Manager"
-			class="com.marvelution.jira.plugins.hudson.services.impl.DefaultHudsonPropertyManager">
-		<interface>com.marvelution.jira.plugins.hudson.service.HudsonPropertyManager</interface>
+	<component key="tx-processor" name="Transactional Annotation Processor"
+			class="com.atlassian.activeobjects.external.TransactionalAnnotationProcessor">
+		<decription>Processes @Transactional annotations.</decription>
 	</component>
-	<component key="hudsonConfigurationManager" name="Default Hudson Configuration Manager"
-			class="com.marvelution.jira.plugins.hudson.services.impl.DefaultHudsonConfigurationManager">
-		<interface>com.marvelution.jira.plugins.hudson.service.HudsonConfigurationManager</interface>
-	</component>
-	<component key="hudsonClientFactory" name="Default Hudson Client Factory"
-			class="com.marvelution.jira.plugins.hudson.services.impl.DefaultHudsonClientFactory">
-		<interface>com.marvelution.jira.plugins.hudson.service.HudsonClientFactory</interface>
-	</component>
-	<component key="hudsonServerFactory" name="Default Hudson Server Factory"
-			class="com.marvelution.jira.plugins.hudson.services.servers.impl.DefaultHudsonServerFactory">
-		<interface>com.marvelution.jira.plugins.hudson.service.servers.HudsonServerFactory</interface>
-	</component>
-	<component key="hudsonServerManager" name="Default Hudson Server Manager"
-			class="com.marvelution.jira.plugins.hudson.services.servers.impl.DefaultHudsonServerManager">
-		<interface>com.marvelution.jira.plugins.hudson.service.servers.HudsonServerManager</interface>
-	</component>
-	<component key="hudsonServerIdGenerator" name="Default Hudson Server Id Generator"
-			class="com.marvelution.jira.plugins.hudson.services.servers.impl.DefaultHudsonServerIdGenerator">
-		<interface>com.marvelution.jira.plugins.hudson.service.servers.HudsonServerIdGenerator</interface>
-	</component>
-	<component key="hudsonAssociationFactory" name="Default Hudson Association Factory"
-			class="com.marvelution.jira.plugins.hudson.services.associations.impl.DefaultHudsonAssociationFactory">
-		<interface>com.marvelution.jira.plugins.hudson.service.associations.HudsonAssociationFactory</interface>
-	</component>
-	<component key="hudsonAssociationManager" name="Default Hudson Association Manager"
-			class="com.marvelution.jira.plugins.hudson.services.associations.impl.DefaultHudsonAssociationManager">
-		<interface>com.marvelution.jira.plugins.hudson.service.associations.HudsonAssociationManager</interface>
-	</component>
-	<component key="hudsonAssociationIdGenerator" name="Default Hudson Association Id Generator"
-			class="com.marvelution.jira.plugins.hudson.services.associations.impl.DefaultHudsonAssociationIdGenerator">
-		<interface>com.marvelution.jira.plugins.hudson.service.associations.HudsonAssociationIdGenerator</interface>
-	</component>
-	<component key="hudsonPanelHelper" name="Default Hudson Panel Helper"
+	<component key="hudson-panel-helper" name="Hudson Panel Helper"
 			class="com.marvelution.jira.plugins.hudson.panels.utils.HudsonPanelHelper">
 		<interface>com.marvelution.jira.plugins.hudson.panels.utils.HudsonPanelHelper</interface>
 	</component>
+	<component key="hudson-client-factory" name="Hudson Client Factory Service"
+			class="com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactoryService">
+		<interface>com.marvelution.jira.plugins.hudson.service.servers.HudsonClientFactory</interface>
+	</component>
+	<component key="hudson-server-manager" name="Hudson Server Manager Service"
+			class="com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManagerService">
+		<interface>com.marvelution.jira.plugins.hudson.service.servers.HudsonServerManager</interface>
+	</component>
+	<component key="hudson-association-manager" name="Hudson Association Manager Service"
+			class="com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManagerService">
+		<interface>com.marvelution.jira.plugins.hudson.service.associations.HudsonAssociationManager</interface>
+	</component>
+	<component key="hudson-configuration-manager" name="Hudson Configuration Manager Service"
+			class="com.marvelution.jira.plugins.hudson.services.configuration.HudsonConfigurationManagerService">
+		<interface>com.marvelution.jira.plugins.hudson.service.configuration.HudsonConfigurationManager</interface>
+	</component>
 
 	<!-- I M P O R T E D   C O M P O N E N T S -->
-	<component-import key="i18nResolver" interface="com.atlassian.sal.api.message.I18nResolver" />
-	<component-import key="crowdService" interface="com.atlassian.crowd.embedded.api.CrowdService" />
+	<component-import key="i18nResolver" interface="com.atlassian.sal.api.message.I18nResolver">
+		<description>Component to access i18n functionality from the plugin</description>
+	</component-import>
+	<component-import key="crowdService" interface="com.atlassian.crowd.embedded.api.CrowdService">
+		<description>Component to access Crowd Services functionality from the plugin</description>
+	</component-import>
+	<component-import key="ao" name="Active Objects service" interface="com.atlassian.activeobjects.external.ActiveObjects">
+		<description>Component to access Active Objects functionality from the plugin</description>
+	</component-import>
 
 	<!-- U P G R A D E   T A S K S -->
-	<component key="hudsonServerUpgradeTask" name="Gadget Upgrade Task" class="com.marvelution.jira.plugins.hudson.upgrade.HudsonServerUpgradeTask" public="true">
-		<interface>com.atlassian.sal.api.upgrade.PluginUpgradeTask</interface>
-	</component>
-	<component key="hudsonConfigUpgradeTask" name="Gadget Upgrade Task" class="com.marvelution.jira.plugins.hudson.upgrade.HudsonConfigurationUpgradeTask" public="true">
-		<interface>com.atlassian.sal.api.upgrade.PluginUpgradeTask</interface>
-	</component>
-	<component key="hudsonWhitelistEntriesUpgradeTask" name="Hudson Whitelist Entries Upgrade Task"
-		class="com.marvelution.jira.plugins.hudson.upgrade.HudsonWhitelistEntriesUpgradeTask" public="true">
+	<component key="active-objects-upgrade" name="Active Objects Upgrade Task"
+		class="com.marvelution.jira.plugins.hudson.upgrade.HudsonActiveObjectsUpgradeTask" public="true">
 		<interface>com.atlassian.sal.api.upgrade.PluginUpgradeTask</interface>
 	</component>
 

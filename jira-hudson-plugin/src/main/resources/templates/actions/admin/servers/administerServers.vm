@@ -64,8 +64,9 @@
 			<tr bgcolor="$rowbgcolor">
 				<td valign="top">
 					<b>${server.name}</b>
-					#if (${serverManager.isDefaultServer(${server})}) (${i18n.getText("common.words.default")}) #end
+					#if (${server.defaultServer}) (${i18n.getText("common.words.default")}) #end
 					<br>
+					#if (${server.includeInStreams}) (${i18n.getText("hudson.servers.include.in.streams")})<br> #end
 					<font size="1">$!{server.description}</font>
 				</td>
 				<td valign="top">
@@ -78,10 +79,10 @@
 					#end
 				</td>
 				<td align="left" valign="top">
-					<a href="UpdateServer!default.jspa?sid=${server.serverId}">$i18n.getText("common.forms.edit")</a>
-					| <a href="DeleteServer!default.jspa?sid=${server.serverId}">$i18n.getText("common.words.delete")</a>
-					#if (!${serverManager.isDefaultServer(${server})})
-					| <a href="UpdateServer!setAsDefault.jspa?sid=${server.serverId}">$i18n.getText("hudson.servers.set.as.default")</a>
+					<a href="UpdateServer!default.jspa?sid=${server.ID}">$i18n.getText("common.forms.edit")</a>
+					| <a href="DeleteServer!default.jspa?sid=${server.ID}">$i18n.getText("common.words.delete")</a>
+					#if (!${server.defaultServer})
+					| <a href="UpdateServer!setAsDefault.jspa?sid=${server.ID}">$i18n.getText("hudson.servers.set.as.default")</a>
 					#end
 				</td>
 			</tr>

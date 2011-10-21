@@ -120,7 +120,7 @@ public class DeleteAssociation extends AbstractHudsonAdminWebActionSupport {
 	 * @return the {@link HudsonServer}
 	 */
 	public HudsonServer getServer() {
-		return serverManager.getServer(getAssociation().getServerId());
+		return getAssociation().getServer();
 	}
 
 }

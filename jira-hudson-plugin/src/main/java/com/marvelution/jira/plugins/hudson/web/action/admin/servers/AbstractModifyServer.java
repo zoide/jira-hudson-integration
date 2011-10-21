@@ -24,11 +24,10 @@ import java.util.Collection;
 import org.apache.commons.lang.StringUtils;
 
 import com.marvelution.hudson.plugins.apiv2.client.ClientException;
+import com.marvelution.hudson.plugins.apiv2.client.Host;
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.VersionQuery;
-import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
-import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
-import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerFactory;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.web.action.admin.AbstractHudsonAdminWebActionSupport;
 import com.marvelution.jira.plugins.hudson.web.action.admin.KeyValuePair;
@@ -44,23 +43,25 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 
 	private static final long serialVersionUID = 1L;
 
-	protected final HudsonServerFactory serverFactory;
+	private String name;
+	private String description;
+	private String host;
+	private String publicHost;
+	private String username;
+	private String password;
+	private boolean includeInStreams;
+
 	protected final HudsonClientFactory clientFactory;
-	protected HudsonServer server;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param serverManager the {@link HudsonServerManager} implementation
-	 * @param serverFactory the {@link HudsonServerFactory} implementation
 	 * @param clientFactory the {@link HudsonClientFactory} implementation
 	 */
-	protected AbstractModifyServer(HudsonServerManager serverManager, HudsonServerFactory serverFactory,
-			HudsonClientFactory clientFactory) {
+	protected AbstractModifyServer(HudsonServerManager serverManager, HudsonClientFactory clientFactory) {
 		super(serverManager);
-		this.serverFactory = serverFactory;
 		this.clientFactory = clientFactory;
-		server = serverFactory.create();
 	}
 
 	/**
@@ -76,7 +77,7 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 		} else if ((!getHost().startsWith("http://")) && (!getHost().startsWith("https://"))) {
 			addError("host", getText("hudson.server.host.invalid"));
 		} else {
-			HudsonClient client = clientFactory.create(server);
+			HudsonClient client = clientFactory.create(new Host(getHost(), getUsername(), getPassword()));
 			try {
 				if (client.find(VersionQuery.createForPluginVersion()) == null) {
 					addError("host", getText("hudson.server.host.apiv2.failed"));
@@ -95,9 +96,24 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 		if (hasAnyErrors()) {
 			return INPUT;
 		}
-		serverManager.addServer(server);
+		saveServer(getName(), getDescription(), getHost(), getPublicHost(), getUsername(), getPassword(),
+			isIncludeInStreams());
 		return getRedirect(ADMINISTER_SERVERS);
 	}
+
+	/**
+	 * Internal method to save the HudsonServer data
+	 * 
+	 * @param name the name of the server
+	 * @param description the description of the server
+	 * @param host the base private host url
+	 * @param publicHost the base public host url
+	 * @param username the username for secured instances
+	 * @param password the password for secured instances
+	 * @param includeInStreams flag whether the server is includable in the activity streams
+	 */
+	protected abstract void saveServer(String name, String description, String host, String publicHost,
+			String username, String password, boolean includeInStreams);
 
 	/**
 	 * Getter for the action type eg: Add/Update
@@ -114,30 +130,12 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	public abstract Collection<KeyValuePair> getExtraHiddenInput();
 
 	/**
-	 * Getter for sid
-	 * 
-	 * @return the sid
-	 */
-	public int getSid() {
-		return server.getServerId();
-	}
-
-	/**
-	 * Setter for sid
-	 * 
-	 * @param sid the sid to set
-	 */
-	public void setSid(int sid) {
-		server.setServerId(sid);
-	}
-
-	/**
 	 * Getter for name
 	 * 
 	 * @return the name
 	 */
 	public String getName() {
-		return server.getName();
+		return name;
 	}
 
 	/**
@@ -146,7 +144,7 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		server.setName(name);
+		this.name = name;
 	}
 
 	/**
@@ -155,7 +153,7 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 * @return the description
 	 */
 	public String getDescription() {
-		return server.getDescription();
+		return description;
 	}
 
 	/**
@@ -164,7 +162,7 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 * @param description the description to set
 	 */
 	public void setDescription(String description) {
-		server.setDescription(description);
+		this.description = description;
 	}
 
 	/**
@@ -173,7 +171,7 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 * @return the host
 	 */
 	public String getHost() {
-		return server.getHost();
+		return host;
 	}
 
 	/**
@@ -183,9 +181,9 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 */
 	public void setHost(String host) {
 		if (host.endsWith("/")) {
-			server.setHost(host.substring(0, host.length() - 1));
+			this.host = host.substring(0, host.length() - 1);
 		} else {
-			server.setHost(host);
+			this.host = host;
 		}
 	}
 
@@ -195,7 +193,7 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 * @return the public host
 	 */
 	public String getPublicHost() {
-		return server.getPublicHost();
+		return publicHost;
 	}
 
 	/**
@@ -205,9 +203,9 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 */
 	public void setPublicHost(String publicHost) {
 		if (publicHost.endsWith("/")) {
-			server.setPublicHost(publicHost.substring(0, publicHost.length() - 1));
+			this.publicHost = publicHost.substring(0, publicHost.length() - 1);
 		} else {
-			server.setPublicHost(publicHost);
+			this.publicHost = publicHost;
 		}
 	}
 
@@ -217,7 +215,7 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 * @return the username
 	 */
 	public String getUsername() {
-		return server.getUsername();
+		return username;
 	}
 
 	/**
@@ -226,7 +224,7 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 * @param username the username to set
 	 */
 	public void setUsername(String username) {
-		server.setUsername(username);
+		this.username = username;
 	}
 
 	/**
@@ -235,7 +233,7 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 * @return the password
 	 */
 	public String getPassword() {
-		return server.getPassword();
+		return password;
 	}
 
 	/**
@@ -244,7 +242,25 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 * @param password the password to set
 	 */
 	public void setPassword(String password) {
-		server.setPassword(password);
+		this.password = password;
+	}
+
+	/**
+	 * Getter for includeInStreams
+	 *
+	 * @return the includeInStreams
+	 */
+	public boolean isIncludeInStreams() {
+		return includeInStreams;
+	}
+
+	/**
+	 * Setter for includeInStreams
+	 *
+	 * @param includeInStreams the includeInStreams to set
+	 */
+	public void setIncludeInStreams(boolean includeInStreams) {
+		this.includeInStreams = includeInStreams;
 	}
 
 }

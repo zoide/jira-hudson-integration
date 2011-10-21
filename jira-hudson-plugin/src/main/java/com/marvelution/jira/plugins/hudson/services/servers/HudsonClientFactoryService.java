@@ -17,15 +17,33 @@
  * under the License.
  */
 
-package com.marvelution.jira.plugins.hudson.services.associations;
+package com.marvelution.jira.plugins.hudson.services.servers;
 
-import com.marvelution.jira.plugins.hudson.services.HudsonIdGenerator;
+import com.marvelution.hudson.plugins.apiv2.client.Host;
+import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
+import com.marvelution.hudson.plugins.apiv2.client.connectors.HttpClient4Connector;
 
 /**
- * Hudson Association Id generator interface
+ * Default {@link HudsonClientFactory}
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public interface HudsonAssociationIdGenerator extends HudsonIdGenerator {
+public class HudsonClientFactoryService implements HudsonClientFactory {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public HudsonClient create(Host host) {
+		return new HudsonClient(new HttpClient4Connector(host));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public HudsonClient create(HudsonServer server) {
+		return create(new Host(server.getHost(), server.getUsername(), server.getPassword()));
+	}
 
 }

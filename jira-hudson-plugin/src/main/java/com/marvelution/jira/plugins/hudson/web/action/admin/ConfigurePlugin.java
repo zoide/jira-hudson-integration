@@ -26,7 +26,7 @@ import com.atlassian.crowd.embedded.api.Group;
 import com.atlassian.jira.issue.issuetype.IssueType;
 import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.security.roles.ProjectRole;
-import com.marvelution.jira.plugins.hudson.services.HudsonConfigurationManager;
+import com.marvelution.jira.plugins.hudson.services.configuration.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 
 /**

@@ -77,7 +77,10 @@ public abstract class ListableModel<MODEL extends Model> extends Model implement
 	 */
 	@Override
 	public boolean addAll(Collection<? extends MODEL> collection) {
-		return getItems().addAll(collection);
+		if (collection != null) {
+			return getItems().addAll(collection);
+		}
+		return false;
 	}
 
 	/**
@@ -93,7 +96,10 @@ public abstract class ListableModel<MODEL extends Model> extends Model implement
 	 */
 	@Override
 	public boolean removeAll(Collection<?> collection) {
-		return getItems().removeAll(collection);
+		if (collection != null) {
+			return getItems().removeAll(collection);
+		}
+		return false;
 	}
 
 	/**
@@ -101,7 +107,10 @@ public abstract class ListableModel<MODEL extends Model> extends Model implement
 	 */
 	@Override
 	public boolean retainAll(Collection<?> collection) {
-		return getItems().retainAll(collection);
+		if (collection != null) {
+			return getItems().retainAll(collection);
+		}
+		return false;
 	}
 
 	/**
@@ -117,7 +126,10 @@ public abstract class ListableModel<MODEL extends Model> extends Model implement
 	 */
 	@Override
 	public boolean containsAll(Collection<?> collection) {
-		return getItems().containsAll(collection);
+		if (collection != null) {
+			return getItems().containsAll(collection);
+		}
+		return false;
 	}
 
 	/**

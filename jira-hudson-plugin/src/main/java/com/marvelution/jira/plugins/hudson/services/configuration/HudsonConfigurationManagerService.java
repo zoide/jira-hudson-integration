@@ -17,23 +17,26 @@
  * under the License.
  */
 
-package com.marvelution.jira.plugins.hudson.services.impl;
+package com.marvelution.jira.plugins.hudson.services.configuration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.marvelution.jira.plugins.hudson.services.HudsonConfigurationManager;
-import com.marvelution.jira.plugins.hudson.services.HudsonPropertyManager;
+import com.google.common.base.Preconditions;
+import com.opensymphony.module.propertyset.PropertySet;
+import com.opensymphony.module.propertyset.PropertySetManager;
 
 /**
  * Default {@link HudsonConfigurationManager} implementation
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class DefaultHudsonConfigurationManager implements HudsonConfigurationManager {
+public class HudsonConfigurationManagerService implements HudsonConfigurationManager {
 
 	private static final String ARRAY_SEPARATOR = ";;";
 	private static final String CONFIG_SETTING_PREFIX = "hudson.configuration.";
@@ -44,10 +47,11 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	private static final String SHOW_IF_USER_MEMEBER_OF_USERGROUP = CONFIG_SETTING_PREFIX 
 		+ "show.if.user.member.of.usergroup";
 	private static final String SHOW_IF_USER_MEMEBER_OF_PROJECTROLE = CONFIG_SETTING_PREFIX 
-	+ "show.if.user.member.of.projectrole";
+		+ "show.if.user.member.of.projectrole";
 	private static final String SHOW_IF_ISSUE_OF_ISSUETYPE = CONFIG_SETTING_PREFIX + "show.if.issue.of.issuetype";
 
-	private final HudsonPropertyManager propertyManager;
+	private static final long PROPERTY_ID = 2L;
+	private PropertySet propertySet;
 
 	private Boolean hideUnassociatedHudsonTabs = null;
 	private Boolean filterHudsonBuilds = null;
@@ -58,11 +62,10 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 
 	/**
 	 * Constructor
-	 * 
-	 * @param propertyManager the {@link HudsonPropertyManager} implementation
 	 */
-	public DefaultHudsonConfigurationManager(HudsonPropertyManager propertyManager) {
-		this.propertyManager = propertyManager;
+	public HudsonConfigurationManagerService() {
+		loadPropertySet();
+		Preconditions.checkNotNull(propertySet, "propertySet");
 	}
 
 	/**
@@ -71,7 +74,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public Boolean isHideUnassociatedHudsonTabs() {
 		if (hideUnassociatedHudsonTabs == null) {
-			hideUnassociatedHudsonTabs = propertyManager.getPropertySet().getBoolean(HIDE_UNASSOCIATED_HUDSON_TABS);
+			hideUnassociatedHudsonTabs = propertySet.getBoolean(HIDE_UNASSOCIATED_HUDSON_TABS);
 		}
 		return hideUnassociatedHudsonTabs;
 	}
@@ -82,7 +85,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public void setHideUnassociatedHudsonTabs(Boolean hideUnassociatedHudsonTabs) {
 		this.hideUnassociatedHudsonTabs = hideUnassociatedHudsonTabs;
-		propertyManager.getPropertySet().setBoolean(HIDE_UNASSOCIATED_HUDSON_TABS, hideUnassociatedHudsonTabs);
+		propertySet.setBoolean(HIDE_UNASSOCIATED_HUDSON_TABS, hideUnassociatedHudsonTabs);
 	}
 
 	/**
@@ -91,7 +94,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public Boolean isFilterHudsonBuilds() {
 		if (filterHudsonBuilds == null) {
-			filterHudsonBuilds = propertyManager.getPropertySet().getBoolean(FILTER_HUDSON_BUILDS);
+			filterHudsonBuilds = propertySet.getBoolean(FILTER_HUDSON_BUILDS);
 		}
 		return filterHudsonBuilds;
 	}
@@ -102,7 +105,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public void setFilterHudsonBuilds(Boolean filterHudsonBuilds) {
 		this.filterHudsonBuilds = filterHudsonBuilds;
-		propertyManager.getPropertySet().setBoolean(FILTER_HUDSON_BUILDS, filterHudsonBuilds);
+		propertySet.setBoolean(FILTER_HUDSON_BUILDS, filterHudsonBuilds);
 	}
 
 	/**
@@ -111,7 +114,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public Boolean isTimePastDateStrings() {
 		if (timePastDateStrings == null) {
-			timePastDateStrings = propertyManager.getPropertySet().getBoolean(TIME_PAST_DATE_STRINGS);
+			timePastDateStrings = propertySet.getBoolean(TIME_PAST_DATE_STRINGS);
 		}
 		return timePastDateStrings;
 	}
@@ -122,7 +125,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public void setTimePastDateStrings(Boolean timePastDateStrings) {
 		this.timePastDateStrings = timePastDateStrings;
-		propertyManager.getPropertySet().setBoolean(TIME_PAST_DATE_STRINGS, timePastDateStrings);
+		propertySet.setBoolean(TIME_PAST_DATE_STRINGS, timePastDateStrings);
 	}
 
 	/**
@@ -131,8 +134,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public Collection<String> getShowIfUserMemberOfUsergroup() {
 		if (showIfUserMemberOfUsergroup == null) {
-			showIfUserMemberOfUsergroup = getTextAsCollection(propertyManager.getPropertySet().getText(
-					SHOW_IF_USER_MEMEBER_OF_USERGROUP));
+			showIfUserMemberOfUsergroup = getTextAsCollection(propertySet.getText(SHOW_IF_USER_MEMEBER_OF_USERGROUP));
 		}
 		return showIfUserMemberOfUsergroup;
 	}
@@ -143,8 +145,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public void setShowIfUserMemberOfUsergroup(Collection<String> showIfUserMemberOfUsergroup) {
 		this.showIfUserMemberOfUsergroup = showIfUserMemberOfUsergroup;
-		propertyManager.getPropertySet().setText(SHOW_IF_USER_MEMEBER_OF_USERGROUP, getCollectionAsText(
-				showIfUserMemberOfUsergroup));
+		propertySet.setText(SHOW_IF_USER_MEMEBER_OF_USERGROUP, getCollectionAsText(showIfUserMemberOfUsergroup));
 	}
 
 	/**
@@ -153,7 +154,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public Collection<String> getShowIfUserMemberOfProjectRole() {
 		if (showIfUserMemberOfProjectRole == null) {
-			showIfUserMemberOfProjectRole = getTextAsCollection(propertyManager.getPropertySet().getText(
+			showIfUserMemberOfProjectRole = getTextAsCollection(propertySet.getText(
 					SHOW_IF_USER_MEMEBER_OF_PROJECTROLE));
 		}
 		return showIfUserMemberOfProjectRole;
@@ -165,8 +166,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public void setShowIfUserMemberOfProjectRole(Collection<String> showIfUserMemberOfProjectRole) {
 		this.showIfUserMemberOfProjectRole = showIfUserMemberOfProjectRole;
-		propertyManager.getPropertySet().setText(SHOW_IF_USER_MEMEBER_OF_PROJECTROLE, getCollectionAsText(
-				showIfUserMemberOfProjectRole));
+		propertySet.setText(SHOW_IF_USER_MEMEBER_OF_PROJECTROLE, getCollectionAsText(showIfUserMemberOfProjectRole));
 	}
 
 	/**
@@ -175,8 +175,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public Collection<String> getShowIfIssueOfIssueType() {
 		if (showIfIssueOfIssueType == null) {
-			showIfIssueOfIssueType = getTextAsCollection(propertyManager.getPropertySet().getText(
-					SHOW_IF_ISSUE_OF_ISSUETYPE));
+			showIfIssueOfIssueType = getTextAsCollection(propertySet.getText(SHOW_IF_ISSUE_OF_ISSUETYPE));
 		}
 		return showIfIssueOfIssueType;
 	}
@@ -187,8 +186,7 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 	@Override
 	public void setShowIfIssueOfIssueType(Collection<String> showIfIssueOfIssueType) {
 		this.showIfIssueOfIssueType = showIfIssueOfIssueType;
-		propertyManager.getPropertySet().setText(SHOW_IF_ISSUE_OF_ISSUETYPE,
-				getCollectionAsText(showIfIssueOfIssueType));
+		propertySet.setText(SHOW_IF_ISSUE_OF_ISSUETYPE, getCollectionAsText(showIfIssueOfIssueType));
 	}
 
 	/**
@@ -213,5 +211,17 @@ public class DefaultHudsonConfigurationManager implements HudsonConfigurationMan
 		}
 		return Arrays.asList(StringUtils.split(text, ARRAY_SEPARATOR));
 	}
+
+	/**
+	 * Internal method to load the {@link PropertySet}
+	 */
+	private void loadPropertySet() {
+		Map<String, Object> arguments = new HashMap<String, Object>();
+		arguments.put("delegator.name", "default");
+	    arguments.put("entityName", "HudsonServerProperties");
+	    arguments.put("entityId", PROPERTY_ID);
+	    propertySet = PropertySetManager.getInstance("ofbiz", arguments);
+	}
+
 
 }

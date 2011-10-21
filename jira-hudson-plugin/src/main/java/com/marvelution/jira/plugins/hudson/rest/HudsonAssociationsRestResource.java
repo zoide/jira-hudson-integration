@@ -34,7 +34,6 @@ import com.marvelution.jira.plugins.hudson.rest.model.Option;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
-import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 
 
 /**
@@ -48,16 +47,13 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 public class HudsonAssociationsRestResource {
 
 	private HudsonAssociationManager associationManager;
-	private HudsonServerManager serverManager;
 
 	/**
 	 * Default Constructor
 	 * 
-	 * @param serverManager the {@link HudsonServerManager}
 	 * @param associationManager the {@link HudsonAssociationManager}
 	 */
-	public HudsonAssociationsRestResource(HudsonServerManager serverManager, HudsonAssociationManager associationManager) {
-		this.serverManager = serverManager;
+	public HudsonAssociationsRestResource(HudsonAssociationManager associationManager) {
 		this.associationManager = associationManager;
 	}
 
@@ -70,9 +66,9 @@ public class HudsonAssociationsRestResource {
 	public Response getAssociations() {
 		final Collection<Option> options = new ArrayList<Option>();
 		for (HudsonAssociation association : associationManager.getAssociations()) {
-			final HudsonServer server = serverManager.getServer(association.getServerId());
+			final HudsonServer server = association.getServer();
 			final String label = association.getJobName() + " (" + server.getName() + ")";
-			options.add(new Option(label, String.valueOf(association.getAssociationId())));
+			options.add(new Option(label, String.valueOf(association.getID())));
 		}
 		return Response.ok(new Associations(options)).build();
 	}

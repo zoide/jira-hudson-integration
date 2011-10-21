@@ -22,13 +22,15 @@ package com.marvelution.jira.plugins.hudson.web.action.admin.associations;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.marvelution.hudson.plugins.apiv2.client.ClientException;
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
 import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
-import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
-import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationFactory;
+import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.web.action.admin.KeyValuePair;
@@ -45,18 +47,19 @@ public class UpdateAssociation extends AbstractModifyAssociation {
 	private static final long serialVersionUID = 1L;
 
 	private final HudsonClientFactory clientFactory;
+	private HudsonAssociation association;
+	private int associationId;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param serverManager the {@link HudsonServerManager} implementation
-	 * @param associationFactory the {@link HudsonAssociationFactory} implementation
 	 * @param associationManager the {@link HudsonAssociationManager} implementation
 	 * @param clientFactory the {@link HudsonClientFactory} implementation
 	 */
-	protected UpdateAssociation(HudsonServerManager serverManager, HudsonAssociationFactory associationFactory,
-			HudsonAssociationManager associationManager, HudsonClientFactory clientFactory) {
-		super(serverManager, associationFactory, associationManager);
+	protected UpdateAssociation(HudsonServerManager serverManager, HudsonAssociationManager associationManager,
+								HudsonClientFactory clientFactory) {
+		super(serverManager, associationManager);
 		this.clientFactory = clientFactory;
 	}
 
@@ -68,7 +71,7 @@ public class UpdateAssociation extends AbstractModifyAssociation {
 		if (!associationManager.hasAssociation(getAssociationId())) {
 			return getRedirect(ADMINISTER_ASSOCIATIONS);
 		}
-		association = associationFactory.create(associationManager.getAssociation(getAssociationId()));
+		association = associationManager.getAssociation(getAssociationId());
 		return super.doDefault();
 	}
 
@@ -79,6 +82,14 @@ public class UpdateAssociation extends AbstractModifyAssociation {
 	protected void doValidation() {
 		super.doValidation();
 		// TODO Validate duplicate
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void saveAssociation(int hudsonId, long projectId, String jobname) {
+		associationManager.updateAssociation(getAssociationId(), getHudsonId(), getProjectId(), getJobName());
 	}
 
 	/**
@@ -113,6 +124,60 @@ public class UpdateAssociation extends AbstractModifyAssociation {
 			options.add(e.getMessage());
 		}
 		return options;
+	}
+
+	/**
+	 * Getter for associationId
+	 * 
+	 * @return the associationId
+	 */
+	public int getAssociationId() {
+		return associationId;
+	}
+
+	/**
+	 * Setter for associationId
+	 * 
+	 * @param associationId the associationId to set
+	 */
+	public void setAssociationId(int associationId) {
+		this.associationId = associationId;
+	}
+
+	/**
+	 * Getter for hudsonId
+	 * 
+	 * @return the hudsonId
+	 */
+	public int getHudsonId() {
+		if (super.getHudsonId() > 0) {
+			return super.getHudsonId();
+		}
+		return association.getServer().getID();
+	}
+
+	/**
+	 * Getter for projectId
+	 * 
+	 * @return the projectId
+	 */
+	public long getProjectId() {
+		if (super.getProjectId() > 0L) {
+			return super.getProjectId();
+		}
+		return association.getProjectId();
+	}
+
+	/**
+	 * Getter for jobname
+	 * 
+	 * @return the jobname
+	 */
+	public String getJobName() {
+		if (StringUtils.isNotBlank(super.getJobName())) {
+			return super.getJobName();
+		}
+		return association.getJobName();
 	}
 
 }

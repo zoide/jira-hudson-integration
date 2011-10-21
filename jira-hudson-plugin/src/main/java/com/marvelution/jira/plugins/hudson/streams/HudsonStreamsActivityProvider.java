@@ -59,9 +59,9 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.User;
 import com.marvelution.hudson.plugins.apiv2.resources.model.activity.Activities;
 import com.marvelution.hudson.plugins.apiv2.resources.model.activity.Activity;
 import com.marvelution.hudson.plugins.apiv2.resources.model.activity.ActivityType;
-import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.utils.JiraPluginUtils;
@@ -118,7 +118,7 @@ public class HudsonStreamsActivityProvider implements StreamsActivityProvider {
 			// Populate the serverIds and JobNames sets from the associations
 			for (Integer associationId : associationIds) {
 				HudsonAssociation association = associationManager.getAssociation(associationId);
-				serverIds.add(association.getServerId());
+				serverIds.add(association.getServer().getID());
 				jobNames.add(association.getJobName());
 			}
 		} else {
@@ -210,7 +210,7 @@ public class HudsonStreamsActivityProvider implements StreamsActivityProvider {
 	private Set<Integer> getAssociationFilters(ActivityRequest activityRequest) {
 		Set<Integer> ids = Sets.newHashSet();
 		for (HudsonAssociation association : associationManager.getAssociations()) {
-			ids.add(association.getAssociationId());
+			ids.add(association.getID());
 		}
 		return getFiltersFromActivityRequest(activityRequest, HUDSON_ASSOCIATION_KEY, ids, toInteger);
 	}
@@ -224,7 +224,7 @@ public class HudsonStreamsActivityProvider implements StreamsActivityProvider {
 	private Set<Integer> getServerFilters(ActivityRequest activityRequest) {
 		Set<Integer> ids = Sets.newHashSet();
 		for (HudsonServer server : serverManager.getServers()) {
-			ids.add(server.getServerId());
+			ids.add(server.getID());
 		}
 		return getFiltersFromActivityRequest(activityRequest, HUDSON_SERVER_KEY, ids, toInteger);
 	}

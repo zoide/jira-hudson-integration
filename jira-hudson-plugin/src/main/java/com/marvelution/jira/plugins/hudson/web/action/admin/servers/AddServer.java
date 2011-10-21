@@ -22,9 +22,8 @@ package com.marvelution.jira.plugins.hudson.web.action.admin.servers;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
-import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerFactory;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.web.action.admin.KeyValuePair;
 import com.marvelution.jira.plugins.hudson.web.action.admin.ModifyActionType;
@@ -43,12 +42,10 @@ public class AddServer extends AbstractModifyServer {
 	 * Constructor
 	 * 
 	 * @param serverManager the {@link HudsonServerManager} implementation
-	 * @param serverFactory the {@link HudsonServerFactory} implementation
 	 * @param clientFactory the {@link HudsonClientFactory} implementation
 	 */
-	protected AddServer(HudsonServerManager serverManager, HudsonServerFactory serverFactory,
-			HudsonClientFactory clientFactory) {
-		super(serverManager, serverFactory, clientFactory);
+	protected AddServer(HudsonServerManager serverManager, HudsonClientFactory clientFactory) {
+		super(serverManager, clientFactory);
 	}
 
 	/**
@@ -60,6 +57,15 @@ public class AddServer extends AbstractModifyServer {
 		if (serverManager.hasServer(getName())) {
 			addError("name", getText("hudson.server.name.duplicate", getName()));
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void saveServer(String name, String description, String host, String publicHost, String username,
+				String password, boolean includeInStreams) {
+		serverManager.addServer(name, description, host, publicHost, username, password, includeInStreams, false);
 	}
 
 	/**

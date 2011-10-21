@@ -52,9 +52,9 @@ import com.marvelution.jira.plugins.hudson.rest.exceptions.NoSuchServerException
 import com.marvelution.jira.plugins.hudson.rest.model.Chart;
 import com.marvelution.jira.plugins.hudson.rest.model.Charts;
 import com.marvelution.jira.plugins.hudson.rest.model.Option;
-import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.sun.jersey.spi.resource.Singleton;
@@ -117,7 +117,7 @@ public class HudsonChartsRestResource {
 			throws IOException, ClientException {
 		if (associationManager.hasAssociation(associationId)) {
 			final HudsonAssociation association = associationManager.getAssociation(associationId);
-			return getChart(type, association.getServerId(), association.getJobName());
+			return getChart(type, association.getServer().getID(), association.getJobName());
 		} else {
 			throw new NoSuchAssociationException(associationId);
 		}

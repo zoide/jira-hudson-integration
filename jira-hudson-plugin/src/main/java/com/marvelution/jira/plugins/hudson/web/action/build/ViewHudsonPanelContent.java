@@ -49,10 +49,10 @@ import com.marvelution.jira.plugins.hudson.panels.resultset.ResultSet;
 import com.marvelution.jira.plugins.hudson.panels.utils.HudsonPanelHelper;
 import com.marvelution.jira.plugins.hudson.panels.utils.PanelModule;
 import com.marvelution.jira.plugins.hudson.panels.utils.PanelView;
-import com.marvelution.jira.plugins.hudson.services.HudsonClientFactory;
-import com.marvelution.jira.plugins.hudson.services.HudsonConfigurationManager;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
+import com.marvelution.jira.plugins.hudson.services.configuration.HudsonConfigurationManager;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactory;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.utils.BuildUtils;
@@ -111,7 +111,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 			return ERROR;
 		}
 		association = associationManager.getAssociation(associationId);
-		if (!serverManager.hasServer(association.getServerId())) {
+		if (!serverManager.hasServer(association.getServer().getID())) {
 			addErrorMessage(getText("hudson.panel.error.invalid.association.server"));
 			return ERROR;
 		}
@@ -123,7 +123,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 		RequestAndSessionUtils.storeInSession(HudsonPanelHelper.SELECTED_VIEW, view.getViewName());
 		RequestAndSessionUtils.storeInSession(HudsonPanelHelper.SELECTED_ASSOCIATION, associationId);
 		try {
-			server = serverManager.getServer(association.getServerId());
+			server = association.getServer();
 			final HudsonClient client = clientFactory.create(server);
 			switch (module) {
 			case ISSUE:

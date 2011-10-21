@@ -22,6 +22,7 @@ package com.marvelution.jira.plugins.hudson.services.associations;
 import java.util.Collection;
 
 import com.atlassian.jira.project.Project;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 
 /**
  * Hudson Association Manager Interface
@@ -77,11 +78,62 @@ public interface HudsonAssociationManager {
 	Collection<HudsonAssociation> getAssociations(Project project);
 
 	/**
-	 * Add a {@link HudsonAssociation} to the collection
+	 * Add a {@link HudsonAssociation}
 	 * 
-	 * @param association the {@link HudsonAssociation} to all
+	 * @param server the {@link HudsonServer}
+	 * @param project the JIRA {@link Project}
+	 * @param jobname the Hudson job name
+	 * @return the new {@link HudsonAssociation}
 	 */
-	void addAssociation(HudsonAssociation association);
+	HudsonAssociation addAssociation(HudsonServer server, long projectId, String jobname);
+
+	/**
+	 * Add a {@link HudsonAssociation}
+	 * 
+	 * @param serverId the Hudson ServerId
+	 * @param projectId the JIRA Project Id
+	 * @param jobname the Hudson job name
+	 * @return the new {@link HudsonAssociation}
+	 */
+	HudsonAssociation addAssociation(int serverId, long projectId, String jobname);
+
+	/**
+	 * Copy a {@link HudsonAssociation} to the collection
+	 * 
+	 * @param association the {@link HudsonAssociation} to copy
+	 * @return the new {@link HudsonAssociation}
+	 */
+	HudsonAssociation addAssociation(HudsonAssociation association);
+
+	/**
+	 * Update a {@link HudsonAssociation}
+	 * 
+	 * @param associationId the Hudson AssociationId
+	 * @param server the {@link HudsonServer}
+	 * @param project the JIRA {@link Project}
+	 * @param jobname the Hudson job name
+	 * @return the updated {@link HudsonAssociation}
+	 */
+	HudsonAssociation updateAssociation(int associationId, HudsonServer server, long projectId, String jobname);
+
+	/**
+	 * Update a {@link HudsonAssociation}
+	 * 
+	 * @param associationId the Hudson AssociationId
+	 * @param serverId the Hudson ServerId
+	 * @param projectId the JIRA Project Id
+	 * @param jobname the Hudson job name
+	 * @return the updated {@link HudsonAssociation}
+	 */
+	HudsonAssociation updateAssociation(int associationId, int serverId, long projectId, String jobname);
+
+	/**
+	 * Update a {@link HudsonAssociation}
+	 * 
+	 * @param association the {@link HudsonAssociation} to update
+	 * @return the updated {@link HudsonAssociation}
+	 */
+	HudsonAssociation updateAssociation(HudsonAssociation association);
 
 	/**
 	 * Remove a {@link HudsonAssociation} from the collection by Id

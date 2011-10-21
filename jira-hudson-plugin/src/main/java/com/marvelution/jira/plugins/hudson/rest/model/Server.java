@@ -63,7 +63,7 @@ public class Server {
 	 * @param server the {@link HudsonServer} to copy the data from
 	 */
 	public Server(HudsonServer server) {
-		setServerId(server.getServerId());
+		setServerId(server.getID());
 		setName(server.getName());
 		setDescription(server.getDescription());
 		setHost(server.getPublicHost());
