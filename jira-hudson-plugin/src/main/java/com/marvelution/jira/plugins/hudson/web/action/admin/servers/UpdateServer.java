@@ -118,10 +118,9 @@ public class UpdateServer extends AbstractModifyServer {
 	}
 
 	/**
-	 * Getter for sid
-	 *
-	 * @return the sid
+	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSid() {
 		return sid;
 	}

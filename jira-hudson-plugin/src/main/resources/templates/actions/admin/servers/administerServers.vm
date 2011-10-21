@@ -23,71 +23,79 @@
 </head>
 
 <script type="text/javascript">
-    function init()
-    {
+    function init() {
         document.title='$i18n.getText("hudson.servers.header.title")';
     }
     window.onload=init;
 </script>
 
 #set($i18n = $action)
-<div class="jiraform maxWidth">
-	<div class="jiraformheader">
-		<h3 class="formtitle">
-			$i18n.getText("hudson.servers.title")
-		</h3>
-		<br/>
-		$i18n.getText("hudson.servers.description")<br />
-		<img src="${req.contextPath}/images/icons/bullet_creme.gif" align="absmiddle" border="0" height="8" width="8">
-		<b><a id="add_hudson_server" href="AddServer!default.jspa">$i18n.getText("hudson.servers.add.link")</a></b>
-	</div>
-	<div class="jiraformcontents">
-		<table class="grid maxWidth">
-			<tr>
-				<th>$i18n.getText("common.words.name")</th>
-				<th>$i18n.getText("common.words.details")</th>
-				<th>$i18n.getText("common.words.operations")</th>
-			</tr>
-			#if( ${servers.isEmpty()} )
-			<tr bgcolor="#FFF">
-				<td colspan="4">
-					$i18n.getText("hudson.servers.not.configured")
-				</td>
-			</tr>
-			#else
-			#foreach($server in $sorter.sort($servers, "name"))
-			#if ($velocityCount % 2 == 1)
-				#set ($rowbgcolor = "#FFFFFF")
-			#else
-				#set ($rowbgcolor = "#FFFFF0")
-			#end
-			<tr bgcolor="$rowbgcolor">
-				<td valign="top">
-					<b>${server.name}</b>
-					#if (${server.defaultServer}) (${i18n.getText("common.words.default")}) #end
-					<br>
-					#if (${server.includeInStreams}) (${i18n.getText("hudson.servers.include.in.streams")})<br> #end
-					<font size="1">$!{server.description}</font>
-				</td>
-				<td valign="top">
-					<b>$i18n.getText("hudson.servers.host")</b>: <a href="${server.host}">${server.host}</a><br>
-					<b>$i18n.getText("hudson.servers.public.host")</b>: <a href="${server.publicHost}">${server.publicHost}</a>
-					#if (${server.isSecured()})
-					<br><b>$i18n.getText("common.words.username")</b>: ${server.username}<br>
-					#else
-					<br><b>$i18n.getText("hudson.servers.anonymous")</b>
-					#end
-				</td>
-				<td align="left" valign="top">
-					<a href="UpdateServer!default.jspa?sid=${server.ID}">$i18n.getText("common.forms.edit")</a>
-					| <a href="DeleteServer!default.jspa?sid=${server.ID}">$i18n.getText("common.words.delete")</a>
-					#if (!${server.defaultServer})
-					| <a href="UpdateServer!setAsDefault.jspa?sid=${server.ID}">$i18n.getText("hudson.servers.set.as.default")</a>
-					#end
-				</td>
-			</tr>
-			#end
-			#end
-		</table>
-	</div>
-</div>
+<table class="jiraform maxWidth">
+<tbody>
+	<tr class="titlerow">
+		<td colspan="2" class="jiraformheader">
+			<h3 class="formtitle">$i18n.getText("hudson.servers.title")</h3>
+		</td>
+	</tr>
+	<tr class="descriptionrow">
+		<td colspan="2" class="jiraformheader">
+			<div class="desc-wrap">
+				$i18n.getText("hudson.servers.description")<br />
+				<img src="${req.contextPath}/images/icons/bullet_creme.gif" align="absmiddle" border="0" height="8" width="8">
+				<b><a id="add_hudson_server" href="AddServer!default.jspa">$i18n.getText("hudson.servers.add.link")</a></b>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table class="grid maxWidth">
+				<tr>
+					<th>$i18n.getText("common.words.name")</th>
+					<th>$i18n.getText("common.words.details")</th>
+					<th>$i18n.getText("common.words.operations")</th>
+				</tr>
+				#if( ${servers.isEmpty()} )
+				<tr bgcolor="#FFF">
+					<td colspan="4">
+						$i18n.getText("hudson.servers.not.configured")
+					</td>
+				</tr>
+				#else
+				#foreach($server in $sorter.sort($servers, "name"))
+				#if ($velocityCount % 2 == 1)
+					#set ($rowbgcolor = "#FFFFFF")
+				#else
+					#set ($rowbgcolor = "#FFFFF0")
+				#end
+				<tr bgcolor="$rowbgcolor">
+					<td valign="top">
+						<b>${server.name}</b>
+						#if (${server.defaultServer}) (${i18n.getText("common.words.default")}) #end
+						#if (${server.includeInStreams}) (${i18n.getText("hudson.servers.include.in.streams")})<br> #end<br />
+						<font size="1">$!{server.description}</font>
+					</td>
+					<td valign="top">
+						#if (${server.isSecured()})
+						<b>$i18n.getText("common.words.username")</b>: ${server.username}
+						#else
+						<b>$i18n.getText("hudson.servers.anonymous")</b>
+						#end
+						<br />
+						<b>$i18n.getText("hudson.servers.host")</b>: <a href="${server.host}">${server.host}</a><br>
+						<b>$i18n.getText("hudson.servers.public.host")</b>: <a href="${server.publicHost}">${server.publicHost}</a>
+					</td>
+					<td align="left" valign="top">
+						<a href="UpdateServer!default.jspa?sid=${server.ID}">$i18n.getText("common.forms.edit")</a>
+						| <a href="DeleteServer!default.jspa?sid=${server.ID}">$i18n.getText("common.words.delete")</a>
+						#if (!${server.defaultServer})
+						| <a href="UpdateServer!setAsDefault.jspa?sid=${server.ID}">$i18n.getText("hudson.servers.set.as.default")</a>
+						#end
+					</td>
+				</tr>
+				#end
+				#end
+			</table>
+		</td>
+	</tr>
+</tbody>
+</table>

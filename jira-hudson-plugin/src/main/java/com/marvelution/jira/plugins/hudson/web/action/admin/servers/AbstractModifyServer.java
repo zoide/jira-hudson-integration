@@ -130,6 +130,15 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	public abstract Collection<KeyValuePair> getExtraHiddenInput();
 
 	/**
+	 * Getter for sid
+	 *
+	 * @return the sid
+	 */
+	public int getSid() {
+		return 0;
+	}
+
+	/**
 	 * Getter for name
 	 * 
 	 * @return the name

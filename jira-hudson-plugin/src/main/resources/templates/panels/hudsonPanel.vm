@@ -35,7 +35,7 @@
 	<div id="sliderWrapper">
 		<ul id="associations">
 			#foreach ($association in $associations)
-			<li id="association_${association.associationId}" class="tab">${association.jobName}</li>
+			<li id="association_${association.ID}" class="tab">${association.jobName}</li>
 			#end
 		</ul>
 	</div>

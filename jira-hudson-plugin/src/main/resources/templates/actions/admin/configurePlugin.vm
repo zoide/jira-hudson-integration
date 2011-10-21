@@ -16,6 +16,17 @@
 ## specific language governing permissions and limitations
 ## under the License.
 ##
+
+#macro (fieldHeader $label)
+<tr>
+	<td class="fieldLabelArea" style="width: 40%">$label</td>
+	<td class="fieldValueArea">
+#end
+#macro (fieldFooter)
+	</td>
+</tr>
+#end
+
 <head>
 	<meta name="decorator" content="admin"/>
 	<meta name="admin.active.section" content="admin_plugins_menu/hudson-section">
@@ -23,8 +34,7 @@
 </head>
 
 <script type="text/javascript">
-    function init()
-    {
+    function init() {
         document.title='$i18n.getText("hudson.configuration.header.title")';
     }
     window.onload=init;
@@ -32,83 +42,79 @@
 
 #set($i18n = $action)
 <form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="ConfigurePlugin.jspa">
-<div class="jiraform maxWidth">
-	<div class="jiraformheader">
-		<h3 class="formtitle">
-			$i18n.getText("hudson.configuration.title")
-		</h3>
-		<br/>
-		$i18n.getText("hudson.configuration.description")<br />
-	</div>
-	<div class="jiraformcontents">
-		<table class="grid maxWidth">
-			<tr>
-				<td valign="top" class="fieldLabelArea" width="55%">$i18n.getText("hudson.configuration.hide.unassociated.hudson.tabs"):</td>
-				<td valign="top" bgcolor="#ffffff" class="fieldValueArea">
-					<input type="radio" value="true" name="hideUnassociatedHudsonTabs" #if (${hideUnassociatedHudsonTabs}) checked #end> $i18n.getText("hudson.configuration.hide")
-					&nbsp;
-					<input type="radio" value="false" name="hideUnassociatedHudsonTabs" #if (!${hideUnassociatedHudsonTabs}) checked #end> $i18n.getText("hudson.configuration.always.show")
-				</td>
-			</tr>
-			<tr>
-				<td valign="top" class="fieldLabelArea" width="55%" rowspan="2">$i18n.getText("hudson.configuration.show.if.user.member.of.usergroup.or.projectrole"):</td>
-				<td valign="top" bgcolor="#ffffff" class="fieldValueArea">
-					#set($selectedOption = $action.getShowIfUserMemberOfUsergroupAsCollection())
-					<b>$i18n.getText("hudson.configuration.usergroups")</b><br />
-					<select name="showIfUserMemberOfUsergroup" multiple size="5">
-						#foreach($group in $groups)
-						<option value="$group.name" #if ($selectedOption.contains($group.name)) selected #end>$group.name</a>
-						#end
-					</select>
-				</td>
-			<tr>
-				<td valign="top" bgcolor="#ffffff" class="fieldValueArea">
-					#set($selectedOption = $action.getShowIfUserMemberOfProjectRoleAsCollection())
-					<b>$i18n.getText("hudson.configuration.projectroles")</b><br />
-					<select name="showIfUserMemberOfProjectRole" multiple size="5">
-						#foreach($role in $projectRoles)
-						<option value="$role.id" #if ($selectedOption.contains($role.id.toString())) selected #end>$role.name</a>
-						#end
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td valign="top" class="fieldLabelArea" width="55%">$i18n.getText("hudson.configuration.show.if.issue.of.issuetype"):</td>
-				<td valign="top" bgcolor="#ffffff" class="fieldValueArea">
-					#set($selectedOptions = $action.getShowIfIssueOfIssuetypeAsCollection())
-					<select name="showIfIssueOfIssuetype" multiple size="5">
-						#foreach($issueType in $issueTypes)
-						<option value="$issueType.id" #if ($selectedOptions.contains($issueType.id)) selected #end>$issueType.name</option>
-						#end
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td valign="top" class="fieldLabelArea" width="45%">$i18n.getText("hudson.configuration.filter.hudson.builds"):</td>
-				<td valign="top" bgcolor="#ffffff" class="fieldValueArea">
-					<input type="radio" value="true" name="filterHudsonBuilds" #if (${filterHudsonBuilds}) checked #end> $i18n.getText("common.words.on")
-					&nbsp;
-					<input type="radio" value="false" name="filterHudsonBuilds" #if (!${filterHudsonBuilds}) checked #end> $i18n.getText("common.words.off")
-				</td>
-			</tr>
-			<tr>
-				<td valign="top" class="fieldLabelArea" width="45%">$i18n.getText("hudson.configuration.use.time.past.date.strings"):</td>
-				<td valign="top" bgcolor="#ffffff" class="fieldValueArea">
-					<input type="radio" value="true" name="timePastDateStrings" #if (${timePastDateStrings}) checked #end> $i18n.getText("common.words.on")
-					&nbsp;
-					<input type="radio" value="false" name="timePastDateStrings" #if (!${timePastDateStrings}) checked #end> $i18n.getText("common.words.off")
-				</td>
-			</tr>
-			<tr>
-				<td valign="top" colspan="2" class="fullyCentered jiraformfooter">
-					<input type="submit" id=" Update " name=" $i18n.getText("common.forms.update") " value=" $i18n.getText("common.forms.update") "
-						   accesskey="S" title="Press Alt+S to submit form" class="spaced" />
-					<input type="button" id="cancelButton" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt + `)"
-						name="ConfigurePlugin.jspa" value="$i18n.getText("common.forms.cancel")"
-						onclick="location.href='ConfigurePlugin.jspa'" />
-				</td>
-			</tr>
-		</table>
-	</div>
-</div>
+<table class="jiraform maxWidth">
+<tbody>
+	<tr class="titlerow">
+		<td colspan="2" class="jiraformheader">
+			<h3 class="formtitle">$i18n.getText("hudson.configuration.title")</h3>
+		</td>
+	</tr>
+	<tr class="descriptionrow">
+		<td colspan="2" class="jiraformheader">
+			<div class="desc-wrap">$i18n.getText("hudson.configuration.description")</div>
+		</td>
+	</tr>
+	#fieldHeader ($i18n.getText("hudson.configuration.hide.unassociated.hudson.tabs"))
+	<input type="radio" value="true" name="hideUnassociatedHudsonTabs" #if (${hideUnassociatedHudsonTabs}) checked #end> $i18n.getText("hudson.configuration.hide")
+	&nbsp;
+	<input type="radio" value="false" name="hideUnassociatedHudsonTabs" #if (!${hideUnassociatedHudsonTabs}) checked #end> $i18n.getText("hudson.configuration.always.show")
+	#fieldFooter ()
+	#fieldHeader ($i18n.getText("hudson.configuration.show.if.user.member.of.usergroup.or.projectrole"))
+	#set($selectedOption = $action.getShowIfUserMemberOfUsergroupAsCollection())
+	<b>$i18n.getText("hudson.configuration.usergroups")</b><br />
+	<select name="showIfUserMemberOfUsergroup" multiple size="5">
+		#foreach($group in $groups)
+		<option value="$group.name" #if ($selectedOption.contains($group.name)) selected #end>$group.name</a>
+		#end
+	</select>
+	<br />
+	#set($selectedOption = $action.getShowIfUserMemberOfProjectRoleAsCollection())
+	<b>$i18n.getText("hudson.configuration.projectroles")</b><br />
+	<select name="showIfUserMemberOfProjectRole" multiple size="5">
+		#foreach($role in $projectRoles)
+		<option value="$role.id" #if ($selectedOption.contains($role.id.toString())) selected #end>$role.name</a>
+		#end
+	</select>
+	#fieldFooter ()
+	#fieldHeader ($i18n.getText("hudson.configuration.show.if.issue.of.issuetype"))
+	#set($selectedOptions = $action.getShowIfIssueOfIssuetypeAsCollection())
+	<select name="showIfIssueOfIssuetype" multiple size="5">
+		#foreach($issueType in $issueTypes)
+		<option value="$issueType.id" #if ($selectedOptions.contains($issueType.id)) selected #end>$issueType.name</option>
+		#end
+	</select>
+	#fieldFooter ()
+	#fieldHeader ($i18n.getText("hudson.configuration.filter.hudson.builds"))
+	<input type="radio" value="true" name="filterHudsonBuilds" #if (${filterHudsonBuilds}) checked #end> $i18n.getText("common.words.on")
+	&nbsp;
+	<input type="radio" value="false" name="filterHudsonBuilds" #if (!${filterHudsonBuilds}) checked #end> $i18n.getText("common.words.off")
+	#fieldFooter ()
+	#fieldHeader ($i18n.getText("hudson.configuration.use.time.past.date.strings"))
+	<input type="radio" value="true" name="timePastDateStrings" #if (${timePastDateStrings}) checked #end> $i18n.getText("common.words.on")
+	&nbsp;
+	<input type="radio" value="false" name="timePastDateStrings" #if (!${timePastDateStrings}) checked #end> $i18n.getText("common.words.off")
+	#fieldFooter ()
+	<tr class="buttons-container">
+		<td class="jiraformfooter">&nbsp;</td>
+		<td colspan="1">
+			<div class="aui-toolbar form-buttons noprint">
+				<div class="toolbar-group">
+					<span class="toolbar-item">
+						<input type="submit" name=" $i18n.getText("common.forms.update") "
+							value=" $i18n.getText("common.forms.update") " id="add_submit" accesskey="s"
+							title="Press Ctrl+Alt+s to submit form" class="toolbar-trigger ">
+					</span>
+				</div>
+				<div class="toolbar-group">
+					<span class="toolbar-item toolbar-item-link">
+						<input id="cancelButton" class="toolbar-trigger" type="button" accesskey="`"
+							title="$i18n.getText("common.forms.cancel") (Ctrl+Alt + `)" name="ConfigurePlugin.jspa"
+							value="$i18n.getText("common.forms.cancel")" onclick="location.href='ConfigurePlugin.jspa'">
+					</span>
+				</div>
+			</div>
+		</td>
+	</tr>
+</tbody>
+</table>
 </form>

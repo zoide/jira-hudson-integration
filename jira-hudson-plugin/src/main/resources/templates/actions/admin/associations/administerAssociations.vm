@@ -23,59 +23,67 @@
 </head>
 
 <script type="text/javascript">
-    function init()
-    {
+    function init() {
         document.title='$i18n.getText("hudson.associations.header.title")';
     }
     window.onload=init;
 </script>
 
 #set($i18n = $action)
-<div class="jiraform maxWidth">
-	<div class="jiraformheader">
-		<h3 class="formtitle">
-			$i18n.getText("hudson.associations.title")
-		</h3>
-		<br/>
-		$i18n.getText("hudson.associations.description")<br />
-		<img src="${req.contextPath}/images/icons/bullet_creme.gif" align="absmiddle" border="0" height="8" width="8">
-		<b><a id="add_hudson_association" href="AddAssociation!default.jspa">$i18n.getText("hudson.associations.add.link")</a></b>
-	</div>
-	<div class="jiraformcontents">
-		<table class="grid maxWidth">
-			<tr>
-				<th>$i18n.getText("hudson.associations.project")</th>
-				<th>$i18n.getText("hudson.associations.details")</th>
-				<th>$i18n.getText("common.words.operations")</th>
-			</tr>
-			#if( ${associations.isEmpty()} )
-			<tr bgcolor="#FFF">
-				<td colspan="4">
-					$i18n.getText("hudson.associations.not.configured")
-				</td>
-			</tr>
-			#else
-			#foreach($association in $sorter.sort($associations, "jobName"))
-			#set ($project = $projectManager.getProjectObj($association.projectId))
-			#if ($velocityCount % 2 == 1)
-				#set ($rowbgcolor = "#FFFFFF")
-			#else
-				#set ($rowbgcolor = "#FFFFF0")
-			#end
-			<tr bgcolor="$rowbgcolor">
-				<td valign="top">
-					<a href="${req.contextPath}/browse/${project.key}">${project.name}<a/>
-				</td>
-				<td valign="top">
-					${association.server.name}: ${association.jobName}
-				</td>
-				<td align="left" valign="top">
-					<a href="UpdateAssociation!default.jspa?associationId=${association.ID}">$i18n.getText("common.forms.edit")</a>
-					| <a href="DeleteAssociation!default.jspa?associationId=${association.ID}">$i18n.getText("common.words.delete")</a>
-				</td>
-			</tr>
-			#end
-			#end
-		</table>
-	</div>
-</div>
+<table class="jiraform maxWidth">
+<tbody>
+	<tr class="titlerow">
+		<td colspan="2" class="jiraformheader">
+			<h3 class="formtitle">$i18n.getText("hudson.associations.title")</h3>
+		</td>
+	</tr>
+	<tr class="descriptionrow">
+		<td colspan="2" class="jiraformheader">
+			<div class="desc-wrap">
+				$i18n.getText("hudson.associations.description")<br />
+				<img src="${req.contextPath}/images/icons/bullet_creme.gif" align="absmiddle" border="0" height="8" width="8">
+				<b><a id="add_hudson_association" href="AddAssociation!default.jspa">$i18n.getText("hudson.associations.add.link")</a></b>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table class="grid maxWidth">
+				<tr>
+					<th>$i18n.getText("hudson.associations.project")</th>
+					<th>$i18n.getText("hudson.associations.details")</th>
+					<th>$i18n.getText("common.words.operations")</th>
+				</tr>
+				#if( ${associations.isEmpty()} )
+				<tr bgcolor="#FFF">
+					<td colspan="4">
+						$i18n.getText("hudson.associations.not.configured")
+					</td>
+				</tr>
+				#else
+				#foreach($association in $sorter.sort($associations, "jobName"))
+				#set ($project = $projectManager.getProjectObj($association.projectId))
+				#if ($velocityCount % 2 == 1)
+					#set ($rowbgcolor = "#FFFFFF")
+				#else
+					#set ($rowbgcolor = "#FFFFF0")
+				#end
+				<tr bgcolor="$rowbgcolor">
+					<td valign="top">
+						<a href="${req.contextPath}/browse/${project.key}">${project.name}<a/>
+					</td>
+					<td valign="top">
+						${association.server.name}: ${association.jobName}
+					</td>
+					<td align="left" valign="top">
+						<a href="UpdateAssociation!default.jspa?associationId=${association.ID}">$i18n.getText("common.forms.edit")</a>
+						| <a href="DeleteAssociation!default.jspa?associationId=${association.ID}">$i18n.getText("common.words.delete")</a>
+					</td>
+				</tr>
+				#end
+				#end
+			</table>
+		</td>
+	</tr>
+</tbody>
+</table>

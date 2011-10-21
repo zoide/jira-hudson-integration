@@ -67,7 +67,7 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 			addError("projectId", getText("hudson.association.project.required"));
 		}
 		if (StringUtils.isBlank(getJobName())) {
-			addError("jobname", getText("hudson.association.jobname.required"));
+			addError("jobName", getText("hudson.association.jobname.required"));
 		}
 	}
 

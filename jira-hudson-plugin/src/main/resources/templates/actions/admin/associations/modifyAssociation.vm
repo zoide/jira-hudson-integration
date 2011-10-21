@@ -16,6 +16,31 @@
 ## specific language governing permissions and limitations
 ## under the License.
 ##
+
+#macro (fieldHeader $label $fieldName $required $errors)
+#set ($extraStyle = "")
+#if ($errors && $errors.containsKey($fieldName))
+#set ($extraStyle = "formErrors")
+<tr>
+	<td class="fieldLabelArea formErrors">&nbsp;</td>
+	<td class="fieldValueArea formErrors">
+		<span class="errMsg">$errors.get($fieldName)</span>
+	</td>
+</tr>
+#end
+<tr>
+	<td class="fieldLabelArea $extraStyle">
+		$label
+		#if ($required) <span class="icon icon-required"><span>(Required Field)</span></span> #end
+	</td>
+	<td class="fieldValueArea $extraStyle">
+#end
+#macro (fieldFooter $labelHint)
+		#if ($labelHint) <div class="fieldDescription">$labelHint</div> #end
+	</td>
+</tr>
+#end
+
 <head>
 	<meta name="decorator" content="admin"/>
 	<meta name="admin.active.section" content="admin_plugins_menu/hudson-section">
@@ -23,8 +48,7 @@
 </head>
 
 <script type="text/javascript">
-    function init()
-    {
+    function init() {
         document.title='$i18n.getText("hudson.associations.${actionType.type()}.header.title")';
     }
     window.onload=init;
@@ -40,88 +64,68 @@
 <input type="hidden" name="$extra.key" value="$extra.value" />
 #end
 #end
-<div class="jiraform maxWidth">
-	<div class="jiraformheader">
-		<h3 class="formtitle">
-			$i18n.getText("hudson.associations.${actionType.type()}.title")
-		</h3>
-		<br/>
-		$i18n.getText("hudson.associations.${actionType.type()}.description")<br />
-	</div>
-	<div class="jiraformcontents">
-		<table class="grid maxWidth">
-	        #if ($action.hasAnyErrors())
-	        <tr>
-	            <td colspan="2" class="formErrors">
-	                <div class="errorArea">
-	                    <h4>Errors</h4>
-	                    <ul>
-	                        #foreach ($error in $action.getErrorMessages())
-	                        <li>$error</li>
-	                        #end
-	                        #foreach ($error in $action.errors)
-	                        <li>$error</li>
-	                        #end
-	                    </ul>
-	                </div>
-	            </td>
-	        </tr>
-	        #end
-	        <tr>
-	            <td class="fieldLabelArea">$i18n.getText("hudson.association.server.label"):</td>
-	            <td bgcolor="#ffffff" class="fieldValueArea">
-	            	<select size="1" name="hudsonId" id="hudsonId">
-	            		<option value="">${i18n.getText("hudson.association.select.server")}</option>
-	            		#foreach ($server in $sorter.sort($serverManager.getServers(), "name"))
-	            		<option value="$server.serverId" #if ($hudsonId == $server.serverId) selected #end >$server.name</option>
-	            		#end
-	            	</select>
-	                <br /><font size="1">$i18n.getText("hudson.association.server.hint")</font>
-	            </td>
-	        </tr>
-	        <tr>
-	            <td class="fieldLabelArea">$i18n.getText("hudson.association.project.label"):</td>
-	            <td bgcolor="#ffffff" class="fieldValueArea">
-	            	<select size="1" name="projectId" id="projectId">
-	            		<option value="">${i18n.getText("hudson.association.select.project")}</option>
-	            		#foreach ($project in $sorter.sort($projectManager.getProjectObjects(), "name"))
-	            		<option value="$project.id" #if ($projectId == $project.id) selected #end >$project.name</option>
-	            		#end
-	            	</select>
-	                <br /><font size="1">$i18n.getText("hudson.association.project.hint")</font>
-	            </td>
-	        </tr>
-	        <tr>
-	            <td class="fieldLabelArea">$i18n.getText("hudson.association.jobname.label"):</td>
-	            <td bgcolor="#ffffff" class="fieldValueArea">
-	                <select size="1" name="jobName" id="jobName">
-	            		<option value="">${i18n.getText("hudson.association.select.jobname")}</option>
-	                	#if ($jobOptions)
-	            		#foreach ($jobOption in $jobOptions)
-	            		<option value="$jobOption" #if ($jobOption.equals($jobName)) selected #end >$jobOption</option>
-	            		#end
-	            		#end
-	            	</select>
-	            	<img src="${req.contextPath}/images/icons/wait.gif" border="0" class="waiting-image" id="waitImage" style="display: none;" />
-	                <br /><font size="1">$i18n.getText("hudson.association.jobname.hint")</font>
-	            </td>
-	        </tr>
-	        <tr>
-	            <tr>
-	                <td colspan="2" class="fullyCentered jiraformfooter">
-	                    <input type="submit" id=" $i18n.getText("hudson.associations.${actionType.type()}.label") "
-	                    		name=" $i18n.getText("hudson.associations.${actionType.type()}.label") "
-	                    		value=" $i18n.getText("hudson.servers.${actionType.type()}.label") "
-	                    		accesskey="S" title="Press Alt+S to submit form" class="spaced" />
-	                    <input type="button" id="cancelButton" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt + `)"
-	                           name="AdministerHAssociations.jspa" value="$i18n.getText("common.forms.cancel")" 
-	                           onclick="location.href='AdministerAssociations.jspa'" />
-	                </td>
-	            </tr>
-	        </tr>
-		</table>
-	</div>
-</div>
+<table class="jiraform maxWidth">
+<tbody>
+	<tr class="titlerow">
+		<td colspan="2" class="jiraformheader">
+			<h3 class="formtitle">$i18n.getText("hudson.servers.${actionType.type()}.title")</h3>
+		</td>
+	</tr>
+	<tr class="descriptionrow">
+		<td colspan="2" class="jiraformheader">
+			<div class="desc-wrap">$i18n.getText("hudson.servers.${actionType.type()}.description")</div>
+		</td>
+	</tr>
+#fieldHeader ($i18n.getText("hudson.association.server.label") "hudsonId" true $action.errors)
+<select size="1" name="hudsonId" id="hudsonId">
+	<option value="">${i18n.getText("hudson.association.select.server")}</option>
+	#foreach ($server in $sorter.sort($serverManager.getServers(), "name"))
+	<option value="$server.ID" #if ($hudsonId == $server.ID) selected #end >$server.name</option>
+	#end
+</select>
+#fieldFooter ($i18n.getText("hudson.association.server.hint"))
+#fieldHeader ($i18n.getText("hudson.association.project.label") "projectId" true $action.errors)
+<select size="1" name="projectId" id="projectId">
+	<option value="">${i18n.getText("hudson.association.select.project")}</option>
+	#foreach ($project in $sorter.sort($projectManager.getProjectObjects(), "name"))
+	<option value="$project.id" #if ($projectId == $project.id) selected #end >$project.name</option>
+	#end
+</select>
+#fieldFooter ($i18n.getText("hudson.association.project.hint"))
+#fieldHeader ($i18n.getText("hudson.association.jobname.label") "jobName" true $action.errors)
+<select size="1" name="jobName" id="jobName">
+	<option value="">${i18n.getText("hudson.association.select.jobname")}</option>
+	#if ($jobOptions)
+	#foreach ($jobOption in $jobOptions)
+	<option value="$jobOption" #if ($jobOption.equals($jobName)) selected #end >$jobOption</option>
+	#end
+	#end
+</select>
+<img src="${req.contextPath}/images/icons/wait.gif" border="0" class="waiting-image" id="waitImage" style="display: none;" />
+#fieldFooter ($i18n.getText("hudson.association.jobname.hint"))
+<tr class="buttons-container">
+	<td class="jiraformfooter">&nbsp;</td>
+	<td colspan="1">
+		<div class="aui-toolbar form-buttons noprint">
+			<div class="toolbar-group">
+				<span class="toolbar-item">
+					<input type="submit" name=" $i18n.getText("hudson.associations.${actionType.type()}.label") "
+						value=" $i18n.getText("hudson.associations.${actionType.type()}.label") " id="add_submit" accesskey="s"
+						title="Press Ctrl+Alt+s to submit form" class="toolbar-trigger ">
+				</span>
+			</div>
+			<div class="toolbar-group">
+				<span class="toolbar-item toolbar-item-link">
+					<input id="cancelButton" class="toolbar-trigger" type="button" accesskey="`"
+						title="$i18n.getText("common.forms.cancel") (Ctrl+Alt + `)" name="AdministerAssociations.jspa"
+						value="$i18n.getText("common.forms.cancel")" onclick="location.href='AdministerAssociations.jspa'">
+				</span>
+			</div>
+		</div>
+	</td>
+</tr>
+</tbody>
+</table>
 </form>
 <script type="text/javascript">
 function updateJobList() {

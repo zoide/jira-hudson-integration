@@ -23,8 +23,7 @@
 </head>
 
 <script type="text/javascript">
-    function init()
-    {
+    function init() {
         document.title='$i18n.getText("hudson.servers.delete.header.title")';
     }
     window.onload=init;
@@ -33,31 +32,44 @@
 #set($i18n = $action)
 <form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="DeleteServer.jspa">
 <input type="hidden" name="sid" value="${sid}" />
-<div class="jiraform maxWidth">
-	<div class="jiraformheader">
-		<h3 class="formtitle">
-			$i18n.getText("hudson.servers.delete.title")
-		</h3>
-		<br/>
-		$i18n.getText("hudson.servers.delete.description")<br />
-	</div>
-	<div class="jiraformcontents">
-		<table class="grid maxWidth">
-			<tr>
-				<td>
-					${i18n.getText("hudson.servers.delete.confirm", $name)}
-				</td>
-			</tr>
-            <tr>
-                <td class="fullyCentered jiraformfooter" >
-                    <input type="submit" name="delete" value="$i18n.getText("common.words.delete")" accesskey="S"
-                    	title="Press Alt+Shift+S to submit form" class="spaced" />
-                    <input id="cancelButton" type="button" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt+Shift + `)"
-                    	name="AdministerServers.jspa" value="$i18n.getText("common.forms.cancel")"
-                    	onclick="location.href='AdministerServers.jspa'" />
-                </td>
-            </tr>
-		</table>
-	</div>
-</div>
+<table class="jiraform maxWidth">
+<tbody>
+	<tr class="titlerow">
+		<td colspan="2" class="jiraformheader">
+			<h3 class="formtitle">$i18n.getText("hudson.servers.delete.title")</h3>
+		</td>
+	</tr>
+	<tr class="descriptionrow">
+		<td colspan="2" class="jiraformheader">
+			<div class="desc-wrap">$i18n.getText("hudson.servers.delete.description")</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			${i18n.getText("hudson.servers.delete.confirm", $name)}
+		</td>
+	</tr>
+	<tr class="buttons-container">
+		<td class="jiraformfooter">&nbsp;</td>
+		<td colspan="1">
+			<div class="aui-toolbar form-buttons noprint">
+				<div class="toolbar-group">
+					<span class="toolbar-item">
+						<input type="submit" name=" $i18n.getText("common.words.delete") "
+							value=" $i18n.getText("common.words.delete") " id="add_submit" accesskey="s"
+							title="Press Ctrl+Alt+s to submit form" class="toolbar-trigger ">
+					</span>
+				</div>
+				<div class="toolbar-group">
+					<span class="toolbar-item toolbar-item-link">
+						<input id="cancelButton" class="toolbar-trigger" type="button" accesskey="`"
+							title="$i18n.getText("common.forms.cancel") (Ctrl+Alt + `)" name="AdministerServers.jspa"
+							value="$i18n.getText("common.forms.cancel")" onclick="location.href='AdministerServers.jspa'">
+					</span>
+				</div>
+			</div>
+		</td>
+	</tr>
+</tbody>
+</table>
 </form>

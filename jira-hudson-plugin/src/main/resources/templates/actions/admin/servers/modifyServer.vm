@@ -16,6 +16,38 @@
 ## specific language governing permissions and limitations
 ## under the License.
 ##
+
+#macro (fieldHeader $label $fieldName $required $errors)
+#set ($extraStyle = "")
+#if ($errors && $errors.containsKey($fieldName))
+#set ($extraStyle = "formErrors")
+<tr>
+	<td class="fieldLabelArea formErrors">&nbsp;</td>
+	<td class="fieldValueArea formErrors">
+		<span class="errMsg">$errors.get($fieldName)</span>
+	</td>
+</tr>
+#end
+<tr>
+	<td class="fieldLabelArea $extraStyle">
+		$label
+		#if ($required) <span class="icon icon-required"><span>(Required Field)</span></span> #end
+	</td>
+	<td class="fieldValueArea $extraStyle">
+#end
+#macro (fieldFooter $labelHint)
+		#if ($labelHint) <div class="fieldDescription">$labelHint</div> #end
+	</td>
+</tr>
+#end
+
+#macro (textField $label $labelHint $fieldName $fieldValue $required $errors)
+	#fieldHeader ($label $fieldName $required $errors)
+	<input type="text" size="60" name="$fieldName" label="$label" value="$!fieldValue" />
+	#fieldFooter ($labelHint)
+</tr>
+#end
+
 <head>
 	<meta name="decorator" content="admin"/>
 	<meta name="admin.active.section" content="admin_plugins_menu/hudson-section">
@@ -23,14 +55,13 @@
 </head>
 
 <script type="text/javascript">
-    function init()
-    {
+    function init() {
         document.title='$i18n.getText("hudson.servers.${actionType.type()}.header.title")';
     }
     window.onload=init;
 </script>
 
-#set($i18n = $action)
+#set ($i18n = $action)
 <form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="$actionType.formAction()">
 #if ($sid > 0)
 <input type="hidden" name="sid" value="${sid}" />
@@ -38,95 +69,48 @@
 #foreach ($extra in $extraHiddenInput)
 <input type="hidden" name="$extra.key" value="$extra.value" />
 #end
-<div class="jiraform maxWidth">
-	<div class="jiraformheader">
-		<h3 class="formtitle">
-			$i18n.getText("hudson.servers.${actionType.type()}.title")
-		</h3>
-		<br/>
-		$i18n.getText("hudson.servers.${actionType.type()}.description")<br />
-	</div>
-	<div class="jiraformcontents">
-		<table class="grid maxWidth">
-	        #if ($action.hasAnyErrors())
-	        <tr>
-	            <td colspan="2" class="formErrors">
-	                <div class="errorArea">
-	                    <h4>Errors</h4>
-	                    <ul>
-	                        #foreach ($error in $action.getErrorMessages())
-	                        <li>$error</li>
-	                        #end
-	                        #foreach ($error in $action.errors)
-	                        <li>$error</li>
-	                        #end
-	                    </ul>
-	                </div>
-	            </td>
-	        </tr>
-	        #end
-	        <tr>
-	            <td class="fieldLabelArea">$i18n.getText("hudson.server.name.label"):</td>
-	            <td bgcolor="#ffffff" class="fieldValueArea">
-	                <input type="text" name="name" label="$i18n.getText("hudson.server.name.label")" value="$!name" />
-	                <br /><font size="1">$i18n.getText("hudson.server.name.hint")</font>
-	            </td>
-	        </tr>
-	        <tr>
-	            <td class="fieldLabelArea">$i18n.getText("common.words.description"):</td>
-	            <td bgcolor="#ffffff" class="fieldValueArea">
-	                <input type="text" size="60" name="description" label="$i18n.getText("common.words.description")" value="$!description" />
-	            </td>
-	        </tr>
-	        <tr>
-	            <td class="fieldLabelArea">$i18n.getText("hudson.server.host.label"):</td>
-	            <td bgcolor="#ffffff" class="fieldValueArea">
-	                <input type="text" name="host" label="$i18n.getText("hudson.server.host.label")" value="$!host" />
-	                <br /><font size="1">$i18n.getText("hudson.server.host.hint")</font>
-	            </td>
-	        </tr>
-	        <tr>
-	            <td class="fieldLabelArea">$i18n.getText("hudson.server.public.host.label"):</td>
-	            <td bgcolor="#ffffff" class="fieldValueArea">
-	                <input type="text" name="publicHost" label="$i18n.getText("hudson.server.public.host.label")" value="$!publicHost" />
-	                <br /><font size="1">$i18n.getText("hudson.server.public.host.hint")</font>
-	            </td>
-	        </tr>
-	        <tr>
-	            <td class="fieldLabelArea">$i18n.getText("common.words.username"):</td>
-	            <td bgcolor="#ffffff" class="fieldValueArea">
-	                <input type="text" name="username" label="$i18n.getText("common.words.username")" value="$!username" />
-	                <br /><font size="1">$i18n.getText("hudson.server.username.hint")</font>
-	            </td>
-	        </tr>
-	        <tr>
-	            <td class="fieldLabelArea">$i18n.getText("hudson.server.include.in.streams"):</td>
-	            <td bgcolor="#ffffff" class="fieldValueArea">
-	                <input type="checkbox" name="includeInStreams" label="$i18n.getText("hudson.server.include.in.streams")" value="true" #if (${includeInStreams}) checked="checked" #end />
-	                <br /><font size="1">$i18n.getText("hudson.server.include.in.streams.hint")</font>
-	            </td>
-	        </tr>
-	        <tr>
-	            <td class="fieldLabelArea">$i18n.getText("common.words.password"):</td>
-	            <td bgcolor="#ffffff" class="fieldValueArea">
-	                <input type="password" name="password" label="$i18n.getText("common.words.password")" value="$!password" />
-	                <br /><font size="1">$i18n.getText("hudson.server.password.hint")</font>
-	            </td>
-	        </tr>
-	        <tr>
-	            <tr>
-	                <td colspan="2" class="fullyCentered jiraformfooter">
-	                    <input type="submit" id=" $i18n.getText("hudson.servers.${actionType.type()}.label") "
-	                    		name=" $i18n.getText("hudson.servers.${actionType.type()}.label") "
-	                    		value=" $i18n.getText("hudson.servers.${actionType.type()}.label") "
-	                    		accesskey="S" title="Press Alt+S to submit form" class="spaced" />
-	                    <input type="button" id="cancelButton" accesskey="`" title="$i18n.getText("common.forms.cancel") (Alt + `)"
-	                           name="AdministerServers.jspa" value="$i18n.getText("common.forms.cancel")" 
-	                           onclick="location.href='AdministerServers.jspa'" />
-	                </td>
-	            </tr>
-	        </tr>
-		</table>
-	</div>
-</div>
+<table class="jiraform maxWidth">
+<tbody>
+	<tr class="titlerow">
+		<td colspan="2" class="jiraformheader">
+			<h3 class="formtitle">$i18n.getText("hudson.servers.${actionType.type()}.title")</h3>
+		</td>
+	</tr>
+	<tr class="descriptionrow">
+		<td colspan="2" class="jiraformheader">
+			<div class="desc-wrap">$i18n.getText("hudson.servers.${actionType.type()}.description")</div>
+		</td>
+	</tr>
+#textField ($i18n.getText("hudson.server.name.label") $i18n.getText("hudson.server.name.hint") "name" "$!name" true $action.errors)
+#textField ($i18n.getText("common.words.description") "" "description" "$!description" false $action.errors)
+#textField ($i18n.getText("hudson.server.host.label") $i18n.getText("hudson.server.host.hint") "host" "$!host" true $action.errors)
+#textField ($i18n.getText("hudson.server.public.host.label") $i18n.getText("hudson.server.public.host.hint") "publicHost" "$!publicHost" false $action.errors)
+#textField ($i18n.getText("common.words.username") $i18n.getText("hudson.server.username.hint") "username" "$!username" false $action.errors)
+#textField ($i18n.getText("common.words.password") $i18n.getText("hudson.server.password.hint") "password" "$!password" false $action.errors)
+#fieldHeader ($i18n.getText("hudson.server.include.in.streams") "includeInStreams" false $action.errors)
+<input type="checkbox" name="includeInStreams" label="$i18n.getText("hudson.server.include.in.streams")" value="true" #if ($includeInStreams) checked="checked" #end />
+#fieldFooter ($i18n.getText("hudson.server.include.in.streams.hint"))
+<tr class="buttons-container">
+	<td class="jiraformfooter">&nbsp;</td>
+	<td colspan="1">
+		<div class="aui-toolbar form-buttons noprint">
+			<div class="toolbar-group">
+				<span class="toolbar-item">
+					<input type="submit" name=" $i18n.getText("hudson.servers.${actionType.type()}.label") "
+						value=" $i18n.getText("hudson.servers.${actionType.type()}.label") " id="add_submit" accesskey="s"
+						title="Press Ctrl+Alt+s to submit form" class="toolbar-trigger ">
+				</span>
+			</div>
+			<div class="toolbar-group">
+				<span class="toolbar-item toolbar-item-link">
+					<input id="cancelButton" class="toolbar-trigger" type="button" accesskey="`"
+						title="$i18n.getText("common.forms.cancel") (Ctrl+Alt + `)" name="AdministerServers.jspa"
+						value="$i18n.getText("common.forms.cancel")" onclick="location.href='AdministerServers.jspa'">
+				</span>
+			</div>
+		</div>
+	</td>
+</tr>
+</tbody>
+</table>
 </form>
