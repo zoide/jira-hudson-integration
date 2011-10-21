@@ -56,7 +56,6 @@
 			</tr>
 			#else
 			#foreach($association in $sorter.sort($associations, "jobName"))
-			#set ($server = $serverManager.getServer($association.serverId))
 			#set ($project = $projectManager.getProjectObj($association.projectId))
 			#if ($velocityCount % 2 == 1)
 				#set ($rowbgcolor = "#FFFFFF")
@@ -68,7 +67,7 @@
 					<a href="${req.contextPath}/browse/${project.key}">${project.name}<a/>
 				</td>
 				<td valign="top">
-					${server.name}: ${association.jobName}
+					${association.server.name}: ${association.jobName}
 				</td>
 				<td align="left" valign="top">
 					<a href="UpdateAssociation!default.jspa?associationId=${association.ID}">$i18n.getText("common.forms.edit")</a>
