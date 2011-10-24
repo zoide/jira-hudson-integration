@@ -42,6 +42,7 @@ import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.BuildQuery;
 import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
 import com.marvelution.hudson.plugins.apiv2.client.services.SearchQuery;
+import com.marvelution.hudson.plugins.apiv2.client.services.VersionQuery;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 import com.marvelution.jira.plugins.hudson.panels.resultset.BuildsResultSet;
 import com.marvelution.jira.plugins.hudson.panels.resultset.JobStatusResultSet;
@@ -83,6 +84,7 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	private long objectId;
 	private HudsonAssociation association;
 	private HudsonServer server;
+	private com.marvelution.hudson.plugins.apiv2.resources.model.Version hudsonVersion;
 
 	/**
 	 * Constructor
@@ -125,6 +127,11 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 		try {
 			server = association.getServer();
 			final HudsonClient client = clientFactory.create(server);
+			try {
+				hudsonVersion = client.find(VersionQuery.createForPluginVersion());
+			} catch (ClientException e) {
+				// Ignore this exception its all about the builds anyway
+			}
 			switch (module) {
 			case ISSUE:
 				getPanelContentForIssueView(client);
@@ -445,6 +452,26 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	 */
 	public void setObjectId(long objectId) {
 		this.objectId = objectId;
+	}
+
+	/**
+	 * Getter for hudsonVersion
+	 *
+	 * @return the hudsonVersion
+	 * @since 4.2.0
+	 */
+	public com.marvelution.hudson.plugins.apiv2.resources.model.Version getHudsonVersion() {
+		return hudsonVersion;
+	}
+
+	/**
+	 * Setter for hudsonVersion
+	 *
+	 * @param hudsonVersion the hudsonVersion to set
+	 * @since 4.2.0
+	 */
+	public void setHudsonVersion(com.marvelution.hudson.plugins.apiv2.resources.model.Version hudsonVersion) {
+		this.hudsonVersion = hudsonVersion;
 	}
 
 	/**

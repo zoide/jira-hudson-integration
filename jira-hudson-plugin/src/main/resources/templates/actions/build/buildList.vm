@@ -16,6 +16,7 @@
 ## specific language governing permissions and limitations
 ## under the License.
 ##
+
 <ul id="summaries">
 #set ($server = $resultSet.getServer())
 #foreach ($build in $resultSet.getResults())
@@ -84,3 +85,4 @@
 	<li class="clear space"></li>
 #end
 </ul>
+#parse ("templates/actions/build/common.vm")

@@ -17,12 +17,8 @@
 ## under the License.
 ##
 
-<ul class="errorList">
-	#foreach ($error in $action.getErrorMessages())
-	<li>$error</li>
-	#end
-	#foreach ($error in $action.errors)
-	<li>$error</li>
-	#end
-</ul>
-#parse ("templates/actions/build/common.vm")
+#if ($hudsonVersion)
+<script type="text/javascript">
+AJS.hudson.utils.setInnerHtml("${module.key}-panel", "<strong>${i18n.getText("hudson.panel.label.dynamic", $hudsonVersion.hudsonSystem.humanName)}</strong>");
+</script>
+#end

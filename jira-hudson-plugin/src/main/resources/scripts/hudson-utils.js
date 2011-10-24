@@ -207,3 +207,7 @@ AJS.hudson.utils.toggleTabView = function(gadget, tabId) {
 	AJS.$("#" + tabId + "_content").css({display: 'block'});
 	gadget.resize();
 }
+
+AJS.hudson.utils.setInnerHtml = function(elementId, html) {
+	AJS.$("#" + elementId).html(html);
+}

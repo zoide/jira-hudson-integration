@@ -53,6 +53,7 @@ AJS.hudson.panel.initializePanel({
 	view: "${selectedView}",
 	associationId: ${associationId},
 	module: "${module.getName()}",
+	moduleKey: "${module.getKey()}",
 	objectId: ${objectId}
 });
 </script>

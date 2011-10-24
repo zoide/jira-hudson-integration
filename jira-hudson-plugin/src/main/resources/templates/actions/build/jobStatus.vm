@@ -16,6 +16,7 @@
 ## specific language governing permissions and limitations
 ## under the License.
 ##
+
 #set ($server = $resultSet.getServer())
 #set ($job = $resultSet.getResults())
 #set ($build = $job.getLastBuild())
@@ -94,3 +95,4 @@
 	<li class="clear">&nbsp;</li>
 	#end
 </ol>
+#parse ("templates/actions/build/common.vm")
