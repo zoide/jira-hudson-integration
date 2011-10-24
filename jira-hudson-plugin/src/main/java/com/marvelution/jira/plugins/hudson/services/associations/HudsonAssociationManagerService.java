@@ -150,6 +150,7 @@ public class HudsonAssociationManagerService implements HudsonAssociationManager
 		association.setServer(server);
 		association.setProjectId(projectId);
 		association.setJobName(jobname);
+		association.save();
 		return association;
 	}
 

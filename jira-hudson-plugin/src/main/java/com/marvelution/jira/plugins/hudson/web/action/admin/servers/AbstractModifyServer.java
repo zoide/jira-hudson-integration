@@ -69,15 +69,15 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 	 */
 	@Override
 	protected void doValidation() {
-		if (StringUtils.isBlank(getName())) {
+		if (StringUtils.isBlank(name)) {
 			addError("name", getText("hudson.server.name.required"));
 		}
-		if (StringUtils.isBlank(getHost())) {
+		if (StringUtils.isBlank(host)) {
 			addError("host", getText("hudson.server.host.required"));
-		} else if ((!getHost().startsWith("http://")) && (!getHost().startsWith("https://"))) {
+		} else if ((!host.startsWith("http://")) && (!host.startsWith("https://"))) {
 			addError("host", getText("hudson.server.host.invalid"));
 		} else {
-			HudsonClient client = clientFactory.create(new Host(getHost(), getUsername(), getPassword()));
+			HudsonClient client = clientFactory.create(new Host(host, username, password));
 			try {
 				if (client.find(VersionQuery.createForPluginVersion()) == null) {
 					addError("host", getText("hudson.server.host.apiv2.failed"));
@@ -96,24 +96,23 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 		if (hasAnyErrors()) {
 			return INPUT;
 		}
-		saveServer(getName(), getDescription(), getHost(), getPublicHost(), getUsername(), getPassword(),
-			isIncludeInStreams());
+		saveServer(name, description, host, publicHost, username, password, includeInStreams);
 		return getRedirect(ADMINISTER_SERVERS);
 	}
 
 	/**
-	 * Internal method to save the HudsonServer data
+	 * Internal method to save the modification
 	 * 
-	 * @param name the name of the server
-	 * @param description the description of the server
-	 * @param host the base private host url
-	 * @param publicHost the base public host url
-	 * @param username the username for secured instances
-	 * @param password the password for secured instances
-	 * @param includeInStreams flag whether the server is includable in the activity streams
+	 * @param name
+	 * @param description
+	 * @param host
+	 * @param publicHost
+	 * @param username
+	 * @param password
+	 * @param includeInStreams
 	 */
 	protected abstract void saveServer(String name, String description, String host, String publicHost,
-			String username, String password, boolean includeInStreams);
+					String username, String password, boolean includeInStreams);
 
 	/**
 	 * Getter for the action type eg: Add/Update

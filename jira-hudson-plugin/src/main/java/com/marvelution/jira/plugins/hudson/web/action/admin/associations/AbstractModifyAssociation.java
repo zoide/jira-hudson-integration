@@ -23,6 +23,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.atlassian.jira.project.ProjectManager;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
 import com.marvelution.jira.plugins.hudson.web.action.admin.AbstractHudsonAdminWebActionSupport;
@@ -39,20 +40,25 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 
 	private static final long serialVersionUID = 1L;
 
+	private int hudsonId = 0;
+	private long projectId = 0L;
+	private String jobName;
+
 	protected final HudsonAssociationManager associationManager;
-	protected int hudsonId = 0;
-	protected long projectId = 0L;
-	protected String jobName;
+	protected final ProjectManager projectManager;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param serverManager the {@link HudsonServerManager} implementation
 	 * @param associationManager the {@link HudsonAssociationManager} implementation
+	 * @param projectManager the {@link ProjectManager} implementation
 	 */
-	protected AbstractModifyAssociation(HudsonServerManager serverManager, HudsonAssociationManager associationManager) {
+	protected AbstractModifyAssociation(HudsonServerManager serverManager,
+										HudsonAssociationManager associationManager, ProjectManager projectManager) {
 		super(serverManager);
 		this.associationManager = associationManager;
+		this.projectManager = projectManager;
 	}
 
 	/**
@@ -60,13 +66,13 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	 */
 	@Override
 	protected void doValidation() {
-		if (getHudsonId() == 0) {
+		if (hudsonId == 0 || !serverManager.hasServer(hudsonId)) {
 			addError("hudsonId", getText("hudson.association.server.required"));
 		}
-		if (getProjectId() == 0) {
+		if (projectId == 0 || projectManager.getProjectObj(projectId) == null) {
 			addError("projectId", getText("hudson.association.project.required"));
 		}
-		if (StringUtils.isBlank(getJobName())) {
+		if (StringUtils.isBlank(jobName)) {
 			addError("jobName", getText("hudson.association.jobname.required"));
 		}
 	}
@@ -79,7 +85,7 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 		if (hasAnyErrors()) {
 			return INPUT;
 		}
-		associationManager.addAssociation(getHudsonId(), getProjectId(), getJobName());
+		saveAssociation(hudsonId, projectId, jobName);
 		return getRedirect(ADMINISTER_ASSOCIATIONS);
 	}
 
@@ -90,7 +96,7 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	 * @param projectId the JIRA project Id
 	 * @param jobname the Hudson Job name
 	 */
-	protected abstract void saveAssociation(int hudsonId, long projectId, String jobname);
+	protected abstract void saveAssociation(int hudsonId, long projectId, String jobName);
 
 	/**
 	 * Getter for the action type eg: Add/Update

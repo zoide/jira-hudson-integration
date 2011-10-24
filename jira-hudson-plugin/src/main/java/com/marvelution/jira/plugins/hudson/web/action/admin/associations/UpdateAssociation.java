@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.atlassian.jira.project.ProjectManager;
 import com.marvelution.hudson.plugins.apiv2.client.ClientException;
 import com.marvelution.hudson.plugins.apiv2.client.HudsonClient;
 import com.marvelution.hudson.plugins.apiv2.client.services.JobQuery;
@@ -56,10 +57,11 @@ public class UpdateAssociation extends AbstractModifyAssociation {
 	 * @param serverManager the {@link HudsonServerManager} implementation
 	 * @param associationManager the {@link HudsonAssociationManager} implementation
 	 * @param clientFactory the {@link HudsonClientFactory} implementation
+	 * @param projectManager the {@link ProjectManager} implementation
 	 */
 	protected UpdateAssociation(HudsonServerManager serverManager, HudsonAssociationManager associationManager,
-								HudsonClientFactory clientFactory) {
-		super(serverManager, associationManager);
+								HudsonClientFactory clientFactory, ProjectManager projectManager) {
+		super(serverManager, associationManager, projectManager);
 		this.clientFactory = clientFactory;
 	}
 
@@ -79,17 +81,8 @@ public class UpdateAssociation extends AbstractModifyAssociation {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void doValidation() {
-		super.doValidation();
-		// TODO Validate duplicate
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void saveAssociation(int hudsonId, long projectId, String jobname) {
-		associationManager.updateAssociation(getAssociationId(), getHudsonId(), getProjectId(), getJobName());
+	protected void saveAssociation(int hudsonId, long projectId, String jobName) {
+		associationManager.updateAssociation(getAssociationId(), hudsonId, projectId, jobName);
 	}
 
 	/**

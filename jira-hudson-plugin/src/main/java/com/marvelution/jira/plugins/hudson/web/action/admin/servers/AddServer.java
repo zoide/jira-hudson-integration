@@ -63,8 +63,8 @@ public class AddServer extends AbstractModifyServer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void saveServer(String name, String description, String host, String publicHost, String username,
-				String password, boolean includeInStreams) {
+	protected void saveServer(String name, String description, String host, String publicHost,
+					String username, String password, boolean includeInStreams) {
 		serverManager.addServer(name, description, host, publicHost, username, password, includeInStreams, false);
 	}
 

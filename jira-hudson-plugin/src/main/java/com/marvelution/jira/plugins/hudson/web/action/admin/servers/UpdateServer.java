@@ -83,8 +83,8 @@ public class UpdateServer extends AbstractModifyServer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void saveServer(String name, String description, String host, String publicHost, String username,
-				String password, boolean includeInStreams) {
+	protected void saveServer(String name, String description, String host, String publicHost,
+					String username, String password, boolean includeInStreams) {
 		serverManager.updateServer(getSid(), name, description, host, publicHost, username, password,
 			includeInStreams, isDefaultServer());
 	}
@@ -218,6 +218,14 @@ public class UpdateServer extends AbstractModifyServer {
 			return super.getPassword();
 		}
 		return server.getPassword();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isIncludeInStreams() {
+		return server.isIncludeInStreams();
 	}
 
 }

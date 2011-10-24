@@ -75,7 +75,7 @@
 						<font size="1">$!{server.description}</font>
 					</td>
 					<td valign="top">
-						#if (${server.isSecured()})
+						#if (${serverUtils.isServerSecured($server)})
 						<b>$i18n.getText("common.words.username")</b>: ${server.username}
 						#else
 						<b>$i18n.getText("hudson.servers.anonymous")</b>

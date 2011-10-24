@@ -132,14 +132,19 @@ public class HudsonStreamsActivityProvider implements StreamsActivityProvider {
 		logger.debug("Created activity query: " + query.getUrl());
 		for (Integer serverId : serverIds) {
 			HudsonServer server = serverManager.getServer(serverId);
-			HudsonClient client = clientFactory.create(server);
-			try {
-				logger.debug("Connecting to server " + server.getHost()
-					+ " to get all the activities matching the query");
-				activities.addAll(client.findAll(query));
-			} catch (ClientException e) {
-				logger.error("Failed to execute query: " +server.getHost() + query.getUrl());
-				throw new StreamsException("Failed to get activities from server " + server.getName(), e);
+			// Make sure we only have the servers that the administrator allows in the activity streams
+			if (server.isIncludeInStreams()) {
+				HudsonClient client = clientFactory.create(server);
+				try {
+					logger.debug("Connecting to server " + server.getHost()
+						+ " to get all the activities matching the query");
+					activities.addAll(client.findAll(query));
+				} catch (ClientException e) {
+					logger.error("Failed to execute query: " +server.getHost() + query.getUrl());
+					throw new StreamsException("Failed to get activities from server " + server.getName(), e);
+				}
+			} else {
+				logger.debug("Skipping serevr '" + server.getName() + "' in activity streams");
 			}
 		}
 		return new StreamsFeed(i18nResolver.getText("streams.hudson.feed.title"), transformActivities(activities),

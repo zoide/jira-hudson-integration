@@ -88,7 +88,7 @@
 #textField ($i18n.getText("common.words.username") $i18n.getText("hudson.server.username.hint") "username" "$!username" false $action.errors)
 #textField ($i18n.getText("common.words.password") $i18n.getText("hudson.server.password.hint") "password" "$!password" false $action.errors)
 #fieldHeader ($i18n.getText("hudson.server.include.in.streams") "includeInStreams" false $action.errors)
-<input type="checkbox" name="includeInStreams" label="$i18n.getText("hudson.server.include.in.streams")" value="true" #if ($includeInStreams) checked="checked" #end />
+<input type="checkbox" name="includeInStreams" label="$i18n.getText("hudson.server.include.in.streams")" value="true" #if ($includeInStreams == true) checked="checked" #end />
 #fieldFooter ($i18n.getText("hudson.server.include.in.streams.hint"))
 <tr class="buttons-container">
 	<td class="jiraformfooter">&nbsp;</td>

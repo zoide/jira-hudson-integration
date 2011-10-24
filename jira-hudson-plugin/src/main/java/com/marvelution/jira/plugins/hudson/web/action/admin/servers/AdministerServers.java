@@ -23,6 +23,7 @@ import java.util.Collection;
 
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerUtils;
 import com.marvelution.jira.plugins.hudson.web.action.admin.AbstractHudsonAdminWebActionSupport;
 
 /**
@@ -50,6 +51,15 @@ public class AdministerServers extends AbstractHudsonAdminWebActionSupport {
 	 */
 	public Collection<HudsonServer> getServers() {
 		return serverManager.getServers();
+	}
+
+	/**
+	 * Getter for the {@link HudsonServerUtils} helper
+	 * 
+	 * @return the {@link HudsonServerUtils} helper
+	 */
+	public HudsonServerUtils getServerUtils() {
+		return new HudsonServerUtils();
 	}
 
 }
