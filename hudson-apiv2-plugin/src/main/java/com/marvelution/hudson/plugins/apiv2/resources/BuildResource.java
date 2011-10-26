@@ -19,6 +19,7 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -54,12 +55,15 @@ public interface BuildResource {
 	 * Get all the builds for a specific Job
 	 * 
 	 * @param jobName the Job name to get all the builds for
+	 * @param offset the starting point of builds to get
+	 * @param count the number of builds to get
 	 * @return the {@link Builds} collection
 	 * @throws NoSuchJobException in case the job identified by the jobName doesn't exist
 	 */
 	@GET
 	@Path("{jobName}/all")
-	Builds getBuilds(@PathParam("jobName") String jobName) throws NoSuchJobException;
+	Builds getBuilds(@PathParam("jobName") String jobName, @QueryParam("offset") @DefaultValue("-1") Integer offset,
+					@QueryParam("count") @DefaultValue("10") Integer count) throws NoSuchJobException;
 
 	/**
 	 * Get the first {@link Build} of a Job

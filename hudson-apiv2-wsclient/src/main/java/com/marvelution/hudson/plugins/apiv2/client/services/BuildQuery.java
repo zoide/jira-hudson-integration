@@ -34,6 +34,8 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	private BuildType buildType = null;
 	private Long from = -1L;
 	private Long to = -1L;
+	private Integer offset = -1;
+	private Integer count = 10;
 
 	/**
 	 * Private constructor to force the use of the static methods below
@@ -70,6 +72,44 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 	 */
 	public Long getTo() {
 		return to;
+	}
+
+	/**
+	 * Getter for offset
+	 *
+	 * @return the offset
+	 */
+	public Integer getOffset() {
+		return offset;
+	}
+
+	/**
+	 * Setter for offset
+	 *
+	 * @param offset the offset to set
+	 */
+	public BuildQuery setOffset(Integer offset) {
+		this.offset = offset;
+		return this;
+	}
+
+	/**
+	 * Getter for count
+	 *
+	 * @return the count
+	 */
+	public Integer getCount() {
+		return count;
+	}
+
+	/**
+	 * Setter for count
+	 *
+	 * @param count the count to set
+	 */
+	public BuildQuery setCount(Integer count) {
+		this.count = count;
+		return this;
 	}
 
 	/**
@@ -171,6 +211,10 @@ public class BuildQuery extends AbstractListableQuery<Build, Builds> {
 			url.append(buildType.endpoint);
 		} else {
 			url.append("/all");
+			if (offset != -1) {
+				addUrlParameter(url, "offset", offset);
+				addUrlParameter(url, "count", count);
+			}
 		}
 		return url.toString();
 	}
