@@ -23,7 +23,7 @@
 	<parent>
 		<artifactId>jira-hudson-integration</artifactId>
 		<groupId>com.marvelution.jira.plugins</groupId>
-		<version>4.2.0</version>
+		<version>4.3.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>hudson-apiv2-wsclient</artifactId>
 	<packaging>jar</packaging>
