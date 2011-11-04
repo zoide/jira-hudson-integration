@@ -30,7 +30,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
      <element name="baseUrl" nillable="true" type="xsd:string"/>
      <element name="buildDate" nillable="true" type="xsd:dateTime"/>
      <element name="buildNumber" nillable="true" type="xsd:string"/>
-     <element name="edition" nillable="true" type="xsd:string"/>
      <element name="serverTime" nillable="true" type="tns1:RemoteTimeInfo"/>
      <element name="version" nillable="true" type="xsd:string"/>
     </sequence>
@@ -127,6 +126,20 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
      </extension>
     </complexContent>
    </complexType>
+   <complexType name="RemoteConfiguration">
+    <sequence>
+     <element name="allowAttachments" type="xsd:boolean"/>
+     <element name="allowExternalUserManagment" type="xsd:boolean"/>
+     <element name="allowIssueLinking" type="xsd:boolean"/>
+     <element name="allowSubTasks" type="xsd:boolean"/>
+     <element name="allowTimeTracking" type="xsd:boolean"/>
+     <element name="allowUnassignedIssues" type="xsd:boolean"/>
+     <element name="allowVoting" type="xsd:boolean"/>
+     <element name="allowWatching" type="xsd:boolean"/>
+     <element name="timeTrackingDaysPerWeek" type="xsd:int"/>
+     <element name="timeTrackingHoursPerDay" type="xsd:int"/>
+    </sequence>
+   </complexType>
    <complexType name="RemoteFieldValue">
     <sequence>
      <element name="id" nillable="true" type="xsd:string"/>
@@ -158,20 +171,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
       </sequence>
      </extension>
     </complexContent>
-   </complexType>
-   <complexType name="RemoteConfiguration">
-    <sequence>
-     <element name="allowAttachments" type="xsd:boolean"/>
-     <element name="allowExternalUserManagment" type="xsd:boolean"/>
-     <element name="allowIssueLinking" type="xsd:boolean"/>
-     <element name="allowSubTasks" type="xsd:boolean"/>
-     <element name="allowTimeTracking" type="xsd:boolean"/>
-     <element name="allowUnassignedIssues" type="xsd:boolean"/>
-     <element name="allowVoting" type="xsd:boolean"/>
-     <element name="allowWatching" type="xsd:boolean"/>
-     <element name="timeTrackingDaysPerWeek" type="xsd:int"/>
-     <element name="timeTrackingHoursPerDay" type="xsd:int"/>
-    </sequence>
    </complexType>
    <complexType name="RemoteScheme">
     <sequence>
@@ -273,13 +272,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
      </extension>
     </complexContent>
    </complexType>
-   <complexType name="RemoteField">
-    <complexContent>
-     <extension base="tns1:AbstractNamedRemoteEntity">
-      <sequence/>
-     </extension>
-    </complexContent>
-   </complexType>
    <complexType name="RemoteFilter">
     <complexContent>
      <extension base="tns1:AbstractNamedRemoteEntity">
@@ -289,6 +281,13 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
        <element name="project" nillable="true" type="xsd:string"/>
        <element name="xml" nillable="true" type="xsd:string"/>
       </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="RemoteField">
+    <complexContent>
+     <extension base="tns1:AbstractNamedRemoteEntity">
+      <sequence/>
      </extension>
     </complexContent>
    </complexType>
@@ -347,13 +346,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
    <complexType name="RemoteException">
     <sequence/>
    </complexType>
-   <complexType name="RemoteValidationException">
-    <complexContent>
-     <extension base="tns2:RemoteException">
-      <sequence/>
-     </extension>
-    </complexContent>
-   </complexType>
    <complexType name="RemoteAuthenticationException">
     <complexContent>
      <extension base="tns2:RemoteException">
@@ -362,6 +354,13 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
     </complexContent>
    </complexType>
    <complexType name="RemotePermissionException">
+    <complexContent>
+     <extension base="tns2:RemoteException">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="RemoteValidationException">
     <complexContent>
      <extension base="tns2:RemoteException">
       <sequence/>
@@ -485,13 +484,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
      </restriction>
     </complexContent>
    </complexType>
-   <complexType name="ArrayOf_tns1_RemoteField">
-    <complexContent>
-     <restriction base="soapenc:Array">
-      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:RemoteField[]"/>
-     </restriction>
-    </complexContent>
-   </complexType>
    <complexType name="ArrayOf_tns1_RemoteComment">
     <complexContent>
      <restriction base="soapenc:Array">
@@ -503,6 +495,13 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
     <complexContent>
      <restriction base="soapenc:Array">
       <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:RemoteFilter[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_RemoteField">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:RemoteField[]"/>
      </restriction>
     </complexContent>
    </complexType>
@@ -752,6 +751,14 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
    </wsdl:message>
 
+   <wsdl:message name="getFieldsForCreateResponse">
+
+      <wsdl:part name="getFieldsForCreateReturn" type="impl:ArrayOf_tns1_RemoteField">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
    <wsdl:message name="getConfigurationResponse">
 
       <wsdl:part name="getConfigurationReturn" type="tns1:RemoteConfiguration">
@@ -807,6 +814,14 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
    <wsdl:message name="refreshCustomFieldsRequest">
 
       <wsdl:part name="in0" type="xsd:string">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="createIssueWithParentWithSecurityLevelResponse">
+
+      <wsdl:part name="createIssueWithParentWithSecurityLevelReturn" type="tns1:RemoteIssue">
 
       </wsdl:part>
 
@@ -925,6 +940,10 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
       <wsdl:part name="in0" type="xsd:string">
 
       </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="setUserPasswordResponse">
 
    </wsdl:message>
 
@@ -1100,14 +1119,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
    </wsdl:message>
 
-   <wsdl:message name="getNotificationSchemesResponse">
-
-      <wsdl:part name="getNotificationSchemesReturn" type="impl:ArrayOf_tns1_RemoteScheme">
-
-      </wsdl:part>
-
-   </wsdl:message>
-
    <wsdl:message name="getIssuesFromTextSearchWithProjectRequest">
 
       <wsdl:part name="in0" type="xsd:string">
@@ -1123,6 +1134,14 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
       </wsdl:part>
 
       <wsdl:part name="in3" type="xsd:int">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getNotificationSchemesResponse">
+
+      <wsdl:part name="getNotificationSchemesReturn" type="impl:ArrayOf_tns1_RemoteScheme">
 
       </wsdl:part>
 
@@ -1192,6 +1211,26 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
    </wsdl:message>
 
+   <wsdl:message name="createIssueWithParentWithSecurityLevelRequest">
+
+      <wsdl:part name="in0" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="in1" type="tns1:RemoteIssue">
+
+      </wsdl:part>
+
+      <wsdl:part name="in2" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="in3" type="xsd:long">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
    <wsdl:message name="getProjectRoleRequest">
 
       <wsdl:part name="in0" type="xsd:string">
@@ -1231,6 +1270,22 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
       </wsdl:part>
 
       <wsdl:part name="in1" type="tns1:RemoteComment">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="createIssueWithParentRequest">
+
+      <wsdl:part name="in0" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="in1" type="tns1:RemoteIssue">
+
+      </wsdl:part>
+
+      <wsdl:part name="in2" type="xsd:string">
 
       </wsdl:part>
 
@@ -1307,6 +1362,14 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
    <wsdl:message name="getDefaultRoleActorsResponse">
 
       <wsdl:part name="getDefaultRoleActorsReturn" type="tns1:RemoteRoleActors">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateUserResponse">
+
+      <wsdl:part name="updateUserReturn" type="tns1:RemoteUser">
 
       </wsdl:part>
 
@@ -1559,6 +1622,14 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
       </wsdl:part>
 
       <wsdl:part name="in1" type="xsd:string">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="createIssueWithParentResponse">
+
+      <wsdl:part name="createIssueWithParentReturn" type="tns1:RemoteIssue">
 
       </wsdl:part>
 
@@ -1984,6 +2055,22 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
    </wsdl:message>
 
+   <wsdl:message name="setUserPasswordRequest">
+
+      <wsdl:part name="in0" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="in1" type="tns1:RemoteUser">
+
+      </wsdl:part>
+
+      <wsdl:part name="in2" type="xsd:string">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
    <wsdl:message name="addWorklogWithNewRemainingEstimateRequest">
 
       <wsdl:part name="in0" type="xsd:string">
@@ -2128,15 +2215,15 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
    </wsdl:message>
 
+   <wsdl:message name="deleteIssueResponse">
+
+   </wsdl:message>
+
    <wsdl:message name="getVersionsResponse">
 
       <wsdl:part name="getVersionsReturn" type="impl:ArrayOf_tns1_RemoteVersion">
 
       </wsdl:part>
-
-   </wsdl:message>
-
-   <wsdl:message name="deleteIssueResponse">
 
    </wsdl:message>
 
@@ -2267,6 +2354,18 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
       </wsdl:part>
 
       <wsdl:part name="in1" type="xsd:string">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateUserRequest">
+
+      <wsdl:part name="in0" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="in1" type="tns1:RemoteUser">
 
       </wsdl:part>
 
@@ -2495,6 +2594,22 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
       </wsdl:part>
 
       <wsdl:part name="in2" type="xsd:string">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getFieldsForCreateRequest">
+
+      <wsdl:part name="in0" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="in1" type="xsd:string">
+
+      </wsdl:part>
+
+      <wsdl:part name="in2" type="xsd:long">
 
       </wsdl:part>
 
@@ -2982,13 +3097,13 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="getVersions" parameterOrder="in0 in1">
+      <wsdl:operation name="addComment" parameterOrder="in0 in1 in2">
 
-         <wsdl:input message="impl:getVersionsRequest" name="getVersionsRequest">
+         <wsdl:input message="impl:addCommentRequest" name="addCommentRequest">
 
        </wsdl:input>
 
-         <wsdl:output message="impl:getVersionsResponse" name="getVersionsResponse">
+         <wsdl:output message="impl:addCommentResponse" name="addCommentResponse">
 
        </wsdl:output>
 
@@ -3015,6 +3130,58 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
          <wsdl:output message="impl:getComponentsResponse" name="getComponentsResponse">
 
        </wsdl:output>
+
+         <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteException" name="RemoteException">
+
+       </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getConfiguration" parameterOrder="in0">
+
+         <wsdl:input message="impl:getConfigurationRequest" name="getConfigurationRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getConfigurationResponse" name="getConfigurationResponse">
+
+       </wsdl:output>
+
+         <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteException" name="RemoteException">
+
+       </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateUser" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:updateUserRequest" name="updateUserRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:updateUserResponse" name="updateUserResponse">
+
+       </wsdl:output>
+
+         <wsdl:fault message="impl:RemoteValidationException" name="RemoteValidationException">
+
+       </wsdl:fault>
 
          <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
 
@@ -3241,30 +3408,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
        </wsdl:fault>
 
          <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
-
-       </wsdl:fault>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="getConfiguration" parameterOrder="in0">
-
-         <wsdl:input message="impl:getConfigurationRequest" name="getConfigurationRequest">
-
-       </wsdl:input>
-
-         <wsdl:output message="impl:getConfigurationResponse" name="getConfigurationResponse">
-
-       </wsdl:output>
-
-         <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
-
-       </wsdl:fault>
-
-         <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
-
-       </wsdl:fault>
-
-         <wsdl:fault message="impl:RemoteException" name="RemoteException">
 
        </wsdl:fault>
 
@@ -3754,15 +3897,23 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="getCustomFields" parameterOrder="in0">
+      <wsdl:operation name="getVersions" parameterOrder="in0 in1">
 
-         <wsdl:input message="impl:getCustomFieldsRequest" name="getCustomFieldsRequest">
+         <wsdl:input message="impl:getVersionsRequest" name="getVersionsRequest">
 
        </wsdl:input>
 
-         <wsdl:output message="impl:getCustomFieldsResponse" name="getCustomFieldsResponse">
+         <wsdl:output message="impl:getVersionsResponse" name="getVersionsResponse">
 
        </wsdl:output>
+
+         <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
+
+       </wsdl:fault>
 
          <wsdl:fault message="impl:RemoteException" name="RemoteException">
 
@@ -3850,6 +4001,22 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="getFieldsForCreate" parameterOrder="in0 in1 in2">
+
+         <wsdl:input message="impl:getFieldsForCreateRequest" name="getFieldsForCreateRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getFieldsForCreateResponse" name="getFieldsForCreateResponse">
+
+       </wsdl:output>
+
+         <wsdl:fault message="impl:RemoteException" name="RemoteException">
+
+       </wsdl:fault>
+
+      </wsdl:operation>
+
       <wsdl:operation name="getFieldsForEdit" parameterOrder="in0 in1">
 
          <wsdl:input message="impl:getFieldsForEditRequest" name="getFieldsForEditRequest">
@@ -3906,6 +4073,22 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="getCustomFields" parameterOrder="in0">
+
+         <wsdl:input message="impl:getCustomFieldsRequest" name="getCustomFieldsRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getCustomFieldsResponse" name="getCustomFieldsResponse">
+
+       </wsdl:output>
+
+         <wsdl:fault message="impl:RemoteException" name="RemoteException">
+
+       </wsdl:fault>
+
+      </wsdl:operation>
+
       <wsdl:operation name="logout" parameterOrder="in0">
 
          <wsdl:input message="impl:logoutRequest" name="logoutRequest">
@@ -3915,30 +4098,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
          <wsdl:output message="impl:logoutResponse" name="logoutResponse">
 
        </wsdl:output>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="addComment" parameterOrder="in0 in1 in2">
-
-         <wsdl:input message="impl:addCommentRequest" name="addCommentRequest">
-
-       </wsdl:input>
-
-         <wsdl:output message="impl:addCommentResponse" name="addCommentResponse">
-
-       </wsdl:output>
-
-         <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
-
-       </wsdl:fault>
-
-         <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
-
-       </wsdl:fault>
-
-         <wsdl:fault message="impl:RemoteException" name="RemoteException">
-
-       </wsdl:fault>
 
       </wsdl:operation>
 
@@ -4878,6 +5037,34 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="setUserPassword" parameterOrder="in0 in1 in2">
+
+         <wsdl:input message="impl:setUserPasswordRequest" name="setUserPasswordRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:setUserPasswordResponse" name="setUserPasswordResponse">
+
+       </wsdl:output>
+
+         <wsdl:fault message="impl:RemoteValidationException" name="RemoteValidationException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteException" name="RemoteException">
+
+       </wsdl:fault>
+
+      </wsdl:operation>
+
       <wsdl:operation name="refreshCustomFields" parameterOrder="in0">
 
          <wsdl:input message="impl:refreshCustomFieldsRequest" name="refreshCustomFieldsRequest">
@@ -4903,6 +5090,62 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
          <wsdl:output message="impl:getSavedFiltersResponse" name="getSavedFiltersResponse">
 
        </wsdl:output>
+
+         <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteException" name="RemoteException">
+
+       </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createIssueWithParent" parameterOrder="in0 in1 in2">
+
+         <wsdl:input message="impl:createIssueWithParentRequest" name="createIssueWithParentRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:createIssueWithParentResponse" name="createIssueWithParentResponse">
+
+       </wsdl:output>
+
+         <wsdl:fault message="impl:RemoteValidationException" name="RemoteValidationException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteException" name="RemoteException">
+
+       </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createIssueWithParentWithSecurityLevel" parameterOrder="in0 in1 in2 in3">
+
+         <wsdl:input message="impl:createIssueWithParentWithSecurityLevelRequest" name="createIssueWithParentWithSecurityLevelRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:createIssueWithParentWithSecurityLevelResponse" name="createIssueWithParentWithSecurityLevelResponse">
+
+       </wsdl:output>
+
+         <wsdl:fault message="impl:RemoteValidationException" name="RemoteValidationException">
+
+       </wsdl:fault>
 
          <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
 
@@ -4959,30 +5202,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
          <wsdl:fault message="impl:RemoteValidationException" name="RemoteValidationException">
 
        </wsdl:fault>
-
-         <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
-
-       </wsdl:fault>
-
-         <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
-
-       </wsdl:fault>
-
-         <wsdl:fault message="impl:RemoteException" name="RemoteException">
-
-       </wsdl:fault>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="getSecuritySchemes" parameterOrder="in0">
-
-         <wsdl:input message="impl:getSecuritySchemesRequest" name="getSecuritySchemesRequest">
-
-       </wsdl:input>
-
-         <wsdl:output message="impl:getSecuritySchemesResponse" name="getSecuritySchemesResponse">
-
-       </wsdl:output>
 
          <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
 
@@ -5097,6 +5316,30 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
        </wsdl:output>
 
          <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteException" name="RemoteException">
+
+       </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getSecuritySchemes" parameterOrder="in0">
+
+         <wsdl:input message="impl:getSecuritySchemesRequest" name="getSecuritySchemesRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getSecuritySchemesResponse" name="getSecuritySchemesResponse">
+
+       </wsdl:output>
+
+         <wsdl:fault message="impl:RemotePermissionException" name="RemotePermissionException">
+
+       </wsdl:fault>
+
+         <wsdl:fault message="impl:RemoteAuthenticationException" name="RemoteAuthenticationException">
 
        </wsdl:fault>
 
@@ -5334,17 +5577,17 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="getVersions">
+      <wsdl:operation name="addComment">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="getVersionsRequest">
+         <wsdl:input name="addCommentRequest">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
 
          </wsdl:input>
 
-         <wsdl:output name="getVersionsResponse">
+         <wsdl:output name="addCommentResponse">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
 
@@ -5385,6 +5628,84 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
 
          </wsdl:output>
+
+         <wsdl:fault name="RemotePermissionException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteAuthenticationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getConfiguration">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getConfigurationRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getConfigurationResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="RemotePermissionException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteAuthenticationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateUser">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updateUserRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updateUserResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="RemoteValidationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteValidationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
 
          <wsdl:fault name="RemotePermissionException">
 
@@ -5725,42 +6046,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
          <wsdl:fault name="RemoteAuthenticationException">
 
             <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:fault>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="getConfiguration">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="getConfigurationRequest">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="getConfigurationResponse">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:output>
-
-         <wsdl:fault name="RemotePermissionException">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="RemoteAuthenticationException">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="RemoteException">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
 
          </wsdl:fault>
 
@@ -6492,21 +6777,33 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="getCustomFields">
+      <wsdl:operation name="getVersions">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="getCustomFieldsRequest">
+         <wsdl:input name="getVersionsRequest">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
 
          </wsdl:input>
 
-         <wsdl:output name="getCustomFieldsResponse">
+         <wsdl:output name="getVersionsResponse">
 
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
 
          </wsdl:output>
+
+         <wsdl:fault name="RemotePermissionException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteAuthenticationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
 
          <wsdl:fault name="RemoteException">
 
@@ -6636,6 +6933,30 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="getFieldsForCreate">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getFieldsForCreateRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getFieldsForCreateResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="RemoteException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
       <wsdl:operation name="getFieldsForEdit">
 
          <wsdlsoap:operation soapAction=""/>
@@ -6720,6 +7041,30 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="getCustomFields">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getCustomFieldsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getCustomFieldsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="RemoteException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
       <wsdl:operation name="logout">
 
          <wsdlsoap:operation soapAction=""/>
@@ -6735,42 +7080,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
 
          </wsdl:output>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="addComment">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="addCommentRequest">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="addCommentResponse">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:output>
-
-         <wsdl:fault name="RemotePermissionException">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="RemoteAuthenticationException">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="RemoteException">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:fault>
 
       </wsdl:operation>
 
@@ -8178,6 +8487,48 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="setUserPassword">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setUserPasswordRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setUserPasswordResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="RemoteValidationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteValidationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemotePermissionException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteAuthenticationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
       <wsdl:operation name="refreshCustomFields">
 
          <wsdlsoap:operation soapAction=""/>
@@ -8217,6 +8568,90 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
             <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
 
          </wsdl:output>
+
+         <wsdl:fault name="RemotePermissionException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteAuthenticationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createIssueWithParent">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createIssueWithParentRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createIssueWithParentResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="RemoteValidationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteValidationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemotePermissionException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteAuthenticationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createIssueWithParentWithSecurityLevel">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createIssueWithParentWithSecurityLevelRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createIssueWithParentWithSecurityLevelResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="RemoteValidationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteValidationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
 
          <wsdl:fault name="RemotePermissionException">
 
@@ -8301,42 +8736,6 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
             <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteValidationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
 
          </wsdl:fault>
-
-         <wsdl:fault name="RemotePermissionException">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="RemoteAuthenticationException">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="RemoteException">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:fault>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="getSecuritySchemes">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="getSecuritySchemesRequest">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="getSecuritySchemesResponse">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
-
-         </wsdl:output>
 
          <wsdl:fault name="RemotePermissionException">
 
@@ -8509,6 +8908,42 @@ Built on Sep 13, 2010 (04:22:38 GMT+10:00)-->
          <wsdl:fault name="RemotePermissionException">
 
             <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getSecuritySchemes">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getSecuritySchemesRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soap.rpc.jira.atlassian.com" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getSecuritySchemesResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="RemotePermissionException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemotePermissionException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="RemoteAuthenticationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="RemoteAuthenticationException" namespace="http://issues.marvelution.com/rpc/soap/jirasoapservice-v2" use="encoded"/>
 
          </wsdl:fault>
 
