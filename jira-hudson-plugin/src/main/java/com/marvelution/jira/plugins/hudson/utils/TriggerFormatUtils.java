@@ -20,6 +20,7 @@
 package com.marvelution.jira.plugins.hudson.utils;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.jira.security.JiraAuthenticationContext;
@@ -38,6 +39,8 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class TriggerFormatUtils {
+
+	private final Logger logger = Logger.getLogger(TriggerFormatUtils.class);
 
 	private I18nHelper i18nHelper;
 	private String contextPath = "";
@@ -63,7 +66,8 @@ public class TriggerFormatUtils {
 	 * @param trigger the {@link ProjectTrigger} to format
 	 * @return the formatted {@link ProjectTrigger}
 	 */
-	public String format(ProjectTrigger trigger) {
+	public String formatProjectTrigger(ProjectTrigger trigger) {
+		logger.debug("Formatting trigger " + trigger.getClass().getName());
 		return i18nHelper.getText("hudson.panel.build.trigger.project", server.getPublicHost(), trigger.getUrl(),
 				trigger.getName(), String.valueOf(trigger.getBuildNumber()));
 	}
@@ -74,7 +78,8 @@ public class TriggerFormatUtils {
 	 * @param trigger the {@link RemoteTrigger} to format
 	 * @return the formatted {@link RemoteTrigger}
 	 */
-	public String format(RemoteTrigger trigger) {
+	public String formatRemoteTrigger(RemoteTrigger trigger) {
+		logger.debug("Formatting trigger " + trigger.getClass().getName());
 		if (StringUtils.isNotBlank(trigger.getHost()) && StringUtils.isNotBlank(trigger.getNote())) {
 			return i18nHelper.getText("hudson.panel.build.trigger.remote.with.host.and.note", trigger.getHost(),
 					trigger.getNote());
@@ -91,7 +96,8 @@ public class TriggerFormatUtils {
 	 * @param trigger the {@link SCMTrigger} to format
 	 * @return the formatted {@link SCMTrigger}
 	 */
-	public String format(SCMTrigger trigger) {
+	public String formatSCMTrigger(SCMTrigger trigger) {
+		logger.debug("Formatting trigger " + trigger.getClass().getName());
 		return i18nHelper.getText("hudson.panel.build.trigger.scm");
 	}
 
@@ -101,7 +107,8 @@ public class TriggerFormatUtils {
 	 * @param trigger the {@link TimeTrigger} to format
 	 * @return the formatted {@link TimeTrigger}
 	 */
-	public String format(TimeTrigger trigger) {
+	public String formatTimeTrigger(TimeTrigger trigger) {
+		logger.debug("Formatting trigger " + trigger.getClass().getName());
 		return i18nHelper.getText("hudson.panel.build.trigger.time");
 	}
 
@@ -111,7 +118,8 @@ public class TriggerFormatUtils {
 	 * @param trigger the {@link UserTrigger} to format
 	 * @return the formatted {@link UserTrigger}
 	 */
-	public String format(UserTrigger trigger) {
+	public String formatUserTrigger(UserTrigger trigger) {
+		logger.debug("Formatting trigger " + trigger.getClass().getName());
 		if (UserUtils.userExists(trigger.getUsername())) {
 			// We have a JIRA user that triggered the build create link to that users profile page
 			final User user = UserUtils.getUser(trigger.getUsername());
@@ -128,8 +136,33 @@ public class TriggerFormatUtils {
 	 * @param trigger the {@link Trigger} to format
 	 * @return the formatted {@link Trigger}
 	 */
-	public String format(Trigger trigger) {
+	public String formatTrigger(Trigger trigger) {
+		logger.debug("Formatting trigger " + trigger.getClass().getName());
 		return i18nHelper.getText("hudson.panel.build.trigger.unknown");
+	}
+
+	/**
+	 * Format helper method to format an object (that should be a {@link Trigger}
+	 * 
+	 * @param trigger the object to format
+	 * @return the formatted object
+	 */
+	public String format(Object trigger) {
+		if (trigger instanceof ProjectTrigger) {
+			return formatProjectTrigger((ProjectTrigger) trigger);
+		} else if (trigger instanceof TimeTrigger) {
+			return formatTimeTrigger((TimeTrigger) trigger);
+		} else if (trigger instanceof UserTrigger) {
+			return formatUserTrigger((UserTrigger) trigger);
+		} else if (trigger instanceof RemoteTrigger) {
+			return formatRemoteTrigger((RemoteTrigger) trigger);
+		} else if (trigger instanceof SCMTrigger) {
+			return formatSCMTrigger((SCMTrigger) trigger);
+		} else if (trigger instanceof Trigger) {
+			return formatTrigger((Trigger) trigger);
+		} else {
+			return i18nHelper.getText("hudson.panel.build.trigger.unknown");
+		}
 	}
 
 }

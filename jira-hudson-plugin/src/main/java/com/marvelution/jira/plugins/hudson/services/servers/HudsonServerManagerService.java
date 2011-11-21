@@ -48,9 +48,7 @@ public class HudsonServerManagerService implements HudsonServerManager {
 	/**
 	 * Constructor
 	 * 
-	 * 
-	 * @param propertyManager the {@link HudsonPropertyManager} implementation
-	 * @param serverFactory the {@link HudsonServerFactory} implementation
+	 * @param objects the {@link ActiveObjects} implementation
 	 * @param whitelistManager the {@link WhitelistManager} implementation
 	 */
 	public HudsonServerManagerService(ActiveObjects objects, WhitelistManager whitelistManager) {

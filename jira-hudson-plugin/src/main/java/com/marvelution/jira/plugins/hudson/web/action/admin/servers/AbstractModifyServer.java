@@ -22,6 +22,7 @@ package com.marvelution.jira.plugins.hudson.web.action.admin.servers;
 import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.marvelution.hudson.plugins.apiv2.client.ClientException;
 import com.marvelution.hudson.plugins.apiv2.client.Host;
@@ -42,6 +43,8 @@ import com.marvelution.jira.plugins.hudson.web.action.admin.ModifyActionType;
 public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
+
+	private final Logger logger = Logger.getLogger(AbstractModifyServer.class);
 
 	private String name;
 	private String description;
@@ -80,9 +83,11 @@ public abstract class AbstractModifyServer extends AbstractHudsonAdminWebActionS
 			HudsonClient client = clientFactory.create(new Host(host, username, password));
 			try {
 				if (client.find(VersionQuery.createForPluginVersion()) == null) {
+					logger.error("Unable to get a response from the /apiv2/plugin/version endpoint");
 					addError("host", getText("hudson.server.host.apiv2.failed"));
 				}
 			} catch (ClientException e) {
+				logger.error("Unable to get a response from the server: " + e.getMessage(), e);
 				addError("host", getText("hudson.server.host.apiv2.failed"));
 			}
 		}
