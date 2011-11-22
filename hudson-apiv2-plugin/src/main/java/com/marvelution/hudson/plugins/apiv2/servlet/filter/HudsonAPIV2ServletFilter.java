@@ -32,8 +32,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.ws.rs.ext.RuntimeDelegate;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wink.common.internal.runtime.RuntimeDelegateImpl;
 import org.apache.wink.server.internal.servlet.RestFilter;
 import org.apache.wink.server.internal.servlet.RestServlet;
 
@@ -93,9 +95,10 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 			if (StringUtils.isNotBlank(requestUri) && requestUri.startsWith("/")) {
 				requestUri = requestUri.substring(1);
 			}
-			LOGGER.log(Level.FINE, "Got a request from URI: " + requestUri);
+			LOGGER.log(Level.FINE, "Got a request from URI: " + requestUri + " with Accept Header: " + servletRequest.getHeader("Accept"));
 			// Make sure it is a REST call
 			if (StringUtils.isNotBlank(requestUri) && requestUri.startsWith(BaseRestResource.BASE_REST_URI)) {
+				validateRuntimeDelegate();
 				LOGGER.log(Level.FINE, "Got a REST request, forwarding it to the Wink RestFilter");
 				FilteredHttpServletResponse servletResponse =
 					new FilteredHttpServletResponse((HttpServletResponse) response);
@@ -116,6 +119,21 @@ public class HudsonAPIV2ServletFilter extends RestFilter {
 			LOGGER.log(Level.FINE,
 				"No HttpServletRequest and HttpServletResponse, forwarding request to the next ServletFilter");
 			filterChain.doFilter(request, response);
+		}
+	}
+
+	/**
+	 * Internal method to validate that the correct {@link RuntimeDelegate} is loaded for the Wink application
+	 */
+	private void validateRuntimeDelegate() {
+		RuntimeDelegate runtimeDelegate = RuntimeDelegate.getInstance();
+		if (!(runtimeDelegate instanceof RuntimeDelegateImpl)) {
+			// This issue was found when Hudson/Jenkins is deployed on Glassfish.
+			// Then the default RuntimeDelegate is used and not the Apache Wink implementation
+			// Override the default implementation with the Apache Wink implementation
+			LOGGER.log(Level.FINE, "Overriding RuntimeDelegate of type [" + runtimeDelegate.getClass()
+				+ "] with the Wink implementation [" + RuntimeDelegateImpl.class.getName() + "]");
+			RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
 		}
 	}
 

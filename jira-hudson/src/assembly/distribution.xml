@@ -31,7 +31,7 @@
 				<include>com.marvelution.jira.plugins:hudson-jirareporter-plugin</include>
 			</includes>
 			<excludes>
-				<exclude>com.marvelution.jira.plugins:hudson-apiv2-plugin:jar:java-client</exclude>
+				<exclude>com.marvelution.jira.plugins:hudson-apiv2-plugin:jar</exclude>
 			</excludes>
 		</dependencySet>
 		<dependencySet>
