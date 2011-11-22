@@ -31,6 +31,9 @@
 		<f:entry title="Issue Priority" help="${descriptor.getBaseHelpURL()}issuePriority.html" field="issuePriority">
 			<f:select class="setting-input" name="jbrr.issuePriority" value="${instance.issuePriority}" />
 		</f:entry>
+		<f:entry title="Assign Issue to the First Build Breaker" help="${descriptor.getBaseHelpURL()}assignToBuildBreaker.html" field="assignToBuildBreaker">
+			<f:checkbox name="jbrr.assignToBuildBreaker" checked="${instance.assignToBuildBreaker}"/>
+		</f:entry>
 		<f:entry title="Auto Close" help="${descriptor.getBaseHelpURL()}autoClose.html" field="autoClose">
 			<f:checkbox name="jbrr.autoClose" checked="${instance.autoClose}"/>
 		</f:entry>

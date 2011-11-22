@@ -20,6 +20,9 @@
 package com.marvelution.hudson.plugins.jirareporter;
 
 import hudson.model.AbstractBuild;
+import hudson.model.Cause;
+import hudson.model.Cause.UserCause;
+import hudson.scm.ChangeLogSet;
 
 import java.rmi.RemoteException;
 import java.util.Collections;
@@ -35,6 +38,7 @@ import com.atlassian.jira.rpc.soap.client.RemoteIssueType;
 import com.atlassian.jira.rpc.soap.client.RemoteNamedObject;
 import com.atlassian.jira.rpc.soap.client.RemotePriority;
 import com.atlassian.jira.rpc.soap.client.RemoteProject;
+import com.atlassian.jira.rpc.soap.client.RemoteUser;
 import com.marvelution.hudson.plugins.jirareporter.utils.IssueTextUtils;
 import com.marvelution.hudson.plugins.jirareporter.utils.IssueTextUtils.Type;
 
@@ -92,11 +96,12 @@ public class JIRAClient {
 	 * @param projectKey the key of the project to raise the issue in
 	 * @param issueType the type of the issue to raise
 	 * @param issuePriority the issue priority
+	 * @param assignToBuildBreaker flag to assign the issue to the build breaker
 	 * @return the Issue Key of the created issue
 	 * @throws RemoteException in case of errors
 	 */
-	public String createIssue(AbstractBuild<?, ?> build, String projectKey, String issueType, String issuePriority)
-			throws RemoteException {
+	public String createIssue(AbstractBuild<?, ?> build, String projectKey, String issueType, String issuePriority,
+					boolean assignToBuildBreaker) throws RemoteException {
 		RemoteIssue newIssue = new RemoteIssue();
 		newIssue.setProject(projectKey);
 		newIssue.setType(issueType);
@@ -105,6 +110,7 @@ public class JIRAClient {
 		newIssue.setDescription(IssueTextUtils.createFieldText(Type.DESCRIPTION, build, site));
 		newIssue.setEnvironment(IssueTextUtils.createFieldText(Type.ENVIRONMENT, build, site));
 		newIssue.setReporter(site.username);
+		newIssue.setAssignee(getFirstBuildBreakerFromBuild(build));
 		RemoteIssue raisedIssue = service.createIssue(token, newIssue);
 		return raisedIssue.getKey();
 	}
@@ -234,6 +240,48 @@ public class JIRAClient {
 			site.priorities = Collections.unmodifiableMap(prios);
 		}
 		return site.priorities;
+	}
+
+	/**
+	 * Get the {@link RemoteUser} for the username given
+	 * 
+	 * @param name the name of the user to get
+	 * @return the {@link RemoteUser}
+	 * @throws RemoteException in case of errors
+	 */
+	public RemoteUser getUser(String name) throws RemoteException {
+		LOGGER.log(Level.FINE, "Checking if user " + name + " exists on JIRA Site " + site.url);
+		return service.getUser(token, name);
+	}
+
+	/**
+	 * Helper method to get the first Build Breaker that also has a valid account on the JIRA site
+	 * 
+	 * @param build the Build to get the breaker from
+	 * @return the first valid account name of the build breaker, may be <code>null</code>
+	 */
+	private String getFirstBuildBreakerFromBuild(AbstractBuild<?, ?> build) {
+		try {
+			for (Cause cause : build.getCauses()) {
+				if (cause instanceof UserCause) {
+					UserCause userCause = (UserCause) cause;
+					RemoteUser user = getUser(userCause.getUserName());
+					if (user != null) {
+						return user.getName();
+					}
+				}
+			}
+			// Still here? Then loop through the changelog
+			for (ChangeLogSet.Entry entry : build.getChangeSet()) {
+				RemoteUser user = getUser(entry.getAuthor().getId());
+				if (user != null) {
+					return user.getName();
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Failed to get a valid first build breaker user: " + e.getMessage(), e);
+		}
+		return null;
 	}
 
 }

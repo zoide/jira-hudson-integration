@@ -78,6 +78,7 @@ public class JIRABuildResultReportNotifier extends Notifier {
 	public final boolean autoClose;
 	public final String issueType;
 	public final String issuePriority;
+	public final boolean assignToBuildBreaker;
 
 	/**
 	 * Constructor
@@ -87,10 +88,11 @@ public class JIRABuildResultReportNotifier extends Notifier {
 	 * @param autoClose flag to auto-close previously raised issues
 	 * @param issueType the type of issue to raise
 	 * @param issuePriority the priority of the raised issue
+	 * @param assignToBuildBreaker flag to assign the new issue to the build breaker
 	 */
 	@DataBoundConstructor
 	public JIRABuildResultReportNotifier(String siteName, String projectKey, boolean autoClose, String issueType,
-			String issuePriority) {
+			String issuePriority, boolean assignToBuildBreaker) {
 		if (siteName == null) {
 			// Defaults to the first one
 			JIRASite[] sites = DESCRIPTOR.getSites();
@@ -102,6 +104,7 @@ public class JIRABuildResultReportNotifier extends Notifier {
 		this.autoClose = autoClose;
 		this.issueType = issueType;
 		this.issuePriority = issuePriority;
+		this.assignToBuildBreaker = assignToBuildBreaker;
 	}
 
 	/**
@@ -162,7 +165,7 @@ public class JIRABuildResultReportNotifier extends Notifier {
 					// So relink that issue also to this build
 					issueKey = client.updateIssue(build, buildAction.raisedIssueKey);
 				} else {
-					issueKey = client.createIssue(build, projectKey, issueType, issuePriority);
+					issueKey = client.createIssue(build, projectKey, issueType, issuePriority, assignToBuildBreaker);
 				}
 				build.addAction(new JIRABuildResultReportAction(build, issueKey, false));
 				listener.getLogger().println("JBRR: Raised build failure issue: " + issueKey);
