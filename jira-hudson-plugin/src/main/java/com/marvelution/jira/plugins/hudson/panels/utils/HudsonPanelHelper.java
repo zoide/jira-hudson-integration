@@ -183,10 +183,12 @@ public class HudsonPanelHelper {
 	private <CONTEXT extends BrowseContext> User getUserFromContext(CONTEXT context) {
 		if (context.getUser() instanceof User) {
 			return (User) context.getUser();
-		} else {
+		} else if (context.getUser() != null) {
 			// TODO This should be removed when no longer needed
 			CrowdService crowdService = ComponentManager.getInstance().getCrowdService();
 			return crowdService.getUser(context.getUser().getName());
+		} else {
+			return null;
 		}
 	}
 
