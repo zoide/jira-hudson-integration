@@ -144,7 +144,7 @@ public class HudsonStreamsActivityProvider implements StreamsActivityProvider {
 					throw new StreamsException("Failed to get activities from server " + server.getName(), e);
 				}
 			} else {
-				logger.debug("Skipping serevr '" + server.getName() + "' in activity streams");
+				logger.debug("Skipping server '" + server.getName() + "' in activity streams");
 			}
 		}
 		return new StreamsFeed(i18nResolver.getText("streams.hudson.feed.title"), transformActivities(activities),
