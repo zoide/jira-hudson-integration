@@ -35,6 +35,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
+import com.atlassian.jira.project.Project;
+import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.plugin.webresource.UrlMode;
 import com.atlassian.plugin.webresource.WebResourceManager;
 import com.atlassian.sal.api.message.I18nResolver;
@@ -47,6 +49,7 @@ import com.atlassian.streams.api.UserProfile;
 import com.atlassian.streams.api.common.ImmutableNonEmptyList;
 import com.atlassian.streams.api.common.Option;
 import com.atlassian.streams.spi.Filters;
+import com.atlassian.streams.spi.StandardStreamsFilterOption;
 import com.atlassian.streams.spi.StreamsActivityProvider;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
@@ -76,6 +79,7 @@ public class HudsonStreamsActivityProvider implements StreamsActivityProvider {
 
 	private final Logger logger = Logger.getLogger(HudsonStreamsActivityProvider.class);
 	private final I18nResolver i18nResolver;
+	private final ProjectManager projectManager;
 	private final HudsonAssociationManager associationManager;
 	private final HudsonServerManager serverManager;
 	private final HudsonClientFactory clientFactory;
@@ -85,15 +89,18 @@ public class HudsonStreamsActivityProvider implements StreamsActivityProvider {
 	 * Constructor
 	 *
 	 * @param i18nResolver the {@link I18nResolver} implementation
+	 * @param projectManager the {@link ProjectManager} implementation
 	 * @param associationManager the {@link HudsonAssociationManager} implementation
 	 * @param serverManager the {@link HudsonServerManager} implementation
 	 * @param clientFactory the {@link HudsonClientFactory} implementation
 	 * @param webResourceManager the {@link WebResourceManager} implementation
 	 */
-	public HudsonStreamsActivityProvider(I18nResolver i18nResolver, HudsonAssociationManager associationManager,
-					HudsonServerManager serverManager, HudsonClientFactory clientFactory,
-					WebResourceManager webResourceManager) {
+	public HudsonStreamsActivityProvider(I18nResolver i18nResolver, ProjectManager projectManager,
+											HudsonAssociationManager associationManager,
+											HudsonServerManager serverManager, HudsonClientFactory clientFactory,
+											WebResourceManager webResourceManager) {
 			this.i18nResolver = checkNotNull(i18nResolver, "i18nResolver");
+			this.projectManager = checkNotNull(projectManager, "projectManager");
 			this.associationManager = checkNotNull(associationManager, "associationManager");
 			this.serverManager = checkNotNull(serverManager, "serverManager");
 			this.clientFactory = checkNotNull(clientFactory, "clientFactory");
@@ -109,23 +116,34 @@ public class HudsonStreamsActivityProvider implements StreamsActivityProvider {
 		Set<Integer> serverIds;
 		Set<String> jobNames;
 		Activities activities = new Activities();
-		if (!activityTypes.contains(ActivityType.JOB)
-				&& activityRequest.getProviderFilters().containsKey(HUDSON_ASSOCIATION_KEY)) {
-			logger.debug("Processing Association filters to get all the ServerIds and Job Name to get the action for");
-			Set<Integer> associationIds = getAssociationFilters(activityRequest);
+		Project project = null;
+		if ((project = getProjectFromFilter(activityRequest)) != null) {
+			logger.debug("Only getting the associations related to project with key: " + project.getKey());
 			serverIds = Sets.newHashSet();
 			jobNames = Sets.newHashSet();
-			// Populate the serverIds and JobNames sets from the associations
-			for (Integer associationId : associationIds) {
-				HudsonAssociation association = associationManager.getAssociation(associationId);
+			for (HudsonAssociation association : associationManager.getAssociations(project)) {
 				serverIds.add(association.getServer().getID());
 				jobNames.add(association.getJobName());
 			}
 		} else {
-			// Populate the serverIds and JobNames sets from the ActivityRequest
-			logger.debug("Processing the Server and Jobs filters from the ActivityReqeust");
-			serverIds = getServerFilters(activityRequest);
-			jobNames = getJobnameFilters(activityRequest);
+			if (!activityTypes.contains(ActivityType.JOB)
+					&& activityRequest.getProviderFilters().containsKey(HUDSON_ASSOCIATION_KEY)) {
+				logger.debug("Processing Association filters to get all the ServerIds and Job Name to get the action for");
+				Set<Integer> associationIds = getAssociationFilters(activityRequest);
+				serverIds = Sets.newHashSet();
+				jobNames = Sets.newHashSet();
+				// Populate the serverIds and JobNames sets from the associations
+				for (Integer associationId : associationIds) {
+					HudsonAssociation association = associationManager.getAssociation(associationId);
+					serverIds.add(association.getServer().getID());
+					jobNames.add(association.getJobName());
+				}
+			} else {
+				// Populate the serverIds and JobNames sets from the ActivityRequest
+				logger.debug("Processing the Server and Jobs filters from the ActivityReqeust");
+				serverIds = getServerFilters(activityRequest);
+				jobNames = getJobnameFilters(activityRequest);
+			}
 		}
 		ActivityQuery query = ActivityQuery.createForActivities(activityTypes).setJobs(jobNames)
 			.setUserIds(getUsernameFilters(activityRequest)).setMaxResults(activityRequest.getMaxResults());
@@ -205,6 +223,25 @@ public class HudsonStreamsActivityProvider implements StreamsActivityProvider {
 			.alternateLinkUri(from.getUri())
 			.renderer(renderer)
 			.applicationType(from.getSystem().getHumanName()), i18nResolver);
+	}
+
+	/**
+	 * Get a single {@link Project} from the Standard Streams Filter
+	 * 
+	 * @param activityRequest the {@link ActivityRequest}
+	 * @return the {@link Project}, may be <code>null</code>
+	 */
+	private Project getProjectFromFilter(ActivityRequest activityRequest) {
+		Set<String> keys =
+			Filters.getIsValues(activityRequest.getStandardFilters().get(StandardStreamsFilterOption.PROJECT_KEY));
+		if (keys != null && keys.size() == 1) {
+			try {
+				return projectManager.getProjectObjByKey(keys.toArray(new String[keys.size()])[0]);
+			} catch (Exception e) {
+				// Ignore this. Just invalid configuration
+			}
+		}
+		return null;
 	}
 
 	/**
