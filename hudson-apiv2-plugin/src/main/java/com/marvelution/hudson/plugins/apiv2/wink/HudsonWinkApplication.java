@@ -167,7 +167,7 @@ public class HudsonWinkApplication extends WinkApplication {
 					jaxRSClasses.add(cls);
 				} else {
 					LOGGER.log(Level.FINE, "Class [" + cls.getName() + "] is not a valid REST Resource, "
-						+ "the @Parent(RestBaseResource.class) annotation is missing");
+						+ "the @Parent(BaseRestResource.class) annotation is missing");
 				}
 			} else {
 				LOGGER.log(Level.FINE, "Skipping class [" + cls.getName() + "]; Its not a REST Resource or Provider");

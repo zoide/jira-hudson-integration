@@ -187,7 +187,8 @@ public class HudsonStreamsActivityProvider implements StreamsActivityProvider {
 			.email(Option.option(user.getEmail()))
 			.profilePictureUri(Option.option(
 				URI.create(webResourceManager.getStaticPluginResource(JiraPluginUtils.getPluginKey()
-				+ ":hudson-stream-resources", "useravatar.gif", UrlMode.ABSOLUTE))));
+				+ ":hudson-stream-resources", from.getSystem().name().toLowerCase() + "-useravatar.png",
+				UrlMode.ABSOLUTE))));
 		if (StringUtils.isNotBlank(user.getUrl())) {
 			logger.debug(user.getUrl() + ": " + URI.create(user.getUrl()).isAbsolute());
 			builder.profilePageUri(Option.option(URI.create(user.getUrl())));

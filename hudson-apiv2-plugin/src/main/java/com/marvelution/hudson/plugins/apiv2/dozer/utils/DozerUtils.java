@@ -19,14 +19,11 @@
 
 package com.marvelution.hudson.plugins.apiv2.dozer.utils;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.wink.common.internal.utils.FileLoader;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.dozer.util.DozerConstants;
@@ -40,7 +37,10 @@ import com.marvelution.hudson.plugins.apiv2.utils.HudsonPluginUtils;
  */
 public class DozerUtils {
 
-	private static final String DOZER_CONFIG_LOCATION = "META-INF/dozer";
+	private static final String DOZER_CONFIG_LOCATION = "META-INF/dozer/";
+	private static final String[] DOZER_MAPPINGS = {"custom-converters-dozer-mapping.xml",
+		"global-dozer-mapping.xml", "build-dozer-mapping.xml", "project-dozer-mapping.xml", "view-dozer-mapping.xml",
+		"healthreport-dozer-mapping.xml", "testresult-dozer-mapping.xml"};
 	private static final Logger LOGGER = Logger.getLogger(DozerUtils.class.getName());
 
 	private static DozerBeanMapper mapper = null;
@@ -57,7 +57,7 @@ public class DozerUtils {
 	 */
 	public static Mapper getMapper() {
 		if (mapper == null) {
-			System.setProperty(DozerConstants.CONFIG_FILE_SYS_PROP, DOZER_CONFIG_LOCATION + "/configuration.properties");
+			System.setProperty(DozerConstants.CONFIG_FILE_SYS_PROP, DOZER_CONFIG_LOCATION + "configuration.properties");
 			mapper = new DozerBeanMapper();
 			mapper.setMappingFiles(getMappingFiles());
 		}
@@ -73,21 +73,14 @@ public class DozerUtils {
 		if (mappingFiles == null) {
 			// First load, add all the plugin default mappings
 			mappingFiles = new ArrayList<String>();
-			try {
-				final URL resourcePackage = FileLoader.loadFile(DOZER_CONFIG_LOCATION);
-				for (String filename : new File(resourcePackage.toURI()).list()) {
-					if (!filename.startsWith("optional") && filename.endsWith(".xml")) {
-						LOGGER.log(Level.FINE, "Loaded Dozer Mapping file: " + DOZER_CONFIG_LOCATION + "/" + filename);
-						mappingFiles.add(DOZER_CONFIG_LOCATION + "/" + filename);
-					}
-				}
-			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE, "Failed to load Dozer Mapper configuration", e);
+			for (String filename : DOZER_MAPPINGS) {
+				LOGGER.log(Level.FINE, "Loaded Dozer Mapping file: " + DOZER_CONFIG_LOCATION + filename);
+				mappingFiles.add(DOZER_CONFIG_LOCATION + filename);
 			}
 		}
 		if (HudsonPluginUtils.hasTestNGPlugin()) {
 			// TestNG plugin is used, add the TestNG Dozer mapping
-			mappingFiles.add(DOZER_CONFIG_LOCATION + "/optional-testng-dozer-mapping.xml");
+			mappingFiles.add(DOZER_CONFIG_LOCATION + "optional-testng-dozer-mapping.xml");
 		}
 		// TODO Support user specific mapping files
 		return mappingFiles;

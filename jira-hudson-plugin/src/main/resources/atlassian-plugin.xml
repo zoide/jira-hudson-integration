@@ -69,6 +69,8 @@
 	<web-resource key="hudson-stream-resources" name="Hudson Provider Web Resources">
 		<resource type="download" name="puzzle-piece.gif" location="/images/puzzle-piece.gif" />
 		<resource type="download" name="useravatar.gif" location="/images/useravatar.gif" />
+		<resource type="download" name="hudson-useravatar.png" location="/images/hudson-useravatar.png" />
+		<resource type="download" name="jenkins-useravatar.png" location="/images/jenkins-useravatar.png" />
 	</web-resource>
 
 	<!-- I M A G E   R E S O U R C E S -->
