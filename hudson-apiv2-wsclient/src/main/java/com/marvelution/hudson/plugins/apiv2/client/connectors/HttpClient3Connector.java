@@ -20,6 +20,10 @@
 package com.marvelution.hudson.plugins.apiv2.client.connectors;
 
 import java.io.IOException;
+import java.net.Proxy;
+import java.net.Proxy.Type;
+import java.net.InetSocketAddress;
+import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -28,11 +32,15 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.ProxyHost;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.util.URIUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.marvelution.hudson.plugins.apiv2.client.Host;
 import com.marvelution.hudson.plugins.apiv2.client.services.Query;
@@ -46,12 +54,10 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
  */
 public class HttpClient3Connector implements Connector {
 
-	private static final int TIMEOUT_MS = 30000;
-
 	private static final int MAX_TOTAL_CONNECTIONS = 40;
-
 	private static final int MAX_HOST_CONNECTIONS = 4;
 
+	private final Log log = LogFactory.getLog(HttpClient3Connector.class);
 	private final Host server;
 
 	private HttpClient httpClient;
@@ -87,19 +93,38 @@ public class HttpClient3Connector implements Connector {
 		params.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
 		MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
 		connectionManager.setParams(params);
-		this.httpClient = new HttpClient(connectionManager);
+		httpClient = new HttpClient(connectionManager);
 		configureCredentials();
+		if (StringUtils.isNotBlank(System.getProperty("http.proxyHost"))) {
+			log.debug("A HTTP Proxy is configured");
+			System.setProperty("java.net.useSystemProxies", "true");
+			Proxy proxy = chooseProxy();
+			if (proxy.type() == Type.HTTP && proxy.address() instanceof InetSocketAddress) {
+				// convert the socket address to an ProxyHost
+	            final InetSocketAddress isa = (InetSocketAddress) proxy.address();
+	            // assume default scheme (http)
+	            ProxyHost proxyHost = new ProxyHost(getHost(isa), isa.getPort());
+	            httpClient.getHostConfiguration().setProxyHost(proxyHost);
+	            if (StringUtils.isNotBlank(System.getProperty("http.proxyUser"))) {
+	            	String user = System.getProperty("http.proxyUser");
+	            	String password = System.getProperty("http.proxyPassword");
+					httpClient.getState().setProxyCredentials(new AuthScope(getHost(isa), isa.getPort()),
+						new UsernamePasswordCredentials(user, password));
+	            }
+			}
+		}
 	}
 
 	/**
 	 * Configure the credentials of the {@link #server} in the {@link #httpClient}
 	 */
 	private void configureCredentials() {
-		if (this.server.isSecured()) {
-			this.httpClient.getParams().setAuthenticationPreemptive(true);
-			Credentials defaultcreds = new UsernamePasswordCredentials(this.server.getUsername(),
-				this.server.getPassword());
-			this.httpClient.getState().setCredentials(getAuthScope(), defaultcreds);
+		if (server.isSecured()) {
+			log.debug("The Server is secured, set the preepmtive authentication header and credentials");
+			httpClient.getParams().setAuthenticationPreemptive(true);
+			Credentials defaultcreds = new UsernamePasswordCredentials(server.getUsername(),
+				server.getPassword());
+			httpClient.getState().setCredentials(getAuthScope(), defaultcreds);
 		}
 	}
 
@@ -124,8 +149,40 @@ public class HttpClient3Connector implements Connector {
 		} catch (URISyntaxException e) {
 			// Failed to parse the server host URI
 			// Fall-back on preset defaults
+			log.error("Failed to parse the host URI", e);
 		}
 		return new AuthScope(host, port, "realm");
+	}
+
+	/**
+	 * Get the first available {@link Proxy} using the {@link ProxySelector} implementation
+	 * 
+	 * @return the first {@link Type#HTTP} proxy available, or {@link Proxy#NO_PROXY} if no
+	 *         proxy is available
+	 */
+	private Proxy chooseProxy() {
+		try {
+			for (Proxy proxy : ProxySelector.getDefault().select(new URI(server.getHost()))) {
+				if (proxy.type() == Type.HTTP) {
+					return proxy;
+				}
+			}
+		} catch (URISyntaxException e) {
+			// Failed to parse the server host URI
+			// Fallback to the default NO_PROXY
+			log.error("Failed to parse the host URI", e);
+		}
+		return Proxy.NO_PROXY;
+	}
+
+	/**
+	 * Obtains a host from an {@link InetSocketAddress}.
+	 * 
+	 * @param isa the socket address
+	 * @return a host string, either as a symbolic name or as a literal IP address string
+	 */
+	protected String getHost(InetSocketAddress isa) {
+		return isa.isUnresolved() ? isa.getHostName() : isa.getAddress().getHostAddress();
 	}
 
 	/**
@@ -136,12 +193,13 @@ public class HttpClient3Connector implements Connector {
 		GetMethod method = null;
 		String url = null;
 		try {
-			url = this.server.getHost() + URIUtil.encodeQuery(query.getUrl());
+			url = server.getHost() + URIUtil.encodeQuery(query.getUrl());
 			method = new GetMethod(url);
 			method.setRequestHeader("Accept", "application/xml");
-			this.httpClient.executeMethod(method);
+			httpClient.executeMethod(method);
 			return getConnectorResponseFromMethod(method);
 		} catch (HttpException e) {
+			log.error("Failed to execute the query: " + query.getUrl(), e);
 		} catch (IOException e) {
 		} finally {
 			if (method != null) {

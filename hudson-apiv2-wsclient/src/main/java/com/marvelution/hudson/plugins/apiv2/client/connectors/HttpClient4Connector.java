@@ -20,9 +20,13 @@
 package com.marvelution.hudson.plugins.apiv2.client.connectors;
 
 import java.io.IOException;
+import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
@@ -40,6 +44,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.ProxySelectorRoutePlanner;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
@@ -55,7 +60,9 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
  */
 public class HttpClient4Connector implements Connector {
 
+	private final Log log = LogFactory.getLog(HttpClient4Connector.class);
 	private final Host server;
+
 	private BasicHttpContext localContext = null;
 
 	/**
@@ -77,8 +84,10 @@ public class HttpClient4Connector implements Connector {
 		try {
 			HttpResponse response;
 			if (localContext != null) {
+				log.debug("Executing the query: " + query.getUrl() + " using the localContext with the credentials");
 				response = client.execute(get, localContext);
 			} else {
+				log.debug("Executing the query: " + query.getUrl());
 				response = client.execute(get);
 			}
 			HttpEntity entity = response.getEntity();
@@ -86,6 +95,7 @@ public class HttpClient4Connector implements Connector {
 				return getConnectorResponseFromEntity(response);
 			}
 		} catch (IOException e) {
+			log.error("Failed to execute the query: " + query.getUrl(), e);
 		} finally {
 			client.getConnectionManager().shutdown();
 		}
@@ -100,8 +110,10 @@ public class HttpClient4Connector implements Connector {
 	 * @return the {@link HttpGet} object
 	 */
 	private <MODEL extends Model> HttpGet createGetMethod(Query<MODEL> query) {
-		HttpGet get = new HttpGet(this.server.getHost() + query.getUrl());
+		HttpGet get = new HttpGet(server.getHost() + query.getUrl());
 		get.setHeader("Accept", "application/xml");
+		get.getParams().setParameter("http.connection.timeout", TIMEOUT_MS);
+		get.getParams().setParameter("http.socket.timeout", TIMEOUT_MS);
 		return get;
 	}
 
@@ -112,15 +124,24 @@ public class HttpClient4Connector implements Connector {
 	 */
 	private DefaultHttpClient createClient() {
 		DefaultHttpClient client = new DefaultHttpClient();
-		if (this.server.isSecured()) {
+		if (server.isSecured()) {
+			log.debug("The Server is secured, create the BasicHttpContext to handle preemptive authentication.");
 			client.getCredentialsProvider().setCredentials(getAuthScope(),
-				new UsernamePasswordCredentials(this.server.getUsername(), this.server.getPassword()));
+				new UsernamePasswordCredentials(server.getUsername(), server.getPassword()));
 			localContext = new BasicHttpContext();
             // Generate BASIC scheme object and stick it to the local execution context
             BasicScheme basicAuth = new BasicScheme();
             localContext.setAttribute("preemptive-auth", basicAuth);
             // Add as the first request intercepter
             client.addRequestInterceptor(new PreemptiveAuth(), 0);
+		}
+		if (StringUtils.isNotBlank(System.getProperty("http.proxyHost"))
+			|| StringUtils.isNotBlank(System.getProperty("https.proxyHost"))) {
+			log.debug("A System HTTP(S) proxy is set, set the ProxySelectorRoutePlanner for the client");
+			System.setProperty("java.net.useSystemProxies", "true");
+			// Set the ProxySelectorRoute Planner to automatically select the system proxy host if set.
+			client.setRoutePlanner(new ProxySelectorRoutePlanner(client.getConnectionManager().getSchemeRegistry(),
+				ProxySelector.getDefault()));
 		}
 		return client;
 	}
@@ -146,6 +167,7 @@ public class HttpClient4Connector implements Connector {
 		} catch (URISyntaxException e) {
 			// Failed to parse the server host URI
 			// Fall-back on preset defaults
+			log.error("Failed to parse the Server host url to an URI", e);
 		}
 		return new AuthScope(host, port, "realm");
 	}

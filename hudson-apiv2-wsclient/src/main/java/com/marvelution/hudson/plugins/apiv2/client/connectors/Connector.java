@@ -29,6 +29,8 @@ import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
  */
 public interface Connector {
 
+	int TIMEOUT_MS = 30000;
+
 	/**
 	 * Method to execute a {@link Query} for a specific {@link Model} identified by the MODEL type
 	 * 
