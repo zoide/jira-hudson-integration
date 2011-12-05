@@ -20,6 +20,7 @@
 package com.marvelution.jira.plugins.hudson.services.servers;
 
 import net.java.ao.Entity;
+import net.java.ao.Implementation;
 import net.java.ao.Preload;
 import net.java.ao.Searchable;
 
@@ -29,6 +30,7 @@ import net.java.ao.Searchable;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @Preload
+@Implementation(HudsonServerEntity.class)
 public interface HudsonServer extends Entity {
 
 	/**
