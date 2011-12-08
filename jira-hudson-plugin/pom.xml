@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>com.marvelution.security</groupId>
 			<artifactId>marvelution-security-crypto</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.0</version>
 			<type>jar</type>
 			<scope>compile</scope>
 			<exclusions>
