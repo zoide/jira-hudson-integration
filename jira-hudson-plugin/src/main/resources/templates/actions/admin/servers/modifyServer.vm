@@ -41,11 +41,20 @@
 </tr>
 #end
 
-#macro (textField $label $labelHint $fieldName $fieldValue $required $errors)
+#macro (formField $type $label $labelHint $fieldName $fieldValue $required $errors)
 	#fieldHeader ($label $fieldName $required $errors)
-	<input type="text" size="60" name="$fieldName" label="$label" value="$!fieldValue" />
+	<input type="$type" size="60" name="$fieldName" label="$label" value="$!fieldValue" />
 	#fieldFooter ($labelHint)
 </tr>
+#end
+
+#macro (passwordField $label $labelHint $fieldName $fieldValue $required $errors)
+	#formField ("password" $label $labelHint $fieldName $fieldValue $required $errors)
+</tr>
+#end
+
+#macro (textField $label $labelHint $fieldName $fieldValue $required $errors)
+	#formField ("text" $label $labelHint $fieldName $fieldValue $required $errors)
 #end
 
 <head>
@@ -86,7 +95,7 @@
 #textField ($i18n.getText("hudson.server.host.label") $i18n.getText("hudson.server.host.hint") "host" "$!host" true $action.errors)
 #textField ($i18n.getText("hudson.server.public.host.label") $i18n.getText("hudson.server.public.host.hint") "publicHost" "$!publicHost" false $action.errors)
 #textField ($i18n.getText("common.words.username") $i18n.getText("hudson.server.username.hint") "username" "$!username" false $action.errors)
-#textField ($i18n.getText("common.words.password") $i18n.getText("hudson.server.password.hint") "password" "$!password" false $action.errors)
+#passwordField ($i18n.getText("common.words.password") $i18n.getText("hudson.server.password.hint") "password" "$!password" false $action.errors)
 #fieldHeader ($i18n.getText("hudson.server.include.in.streams") "includeInStreams" false $action.errors)
 <input type="checkbox" name="includeInStreams" label="$i18n.getText("hudson.server.include.in.streams")" value="true" #if ($includeInStreams == true) checked="checked" #end />
 #fieldFooter ($i18n.getText("hudson.server.include.in.streams.hint"))

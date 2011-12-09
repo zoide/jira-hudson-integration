@@ -68,8 +68,8 @@
 	</li>
 	<li class="clear">&nbsp;</li>
 	<li class="testResults">
-		<ul>
-			<li class="header">${i18n.getText("common.words.latest")} <a href="${server.publicHost}/${job.url}/lastCompletedBuild/testReport/">${i18n.getText("hudson.panel.build.tests.results")}</a> (${i18n.getText("hudson.panel.build.tests.failed", $build.testResults.failed)}):</li>
+		<ul>#set ($testcount = 0) #if ($build.testResults) #set ($testcount = $build.testResults.failed) #end
+			<li class="header">${i18n.getText("common.words.latest")} <a href="${server.publicHost}/${job.url}/lastCompletedBuild/testReport/">${i18n.getText("hudson.panel.build.tests.results")}</a> (${i18n.getText("hudson.panel.build.tests.failed", $testcount)}):</li>
 			#if ($build.testResults && $build.testResults.failed > 0)
 			#foreach ($test in $build.testResults.failedTests)
 			<li #if (!${foreach.hasNext})class="last"#end>${test.className}.${test.testName}</li>
