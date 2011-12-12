@@ -48,12 +48,12 @@
 	</tr>
 	<tr>
 		<td colspan="2">
-			<table class="grid maxWidth">
-				<tr>
+			<table class="aui">
+				<thead><tr>
 					<th>$i18n.getText("hudson.associations.project")</th>
 					<th>$i18n.getText("hudson.associations.details")</th>
 					<th>$i18n.getText("common.words.operations")</th>
-				</tr>
+				</tr></thead><tbody>
 				#if( ${associations.isEmpty()} )
 				<tr bgcolor="#FFF">
 					<td colspan="4">
@@ -63,12 +63,7 @@
 				#else
 				#foreach($association in $sorter.sort($associations, "jobName"))
 				#set ($project = $projectManager.getProjectObj($association.projectId))
-				#if ($velocityCount % 2 == 1)
-					#set ($rowbgcolor = "#FFFFFF")
-				#else
-					#set ($rowbgcolor = "#FFFFF0")
-				#end
-				<tr bgcolor="$rowbgcolor">
+				<tr>
 					<td valign="top">
 						<a href="${req.contextPath}/browse/${project.key}">${project.name}<a/>
 					</td>
@@ -82,6 +77,7 @@
 				</tr>
 				#end
 				#end
+				</tbody>
 			</table>
 		</td>
 	</tr>

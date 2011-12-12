@@ -49,11 +49,11 @@
 	<tr>
 		<td colspan="2">
 			<table class="grid maxWidth">
-				<tr>
+				<thead><tr>
 					<th>$i18n.getText("common.words.name")</th>
 					<th>$i18n.getText("common.words.details")</th>
 					<th>$i18n.getText("common.words.operations")</th>
-				</tr>
+				</tr></thead><tbody>
 				#if( ${servers.isEmpty()} )
 				<tr bgcolor="#FFF">
 					<td colspan="4">
@@ -62,12 +62,7 @@
 				</tr>
 				#else
 				#foreach($server in $sorter.sort($servers, "name"))
-				#if ($velocityCount % 2 == 1)
-					#set ($rowbgcolor = "#FFFFFF")
-				#else
-					#set ($rowbgcolor = "#FFFFF0")
-				#end
-				<tr bgcolor="$rowbgcolor">
+				<tr>
 					<td valign="top">
 						<b>${server.name}</b>
 						#if (${server.defaultServer}) (${i18n.getText("common.words.default")}) #end
@@ -94,6 +89,7 @@
 				</tr>
 				#end
 				#end
+				</tbody>
 			</table>
 		</td>
 	</tr>
