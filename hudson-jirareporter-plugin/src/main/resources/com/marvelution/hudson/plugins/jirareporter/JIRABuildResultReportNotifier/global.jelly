@@ -46,7 +46,7 @@
 						<f:entry title="Close action name" help="${descriptor.getBaseHelpURL()}closeAction.html">
 							<f:textbox name="jbrr.closeAction" value="${site.closeAction}" />
 						</f:entry>
-						<f:entry title="Check Issue existence" help="${descriptor.getBaseHelpURL()}checkIssueExistence.html">
+						<f:entry title="Check Issue existence" help="${descriptor.getBaseHelpURL()}issueExistence.html">
 							<f:checkbox name="jbrr.checkIssueExistence" checked="${site.checkIssueExistence}"/>
 						</f:entry>
 					</f:advanced>
