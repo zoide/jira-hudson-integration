@@ -120,10 +120,9 @@ public class UpdateAssociation extends AbstractModifyAssociation {
 	}
 
 	/**
-	 * Getter for associationId
-	 * 
-	 * @return the associationId
+	 * {@inheritDoc}
 	 */
+	@Override
 	public int getAssociationId() {
 		return associationId;
 	}

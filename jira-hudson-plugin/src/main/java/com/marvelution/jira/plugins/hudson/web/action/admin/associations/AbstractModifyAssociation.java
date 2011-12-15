@@ -120,6 +120,15 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	public abstract Collection<String> getJobOptions();
 
 	/**
+	 * Getter for associationId
+	 * 
+	 * @return the associationId
+	 */
+	public int getAssociationId() {
+		return 0;
+	}
+
+	/**
 	 * Getter for hudsonId
 	 * 
 	 * @return the hudsonId
