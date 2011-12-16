@@ -88,7 +88,7 @@
 		<hudson.test.harness.version>1.395</hudson.test.harness.version>
 		<atlassian.jira.version>4.4</atlassian.jira.version>
 		<javax.xml.bind.version>2.2</javax.xml.bind.version>
-		<enunciate.version>1.22</enunciate.version>
+		<enunciate.version>1.24</enunciate.version>
 		<apache.wink.version>1.1.3-incubating</apache.wink.version>
 		<stagingSiteURL>dav:http://repository.marvelution.com/content/sites/apidocs-staging/jira-hudson-integration/${project.version}</stagingSiteURL>
 	</properties>

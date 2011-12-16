@@ -68,12 +68,12 @@
 <tbody>
 	<tr class="titlerow">
 		<td colspan="2" class="jiraformheader">
-			<h3 class="formtitle">$i18n.getText("hudson.servers.${actionType.type()}.title")</h3>
+			<h3 class="formtitle">$i18n.getText("hudson.associations.${actionType.type()}.title")</h3>
 		</td>
 	</tr>
 	<tr class="descriptionrow">
 		<td colspan="2" class="jiraformheader">
-			<div class="desc-wrap">$i18n.getText("hudson.servers.${actionType.type()}.description")</div>
+			<div class="desc-wrap">$i18n.getText("hudson.associations.${actionType.type()}.description")</div>
 		</td>
 	</tr>
 #fieldHeader ($i18n.getText("hudson.association.server.label") "hudsonId" true $action.errors)
