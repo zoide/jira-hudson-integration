@@ -21,6 +21,9 @@ package com.marvelution.jira.plugins.hudson.services.servers;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
+import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
+
 /**
  * Hudson Server utility class
  * 
@@ -71,6 +74,16 @@ public class HudsonServerUtils {
 	 */
 	public static boolean isServerSecured(HudsonServer server) {
 		return StringUtils.isNotBlank(server.getUsername()) && StringUtils.isNotBlank(server.getPassword());
+	}
+
+	/**
+	 * Check method to see if the {@link HudsonServer} has associations
+	 * 
+	 * @param server the {@link HudsonServer} to check
+	 * @return <code>true</code> if there are {@link HudsonAssociation} objects using the server
+	 */
+	public static boolean hasAssociations(HudsonServer server) {
+		return server.getAssociations() != null && server.getAssociations().length > 0;
 	}
 
 }

@@ -19,8 +19,11 @@
 
 package com.marvelution.jira.plugins.hudson.services.servers;
 
+import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
+
 import net.java.ao.Entity;
 import net.java.ao.Implementation;
+import net.java.ao.OneToMany;
 import net.java.ao.Preload;
 import net.java.ao.Searchable;
 
@@ -148,5 +151,13 @@ public interface HudsonServer extends Entity {
 	 *         <code>false</code> otherwise.
 	 */
 	boolean isIncludeInStreams();
+
+	/**
+	 * Getter for all the {@link HudsonAssociation} objects linked to this server
+	 * 
+	 * @return array of {@link HudsonAssociation} objects
+	 */
+	@OneToMany
+	HudsonAssociation[] getAssociations();
 
 }
