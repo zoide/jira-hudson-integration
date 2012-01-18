@@ -174,9 +174,9 @@ public class JIRABuildResultReportNotifier extends Notifier {
 				if (buildAction != null) {
 					RemoteIssue issue = client.getIssue(buildAction);
 					if (issue == null || issue.getKey() == null) {
-						listener.getLogger().println("WARN: Failed to automatically close issue: "
-							+ buildAction.raisedIssueKey + " unable to locate the issue in JIRA site "
-							+ getSite().name);
+						listener.getLogger().println(
+							"WARN: Failed to automatically close issue: Unable to locate issue "
+								+ buildAction.raisedIssueKey + " in JIRA site " + getSite().name);
 					} else if (client.canCloseIssue(issue)) {
 						if (client.closeIssue(issue, build)) {
 							build.addAction(new JIRABuildResultReportAction(build, issue.getKey(), true));
