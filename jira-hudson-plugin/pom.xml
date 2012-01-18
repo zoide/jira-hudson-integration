@@ -104,6 +104,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-project-config-plugin</artifactId>
+			<version>${atlassian.jira.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.jira</groupId>
 			<artifactId>jira-rest-plugin</artifactId>
 			<version>${atlassian.jira.version}</version>
 			<type>jar</type>

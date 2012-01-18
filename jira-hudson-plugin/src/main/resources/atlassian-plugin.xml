@@ -22,7 +22,6 @@
 		<description>${project.description}</description>
 		<vendor name="${project.organization.name}" url="${project.organization.url}" />
 		<version>${project.version}</version>
-		<application-version min="${atlassian.jira.version}" max="${atlassian.jira.version}"/>
 	</plugin-info>
 
 	<!-- I 1 8 N   R E S O U R C E S -->
@@ -71,6 +70,10 @@
 		<resource type="download" name="useravatar.gif" location="/images/useravatar.gif" />
 		<resource type="download" name="hudson-useravatar.png" location="/images/hudson-useravatar.png" />
 		<resource type="download" name="jenkins-useravatar.png" location="/images/jenkins-useravatar.png" />
+	</web-resource>
+	<web-resource key="hudson-admin" name="Hudson Admin Resources">
+		<context>hudson-admin</context>
+		<dependency>com.atlassian.jira.jira-project-config-plugin:project-config-global</dependency>
 	</web-resource>
 
 	<!-- I M A G E   R E S O U R C E S -->
@@ -142,6 +145,7 @@
 		</condition>
 		<label key="hudson.section"/>
 	</web-section>
+	<web-section key="hudson-group" name="Hudson Config Group" location="atl.jira.proj.config" i18n-name-key="admin.project.hudson.section" weight="60"/>
 
 	<!-- W E B   I T E M S -->
 	<web-item key="hudson-plugin-configuration" name="Hudson Plugin Configuration" section="admin_plugins_menu/hudson-section" weight="10">
@@ -195,6 +199,10 @@
 		</conditions>
 		<label key="hudson.association.project.add" />
 		<link linkId="hudson_association_add">/secure/admin/hudson/AddAssociation!default.jspa?projectId=$helper.project.id</link>
+	</web-item>
+	<web-item key="hudson-project-associations" name="Hudson Project Associations" section="atl.jira.proj.config/hudson-group" weight="10">
+		<label key="admin.project.hudson.associations" />
+		<link linkId="hudson_project_associations">/secure/admin/hudson/AdministerAssociations.jspa?context=$helper.project.id</link>
 	</web-item>
 
 	<!-- H U D S O N   P L U G I N   C O N F I G U R A T I O N -->

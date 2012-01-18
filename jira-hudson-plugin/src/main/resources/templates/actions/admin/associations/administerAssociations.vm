@@ -16,10 +16,20 @@
 ## specific language governing permissions and limitations
 ## under the License.
 ##
+
+$!webResourceManager.requireResourcesForContext("hudson-admin")
+
 <head>
 	<meta name="decorator" content="admin"/>
+	#if ($action.useContextDecorator())
+	<meta name="projectKey" content="${project.key}">
+	<meta name="projectId" content="${context}">
+	<meta name="admin.active.section" content="atl.jira.proj.config">
+	<meta name="admin.active.tab" content="hudson_project_associations">
+	#else
 	<meta name="admin.active.section" content="admin_plugins_menu/hudson-section">
 	<meta name="admin.active.tab" content="hudson_associations_administer">
+	#end
 </head>
 
 <script type="text/javascript">
@@ -30,56 +40,46 @@
 </script>
 
 #set($i18n = $action)
-<table class="jiraform maxWidth">
-<tbody>
-	<tr class="titlerow">
-		<td colspan="2" class="jiraformheader">
-			<h3 class="formtitle">$i18n.getText("hudson.associations.title")</h3>
+<div class="operations-panel">
+	<ul class="operations">
+		<li>
+			<a id="add_association" class="operations-item" href="AddAssociation!default.jspa?context=${context}&amp;projectId=${context}">
+				<span class="icon icon-add16"></span>
+				$i18n.getText("hudson.associations.add.link")
+			</a>
+		</li>
+	</ul>
+</div>
+<h1 class="formtitle">$i18n.getText("hudson.associations.title")</h1>
+<div class="desc-wrap">$i18n.getText("hudson.associations.description")</div>
+<table class="aui">
+	<thead><tr>
+		<th>$i18n.getText("hudson.associations.project")</th>
+		<th>$i18n.getText("hudson.associations.details")</th>
+		<th>$i18n.getText("common.words.operations")</th>
+	</tr></thead><tbody>
+	#if( ${associations.isEmpty()} )
+	<tr bgcolor="#FFF">
+		<td colspan="4">
+			$i18n.getText("hudson.associations.not.configured")
 		</td>
 	</tr>
-	<tr class="descriptionrow">
-		<td colspan="2" class="jiraformheader">
-			<div class="desc-wrap">
-				$i18n.getText("hudson.associations.description")<br />
-				<img src="${req.contextPath}/images/icons/bullet_creme.gif" align="absmiddle" border="0" height="8" width="8">
-				<b><a id="add_hudson_association" href="AddAssociation!default.jspa">$i18n.getText("hudson.associations.add.link")</a></b>
-			</div>
-		</td>
-	</tr>
+	#else
+	#foreach($association in $sorter.sort($associations, "jobName"))
+	#set ($project = $projectManager.getProjectObj($association.projectId))
 	<tr>
-		<td colspan="2">
-			<table class="aui">
-				<thead><tr>
-					<th>$i18n.getText("hudson.associations.project")</th>
-					<th>$i18n.getText("hudson.associations.details")</th>
-					<th>$i18n.getText("common.words.operations")</th>
-				</tr></thead><tbody>
-				#if( ${associations.isEmpty()} )
-				<tr bgcolor="#FFF">
-					<td colspan="4">
-						$i18n.getText("hudson.associations.not.configured")
-					</td>
-				</tr>
-				#else
-				#foreach($association in $sorter.sort($associations, "jobName"))
-				#set ($project = $projectManager.getProjectObj($association.projectId))
-				<tr>
-					<td valign="top">
-						<a href="${req.contextPath}/browse/${project.key}">${project.name}<a/>
-					</td>
-					<td valign="top">
-						${association.server.name}: ${association.jobName}
-					</td>
-					<td align="left" valign="top">
-						<a href="UpdateAssociation!default.jspa?associationId=${association.ID}">$i18n.getText("common.forms.edit")</a>
-						| <a href="DeleteAssociation!default.jspa?associationId=${association.ID}">$i18n.getText("common.words.delete")</a>
-					</td>
-				</tr>
-				#end
-				#end
-				</tbody>
-			</table>
+		<td valign="top">
+			<a href="${req.contextPath}/browse/${project.key}">${project.name}<a/>
+		</td>
+		<td valign="top">
+			${association.server.name}: ${association.jobName}
+		</td>
+		<td align="left" valign="top">
+			<a href="UpdateAssociation!default.jspa?context=${context}&amp;associationId=${association.ID}">$i18n.getText("common.forms.edit")</a>
+			| <a href="DeleteAssociation!default.jspa?context=${context}&amp;associationId=${association.ID}">$i18n.getText("common.words.delete")</a>
 		</td>
 	</tr>
-</tbody>
+	#end
+	#end
+	</tbody>
 </table>

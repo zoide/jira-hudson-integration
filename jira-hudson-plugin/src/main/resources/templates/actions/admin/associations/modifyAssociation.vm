@@ -41,10 +41,19 @@
 </tr>
 #end
 
+$!webResourceManager.requireResourcesForContext("hudson-admin")
+
 <head>
 	<meta name="decorator" content="admin"/>
+	#if ($action.useContextDecorator())
+	<meta name="projectKey" content="${project.key}">
+	<meta name="projectId" content="${context}">
+	<meta name="admin.active.section" content="atl.jira.proj.config">
+	<meta name="admin.active.tab" content="hudson_project_associations">
+	#else
 	<meta name="admin.active.section" content="admin_plugins_menu/hudson-section">
 	<meta name="admin.active.tab" content="hudson_association_${actionType.type()}">
+	#end
 </head>
 
 <script type="text/javascript">
@@ -56,6 +65,7 @@
 
 #set($i18n = $action)
 <form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="$actionType.formAction()">
+<input type="hidden" name="context" value="${context}" />
 #if ($associationId > 0)
 <input type="hidden" name="associationId" value="${associationId}" />
 #end
@@ -118,7 +128,7 @@
 				<span class="toolbar-item toolbar-item-link">
 					<input id="cancelButton" class="toolbar-trigger" type="button" accesskey="`"
 						title="$i18n.getText("common.forms.cancel") (Ctrl+Alt + `)" name="AdministerAssociations.jspa"
-						value="$i18n.getText("common.forms.cancel")" onclick="location.href='AdministerAssociations.jspa'">
+						value="$i18n.getText("common.forms.cancel")" onclick="location.href='AdministerAssociations.jspa?context=${context}'">
 				</span>
 			</div>
 		</div>

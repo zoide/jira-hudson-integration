@@ -23,10 +23,9 @@ import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.atlassian.jira.project.ProjectManager;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
-import com.marvelution.jira.plugins.hudson.web.action.admin.AbstractHudsonAdminWebActionSupport;
+import com.marvelution.jira.plugins.hudson.web.action.admin.AbstractHudsonProjectAdminWebActionSupport;
 import com.marvelution.jira.plugins.hudson.web.action.admin.KeyValuePair;
 import com.marvelution.jira.plugins.hudson.web.action.admin.ModifyActionType;
 
@@ -36,7 +35,7 @@ import com.marvelution.jira.plugins.hudson.web.action.admin.ModifyActionType;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 @SuppressWarnings("unchecked")
-public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebActionSupport {
+public abstract class AbstractModifyAssociation extends AbstractHudsonProjectAdminWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,20 +44,17 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	private String jobName;
 
 	protected final HudsonAssociationManager associationManager;
-	protected final ProjectManager projectManager;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param serverManager the {@link HudsonServerManager} implementation
 	 * @param associationManager the {@link HudsonAssociationManager} implementation
-	 * @param projectManager the {@link ProjectManager} implementation
 	 */
 	protected AbstractModifyAssociation(HudsonServerManager serverManager,
-										HudsonAssociationManager associationManager, ProjectManager projectManager) {
+										HudsonAssociationManager associationManager) {
 		super(serverManager);
 		this.associationManager = associationManager;
-		this.projectManager = projectManager;
 	}
 
 	/**
@@ -66,10 +62,11 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	 */
 	@Override
 	protected void doValidation() {
+		initRequest();
 		if (hudsonId == 0 || !serverManager.hasServer(hudsonId)) {
 			addError("hudsonId", getText("hudson.association.server.required"));
 		}
-		if (projectId == 0 || projectManager.getProjectObj(projectId) == null) {
+		if (projectId == 0 || getProjectManager().getProjectObj(projectId) == null) {
 			addError("projectId", getText("hudson.association.project.required"));
 		}
 		if (StringUtils.isBlank(jobName)) {
@@ -82,11 +79,12 @@ public abstract class AbstractModifyAssociation extends AbstractHudsonAdminWebAc
 	 */
 	@Override
 	protected String doExecute() throws Exception {
+		initRequest();
 		if (hasAnyErrors()) {
 			return INPUT;
 		}
 		saveAssociation(hudsonId, projectId, jobName);
-		return getRedirect(ADMINISTER_ASSOCIATIONS);
+		return getRedirect(ADMINISTER_ASSOCIATIONS + getContext());
 	}
 
 	/**

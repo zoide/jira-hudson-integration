@@ -24,14 +24,14 @@ import java.util.Collection;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociation;
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
-import com.marvelution.jira.plugins.hudson.web.action.admin.AbstractHudsonAdminWebActionSupport;
+import com.marvelution.jira.plugins.hudson.web.action.admin.AbstractHudsonProjectAdminWebActionSupport;
 
 /**
  * {@link AbstractHudsonAdminWebActionSupport} implementation to administer Hudson server
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class AdministerAssociations extends AbstractHudsonAdminWebActionSupport {
+public class AdministerAssociations extends AbstractHudsonProjectAdminWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,7 +54,20 @@ public class AdministerAssociations extends AbstractHudsonAdminWebActionSupport 
 	 * @return {@link Collection} with all the configured {@link HudsonAssociation} objects
 	 */
 	public Collection<HudsonAssociation> getAssociations() {
-		return associationManager.getAssociations();
+		if (getContext() != 0L && getProject() != null) {
+			return associationManager.getAssociations(getProject());
+		} else {
+			return associationManager.getAssociations();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String doExecute() throws Exception {
+		initRequest();
+		return SUCCESS;
 	}
 
 }

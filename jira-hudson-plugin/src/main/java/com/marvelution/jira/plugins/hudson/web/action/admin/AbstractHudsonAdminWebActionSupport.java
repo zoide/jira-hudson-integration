@@ -39,7 +39,7 @@ public class AbstractHudsonAdminWebActionSupport extends HudsonWebActionSupport 
 	
 	protected static final Logger LOGGER = Logger.getLogger(AbstractHudsonAdminWebActionSupport.class);
 	protected static final String ADMINISTER_SERVERS = "AdministerServers.jspa";
-	protected static final String ADMINISTER_ASSOCIATIONS= "AdministerAssociations.jspa";
+	protected static final String ADMINISTER_ASSOCIATIONS= "AdministerAssociations.jspa?context=";
 	
 	protected final HudsonServerManager serverManager;
 

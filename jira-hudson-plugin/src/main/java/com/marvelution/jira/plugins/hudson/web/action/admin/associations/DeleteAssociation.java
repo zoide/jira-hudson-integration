@@ -24,14 +24,14 @@ import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociati
 import com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServer;
 import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
-import com.marvelution.jira.plugins.hudson.web.action.admin.AbstractHudsonAdminWebActionSupport;
+import com.marvelution.jira.plugins.hudson.web.action.admin.AbstractHudsonProjectAdminWebActionSupport;
 
 /**
  * Delete {@link HudsonServer} WebAction implementation
  * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
-public class DeleteAssociation extends AbstractHudsonAdminWebActionSupport {
+public class DeleteAssociation extends AbstractHudsonProjectAdminWebActionSupport {
 
 	private static final long serialVersionUID = 1L;
 
@@ -110,7 +110,7 @@ public class DeleteAssociation extends AbstractHudsonAdminWebActionSupport {
 	 * 
 	 * @return the {@link Project}
 	 */
-	public Project getProject() {
+	public Project getAssociationProject() {
 		return getProjectManager().getProjectObj(getAssociation().getProjectId());
 	}
 
