@@ -16,6 +16,9 @@
 ## specific language governing permissions and limitations
 ## under the License.
 ##
+
+$!webResourceManager.requireResourcesForContext("hudson-admin")
+
 <head>
 	<meta name="decorator" content="admin"/>
 	<meta name="admin.active.section" content="admin_plugins_menu/hudson-section">

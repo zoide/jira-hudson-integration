@@ -16,6 +16,9 @@
 ## specific language governing permissions and limitations
 ## under the License.
 ##
+
+$!webResourceManager.requireResourcesForContext("hudson-admin")
+
 <head>
 	<meta name="decorator" content="admin"/>
 	<meta name="admin.active.section" content="admin_plugins_menu/hudson-section">
@@ -28,6 +31,14 @@
     }
     window.onload=init;
 </script>
+
+#if( !${servers.isEmpty()} )
+<div id="hudson-server-delete-warning" class="aui-message warning">
+	<p class="title">$i18n.getText("hudson.server.delete.warning")</p>
+	<p>$i18n.getText("hudson.server.delete.warning.description")</p>
+	<span class="aui-icon icon-warning"></span>
+</div>
+#end
 
 #set($i18n = $action)
 <div class="operations-panel">

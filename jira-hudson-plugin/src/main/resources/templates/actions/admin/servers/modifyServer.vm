@@ -17,6 +17,8 @@
 ## under the License.
 ##
 
+$!webResourceManager.requireResourcesForContext("hudson-admin")
+
 #macro (fieldHeader $label $fieldName $required $errors)
 #set ($extraStyle = "")
 #if ($errors && $errors.containsKey($fieldName))
