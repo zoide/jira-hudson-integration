@@ -21,6 +21,7 @@ package com.marvelution.jira.plugins.hudson.services.servers;
 
 import javax.crypto.IllegalBlockSizeException;
 
+import com.atlassian.gzipfilter.org.apache.commons.lang.StringUtils;
 import com.marvelution.security.crypto.SimpleStringEncryptor;
 import com.marvelution.security.crypto.StringEncryptor;
 
@@ -74,6 +75,21 @@ public class HudsonServerEntity {
 	 */
 	public void setPassword(String password) {
 		server.setPassword(ENCRYPTOR.encrypt(password));
+	}
+
+	/**
+	 * Getter for the Server Public Host URL.
+	 * If the Public Host URL is not set then the Host URL is returned.
+	 * 
+	 * @return the Public Host URL
+	 * @see com.marvelution.jira.plugins.hudson.services.servers.HudsonServer#getPublicHost()
+	 */
+	public String getPublicHost() {
+		if (StringUtils.isNotBlank(server.getPublicHost())) {
+			return server.getPublicHost();
+		} else {
+			return server.getHost();
+		}
 	}
 
 }
