@@ -269,20 +269,20 @@
 		<interface>com.marvelution.jira.plugins.hudson.panels.utils.HudsonPanelHelper</interface>
 	</component>
 	<component key="hudson-client-factory" name="Hudson Client Factory Service"
-			class="com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactoryService">
-		<interface>com.marvelution.jira.plugins.hudson.service.servers.HudsonClientFactory</interface>
+			class="com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactoryService" public="true">
+		<interface>com.marvelution.jira.plugins.hudson.services.servers.HudsonClientFactory</interface>
 	</component>
 	<component key="hudson-server-manager" name="Hudson Server Manager Service"
-			class="com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManagerService">
-		<interface>com.marvelution.jira.plugins.hudson.service.servers.HudsonServerManager</interface>
+			class="com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManagerService" public="true">
+		<interface>com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager</interface>
 	</component>
 	<component key="hudson-association-manager" name="Hudson Association Manager Service"
-			class="com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManagerService">
-		<interface>com.marvelution.jira.plugins.hudson.service.associations.HudsonAssociationManager</interface>
+			class="com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManagerService" public="true">
+		<interface>com.marvelution.jira.plugins.hudson.services.associations.HudsonAssociationManager</interface>
 	</component>
 	<component key="hudson-configuration-manager" name="Hudson Configuration Manager Service"
 			class="com.marvelution.jira.plugins.hudson.services.configuration.HudsonConfigurationManagerService">
-		<interface>com.marvelution.jira.plugins.hudson.service.configuration.HudsonConfigurationManager</interface>
+		<interface>com.marvelution.jira.plugins.hudson.services.configuration.HudsonConfigurationManager</interface>
 	</component>
 
 	<!-- I M P O R T E D   C O M P O N E N T S -->
