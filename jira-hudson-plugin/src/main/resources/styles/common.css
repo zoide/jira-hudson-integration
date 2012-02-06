@@ -292,10 +292,12 @@ li {
 	clear: both;
 }
 
+#jobStatus .buildTriggers,
 #jobStatus .testResults,
 #jobStatus .buildArtifacts {
 }
 
+#jobStatus .buildTriggers ul,
 #jobStatus .testResults ul,
 #jobStatus .buildArtifacts ul {
 	margin: 0px 5px;
@@ -304,6 +306,7 @@ li {
 	list-style-position: inside;
 }
 
+#jobStatus .buildTriggers li,
 #jobStatus .testResults li,
 #jobStatus .buildArtifacts li {
 	border: 1px solid #BBD0E5;
@@ -311,6 +314,7 @@ li {
 	padding: 5px;
 }
 
+#jobStatus .buildTriggers .header,
 #jobStatus .testResults .header,
 #jobStatus .buildArtifacts .header {
 	margin: 0px;
@@ -319,11 +323,13 @@ li {
 	color: #036;
 }
 
+#jobStatus .buildTriggers .header a,
 #jobStatus .testResults .header a,
 #jobStatus .buildArtifacts .header a {
 	color: #036;
 }
 
+#jobStatus .buildTriggers .last,
 #jobStatus .testResults .last,
 #jobStatus .buildArtifacts .last {
 	border-bottom: 1px solid #BBD0E5;

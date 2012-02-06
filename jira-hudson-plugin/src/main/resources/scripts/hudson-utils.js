@@ -107,6 +107,23 @@ AJS.hudson.utils.createChart = function(gadget, chart) {
  */
 AJS.hudson.utils.createBuildDetailsView = function(gadget, server, job, build) {
 	var jobStatus = AJS.$('<ol/>').attr('id', 'jobStatus');
+	var triggers = AJS.hudson.trigger.parser.parse(gadget, server, job, build);
+	if (triggers.length > 1) {
+		// We have multiple triggers, the first is already showing, now add the rest in a table
+		jobStatus.append('<li class="clear">&nbsp;</li>');
+		var btLi = AJS.$('<li/>').addClass('buildTriggers');
+		var btUl = AJS.$('<ul/>');
+		btUl.append(AJS.$('<li/>').addClass('header').text(gadget.getMsg('hudson.gadget.build.triggers')));
+		AJS.$.each(triggers, function(index, trigger) {
+			var listItem = AJS.$('<li/>').html(trigger);
+			if (index == triggers.length - 1) {
+				listItem.addClass('last');
+			}
+			btUl.append(listItem);
+		});
+		btLi.append(btUl);
+		jobStatus.append(btLi);
+	}
 	jobStatus.append('<li class="clear">&nbsp;</li>');
 	var trLi = AJS.$('<li/>').addClass('testResults');
 	var trUl = AJS.$('<ul/>');

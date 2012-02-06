@@ -104,7 +104,7 @@
 								"value": Date.duration(job.lastBuild.duration)
 							},{
 								"label": "__MSG_hudson.gadget.build.because__",
-								"value": AJS.hudson.trigger.parser.parse(gadget, args.hudson, job, job.lastBuild)
+								"value": AJS.hudson.trigger.parser.parse(gadget, args.hudson, job, job.lastBuild)[0]
 							}];
 							nameDiv.append(AJS.hudson.utils.createLink(args.hudson.host + "/" + job.lastBuild.url, job.name + " #" + job.lastBuild.number));
 							detailsDiv.append(AJS.hudson.utils.createDetailsTable(details));

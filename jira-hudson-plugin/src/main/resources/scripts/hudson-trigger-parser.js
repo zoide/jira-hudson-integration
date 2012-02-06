@@ -55,7 +55,10 @@ AJS.hudson.trigger.parser.parse = function(gadget, server, job, build) {
 			}
 		}
 	}
-	return triggers.join(" | ");
+	if (triggers.length === 0) {
+		triggers.push(gadget.getMsg("hudson.gadget.trigger.unknown"));
+	}
+	return triggers;
 }
 
 AJS.hudson.trigger.parser.parseProjectTrigger = function(gadget, server, job, build, trigger) {
