@@ -40,6 +40,7 @@ import org.jfree.ui.TextAnchor;
 
 import com.atlassian.jira.charts.jfreechart.ChartHelper;
 import com.atlassian.jira.charts.jfreechart.util.ChartDefaults;
+import com.atlassian.jira.charts.jfreechart.util.ChartUtil;
 import com.atlassian.jira.util.I18nHelper;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
 import com.marvelution.jira.plugins.hudson.charts.renderers.BuildResultRenderer;
@@ -83,6 +84,7 @@ public class BuildResultsRatioChartGenerator extends AbstractHudsonChartGenerato
 		final JFreeChart chart = ChartFactory.createXYBarChart("", "", false,
 				getI18n().getText("hudson.charts.duration"), dataSet, PlotOrientation.VERTICAL, false, false, false);
 		chart.setBackgroundPaint(Color.WHITE);
+		chart.setBorderVisible(false);
 		final BuildResultRenderer renderer = new BuildResultRenderer(server, buildMap);
 		renderer.setBaseItemLabelFont(ChartDefaults.defaultFont);
 		renderer.setBaseItemLabelsVisible(false);
@@ -105,6 +107,7 @@ public class BuildResultsRatioChartGenerator extends AbstractHudsonChartGenerato
 		rangeAxis.setDateFormatOverride(durationFormat);
 		rangeAxis.setLabel(getI18n().getText("hudson.charts.duration"));
 		xyPlot.setRangeAxis(rangeAxis);
+		ChartUtil.setupPlot(xyPlot);
 		return new ChartHelper(chart);
 	}
 

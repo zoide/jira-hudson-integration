@@ -226,6 +226,10 @@ li {
 	color: #FFF;
 }
 
+#jobStatus .header a {
+	text-decoration: underline;
+}
+
 #jobStatus .header .image {
 	float: left;
 	left: -5px;

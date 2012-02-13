@@ -39,6 +39,8 @@ import org.jfree.data.xy.CategoryTableXYDataset;
 import org.jfree.data.xy.XYDataset;
 
 import com.atlassian.jira.charts.jfreechart.ChartHelper;
+import com.atlassian.jira.charts.jfreechart.util.ChartDefaults;
+import com.atlassian.jira.charts.jfreechart.util.ChartUtil;
 import com.atlassian.jira.util.I18nHelper;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.TestResult;
@@ -97,6 +99,7 @@ public class BuildTestResultsRatioChartGenerator extends AbstractHudsonChartGene
 		final JFreeChart chart = ChartFactory.createStackedXYAreaChart("", "", getI18n().getText("hudson.charts.tests"),
 				dataset, PlotOrientation.VERTICAL, false, false, false);
 		chart.setBackgroundPaint(Color.WHITE);
+		chart.setBorderVisible(false);
 		XYPlot xyPlot = chart.getXYPlot();
 		xyPlot.setDataset(1, dataset);
 		if (dataset.getItemCount() > 0) {
@@ -105,19 +108,22 @@ public class BuildTestResultsRatioChartGenerator extends AbstractHudsonChartGene
 			shapeRenderer.setSeriesLinesVisible(1, false);
 			shapeRenderer.setSeriesShapesVisible(2, false);
 			shapeRenderer.setSeriesLinesVisible(2, false);
-			shapeRenderer.setSeriesShape(0, new Ellipse2D.Double(-1.5D, -1.5D, 3.0D, 3.0D));
-			shapeRenderer.setSeriesPaint(0, GREEN_OUTLINE);
+			shapeRenderer.setSeriesShape(0, new Ellipse2D.Double(-3.0D, -3.0D, 6.0D, 6.0D));
+			shapeRenderer.setSeriesPaint(0, GREEN_PAINT);
 			shapeRenderer.setSeriesShapesFilled(0, true);
 			shapeRenderer.setBaseToolTipGenerator(this);
+			shapeRenderer.setBaseItemLabelFont(ChartDefaults.defaultFont);
+			shapeRenderer.setBaseItemLabelsVisible(false);
 			xyPlot.setRenderer(0, shapeRenderer);
 			StackedXYAreaRenderer2 renderer = new StackedXYAreaRenderer2();
 			renderer.setSeriesPaint(0, GREEN_PAINT);
 			renderer.setSeriesPaint(1, RED_PAINT);
 			renderer.setSeriesPaint(2, YELLOW_PAINT);
+			renderer.setBaseItemLabelFont(ChartDefaults.defaultFont);
+			renderer.setBaseItemLabelsVisible(false);
 			xyPlot.setRenderer(1, renderer);
 			renderer.setBaseToolTipGenerator(this);
 		}
-
 		ValueAxis rangeAxis = xyPlot.getRangeAxis();
 		rangeAxis.setLowerBound(0.0D);
 		rangeAxis.setUpperBound(100.0D);
@@ -127,6 +133,7 @@ public class BuildTestResultsRatioChartGenerator extends AbstractHudsonChartGene
 		final TickUnitSource ticks = NumberAxis.createIntegerTickUnits();
 		domainAxis.setStandardTickUnits(ticks);
 		xyPlot.setDomainAxis(domainAxis);
+		ChartUtil.setupPlot(xyPlot);
 		return new ChartHelper(chart);
 	}
 

@@ -23,6 +23,7 @@ import java.awt.Paint;
 import java.util.Map;
 
 import org.jfree.chart.labels.XYToolTipGenerator;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.urls.XYURLGenerator;
 import org.jfree.data.xy.XYDataset;
@@ -52,6 +53,7 @@ public class BuildResultRenderer extends XYBarRenderer implements XYURLGenerator
 	public BuildResultRenderer(HudsonServer server, Map<Integer, Build> builds) {
 		this.server = server;
 		this.builds = builds;
+		setBarPainter(new StandardXYBarPainter());
 	}
 
 	/**
@@ -84,15 +86,15 @@ public class BuildResultRenderer extends XYBarRenderer implements XYURLGenerator
 		final Build build = builds.get(number);
 		switch (build.getResult()) {
 		case SUCCESSFUL:
-			return HudsonChartGenerator.GREEN_OUTLINE;
+			return HudsonChartGenerator.GREEN_PAINT;
 		case FAILED:
-			return HudsonChartGenerator.RED_OUTLINE;
+			return HudsonChartGenerator.RED_PAINT;
 		case UNSTABLE:
-			return HudsonChartGenerator.YELLOW_OUTLINE;
+			return HudsonChartGenerator.YELLOW_PAINT;
 		case ABORTED:
 		case NOTBUILD:
 		default:
-			return HudsonChartGenerator.GRAY_OUTLINE;
+			return HudsonChartGenerator.GRAY_PAINT;
 		}
 	}
 
