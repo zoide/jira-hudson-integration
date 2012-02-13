@@ -111,7 +111,7 @@ public class HttpClient4Connector implements Connector {
 	 */
 	private <MODEL extends Model> HttpGet createGetMethod(Query<MODEL> query) {
 		HttpGet get = new HttpGet(server.getHost() + query.getUrl());
-		get.setHeader("Accept", "application/xml");
+		get.setHeader("Accept", query.getAcceptHeader());
 		get.getParams().setParameter("http.connection.timeout", TIMEOUT_MS);
 		get.getParams().setParameter("http.socket.timeout", TIMEOUT_MS);
 		return get;

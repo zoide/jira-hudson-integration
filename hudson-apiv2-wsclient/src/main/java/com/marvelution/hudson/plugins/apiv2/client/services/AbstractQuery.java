@@ -74,6 +74,14 @@ public abstract class AbstractQuery<MODEL extends Model> implements Query<MODEL>
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String getAcceptHeader() {
+		return "application/xml";
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Class<MODEL> getModelClass() {
 		return modelClass;
 	}

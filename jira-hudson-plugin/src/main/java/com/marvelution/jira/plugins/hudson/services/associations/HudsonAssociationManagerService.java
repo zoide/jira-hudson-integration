@@ -25,8 +25,6 @@ import java.util.Collection;
 
 import net.java.ao.Query;
 
-import org.apache.log4j.Logger;
-
 import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.jira.project.Project;
 import com.google.common.collect.Lists;
@@ -39,8 +37,6 @@ import com.marvelution.jira.plugins.hudson.services.servers.HudsonServerManager;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public class HudsonAssociationManagerService implements HudsonAssociationManager {
-
-	private static final Logger LOGGER = Logger.getLogger(HudsonAssociationManagerService.class);
 
 	private final ActiveObjects objects;
 	private final HudsonServerManager serverManager;

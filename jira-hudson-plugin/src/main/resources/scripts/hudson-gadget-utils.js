@@ -32,17 +32,13 @@ AJS.hudson.gadget.utils.getAjaxOptions = function(server, apiUrl, successHandler
 		type : "GET",
 		dataTpe : "json"
 	};
-	if (server.secured) {
-		// The makeRequest servlet of Atlassian doesn't handle the authenticate correctly for Hudson instances
-		// So redirect the call to the Hudson Make Request servlet that does it
-		options.url = server.baseUrl + "/plugins/servlet/hudson/makeRequest";
-		options.data = {
-			url: server.host + apiUrl,
-			type: "json"
-		};
-	} else {
-		options.url = server.host + apiUrl;
-	}
+	// The makeRequest servlet of Atlassian doesn't handle the authenticate correctly for Hudson instances
+	// So redirect the call to the Hudson Make Request servlet that does it
+	options.url = server.baseUrl + "/plugins/servlet/hudson/makeRequest";
+	options.data = {
+		url: server.host + apiUrl,
+		type: "json"
+	};
 	if (errorHandler !== undefined) {
 		options.error = errorHandler;
 	}

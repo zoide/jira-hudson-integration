@@ -61,6 +61,13 @@ public interface Query<MODEL extends Model> {
 	<T> T getData();
 
 	/**
+	 * Getter for the Accept header
+	 * 
+	 * @return the Accept Header, may be <code>null</code>
+	 */
+	String getAcceptHeader();
+
+	/**
 	 * Get the {@link Model} class that this Query returns.
 	 * This is used to get the correct Unmarshaller.
 	 * 

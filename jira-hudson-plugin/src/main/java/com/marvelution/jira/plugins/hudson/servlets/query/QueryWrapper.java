@@ -32,6 +32,7 @@ import com.marvelution.hudson.plugins.apiv2.client.services.QueryType;
 public class QueryWrapper implements Query<WrapperModel> {
 
 	private final URI uri;
+	private String acceptHeader;
 
 	/**
 	 * Constructor
@@ -47,7 +48,7 @@ public class QueryWrapper implements Query<WrapperModel> {
 	 */
 	@Override
 	public String getUrl() {
-		return uri.getPath() + "?" + uri.getQuery();
+		return uri.getPath() + "?" + (uri.getQuery() != null ? uri.getQuery() : "");
 	}
 
 	/**
@@ -73,6 +74,23 @@ public class QueryWrapper implements Query<WrapperModel> {
 	@Override
 	public QueryType getQueryType() {
 		return QueryType.GET;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getAcceptHeader() {
+		return acceptHeader;
+	}
+
+	/**
+	 * Setter for the Accept Header
+	 * 
+	 * @param acceptHeader the Accept Header
+	 */
+	public void setAcceptHeader(String acceptHeader) {
+		this.acceptHeader = acceptHeader;
 	}
 
 }

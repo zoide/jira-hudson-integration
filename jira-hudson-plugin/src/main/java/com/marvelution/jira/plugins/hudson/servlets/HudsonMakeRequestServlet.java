@@ -64,13 +64,16 @@ public class HudsonMakeRequestServlet extends HttpServlet {
 			try {
 				URI uri = new URI(requestUrl);
 				HudsonClient hudson = new HudsonClient(new HttpClient4Connector(getHost(uri)));
-				ConnectorResponse response = hudson.getConnector().execute(new QueryWrapper(uri));
-				resp.setCharacterEncoding("UTF-8");
+				QueryWrapper query = new QueryWrapper(uri);
 				if (StringUtils.isBlank(requestType) || "json".equalsIgnoreCase(requestType)) {
+					query.setAcceptHeader(MediaType.APPLICATION_JSON);
 					resp.setContentType(MediaType.APPLICATION_JSON);
 				} else {
+					query.setAcceptHeader(MediaType.APPLICATION_XML);
 					resp.setContentType(MediaType.APPLICATION_XML);
 				}
+				ConnectorResponse response = hudson.getConnector().execute(query);
+				resp.setCharacterEncoding("UTF-8");
 				IOUtils.copy(response.getResponseAsReader(), resp.getWriter());
 				resp.getWriter().flush();
 			} catch (URISyntaxException e) {

@@ -195,7 +195,7 @@ public class HttpClient3Connector implements Connector {
 		try {
 			url = server.getHost() + URIUtil.encodeQuery(query.getUrl());
 			method = new GetMethod(url);
-			method.setRequestHeader("Accept", "application/xml");
+			method.setRequestHeader("Accept", query.getAcceptHeader());
 			httpClient.executeMethod(method);
 			return getConnectorResponseFromMethod(method);
 		} catch (HttpException e) {
