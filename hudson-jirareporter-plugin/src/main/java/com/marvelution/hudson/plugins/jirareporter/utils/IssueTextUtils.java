@@ -73,8 +73,10 @@ public class IssueTextUtils {
 		} catch (Exception e) {
 			context.setVariable("environment", Collections.emptyMap());
 		}
-		// Utilize the Dozer Mapper and its convertors of the API V2 plugin to get the ChangeLog and TestResults
-		context.setVariable("changelog", DozerUtils.getMapper().map(build.getChangeSet(), ChangeLog.class));
+		if (build.getChangeSet() != null) {
+			// Utilize the Dozer Mapper and its convertors of the API V2 plugin to get the ChangeLog and TestResults
+			context.setVariable("changelog", DozerUtils.getMapper().map(build.getChangeSet(), ChangeLog.class));
+		}
 		context.setVariable("testresults", DozerUtils.getMapper().map(build, TestResult.class));
 		try {
 			// TODO Support custom templates
