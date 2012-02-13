@@ -327,6 +327,7 @@ li {
 #jobStatus .testResults .header a,
 #jobStatus .buildArtifacts .header a {
 	color: #036;
+	text-decoration: underline;
 }
 
 #jobStatus .buildTriggers .last,
