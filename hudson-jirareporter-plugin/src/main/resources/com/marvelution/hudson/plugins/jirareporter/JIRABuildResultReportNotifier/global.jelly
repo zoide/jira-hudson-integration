@@ -17,7 +17,7 @@
  ~ under the License.
  -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-	<f:section title="JIRA">
+	<f:section title="Marvelution JIRA Build Reporter">
 		<f:entry title="JIRA sites" description="">
 			<f:repeatable name="jirasite" var="site" items="${descriptor.sites}">
 				<table width="100%">
