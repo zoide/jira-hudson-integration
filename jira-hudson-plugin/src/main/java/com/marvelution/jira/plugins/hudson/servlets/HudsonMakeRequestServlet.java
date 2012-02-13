@@ -60,10 +60,11 @@ public class HudsonMakeRequestServlet extends HttpServlet {
 		String requestUrl = req.getParameter("url");
 		String requestType = req.getParameter("type");
 		if (StringUtils.isNotBlank(requestUrl)) {
-			logger.debug("Got a makeRequest request for " + requestUrl);
 			try {
 				URI uri = new URI(requestUrl);
-				HudsonClient hudson = new HudsonClient(new HttpClient4Connector(getHost(uri)));
+				Host host = getHost(uri);
+				logger.debug("Got a makeRequest request for " + host.toString());
+				HudsonClient hudson = new HudsonClient(new HttpClient4Connector(host));
 				QueryWrapper query = new QueryWrapper(uri);
 				if (StringUtils.isBlank(requestType) || "json".equalsIgnoreCase(requestType)) {
 					query.setAcceptHeader(MediaType.APPLICATION_JSON);
@@ -77,6 +78,7 @@ public class HudsonMakeRequestServlet extends HttpServlet {
 				IOUtils.copy(response.getResponseAsReader(), resp.getWriter());
 				resp.getWriter().flush();
 			} catch (URISyntaxException e) {
+				logger.error("Invalid request", e);
 			}
 		}
 	}
