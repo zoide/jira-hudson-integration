@@ -19,7 +19,7 @@
 
 #if ($hudsonVersion)
 <script type="text/javascript">
-AJS.$("#hudsonPanelContent").parent().find("h2").text("${i18n.getText("hudson.panel.label.dynamic", $hudsonVersion.hudsonSystem.humanName)}");
+AJS.$(AJS.$("#hudsonPanelContent").parent().find("h2")[0]).text("${i18n.getText("hudson.panel.label.dynamic", $hudsonVersion.hudsonSystem.humanName)}");
 #if ($module.name() == "ISSUE")
 	#set ($tabId = "${module.key}")
 #else
