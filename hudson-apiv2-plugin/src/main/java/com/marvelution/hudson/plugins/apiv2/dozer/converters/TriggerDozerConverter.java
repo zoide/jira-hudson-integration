@@ -22,11 +22,11 @@ package com.marvelution.hudson.plugins.apiv2.dozer.converters;
 import hudson.model.Cause;
 import hudson.model.Cause.RemoteCause;
 import hudson.model.Cause.UpstreamCause;
-import hudson.model.Cause.UserCause;
 import hudson.triggers.SCMTrigger.SCMTriggerCause;
 import hudson.triggers.TimerTrigger.TimerTriggerCause;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,9 +63,7 @@ public class TriggerDozerConverter extends DozerConverter<Cause, Trigger> {
 	 */
 	@Override
 	public Trigger convertTo(Cause source, Trigger destination) {
-		if (source instanceof UserCause) {
-			return UserTrigger.create(((UserCause) source).getUserName(), source.getShortDescription());
-		} else if (source instanceof UpstreamCause) {
+		if (source instanceof UpstreamCause) {
 			UpstreamCause upstreamCause = (UpstreamCause) source;
 			return ProjectTrigger.create(upstreamCause.getUpstreamProject(), upstreamCause.getUpstreamUrl(),
 					upstreamCause.getUpstreamBuild(), source.getShortDescription());
@@ -84,6 +82,25 @@ public class TriggerDozerConverter extends DozerConverter<Cause, Trigger> {
 			return TimeTrigger.create(-1L, source.getShortDescription());
 		} else if (source instanceof SCMTriggerCause) {
 			return SCMTrigger.create(source.getShortDescription());
+		} else {
+			// It might be a UserIdCause
+			// This is needed as Hudson doesn't have the UserIdCause that Jenkins has
+			try {
+				Method useridGetter = source.getClass().getMethod("getUserId");
+				String userid = (String) useridGetter.invoke(source);
+				return UserTrigger.create(userid, source.getShortDescription());
+			} catch (Exception e) {
+				// It might be a UserCause
+				// This is needed as Hudson doesn't have the UserIdCause that Jenkins has, but they both have the
+				// getUsername() method
+				try {
+					Method usernameGetter = source.getClass().getMethod("getUserName");
+					String username = (String) usernameGetter.invoke(source);
+					return UserTrigger.create(username, source.getShortDescription());
+				} catch (Exception ee) {
+					// Its not a User(Id)Cause so ignore the exception
+				}
+			}
 		}
 		return UnknownTrigger.create(source.getClass().getSimpleName(), source.getShortDescription());
 	}

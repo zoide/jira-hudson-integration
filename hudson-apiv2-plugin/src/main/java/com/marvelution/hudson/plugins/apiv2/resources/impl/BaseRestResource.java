@@ -46,7 +46,7 @@ import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobExcept
 @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
 public class BaseRestResource {
 
-	private final Logger log = Logger.getLogger(BaseRestResource.class.getName());
+	private final Logger LOGGER = Logger.getLogger(BaseRestResource.class.getName());
 
 	/**
 	 * The base url for all the rest endpoints
@@ -69,7 +69,7 @@ public class BaseRestResource {
 		hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job = Hudson.getInstance().getItemByFullName(jobName,
 			hudson.model.Job.class);
 		if (job != null) {
-			log.fine("Found the job " + job.getFullName() + ", checking permissions");
+			LOGGER.fine("Found the job " + job.getFullName() + ", checking permissions");
 			if (job.hasPermission(Project.READ)) {
 				return job;
 			} else {
@@ -78,7 +78,7 @@ public class BaseRestResource {
 		} else {
 			// We failed to get the Job, but it could be a module.
 			// Loop through all the Jobs to locate it.
-			log.fine("Could not find the Job using method getItemByFullName, going to loop through all the Job Items");
+			LOGGER.fine("Could not find the Job using method getItemByFullName, going to loop through all the Job Items");
 			for (hudson.model.Job<?, ? extends AbstractBuild<?, ?>> item : Hudson.getInstance().getAllItems(
 					hudson.model.Job.class)) {
 				// Only search in the Jobs the user can view
@@ -103,7 +103,7 @@ public class BaseRestResource {
 	protected AbstractBuild<?, ?> getHudsonBuild(hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job, int number) {
 		final AbstractBuild<?, ?> build = job.getBuildByNumber(number);
 		if (build != null) {
-			log.fine("Found build " + number + " for job " + job.getFullName());
+			LOGGER.fine("Found build " + number + " for job " + job.getFullName());
 			return build;
 		}
 		throw new NoSuchBuildException(job.getFullName(), number);
