@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
  */
 public final class JiraKeyUtils {
 	
-	public static final Pattern DEFAULT_JIRA_PROJECT_KEY_PATTERN = Pattern.compile("\\b[A-Z]([A-Z]+)\\b");
+	public static final Pattern DEFAULT_JIRA_PROJECT_KEY_PATTERN = Pattern.compile("\\b([A-Z][A-Z]+)\\b");
 	
 	public static final Pattern DEFAULT_JIRA_ISSUE_KEY_PATTERN = Pattern.compile("\\b([a-zA-Z][a-zA-Z0-9_]+-[1-9][0-9]*)\\b");
 

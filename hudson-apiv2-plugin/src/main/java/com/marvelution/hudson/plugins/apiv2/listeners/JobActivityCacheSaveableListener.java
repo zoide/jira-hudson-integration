@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.marvelution.hudson.plugins.apiv2.PluginImpl;
+import com.marvelution.hudson.plugins.apiv2.APIv2Plugin;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.ActivityCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.JobActivityCache;
 import com.marvelution.hudson.plugins.apiv2.resources.model.User;
@@ -64,7 +64,7 @@ public class JobActivityCacheSaveableListener extends SaveableListener {
 			if (item.getParent().getFullName().length() > 0) {
 				activity.setParent(item.getParent().getFullName());
 			}
-			PluginImpl.getActivitiesCache().add(activity);
+			APIv2Plugin.getActivitiesCache().add(activity);
 		}
 	}
 

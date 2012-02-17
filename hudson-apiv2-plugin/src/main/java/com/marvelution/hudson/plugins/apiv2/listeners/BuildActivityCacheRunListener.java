@@ -22,7 +22,7 @@ package com.marvelution.hudson.plugins.apiv2.listeners;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.marvelution.hudson.plugins.apiv2.PluginImpl;
+import com.marvelution.hudson.plugins.apiv2.APIv2Plugin;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.ActivityCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.BuildActivityCache;
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
@@ -55,7 +55,7 @@ public class BuildActivityCacheRunListener extends RunListener<Run> {
 	@Override
 	public void onCompleted(Run r, TaskListener listener) {
 		LOGGER.log(Level.FINE, "Adding build action on " + r.getParent().getFullName() + " to the Activity Cache");
-		PluginImpl.getActivitiesCache().add(getBuildActivityCacheFromRun(r));
+		APIv2Plugin.getActivitiesCache().add(getBuildActivityCacheFromRun(r));
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class BuildActivityCacheRunListener extends RunListener<Run> {
 	@Override
 	public void onDeleted(Run r) {
 		LOGGER.log(Level.FINE, "Removing build action on " + r.getParent().getFullName() + " from the Activity Cache");
-		PluginImpl.getActivitiesCache().remove(getBuildActivityCacheFromRun(r));
+		APIv2Plugin.getActivitiesCache().remove(getBuildActivityCacheFromRun(r));
 	}
 
 	/**

@@ -34,7 +34,7 @@ import org.apache.wink.common.annotations.Parent;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 
-import com.marvelution.hudson.plugins.apiv2.PluginImpl;
+import com.marvelution.hudson.plugins.apiv2.APIv2Plugin;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.ActivityCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.BuildActivityCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.JobActivityCache;
@@ -72,7 +72,7 @@ public class ActivityRestResourceImpl extends BaseRestResource implements Activi
 		if (ArrayUtils.isEmpty(types)) {
 			types = ActivityType.values();
 		}
-		for (ActivityCache cache : PluginImpl.getActivitiesCache().getSortedActivities()) {
+		for (ActivityCache cache : APIv2Plugin.getActivitiesCache().getSortedActivities()) {
 			try {
 				hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job = getHudsonJob(cache.getJob());
 				if (ArrayUtils.isEmpty(jobs)

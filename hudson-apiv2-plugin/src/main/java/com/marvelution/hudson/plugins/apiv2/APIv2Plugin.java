@@ -22,11 +22,21 @@ package com.marvelution.hudson.plugins.apiv2;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.servlet.Filter;
+import javax.servlet.ServletException;
+
+import net.sf.json.JSONObject;
+
+import org.apache.commons.lang.StringUtils;
+import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.StaplerRequest;
 
 import com.google.common.collect.Lists;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.ActivitiesCache;
@@ -36,6 +46,10 @@ import com.marvelution.hudson.plugins.apiv2.servlet.filter.HudsonAPIV2ServletFil
 import com.thoughtworks.xstream.XStream;
 
 import hudson.Plugin;
+import hudson.model.Hudson;
+import hudson.model.Descriptor.FormException;
+import hudson.util.CopyOnWriteList;
+import hudson.util.FormValidation;
 import hudson.util.PluginServletFilter;
 
 /**
@@ -46,23 +60,26 @@ import hudson.util.PluginServletFilter;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  * @plugin
  */
-public class PluginImpl extends Plugin {
+public class APIv2Plugin extends Plugin {
 
-	private static final Logger LOGGER = Logger.getLogger(PluginImpl.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(APIv2Plugin.class.getName());
+	private static final XStream XSTREAM = new XStream();
 	private static final String APIV2_DIRECTORY_NAME = "APIv2";
 	private static final String ACTIVITIES_CHACHE_FILE = "activities-cache.xml";
-	private static final XStream XSTREAM = new XStream();
+	private static final String APIV2_PATTERN_KEY = "apiv2.pattern";
 
-	private static PluginImpl plugin;
+	private static APIv2Plugin plugin;
 
-	private List<Filter> filters = Lists.newArrayList();
-	private ActivitiesCache activitiesCache;
+	private transient List<Filter> filters = Lists.newArrayList();
+	private transient ActivitiesCache activitiesCache;
+	private final CopyOnWriteList<String> patterns = new CopyOnWriteList<String>();
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void start() throws Exception {
 		plugin = this;
+		load();
 		LOGGER.log(Level.FINE, "Adding the APIv2 Filters");
 		filters.add(new HudsonAPIV2ServletFilter());
 		for (Filter filter : filters) {
@@ -88,7 +105,60 @@ public class PluginImpl extends Plugin {
 		filters.clear();
 		LOGGER.log(Level.FINE, "Storing the Activity Cache");
 		XSTREAM.toXML(activitiesCache, new FileOutputStream(getFile(ACTIVITIES_CHACHE_FILE)));
+		save();
 		plugin = null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void configure(StaplerRequest req, JSONObject formData) throws IOException, ServletException,
+					FormException {
+		patterns.replaceBy(req.getParameterValues(APIV2_PATTERN_KEY));
+		save();
+	}
+
+	/**
+	 * Web Method to validate a given {@link Pattern}
+	 * 
+	 * @param value the {@link Pattern} to validate
+	 * @return validation result
+	 * @throws IOException in case of errors
+	 * @throws ServletException in case of errors
+	 */
+	public FormValidation doCheckPattern(@QueryParameter final String value) throws IOException, ServletException {
+		if (!Hudson.getInstance().hasPermission(Hudson.ADMINISTER) || StringUtils.isBlank(value)) {
+			return FormValidation.ok();
+		}
+		try {
+			Pattern.compile(value);
+			return FormValidation.ok();
+		} catch (PatternSyntaxException e) {
+			StringBuilder builder = new StringBuilder(e.getDescription());
+			if (e.getIndex() >= 0) {
+				builder.append(" near index ").append(e.getIndex());
+			}
+			builder.append("<pre>");
+			builder.append(e.getPattern()).append(System.getProperty("line.separator"));
+			if (e.getIndex() >= 0) {
+				for (int i = 0; i < e.getIndex(); ++i) {
+					builder.append(' ');
+				}
+				builder.append('^');
+			}
+			builder.append("</pre>");
+			return FormValidation.errorWithMarkup(builder.toString());
+		}
+	}
+
+	/**
+	 * Getter for patterns
+	 *
+	 * @return the patterns
+	 */
+	public String[] getPatterns() {
+		return patterns.toArray(new String[patterns.size()]);
 	}
 
 	/**

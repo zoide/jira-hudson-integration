@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.marvelution.hudson.plugins.jirareporter.PluginImpl;
+import com.marvelution.hudson.plugins.jirareporter.JIRAReporterPlugin;
 
 /**
  * Helper class to get Plugin properties
@@ -51,7 +51,7 @@ public final class HudsonPluginUtils {
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to load Hudson Plugin properties", e);
 		}
-		PLUGIN_WRAPPER = Hudson.getInstance().getPluginManager().getPlugin(PluginImpl.class);
+		PLUGIN_WRAPPER = Hudson.getInstance().getPluginManager().getPlugin(JIRAReporterPlugin.class);
 	}
 
 	/**

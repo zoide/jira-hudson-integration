@@ -27,7 +27,7 @@ import hudson.Plugin;
  * @author <a href="mailto:markrekveld@marvelution.com">Mark rekveld</a>
  * @plugin
  */
-public class PluginImpl extends Plugin {
+public class JIRAReporterPlugin extends Plugin {
 
 	/**
 	 * {@inheritDoc}

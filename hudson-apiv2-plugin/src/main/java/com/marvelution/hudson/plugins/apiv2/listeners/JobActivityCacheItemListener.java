@@ -24,7 +24,7 @@ import java.util.Collection;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
-import com.marvelution.hudson.plugins.apiv2.PluginImpl;
+import com.marvelution.hudson.plugins.apiv2.APIv2Plugin;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.ActivityCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.BuildActivityCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.JobActivityCache;
@@ -47,12 +47,12 @@ public class JobActivityCacheItemListener extends ItemListener {
 	@Override
 	public void onDeleted(Item item) {
 		Collection<ActivityCache> toBeRemoved = Lists.newArrayList();
-		for (ActivityCache cache : PluginImpl.getActivitiesCache().getSortedActivities()) {
+		for (ActivityCache cache : APIv2Plugin.getActivitiesCache().getSortedActivities()) {
 			if (item.getFullName().equals(cache.getJob()) || item.getFullName().equals(cache.getParent())) {
 				toBeRemoved.add(cache);
 			}
 		}
-		PluginImpl.getActivitiesCache().removeAll(toBeRemoved);
+		APIv2Plugin.getActivitiesCache().removeAll(toBeRemoved);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class JobActivityCacheItemListener extends ItemListener {
 		}
 		Collection<ActivityCache> toBeRemoved = Lists.newArrayList();
 		Collection<ActivityCache> toBeAdded = Lists.newArrayList();
-		for (ActivityCache cache : PluginImpl.getActivitiesCache().getSortedActivities()) {
+		for (ActivityCache cache : APIv2Plugin.getActivitiesCache().getSortedActivities()) {
 			ActivityCache newCache = null;
 			if (oldFullName.equals(cache.getJob())) {
 				newCache = getRenamedJobActivityCache(cache, newFullName);
@@ -84,8 +84,8 @@ public class JobActivityCacheItemListener extends ItemListener {
 				toBeAdded.add(newCache);
 			}
 		}
-		PluginImpl.getActivitiesCache().removeAll(toBeRemoved);
-		PluginImpl.getActivitiesCache().addAll(toBeAdded);
+		APIv2Plugin.getActivitiesCache().removeAll(toBeRemoved);
+		APIv2Plugin.getActivitiesCache().addAll(toBeAdded);
 	}
 
 	/**

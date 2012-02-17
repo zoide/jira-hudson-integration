@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.marvelution.hudson.plugins.apiv2.PluginImpl;
+import com.marvelution.hudson.plugins.apiv2.APIv2Plugin;
 import com.marvelution.hudson.plugins.apiv2.resources.model.HudsonSystem;
 
 /**
@@ -52,7 +52,7 @@ public final class HudsonPluginUtils {
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to load Hudson Plugin properties", e);
 		}
-		PLUGIN_WRAPPER = Hudson.getInstance().getPluginManager().getPlugin(PluginImpl.class);
+		PLUGIN_WRAPPER = Hudson.getInstance().getPluginManager().getPlugin(APIv2Plugin.class);
 	}
 
 	/**
