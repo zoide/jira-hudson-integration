@@ -19,8 +19,6 @@
 
 package com.marvelution.jira.plugins.hudson.services.servers;
 
-import javax.crypto.IllegalBlockSizeException;
-
 import com.atlassian.gzipfilter.org.apache.commons.lang.StringUtils;
 import com.marvelution.security.crypto.SimpleStringEncryptor;
 import com.marvelution.security.crypto.StringEncryptor;
@@ -54,17 +52,7 @@ public class HudsonServerEntity {
 	 * @see com.marvelution.jira.plugins.hudson.services.servers.HudsonServer#getPassword()
 	 */
 	public String getPassword() {
-		try {
-			return ENCRYPTOR.decrypt(server.getPassword());
-		} catch (IllegalStateException e) {
-			// TODO Remove this catch block in the next release
-			if (e.getCause() instanceof IllegalBlockSizeException) {
-				String password = server.getPassword();
-				setPassword(password);
-				return password;
-			}
-			throw e;
-		}
+		return ENCRYPTOR.decrypt(server.getPassword());
 	}
 
 	/**
