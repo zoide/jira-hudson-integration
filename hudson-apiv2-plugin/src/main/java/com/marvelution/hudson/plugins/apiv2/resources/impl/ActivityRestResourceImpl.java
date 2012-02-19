@@ -75,8 +75,9 @@ public class ActivityRestResourceImpl extends BaseRestResource implements Activi
 		for (ActivityCache cache : APIv2Plugin.getActivitiesCache().getSortedActivities()) {
 			try {
 				hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job = getHudsonJob(cache.getJob());
-				if (ArrayUtils.isEmpty(jobs)
-					|| (ArrayUtils.contains(jobs, job.getFullName()) && job.hasPermission(Project.READ))) {
+				if ((ArrayUtils.isEmpty(jobs) || ArrayUtils.contains(jobs, job.getFullName()))
+					&& (ArrayUtils.isEmpty(userIds) || ArrayUtils.contains(userIds, cache.getCulprit()))
+					&& job.hasPermission(Project.READ)) {
 					if (cache instanceof JobActivityCache && ArrayUtils.contains(types, ActivityType.JOB)) {
 						activities.add(getActivityFromCache((JobActivityCache) cache, job));
 					} else if (cache instanceof BuildActivityCache && ArrayUtils.contains(types, ActivityType.BUILD)) {
