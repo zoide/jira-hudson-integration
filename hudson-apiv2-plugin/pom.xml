@@ -220,8 +220,11 @@
 				<configuration>
 					<webResources>
 						<webResource>
-							<directory>${project.build.directory}/enunciate/build/docs</directory>
+							<directory>${project.build.directory}/enunciate/build</directory>
 							<filtering>false</filtering>
+							<includes>
+								<include>docs/**/**.**</include>
+							</includes>
 						</webResource>
 					</webResources>
 					<disabledTestInjection>false</disabledTestInjection>

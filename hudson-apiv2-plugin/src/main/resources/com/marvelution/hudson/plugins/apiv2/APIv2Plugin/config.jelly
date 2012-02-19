@@ -18,8 +18,11 @@
  -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
 	<f:section title="Marvelution API v2">
+        <f:entry title="API v2 Docs">
+        	<a href="${rootURL}/plugin/hudson-apiv2-plugin/docs/index.html" target="API">REST API Reference</a>
+        </f:entry>
 		<f:optionalBlock name="apiv2.indexing" title="Index builds using patterns" checked="${it.patterns.size() > 0}"
-				help="${rootURL}/plugin/hudson-apiv2-plugin/help-index-patterns.html">
+				help="${rootURL}/plugin/hudson-apiv2-plugin/help/index-patterns.html">
 			<f:entry title="Indexing Patterns" description="">
 				<f:repeatable var="pattern" items="${it.patterns}">
 					<table width="100%">
