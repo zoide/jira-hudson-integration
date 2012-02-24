@@ -20,9 +20,6 @@
 package com.marvelution.hudson.plugins.apiv2.client.services;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -53,14 +50,10 @@ public abstract class SearchQuery<MODEL extends Model, LISTMODEL extends Listabl
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String getSpecificUrl() {
+	protected final String getSpecificUrl() {
 		final StringBuilder url = new StringBuilder();
 		url.append("search/").append(getSearchMethod()).append("?");
-		if (getParameters() != null) {
-			for (Entry<String, Object> entry : getParameters().entrySet()) {
-				addUrlParameter(url, entry.getKey(), entry.getValue());
-			}
-		}
+		addParameters(url);
 		return url.toString();
 	}
 
@@ -72,12 +65,11 @@ public abstract class SearchQuery<MODEL extends Model, LISTMODEL extends Listabl
 	protected abstract String getSearchMethod();
 
 	/**
-	 * Internal method to get possible parameters
+	 * Internal method to add search parameters
 	 * 
-	 * @return a {@link Map} of {@link String}, {@link Object} containing the parameters, may be 
-	 * 	       <code>null</code> or <code>empty</code>
+	 * @param url the {@link StringBuilder} with teh base URL
 	 */
-	protected abstract Map<String, Object> getParameters();
+	protected abstract void addParameters(StringBuilder url);
 
 	/**
 	 * Build {@link SearchQuery} implementation that searches by Issue keys
@@ -115,13 +107,11 @@ public abstract class SearchQuery<MODEL extends Model, LISTMODEL extends Listabl
 		 * {@inheritDoc}
 		 */
 		@Override
-		protected Map<String, Object> getParameters() {
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("key", keys);
+		protected void addParameters(StringBuilder url) {
+			addUrlParameter(url, "key", keys);
 			if (StringUtils.isNotBlank(job)) {
-				params.put("job", job);
+				addUrlParameter(url, "jobname", job);
 			}
-			return params;
 		}
 
 	}

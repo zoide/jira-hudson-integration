@@ -78,10 +78,10 @@ public class ActivityRestResourceImpl extends BaseRestResource implements Activi
 				if ((ArrayUtils.isEmpty(jobs) || ArrayUtils.contains(jobs, job.getFullName()))
 					&& (ArrayUtils.isEmpty(userIds) || ArrayUtils.contains(userIds, cache.getCulprit()))
 					&& job.hasPermission(Project.READ)) {
-					if (cache instanceof JobActivityCache && ArrayUtils.contains(types, ActivityType.JOB)) {
-						activities.add(getActivityFromCache((JobActivityCache) cache, job));
-					} else if (cache instanceof BuildActivityCache && ArrayUtils.contains(types, ActivityType.BUILD)) {
-						activities.add(getActivityFromCache((BuildActivityCache) cache, job));
+					if (cache instanceof BuildActivityCache && ArrayUtils.contains(types, ActivityType.BUILD)) {
+						activities.add(getBuildActivityFromCache((BuildActivityCache) cache, job));
+					} else if (cache instanceof JobActivityCache && ArrayUtils.contains(types, ActivityType.JOB)) {
+						activities.add(getJobActivityFromCache((JobActivityCache) cache, job));
 					}
 					if (activities.size() == maxResults) {
 						// We have the maximum number of results wanted
@@ -90,7 +90,7 @@ public class ActivityRestResourceImpl extends BaseRestResource implements Activi
 				}
 			} catch (Exception e) {
 				LOGGER.log(Level.WARNING,
-					"Failed to add ActivityCache object " + cache.toString() + ". Reason: " + e.getMessage());
+					"Failed to add ActivityCache object " + cache.toString() + ". Reason: " + e.getMessage(), e);
 			}
 		}
 		return activities;
@@ -103,7 +103,7 @@ public class ActivityRestResourceImpl extends BaseRestResource implements Activi
 	 * @param job the {@link hudson.model.Job}
 	 * @return the {@link JobActivity}
 	 */
-	public Activity getActivityFromCache(JobActivityCache cache,
+	public Activity getJobActivityFromCache(JobActivityCache cache,
 					hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job) {
 		JobActivity activity = new JobActivity();
 		activity.setUri(URI.create(Hudson.getInstance().getRootUrl() + job.getUrl()));
@@ -121,7 +121,7 @@ public class ActivityRestResourceImpl extends BaseRestResource implements Activi
 	 * @param job the {@link hudson.model.Job}
 	 * @return the {@link BuildActivity}
 	 */
-	public Activity getActivityFromCache(BuildActivityCache cache,
+	public Activity getBuildActivityFromCache(BuildActivityCache cache,
 					hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job) {
 		AbstractBuild<?, ?> build = getHudsonBuild(job, cache.getBuild());
 		BuildActivity activity = new BuildActivity();

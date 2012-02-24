@@ -66,7 +66,7 @@ public class DeleteAssociation extends AbstractHudsonProjectAdminWebActionSuppor
 	@Override
 	protected String doExecute() throws Exception {
 		associationManager.removeAssociation(getAssociationId());
-		return getRedirect(ADMINISTER_ASSOCIATIONS);
+		return getRedirect(ADMINISTER_ASSOCIATIONS + getContext());
 	}
 
 	/**
