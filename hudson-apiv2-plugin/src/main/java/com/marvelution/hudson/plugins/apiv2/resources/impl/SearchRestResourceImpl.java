@@ -19,13 +19,14 @@
 
 package com.marvelution.hudson.plugins.apiv2.resources.impl;
 
-import java.util.logging.Logger;
-
 import hudson.model.AbstractBuild;
-import hudson.model.Hudson;
-import hudson.model.Project;
-import hudson.scm.ChangeLogSet;
-import hudson.scm.ChangeLogSet.Entry;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.ws.rs.Path;
 
@@ -34,12 +35,21 @@ import org.apache.wink.common.annotations.Parent;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.marvelution.hudson.plugins.apiv2.APIv2Plugin;
+import com.marvelution.hudson.plugins.apiv2.cache.issue.IssueCache;
+import com.marvelution.hudson.plugins.apiv2.cache.issue.IssueCachePredicates;
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
 import com.marvelution.hudson.plugins.apiv2.resources.SearchResource;
+import com.marvelution.hudson.plugins.apiv2.resources.exceptions.NoSuchJobException;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
 import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
-import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
-import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
+import com.marvelution.hudson.plugins.apiv2.utils.JiraKeyUtils;
 
 /**
  * The {@link SearchResource} REST implementation
@@ -57,87 +67,47 @@ public class SearchRestResourceImpl extends BaseRestResource implements SearchRe
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Jobs searchForJobs(String query, boolean nameOnly) {
-		Jobs jobs = new Jobs();
-		for (hudson.model.Job<?, ?> item : Hudson.getInstance().getAllItems(hudson.model.Job.class)) {
-			if (item.hasPermission(Project.READ)) {
-				log.finer("Search in Job " + item.getDisplayName());
-				if (stringMatchesQuery(query, item.getDisplayName()) || (!nameOnly && stringMatchesQuery(query,
-						item.getDescription()))) {
-					jobs.add(DozerUtils.getMapper().map(item, Job.class, "full"));
-				}
+	public Builds searchForIssues(String[] keys, String jobName) throws NoSuchJobException {
+		Builds builds = new Builds();
+		Predicate<IssueCache> predicates = getSearchPredicates(keys, jobName);
+		Collection<IssueCache> includes = Collections2.filter(APIv2Plugin.getIssuesCache(), predicates);
+		Map<String, Set<Integer>> buildsMap = Maps.newHashMap();
+		for (IssueCache cache : includes) {
+			if (buildsMap.containsKey(cache.getJob())) {
+				buildsMap.get(cache.getJob()).add(cache.getBuild());
+			} else {
+				buildsMap.put(cache.getJob(), Sets.newHashSet(cache.getBuild()));
 			}
 		}
-		return jobs;
+		for (Entry<String, Set<Integer>> entry : buildsMap.entrySet()) {
+			hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job = getHudsonJob(entry.getKey());
+			for (Integer number : entry.getValue()) {
+				builds.add(DozerUtils.getMapper().map(job.getBuildByNumber(number), Build.class));
+			}
+		}
+		builds.sortBuilds();
+		return builds;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * @param keys
+	 * @param jobName
+	 * @return
 	 */
-	@Override
-	public Builds searchForBuilds(String query, String jobName) {
-		Builds builds = new Builds();
+	private Predicate<IssueCache> getSearchPredicates(String[] keys, String jobName) {
+		List<Predicate<IssueCache>> issuePredicates = Lists.newArrayList();
+		for (String key : keys) {
+			if (JiraKeyUtils.isValidProjectKey(key)) {
+				issuePredicates.add(IssueCachePredicates.isRelatedToJIRAProject(key));
+			} else if (JiraKeyUtils.isValidIssueKey(key)) {
+				issuePredicates.add(IssueCachePredicates.isRelatedToJIRAIssue(key));
+			}
+		}
 		if (StringUtils.isNotBlank(jobName)) {
-			return searchForBuilds(getHudsonJob(jobName), query);
+			return Predicates.and(IssueCachePredicates.isRelatedToHudsonJob(jobName), Predicates.or(issuePredicates));
 		} else {
-			for (hudson.model.Job<?, ? extends AbstractBuild<?, ?>> item : Hudson.getInstance().getAllItems(
-					hudson.model.Job.class)) {
-				if (item.hasPermission(Project.READ)) {
-					builds.addAll(searchForBuilds(item, query).getItems());
-				}
-			}
+			return Predicates.or(issuePredicates);
 		}
-		return builds;
-	}
-
-	/**
-	 * Search for matching Builds in a Hudson Job that match the given query
-	 * 
-	 * @param job the Hudson {@link hudson.model.Job} to search through its builds
-	 * @param query the query string to search for within the change log of a build
-	 * @return the {@link Builds} collection of {@link Build} objects that match the query
-	 */
-	private Builds searchForBuilds(hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job, String query) {
-		Builds builds = new Builds();
-		for (AbstractBuild<?, ?> build : job.getBuilds()) {
-			if (searchThroughChangeLog(build.getChangeSet(), query)) {
-				builds.add(DozerUtils.getMapper().map(build, Build.class));
-			}
-		}
-		return builds;
-	}
-
-	/**
-	 * Search through to the {@link ChangeLogSet} for query string
-	 * 
-	 * @param changeSet the {@link ChangeLogSet} to search through
-	 * @param query the query string to search for in the {@link ChangeLogSet}
-	 * @return <code>true</code> if the query string is found in any of the entries in {@link ChangeLogSet} contains
-	 *         the query string
-	 */
-	private boolean searchThroughChangeLog(ChangeLogSet<? extends Entry> changeSet, String query) {
-		for (Entry entry : changeSet) {
-			if (stringMatchesQuery(query, entry.getMsg())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Internal method to check if the given {@link String} matches the query items
-	 * @param query the query {@link String} [] to match
-	 * @param searchString the {@link String} to match against
-	 * @return <code>true</code> if a query {@link String} is found in the search {@link String}
-	 */
-	private boolean stringMatchesQuery(String query, String searchString) {
-		for (String item : StringUtils.split(query, " ")) {
-			log.finer("Search for " + item + " in " + searchString);
-			if (StringUtils.containsIgnoreCase(searchString, item)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }

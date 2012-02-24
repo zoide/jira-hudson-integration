@@ -20,36 +20,33 @@
 package com.marvelution.hudson.plugins.apiv2.client.services;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
-import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 import com.marvelution.hudson.plugins.apiv2.resources.model.ListableModel;
 import com.marvelution.hudson.plugins.apiv2.resources.model.Model;
-import com.marvelution.hudson.plugins.apiv2.resources.model.job.Job;
-import com.marvelution.hudson.plugins.apiv2.resources.model.job.Jobs;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Build;
+import com.marvelution.hudson.plugins.apiv2.resources.model.build.Builds;
 
 /**
+ * Base SearchQuery implementation
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  */
 public abstract class SearchQuery<MODEL extends Model, LISTMODEL extends ListableModel<MODEL>>
 		extends AbstractListableQuery<MODEL, LISTMODEL> {
 
-	protected final String[] query;
-
 	/**
 	 * Constructor
 	 * 
-	 * @param modelClass the <MDL> base type
-	 * @param listModelClass the <MDL> Listable type
+	 * @param modelClass the <MODEL> base type
+	 * @param listModelClass the <LISTMODEL> Listable type
 	 */
-	protected SearchQuery(Class<MODEL> modelClass, Class<LISTMODEL> listModelClass, String[] query) {
+	protected SearchQuery(Class<MODEL> modelClass, Class<LISTMODEL> listModelClass) {
 		super(modelClass, listModelClass, QueryType.GET);
-		this.query = query;
 	}
 
 	/**
@@ -59,9 +56,8 @@ public abstract class SearchQuery<MODEL extends Model, LISTMODEL extends Listabl
 	protected String getSpecificUrl() {
 		final StringBuilder url = new StringBuilder();
 		url.append("search/").append(getSearchMethod()).append("?");
-		addUrlParameter(url, "query", StringUtils.join(query, " "));
-		if (getExtraParameters() != null) {
-			for (Entry<String, String> entry : getExtraParameters().entrySet()) {
+		if (getParameters() != null) {
+			for (Entry<String, Object> entry : getParameters().entrySet()) {
 				addUrlParameter(url, entry.getKey(), entry.getValue());
 			}
 		}
@@ -76,27 +72,35 @@ public abstract class SearchQuery<MODEL extends Model, LISTMODEL extends Listabl
 	protected abstract String getSearchMethod();
 
 	/**
-	 * Internal method to get possible extra parameters
+	 * Internal method to get possible parameters
 	 * 
-	 * @return a {@link Map} of {@link String}, {@link String} containing the extra parameters, may be 
+	 * @return a {@link Map} of {@link String}, {@link Object} containing the parameters, may be 
 	 * 	       <code>null</code> or <code>empty</code>
 	 */
-	protected abstract Map<String, String> getExtraParameters();
+	protected abstract Map<String, Object> getParameters();
 
 	/**
-	 * Job {@link SearchQuery} implementaiton
+	 * Build {@link SearchQuery} implementation that searches by Issue keys
 	 * 
 	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
+	 *
+	 * @since 4.4.0
 	 */
-	public static class JobSearchQuery extends SearchQuery<Job, Jobs> {
+	public static class IssueSearchQuery extends SearchQuery<Build, Builds> {
 
-		protected boolean nameOnly = false;
+		private String[] keys;
+		private String job;
 
 		/**
 		 * Constructor
+		 *
+		 * @param modelClass
+		 * @param listModelClass
 		 */
-		protected JobSearchQuery(String[] query) {
-			super(Job.class, Jobs.class, query);
+		protected IssueSearchQuery(String[] keys, String job) {
+			super(Build.class, Builds.class);
+			this.keys = keys;
+			this.job = job;
 		}
 
 		/**
@@ -104,138 +108,66 @@ public abstract class SearchQuery<MODEL extends Model, LISTMODEL extends Listabl
 		 */
 		@Override
 		protected String getSearchMethod() {
-			return "jobs";
+			return "issues";
 		}
 
 		/**
 		 * {@inheritDoc}
 		 */
 		@Override
-		protected Map<String, String> getExtraParameters() {
-			return Collections.singletonMap("nameOnly", String.valueOf(nameOnly));
+		protected Map<String, Object> getParameters() {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("key", keys);
+			if (StringUtils.isNotBlank(job)) {
+				params.put("job", job);
+			}
+			return params;
 		}
 
 	}
 
 	/**
-	 * Build {@link SearchQuery} implementaiton
-	 * 
-	 * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
-	 */
-	public static class BuildSearchQuery extends SearchQuery<Build, Builds> {
-
-		protected String jobName;
-
-		/**
-		 * Constructor
-		 */
-		protected BuildSearchQuery(String[] query) {
-			super(Build.class, Builds.class, query);
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		protected String getSearchMethod() {
-			return "builds";
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		protected Map<String, String> getExtraParameters() {
-			return Collections.singletonMap("jobname", jobName);
-		}
-
-	}
-
-	/**
-	 * Method to create a {@link JobSearchQuery} that will search in both the name and the description
+	 * Method to create a {@link IssueSearchQuery} that will search in all the builds
 	 * 
 	 * @param query the query {@link String} array to search for
-	 * @return the {@link JobSearchQuery}
-	 * @see #createForJobSearch(String[], boolean)
+	 * @return the {@link IssueSearchQuery}
 	 */
-	public static JobSearchQuery createForJobSearch(String[] query) {
-		return createForJobSearch(query, false);
+	public static IssueSearchQuery createForIssueSearch(String[] query) {
+		return createForIssueSearch(query, null);
 	}
 
 	/**
-	 * Method to create a {@link JobSearchQuery} that will search only in the name
-	 * 
-	 * @param query the query {@link String} array to search for
-	 * @return the {@link JobSearchQuery}
-	 * @see #createForJobSearch(String[], boolean)
-	 */
-	public static JobSearchQuery createForJobSearchNameOnly(String[] query) {
-		return createForJobSearch(query, true);
-	}
-
-	/**
-	 * Method to create a {@link JobSearchQuery} that will search in the name and description based on the
-	 * {@link Boolean} flag given
-	 * 
-	 * @param query the query {@link String} array to search for
-	 * @param nameOnly the {@link Boolean} flag to search in; <code>true</code> for name only search,
-	 *        <code>false</code> for name and description search
-	 * @return the {@link JobSearchQuery}
-	 */
-	public static JobSearchQuery createForJobSearch(String[] query, boolean nameOnly) {
-		JobSearchQuery searchQuery = new JobSearchQuery(query);
-		searchQuery.nameOnly = nameOnly;
-		return searchQuery;
-	}
-
-	/**
-	 * Method to create a {@link BuildSearchQuery} that will search in all the builds of all the Hudson jobs
-	 * 
-	 * @param query the query {@link String} array to search for
-	 * @return the {@link BuildSearchQuery}
-	 * @see #createForBuildSearch(String[], String)
-	 */
-	public static BuildSearchQuery createForBuildSearch(String[] query) {
-		return createForBuildSearch(query, "");
-	}
-
-	/**
-	 * Method to create a {@link BuildSearchQuery} that will search in all the builds of all the Hudson jobs
-	 * 
-	 * @param query the query {@link String} {@link Collection} to search for
-	 * @return the {@link BuildSearchQuery}
-	 * @see #createForBuildSearch(String[], String)
-	 */
-	public static BuildSearchQuery createForBuildSearch(Collection<String> query) {
-		return createForBuildSearch(query, "");
-	}
-
-	/**
-	 * Method to create a {@link BuildSearchQuery} that will search in all the builds of a specific Hudson Job given
+	 * Method to create a {@link IssueSearchQuery} that will search in all the builds of a specific Hudson Job given
 	 * by name
 	 * 
 	 * @param query the query {@link String} array to search for
-	 * @param jobName the Job name of the specific Hudson job
-	 * @return the {@link BuildSearchQuery}
+	 * @param jobName the Job name of the specific Hudson job, may be <code>null</code>
+	 * @return the {@link IssueSearchQuery}
 	 */
-	public static BuildSearchQuery createForBuildSearch(String[] query, String jobName) {
-		BuildSearchQuery searchQuery = new BuildSearchQuery(query);
-		searchQuery.jobName = jobName;
-		return searchQuery;
+	public static IssueSearchQuery createForIssueSearch(String[] query, String jobName) {
+		return new IssueSearchQuery(query, jobName);
 	}
 
 	/**
-	 * Method to create a {@link BuildSearchQuery} that will search in all the builds of a specific Hudson Job given
+	 * Method to create a {@link IssueSearchQuery} that will search in all the builds
+	 * 
+	 * @param query the query {@link String} {@link Collection} to search for
+	 * @return the {@link IssueSearchQuery}
+	 */
+	public static IssueSearchQuery createForIssueSearch(Collection<String> query) {
+		return createForIssueSearch(query, null);
+	}
+
+	/**
+	 * Method to create a {@link IssueSearchQuery} that will search in all the builds of a specific Hudson Job given
 	 * by name
 	 * 
 	 * @param query the query {@link String} {@link Collection} to search for
-	 * @param jobName the Job name of the specific Hudson job
-	 * @return the {@link BuildSearchQuery}
+	 * @param jobName the Job name of the specific Hudson job, may be <code>null</code>
+	 * @return the {@link IssueSearchQuery}
 	 */
-	public static BuildSearchQuery createForBuildSearch(Collection<String> query, String jobName) {
-		BuildSearchQuery searchQuery = new BuildSearchQuery(query.toArray(new String[query.size()]));
-		searchQuery.jobName = jobName;
-		return searchQuery;
+	public static IssueSearchQuery createForIssueSearch(Collection<String> query, String jobName) {
+		return new IssueSearchQuery(query.toArray(new String[query.size()]), jobName);
 	}
 
 }

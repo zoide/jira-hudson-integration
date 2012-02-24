@@ -21,6 +21,7 @@ package com.marvelution.hudson.plugins.apiv2.cache.activity;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections.list.SynchronizedList;
@@ -35,7 +36,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  *
  * @since 4.4.0
  */
-public class ActivitiesCache {
+public class ActivitiesCache implements Iterable<ActivityCache>, Collection<ActivityCache> {
 
 	public static final long MERGE_TIMESPAN = 60 * 1000;
 
@@ -44,9 +45,9 @@ public class ActivitiesCache {
 	private ActivityCache previousActivity = null;
 
 	/**
-	 * Getter for activities
+	 * Getter for getActivities()
 	 *
-	 * @return the activities
+	 * @return the getActivities()
 	 */
 	@SuppressWarnings("unchecked")
 	private List<ActivityCache> getActivities() {
@@ -66,51 +67,135 @@ public class ActivitiesCache {
 					return new Date(from.getTimestamp());
 				}
 			});
-		return ordering.immutableSortedCopy(activities);
+		return ordering.immutableSortedCopy(getActivities());
 	}
 
 	/**
-	 * Add an {@link ActivityCache} to the cache
-	 * 
-	 * @param activity the {@link ActivityCache} to add
+	 * {@inheritDoc}
 	 */
-	public void add(ActivityCache activity) {
+	@Override
+	public boolean add(ActivityCache activity) {
 		if (previousActivity != null && previousActivity.isTheSame(activity)) {
 			// The Activity was on the same object and executed by the same User, check to see if the activity needs
 			// to be merged
 			if (activity.getTimestamp() - previousActivity.getTimestamp() < MERGE_TIMESPAN) {
-				return;
+				return false;
 			}
 		}
 		previousActivity = activity;
-		getActivities().add(activity);
+		return getActivities().add(activity);
 	}
 
 	/**
-	 * Add all {@link ActivityCache}s to the cache
-	 * 
-	 * @param activities the {@link ActivityCache}s to add
+	 * {@inheritDoc}
 	 */
-	public void addAll(Collection<ActivityCache> activities) {
-		getActivities().addAll(activities);
+	@Override
+	public int size() {
+		return getActivities().size();
 	}
 
 	/**
-	 * Remove an {@link ActivityCache} from the cache
-	 * 
-	 * @param activity the {@link ActivityCache} to remove
+	 * {@inheritDoc}
 	 */
-	public void remove(ActivityCache activity) {
-		getActivities().remove(activity);
+	@Override
+	public boolean isEmpty() {
+		return getActivities().isEmpty();
 	}
 
 	/**
-	 * Remove all {@link ActivityCache}s from the cache
-	 * 
-	 * @param activity the {@link ActivityCache}s to remove
+	 * {@inheritDoc}
 	 */
-	public void removeAll(Collection<ActivityCache> activities) {
-		getActivities().removeAll(activities);
+	@Override
+	public boolean contains(Object paramObject) {
+		return getActivities().contains(paramObject);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Iterator<ActivityCache> iterator() {
+		return getActivities().iterator();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object[] toArray() {
+		return getActivities().toArray();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <T> T[] toArray(T[] paramArrayOfT) {
+		return getActivities().toArray(paramArrayOfT);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean remove(Object paramObject) {
+		return getActivities().remove(paramObject);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean containsAll(Collection<?> paramCollection) {
+		return getActivities().containsAll(paramCollection);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean addAll(Collection<? extends ActivityCache> paramCollection) {
+		return getActivities().addAll(paramCollection);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean removeAll(Collection<?> paramCollection) {
+		return getActivities().removeAll(paramCollection);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean retainAll(Collection<?> paramCollection) {
+		return getActivities().retainAll(paramCollection);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clear() {
+		getActivities().clear();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object paramObject) {
+		return getActivities().equals(paramObject);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		return getActivities().hashCode();
 	}
 
 }

@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
 import com.marvelution.hudson.plugins.apiv2.APIv2Plugin;
+import com.marvelution.hudson.plugins.apiv2.cache.activity.ActivitiesCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.ActivityCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.BuildActivityCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.JobActivityCache;
@@ -34,6 +35,8 @@ import hudson.model.Item;
 import hudson.model.listeners.ItemListener;
 
 /**
+ * {@link ItemListener} to keep the {@link ActivitiesCache} up to date on item rename and delete actions
+ * 
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
  *
  * @since 4.4.0
@@ -47,7 +50,7 @@ public class JobActivityCacheItemListener extends ItemListener {
 	@Override
 	public void onDeleted(Item item) {
 		Collection<ActivityCache> toBeRemoved = Lists.newArrayList();
-		for (ActivityCache cache : APIv2Plugin.getActivitiesCache().getSortedActivities()) {
+		for (ActivityCache cache : APIv2Plugin.getActivitiesCache()) {
 			if (item.getFullName().equals(cache.getJob()) || item.getFullName().equals(cache.getParent())) {
 				toBeRemoved.add(cache);
 			}
@@ -70,7 +73,7 @@ public class JobActivityCacheItemListener extends ItemListener {
 		}
 		Collection<ActivityCache> toBeRemoved = Lists.newArrayList();
 		Collection<ActivityCache> toBeAdded = Lists.newArrayList();
-		for (ActivityCache cache : APIv2Plugin.getActivitiesCache().getSortedActivities()) {
+		for (ActivityCache cache : APIv2Plugin.getActivitiesCache()) {
 			ActivityCache newCache = null;
 			if (oldFullName.equals(cache.getJob())) {
 				newCache = getRenamedJobActivityCache(cache, newFullName);

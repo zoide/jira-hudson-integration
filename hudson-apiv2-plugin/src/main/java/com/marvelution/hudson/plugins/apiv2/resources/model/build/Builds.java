@@ -21,6 +21,7 @@ package com.marvelution.hudson.plugins.apiv2.resources.model.build;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -28,6 +29,8 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Ordering;
 import com.marvelution.hudson.plugins.apiv2.resources.model.ListableModel;
 import com.marvelution.hudson.plugins.apiv2.resources.utils.NameSpaceUtils;
 
@@ -58,6 +61,20 @@ public class Builds extends ListableModel<Build> {
 	@Override
 	public Collection<Build> getItems() {
 		return items;
+	}
+
+	/**
+	 * Reverse sort the builds by execution time-stamp
+	 */
+	public void sortBuilds() {
+		Ordering<Build> ordering =
+			Ordering.natural().reverse().onResultOf(new Function<Build, Date>() {
+				@Override
+				public Date apply(Build from) {
+					return new Date(from.getTimestamp());
+				}
+			});
+		items = ordering.sortedCopy(items);
 	}
 
 }

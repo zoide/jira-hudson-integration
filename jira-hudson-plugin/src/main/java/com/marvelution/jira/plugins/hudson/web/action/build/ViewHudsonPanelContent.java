@@ -179,9 +179,9 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 					association.getJobName(), true)), getI18nHelper());
 			break;
 		case BUILDS_BY_ISSUE:
-			// See MARVJIRAHUDSON-130, simply use the project key followed by a '-' as the search term
+			// See MARVJIRAHUDSON-130, simply use the project key as the search term
 			resultSet = new BuildsResultSet(server, getBuildsRelatedToIssueKeys(client,
-					Collections.singleton(project.getKey() + "-")));
+					Collections.singleton(project.getKey())));
 			break;
 		case BUILDS_BY_JOB:
 		default:
@@ -274,9 +274,9 @@ public class ViewHudsonPanelContent extends HudsonWebActionSupport {
 	private Builds getBuildsRelatedToIssueKeys(HudsonClient client, Collection<String> issueKeys) throws ClientException {
 		Builds builds;
 		if (configurationManager.isFilterHudsonBuilds()) {
-			builds = client.findAll(SearchQuery.createForBuildSearch(issueKeys, association.getJobName()));
+			builds = client.findAll(SearchQuery.createForIssueSearch(issueKeys, association.getJobName()));
 		} else {
-			builds = client.findAll(SearchQuery.createForBuildSearch(issueKeys));
+			builds = client.findAll(SearchQuery.createForIssueSearch(issueKeys, null));
 		}
 		return builds;
 	}

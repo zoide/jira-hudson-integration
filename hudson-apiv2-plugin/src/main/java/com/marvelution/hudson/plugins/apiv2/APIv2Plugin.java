@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +43,9 @@ import com.google.common.collect.Lists;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.ActivitiesCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.BuildActivityCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.JobActivityCache;
+import com.marvelution.hudson.plugins.apiv2.cache.issue.IssueCache;
+import com.marvelution.hudson.plugins.apiv2.cache.issue.IssueKey;
+import com.marvelution.hudson.plugins.apiv2.cache.issue.IssuesCache;
 import com.marvelution.hudson.plugins.apiv2.servlet.filter.HudsonAPIV2ServletFilter;
 import com.thoughtworks.xstream.XStream;
 
@@ -65,13 +69,15 @@ public class APIv2Plugin extends Plugin {
 	private static final Logger LOGGER = Logger.getLogger(APIv2Plugin.class.getName());
 	private static final XStream XSTREAM = new XStream();
 	private static final String APIV2_DIRECTORY_NAME = "APIv2";
-	private static final String ACTIVITIES_CHACHE_FILE = "activities-cache.xml";
+	private static final String ACTIVITIES_CACHE_FILE = "activities-cache.xml";
+	private static final String ISSUES_CACHE_FILE = "issues-cache.xml";
 	private static final String APIV2_PATTERN_KEY = "apiv2.pattern";
 
 	private static APIv2Plugin plugin;
 
 	private transient List<Filter> filters = Lists.newArrayList();
-	private transient ActivitiesCache activitiesCache;
+	private transient ActivitiesCache activitiesCache = new ActivitiesCache();
+	private transient IssuesCache issuesCache = new IssuesCache();
 	private final CopyOnWriteList<String> patterns = new CopyOnWriteList<String>();
 
 	/**
@@ -86,11 +92,14 @@ public class APIv2Plugin extends Plugin {
 			PluginServletFilter.addFilter(filter);
 		}
 		LOGGER.log(Level.FINE, "Loading the Activity Cache");
-		File activityCacheFile = getFile(ACTIVITIES_CHACHE_FILE);
+		File activityCacheFile = getFile(ACTIVITIES_CACHE_FILE);
 		if (activityCacheFile.exists()) {
 			activitiesCache = (ActivitiesCache) XSTREAM.fromXML(new FileInputStream(activityCacheFile));
-		} else {
-			activitiesCache = new ActivitiesCache();
+		}
+		LOGGER.log(Level.FINE, "Loading the Issues Cache");
+		File issuesCacheFile = getFile(ISSUES_CACHE_FILE);
+		if (issuesCacheFile.exists()) {
+			issuesCache = (IssuesCache) XSTREAM.fromXML(new FileInputStream(issuesCacheFile));
 		}
 	}
 
@@ -104,7 +113,9 @@ public class APIv2Plugin extends Plugin {
 		}
 		filters.clear();
 		LOGGER.log(Level.FINE, "Storing the Activity Cache");
-		XSTREAM.toXML(activitiesCache, new FileOutputStream(getFile(ACTIVITIES_CHACHE_FILE)));
+		XSTREAM.toXML(activitiesCache, new FileOutputStream(getFile(ACTIVITIES_CACHE_FILE)));
+		LOGGER.log(Level.FINE, "Storing the Issue Cache");
+		XSTREAM.toXML(issuesCache, new FileOutputStream(getFile(ISSUES_CACHE_FILE)));
 		save();
 		plugin = null;
 	}
@@ -115,8 +126,12 @@ public class APIv2Plugin extends Plugin {
 	@Override
 	public void configure(StaplerRequest req, JSONObject formData) throws IOException, ServletException,
 					FormException {
-		patterns.replaceBy(req.getParameterValues(APIV2_PATTERN_KEY));
-		save();
+		String[] newPatterns = req.getParameterValues(APIV2_PATTERN_KEY);
+		if (!Arrays.equals(newPatterns, patterns.toArray(new String[patterns.size()]))) {
+			// TODO Also trigger a full index rescan
+			patterns.replaceBy(req.getParameterValues(APIV2_PATTERN_KEY));
+			save();
+		}
 	}
 
 	/**
@@ -171,6 +186,15 @@ public class APIv2Plugin extends Plugin {
 	}
 
 	/**
+	 * Getter for the {@link IssuesCache}
+	 * 
+	 * @return the {@link IssuesCache}
+	 */
+	public static IssuesCache getIssuesCache() {
+		return plugin.issuesCache;
+	}
+
+	/**
 	 * Getter for a {@link File} by name
 	 * 
 	 * @param filename the file name to get
@@ -192,6 +216,9 @@ public class APIv2Plugin extends Plugin {
 		XSTREAM.processAnnotations(ActivitiesCache.class);
 		XSTREAM.processAnnotations(JobActivityCache.class);
 		XSTREAM.processAnnotations(BuildActivityCache.class);
+		XSTREAM.processAnnotations(IssuesCache.class);
+		XSTREAM.processAnnotations(IssueCache.class);
+		XSTREAM.processAnnotations(IssueKey.class);
 	}
 
 }
