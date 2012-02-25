@@ -73,13 +73,18 @@ public class IssueTextUtils {
 		} catch (Exception e) {
 			context.setVariable("environment", Collections.emptyMap());
 		}
-		if (build.getChangeSet() != null) {
-			// Utilize the Dozer Mapper and its convertors of the API V2 plugin to get the ChangeLog and TestResults
-			context.setVariable("changelog", DozerUtils.getMapper().map(build.getChangeSet(), ChangeLog.class));
-		}
-		context.setVariable("testresults", DozerUtils.getMapper().map(build, TestResult.class));
+		// Utilize the Dozer Mapper and its convertors of the API V2 plugin to get the ChangeLog and TestResults
 		try {
-			// TODO Support custom templates
+			context.setVariable("changelog", DozerUtils.getMapper().map(build.getChangeSet(), ChangeLog.class));
+		} catch (Exception e) {
+			context.setVariable("changelog", new ChangeLog());
+		}
+		try {
+			context.setVariable("testresults", DozerUtils.getMapper().map(build, TestResult.class));
+		} catch (Exception e) {
+			context.setVariable("testresults", new TestResult());
+		}
+		try {
 			context.runScript(HudsonPluginUtils.getPluginClassloader().getResource("fields/" + type.field(site)
 				+ ".jelly"), output);
 		} catch (JellyException e) {
