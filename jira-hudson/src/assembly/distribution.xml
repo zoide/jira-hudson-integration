@@ -25,13 +25,14 @@
 	</formats>
 	<dependencySets>
 		<dependencySet>
-			<outputDirectory>hudson-plugin</outputDirectory>
+			<outputDirectory>hudson-plugins</outputDirectory>
 			<includes>
 				<include>com.marvelution.jira.plugins:hudson-apiv2-plugin</include>
 				<include>com.marvelution.jira.plugins:hudson-jirareporter-plugin</include>
 			</includes>
 			<excludes>
 				<exclude>com.marvelution.jira.plugins:hudson-apiv2-plugin:jar</exclude>
+				<exclude>com.marvelution.jira.plugins:hudson-apiv2-plugin:jar:java-client</exclude>
 			</excludes>
 		</dependencySet>
 		<dependencySet>

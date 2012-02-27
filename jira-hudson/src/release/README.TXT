@@ -7,8 +7,8 @@ What is it?
 ${project.description}
 
 
-Hudson CI - Quick Installation Guide
--------------------------------
+Hudson/Jenkins CI - Quick Installation Guide
+--------------------------------------------
 1. Shutdown the Hudson server instance
 2. Remove any existing JIRA Hudson Integration plugins of previous versions
 3a. Install the new plugin (hudson-apiv2-plugin-${project.version}.hpi) in the [HUDSON_HOME]/plugins directory
