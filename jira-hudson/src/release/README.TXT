@@ -10,17 +10,18 @@ ${project.description}
 Hudson CI - Quick Installation Guide
 -------------------------------
 1. Shutdown the Hudson server instance
-2. Remove any existing Jira Hudson Integration plugins of previous versions
+2. Remove any existing JIRA Hudson Integration plugins of previous versions
 3a. Install the new plugin (hudson-apiv2-plugin-${project.version}.hpi) in the [HUDSON_HOME]/plugins directory
 3b. Optionally install the new pugin (hudson-jira-reporter-${project.version}.hpi) in the [HUDSON_HOME]/plugins directory
 4. Start the Hudson server instance
 
 JIRA - Quick Installation Guide
 -------------------------------
-1. Shutdown the JIRA server instance
-2. Remove any existing Jira Hudson Integration plugins of previous versions
-3. Install the new plugin (jira-hudson-plugin-${project.version}.jar) in the {JIRA_HOME]/plugins/installed-plugins directory
-4. Start the JIRA server instance
+1. Logon to JIRA and navigate to Administration > Plugins
+2. Using the Universal Plugin Manager:
+2a. Update the plugin using the version on the Plugin Exchange (https://plugins.atlassian.com)
+2b. Update the plugin by uploading the new version (jira-hudson-plugin-${project.version}.jar)
+3. Don't forget to 'Drop Access' to the Administration section if you don't require it anymore
 
 
 MORE?
