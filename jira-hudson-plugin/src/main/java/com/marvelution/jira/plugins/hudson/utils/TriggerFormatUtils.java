@@ -120,14 +120,18 @@ public class TriggerFormatUtils {
 	 */
 	public String formatUserTrigger(UserTrigger trigger) {
 		logger.debug("Formatting trigger " + trigger.getClass().getName());
-		if (StringUtils.isNotBlank(trigger.getUsername()) && UserUtils.userExists(trigger.getUsername())) {
+		if (StringUtils.isBlank(trigger.getUsername())) {
+			// No username was given by the API, so he or she remains unknown
+			return i18nHelper.getText("hudson.panel.build.trigger.unknown.user");
+		} else if (UserUtils.userExists(trigger.getUsername())) {
 			// We have a JIRA user that triggered the build create link to that users profile page
 			final User user = UserUtils.getUser(trigger.getUsername());
 			return i18nHelper.getText("hudson.panel.build.trigger.jira.user", contextPath, user.getName(),
 				user.getDisplayName());
+		} else {
+			// It was a Hudson user that triggered the build
+			return i18nHelper.getText("hudson.panel.build.trigger.hudson.user", server.getPublicHost(), trigger.getUsername());
 		}
-		// It was a Hudson user that triggered the build
-		return i18nHelper.getText("hudson.panel.build.trigger.hudson.user", server.getPublicHost(), trigger.getUsername());
 	}
 
 	/**
