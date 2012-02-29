@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 
 import com.atlassian.crowd.embedded.api.CrowdService;
 import com.atlassian.crowd.embedded.api.User;
+import com.atlassian.gzipfilter.org.apache.commons.lang.StringUtils;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.security.roles.ProjectRole;
@@ -137,7 +138,7 @@ public class UserUtils {
 	 * @return <code>true</code> if it exists, <code>false</code> otherwise
 	 */
 	public static boolean userExists(String username, CrowdService crowdService) {
-		return getUser(username, crowdService) != null;
+		return StringUtils.isNotBlank(username) && getUser(username, crowdService) != null;
 	}
 
 	/**
@@ -155,9 +156,12 @@ public class UserUtils {
 	 * 
 	 * @param username the user name
 	 * @param crowdService the {@link CrowdService} implementation
-	 * @return the {@link User}
+	 * @return the {@link User}, <code>null</code> in case the given username is blank
 	 */
 	public static User getUser(String username, CrowdService crowdService) {
+		if (StringUtils.isBlank(username)) {
+			return null;
+		}
 		return crowdService.getUser(username);
 	}
 
