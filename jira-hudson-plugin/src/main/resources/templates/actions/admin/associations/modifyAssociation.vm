@@ -66,6 +66,9 @@ $!webResourceManager.requireResourcesForContext("hudson-admin")
 #set($i18n = $action)
 <form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post" action="$actionType.formAction()">
 <input type="hidden" name="context" value="${context}" />
+#if ($action.useContextDecorator())
+<input type="hidden" name="projectId" value="${context}" />
+#end
 #if ($associationId > 0)
 <input type="hidden" name="associationId" value="${associationId}" />
 #end
@@ -94,6 +97,7 @@ $!webResourceManager.requireResourcesForContext("hudson-admin")
 	#end
 </select>
 #fieldFooter ($i18n.getText("hudson.association.server.hint"))
+#if (!$action.useContextDecorator())
 #fieldHeader ($i18n.getText("hudson.association.project.label") "projectId" true $action.errors)
 <select size="1" name="projectId" id="projectId">
 	<option value="">${i18n.getText("hudson.association.select.project")}</option>
@@ -102,6 +106,7 @@ $!webResourceManager.requireResourcesForContext("hudson-admin")
 	#end
 </select>
 #fieldFooter ($i18n.getText("hudson.association.project.hint"))
+#end
 #fieldHeader ($i18n.getText("hudson.association.jobname.label") "jobName" true $action.errors)
 <select size="1" name="jobName" id="jobName">
 	<option value="">${i18n.getText("hudson.association.select.jobname")}</option>
