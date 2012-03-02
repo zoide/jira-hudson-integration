@@ -61,14 +61,18 @@ public class AbstractHudsonProjectAdminWebActionSupport extends AbstractHudsonAd
 	 * {@inheritDoc}
 	 */
 	@Override
+	public boolean hasPermissions() {
+		return super.hasPermissions() || (context != 0L
+				&& getPermissionManager().hasPermission(Permissions.PROJECT_ADMIN, getProject(), getLoggedInUser()));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public String doDefault() throws Exception {
 		initRequest();
-		if (context != 0L) {
-			return getPermissionManager().hasPermission(Permissions.PROJECT_ADMIN,
-				getProjectManager().getProjectObj(context), getLoggedInUser()) ? INPUT : PERMISSION_VIOLATION_RESULT;
-		} else {
-			return super.doDefault();
-		}
+		return super.doDefault();
 	}
 
 	/**

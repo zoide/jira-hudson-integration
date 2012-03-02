@@ -178,7 +178,7 @@
 			<condition class="com.marvelution.jira.plugins.hudson.conditions.IsHudsonConfigured" />
 		</conditions>
 		<label key="hudson.associations.admin"/>
-		<link linkId="hudson_associations_administer">/secure/admin/hudson/AdministerAssociations.jspa</link>
+		<link linkId="hudson_associations_administer">/secure/hudson/AdministerAssociations.jspa</link>
 	</web-item>
 	<web-item key="hudson-add-association" name="Hudson Add Association" section="admin_plugins_menu/hudson-section" weight="50">
 		<conditions type="AND">
@@ -188,22 +188,12 @@
 			<condition class="com.marvelution.jira.plugins.hudson.conditions.IsHudsonConfigured" />
 		</conditions>
 		<label key="hudson.association.admin.add"/>
-		<link linkId="hudson_association_add">/secure/admin/hudson/AddAssociation!default.jspa</link>
-	</web-item>
-	<!-- Extra Web-item to add a link in the ViewProject.jsp page -->
-	<web-item key="hudson-add-project-association" name="Hudson Add Project Association" section="system.view.project.operations" weight="10">
-		<conditions type="AND">
-			<condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
-				<param name="permission">admin</param>
-			</condition>
-			<condition class="com.marvelution.jira.plugins.hudson.conditions.IsHudsonConfigured" />
-		</conditions>
-		<label key="hudson.association.project.add" />
-		<link linkId="hudson_association_add">/secure/admin/hudson/AddAssociation!default.jspa?projectId=$helper.project.id</link>
+		<link linkId="hudson_association_add">/secure/hudson/AddAssociation!default.jspa</link>
 	</web-item>
 	<web-item key="hudson-project-associations" name="Hudson Project Associations" section="atl.jira.proj.config/hudson-group" weight="10">
+		<condition class="com.marvelution.jira.plugins.hudson.conditions.IsHudsonConfigured" />
 		<label key="admin.project.hudson.associations" />
-		<link linkId="hudson_project_associations">/secure/admin/hudson/AdministerAssociations.jspa?context=$helper.project.id</link>
+		<link linkId="hudson_project_associations">/secure/hudson/AdministerAssociations.jspa?context=$helper.project.id</link>
 	</web-item>
 
 	<!-- H U D S O N   P L U G I N   C O N F I G U R A T I O N -->
