@@ -152,6 +152,7 @@
 							<attach>true</attach>
 							<descriptors>
 								<descriptor>src/assembly/java-client.xml</descriptor>
+								<descriptor>src/assembly/java-client-sources.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
@@ -172,16 +173,9 @@
 				</executions>
 				<configuration>
 					<configFile>src/enunciate/enunciate.xml</configFile>
-					<artifacts>
-						<artifact>
-							<enunciateArtifactId>java.json.client.library.binaries</enunciateArtifactId>
-							<classifier>java-json-client</classifier>
-							<artifactType>jar</artifactType>
-						</artifact>
-					</artifacts>
 					<exports>
-						<java.client.library.sources>java-client-sources.jar</java.client.library.sources>
-						<java.json.client.library.sources>java-json-client-sources.jar</java.json.client.library.sources>
+						<java.client.library>java-client.jar</java.client.library>
+						<java.json.client.library>java-json-client.jar</java.json.client.library>
 					</exports>
 				</configuration>
 				<dependencies>

@@ -33,12 +33,20 @@
 			<excludes>
 				<exclude>com.marvelution.jira.plugins:hudson-apiv2-plugin:jar</exclude>
 				<exclude>com.marvelution.jira.plugins:hudson-apiv2-plugin:jar:java-client</exclude>
+				<exclude>com.marvelution.jira.plugins:hudson-apiv2-plugin:jar:java-client-sources</exclude>
 			</excludes>
 		</dependencySet>
 		<dependencySet>
 			<outputDirectory>jira-plugin</outputDirectory>
 			<includes>
 				<include>com.marvelution.jira.plugins:jira-hudson-plugin</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>development</outputDirectory>
+			<includes>
+				<include>com.marvelution.jira.plugins:hudson-apiv2-wsclient</include>
+				<include>com.marvelution.jira.plugins:hudson-apiv2-plugin:jar:java-client</include>
 			</includes>
 		</dependencySet>
 	</dependencySets>

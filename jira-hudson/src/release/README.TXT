@@ -23,6 +23,9 @@ JIRA - Quick Installation Guide
 2b. Update the plugin by uploading the new version (jira-hudson-plugin-${project.version}.jar)
 3. Don't forget to 'Drop Access' to the Administration section if you don't require it anymore
 
+Developers
+----------
+For developers can use the libraries in the development directory to integrate with the Hudson API v2 plugin
 
 MORE?
 -------------------------------
