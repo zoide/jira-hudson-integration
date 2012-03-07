@@ -26,10 +26,10 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>jira-hudson-plugin</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>atlassian-plugin</packaging>
 	
 	<name>JIRA Hudson Plugin</name>
-	<description>Jira Plugin to integrate Hudson CI</description>
+	<description>JIRA Plugin to integrate Hudson CI</description>
 	<url>http://apidocs.marvelution.com/${project.parent.artifactId}/${project.version}/${project.artifactId}/</url>
 
 	<scm>
@@ -39,6 +39,7 @@
 	</scm>
 
 	<properties>
+		<atlassian.amps.version>3.8</atlassian.amps.version>
 		<atlassian.streams.version>4.1.2</atlassian.streams.version>
 		<atlassian.ao.version>0.15.8</atlassian.ao.version>
 		<atlassian.plugin.key>${project.groupId}.hudson</atlassian.plugin.key>
@@ -97,7 +98,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.atlassian.jira</groupId>
-			<artifactId>atlassian-jira</artifactId>
+			<artifactId>jira-api</artifactId>
+			<version>${atlassian.jira.version}</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-core</artifactId>
 			<version>${atlassian.jira.version}</version>
 			<type>jar</type>
 			<scope>provided</scope>
@@ -215,6 +223,18 @@
 			</exclusions>
 		</dependency>
 		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-tests</artifactId>
+			<version>${atlassian.jira.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-func-tests</artifactId>
+			<version>${atlassian.jira.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.8</version>
@@ -244,55 +264,25 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<groupId>net.alchim31.maven</groupId>
-				<artifactId>yuicompressor-maven-plugin</artifactId>
-				<version>0.9</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compress</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<linebreakpos>-1</linebreakpos>
-					<jswarn>false</jswarn>
-					<excludes>
-						<exclude>**/**.xml</exclude>
-						<exclude>**/**-min*</exclude>
-						<exclude>**/**.properties</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.2.0</version>
+				<groupId>com.atlassian.maven.plugins</groupId>
+				<artifactId>maven-jira-plugin</artifactId>
+				<version>${atlassian.amps.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-					<instructions>
-						<Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
-						<Bundle-SymbolicName>${atlassian.plugin.key}</Bundle-SymbolicName>
-						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
-						<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
-						<Embed-Transitive>true</Embed-Transitive>
-						<Embed-Directory>META-INF/lib</Embed-Directory>
-						<Embed-StripGroup>false</Embed-StripGroup>
-						<Embed-StripVersion>false</Embed-StripVersion>
-						<Export-Package>
-							com.marvelution.jira.plugins.hudson.rest*,
-							com.marvelution.jira.plugins.hudson.services*,
-						</Export-Package>
-						<Import-Package>
-							*;resolution:=optional
-						</Import-Package>
-						<Include-Resource>
-							{maven-resources},
-							{maven-dependencies},
-						</Include-Resource>
-						<Spring-Context>*;timeout:=60</Spring-Context>
-					</instructions>
+					<product>jira</product>
+					<productVersion>${atlassian.jira.version}</productVersion>
+					<productDataVersion>${atlassian.jira.version}</productDataVersion>
+					<productDataPath>${basedir}/src/test/resources/generated-test-resources.zip</productDataPath>
+					<server>localhost</server>
+					<allowGoogleTracking>false</allowGoogleTracking>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.atlassian.maven.plugins</groupId>
+						<artifactId>maven-amps-plugin</artifactId>
+						<version>3.8-marvelution-1</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<inherited>true</inherited>
@@ -351,15 +341,19 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>net.alchim31.maven</groupId>
-										<artifactId>yuicompressor-maven-plugin</artifactId>
-										<versionRange>[0.9,)</versionRange>
+										<groupId>com.atlassian.maven.plugins</groupId>
+										<artifactId>maven-jira-plugin</artifactId>
+										<versionRange>[3.8,)</versionRange>
 										<goals>
-											<goal>compress</goal>
+											<goal>copy-bundled-dependencies</goal>
+											<goal>compress-resources</goal>
+											<goal>filter-plugin-descriptor</goal>
+											<goal>generate-manifest</goal>
+											<goal>generate-rest-docs</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute />
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
