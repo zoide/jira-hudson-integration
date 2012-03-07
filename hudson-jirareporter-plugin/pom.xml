@@ -227,7 +227,7 @@
 			<id>get-jira-wsdl</id>
 			<activation>
 				<file>
-					<missing>hudson-jirareporter-plugin/src/main/wsdl/jirasoapservice-v2.wsdl</missing>
+					<missing>${basedir}/src/main/wsdl/jirasoapservice-v2.wsdl</missing>
 				</file>
 			</activation>
 			<build>
