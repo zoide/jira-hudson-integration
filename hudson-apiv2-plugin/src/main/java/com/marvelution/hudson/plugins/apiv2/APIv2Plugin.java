@@ -94,12 +94,21 @@ public class APIv2Plugin extends Plugin {
 		LOGGER.log(Level.FINE, "Loading the Activity Cache");
 		File activityCacheFile = getFile(ACTIVITIES_CACHE_FILE);
 		if (activityCacheFile.exists()) {
-			activitiesCache = (ActivitiesCache) XSTREAM.fromXML(new FileInputStream(activityCacheFile));
+			try {
+				activitiesCache = (ActivitiesCache) XSTREAM.fromXML(new FileInputStream(activityCacheFile));
+			} catch (Exception e) {
+				LOGGER
+					.severe("Failed to load the activity-cache.xml and will thus not be available for the REST APIs");
+			}
 		}
 		LOGGER.log(Level.FINE, "Loading the Issues Cache");
 		File issuesCacheFile = getFile(ISSUES_CACHE_FILE);
 		if (issuesCacheFile.exists()) {
-			issuesCache = (IssuesCache) XSTREAM.fromXML(new FileInputStream(issuesCacheFile));
+			try {
+				issuesCache = (IssuesCache) XSTREAM.fromXML(new FileInputStream(issuesCacheFile));
+			} catch (Exception e) {
+				LOGGER.severe("Failed to load the issue-cache.xml and will thus not be available for the REST APIs");
+			}
 		}
 	}
 
