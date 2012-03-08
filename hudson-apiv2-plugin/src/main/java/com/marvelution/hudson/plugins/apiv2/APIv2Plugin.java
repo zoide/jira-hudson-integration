@@ -136,9 +136,9 @@ public class APIv2Plugin extends Plugin {
 	public void configure(StaplerRequest req, JSONObject formData) throws IOException, ServletException,
 					FormException {
 		String[] newPatterns = req.getParameterValues(APIV2_PATTERN_KEY);
-		if (!Arrays.equals(newPatterns, patterns.toArray(new String[patterns.size()]))) {
+		if (newPatterns != null && !Arrays.equals(newPatterns, patterns.toArray(new String[patterns.size()]))) {
 			// TODO Also trigger a full index rescan
-			patterns.replaceBy(req.getParameterValues(APIV2_PATTERN_KEY));
+			patterns.replaceBy(newPatterns);
 			save();
 		}
 	}
