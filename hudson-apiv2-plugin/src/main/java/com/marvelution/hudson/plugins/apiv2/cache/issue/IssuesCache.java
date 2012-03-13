@@ -22,10 +22,12 @@ package com.marvelution.hudson.plugins.apiv2.cache.issue;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.collections.list.SynchronizedList;
 
 import com.google.common.collect.Lists;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * @author <a href="mailto:markrekveld@marvelution.com">Mark Rekveld</a>
@@ -35,6 +37,46 @@ import com.google.common.collect.Lists;
 public class IssuesCache implements Iterable<IssueCache>, Collection<IssueCache> {
 
 	private List<IssueCache> issues = Lists.newArrayList();
+	private String issueKeyRegex;
+	@XStreamOmitField
+	private Pattern issueKeyPattern;
+
+	
+	/**
+	 * Getter for issueKeyRegex
+	 *
+	 * @return the issueKeyRegex
+	 * @since 4.5.0
+	 */
+	public String getIssueKeyRegex() {
+		return issueKeyRegex;
+	}
+
+	
+	/**
+	 * Setter for issueKeyRegex
+	 *
+	 * @param issueKeyRegex the issueKeyRegex to set
+	 * @since 4.5.0
+	 */
+	public void setIssueKeyRegex(String issueKeyRegex) {
+		this.issueKeyRegex = issueKeyRegex;
+	}
+
+	
+	/**
+	 * Getter for issueKeyPattern
+	 *
+	 * @return the issueKeyPattern
+	 * @since 4.5.0
+	 */
+	public Pattern getIssueKeyPattern() {
+		// Get the Issue Key Pattern, create it if its not created before or if the pattern has changed
+		if (issueKeyPattern == null || !issueKeyPattern.pattern().equals(getIssueKeyRegex())) {
+			issueKeyPattern = Pattern.compile(getIssueKeyRegex());
+		}
+		return issueKeyPattern;
+	}
 
 	/**
 	 * Getter for issues

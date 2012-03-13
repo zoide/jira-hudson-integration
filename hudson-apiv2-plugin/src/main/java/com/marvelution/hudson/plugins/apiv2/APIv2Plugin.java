@@ -47,6 +47,7 @@ import com.marvelution.hudson.plugins.apiv2.cache.issue.IssueCache;
 import com.marvelution.hudson.plugins.apiv2.cache.issue.IssueKey;
 import com.marvelution.hudson.plugins.apiv2.cache.issue.IssuesCache;
 import com.marvelution.hudson.plugins.apiv2.servlet.filter.HudsonAPIV2ServletFilter;
+import com.marvelution.hudson.plugins.apiv2.utils.JiraKeyUtils;
 import com.thoughtworks.xstream.XStream;
 
 import hudson.Plugin;
@@ -71,6 +72,7 @@ public class APIv2Plugin extends Plugin {
 	private static final String APIV2_DIRECTORY_NAME = "APIv2";
 	private static final String ACTIVITIES_CACHE_FILE = "activities-cache.xml";
 	private static final String ISSUES_CACHE_FILE = "issues-cache.xml";
+	private static final String APIV2_ISSUE_KEY_PATTERN = "apiv2.issue.key.pattern";
 	private static final String APIV2_PATTERN_KEY = "apiv2.pattern";
 
 	private static APIv2Plugin plugin;
@@ -110,6 +112,10 @@ public class APIv2Plugin extends Plugin {
 				LOGGER.severe("Failed to load the issue-cache.xml and will thus not be available for the REST APIs");
 			}
 		}
+		if (StringUtils.isBlank(issuesCache.getIssueKeyRegex())) {
+			// Make sure the pattern is set
+			issuesCache.setIssueKeyRegex(JiraKeyUtils.DEFAULT_JIRA_ISSUE_KEY_PATTERN.pattern());
+		}
 	}
 
 	/**
@@ -135,6 +141,11 @@ public class APIv2Plugin extends Plugin {
 	@Override
 	public void configure(StaplerRequest req, JSONObject formData) throws IOException, ServletException,
 					FormException {
+		if (req.hasParameter(APIV2_ISSUE_KEY_PATTERN)
+				&& StringUtils.isNotBlank(req.getParameter(APIV2_ISSUE_KEY_PATTERN))) {
+			issuesCache.setIssueKeyRegex(req.getParameter(APIV2_ISSUE_KEY_PATTERN));
+			// TODO Also trigger a full index rescan
+		}
 		String[] newPatterns = req.getParameterValues(APIV2_PATTERN_KEY);
 		if (newPatterns != null && !Arrays.equals(newPatterns, patterns.toArray(new String[patterns.size()]))) {
 			// TODO Also trigger a full index rescan
@@ -183,6 +194,16 @@ public class APIv2Plugin extends Plugin {
 	 */
 	public String[] getPatterns() {
 		return patterns.toArray(new String[patterns.size()]);
+	}
+
+	/**
+	 * Getter for the pattern used to index issue key
+	 * 
+	 * @return the Issue Key pattern
+	 * @since 4.5.0
+	 */
+	public String getIssueKeyPattern() {
+		return issuesCache.getIssueKeyRegex();
 	}
 
 	/**

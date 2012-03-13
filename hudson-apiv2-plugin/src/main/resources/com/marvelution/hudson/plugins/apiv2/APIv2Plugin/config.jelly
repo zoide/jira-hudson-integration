@@ -21,6 +21,9 @@
         <f:entry title="API v2 Docs">
         	<a href="${rootURL}/plugin/hudson-apiv2-plugin/docs/index.html" target="API">REST API Reference</a>
         </f:entry>
+        <f:entry title="JIRA Issue Key Pattern" help="${rootURL}/plugin/hudson-apiv2-plugin/help/issue-key-pattern.html" field="issueKeyPattern">
+			<f:textbox name="apiv2.issue.key.pattern" value="${it.issueKeyPattern}" checkUrl="'${rootURL}/plugin/hudson-apiv2-plugin/checkPattern?value='+escape(this.value)" />
+		</f:entry>
 		<f:optionalBlock name="apiv2.indexing" title="Index builds using patterns" checked="${it.patterns.size() > 0}"
 				help="${rootURL}/plugin/hudson-apiv2-plugin/help/index-patterns.html">
 			<f:entry title="Indexing Patterns" description="">

@@ -57,7 +57,8 @@ public class JiraIssueKeyCacheRunListener extends RunListener<Run> {
 			// We can only handle AbstractBuild implementations since we need the change log
 			AbstractBuild<?, ?> build = (AbstractBuild<?, ?>) r;
 			for (Entry entry : (ChangeLogSet<? extends Entry>) build.getChangeSet()) {
-				for (String key : JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg())) {
+				for (String key : JiraKeyUtils.getJiraIssueKeysFromText(entry.getMsg(),
+						APIv2Plugin.getIssuesCache().getIssueKeyPattern())) {
 					try {
 						toBeAdded.add(new IssueCache(IssueKey.getIssueKey(key), r.getParent().getFullName(), r
 							.getNumber()));
