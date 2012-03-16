@@ -275,6 +275,19 @@
 					<productDataPath>${basedir}/src/test/resources/generated-test-resources.zip</productDataPath>
 					<server>localhost</server>
 					<allowGoogleTracking>false</allowGoogleTracking>
+					<pluginArtifacts>
+						<pluginArtifact>
+							<groupId>com.atlassian.activeobjects</groupId>
+							<artifactId>activeobjects-plugin</artifactId>
+							<version>${atlassian.ao.version}</version>
+						</pluginArtifact>
+						<pluginArtifact>
+							<groupId>com.atlassian.activeobjects</groupId>
+							<artifactId>activeobjects-jira-spi</artifactId>
+							<version>${atlassian.ao.version}</version>
+						</pluginArtifact>
+					</pluginArtifacts>
+					<!-- TODO Add the instructions element -->
 				</configuration>
 				<dependencies>
 					<dependency>
