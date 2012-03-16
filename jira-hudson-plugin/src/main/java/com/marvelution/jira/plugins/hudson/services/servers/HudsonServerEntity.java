@@ -19,7 +19,8 @@
 
 package com.marvelution.jira.plugins.hudson.services.servers;
 
-import com.atlassian.gzipfilter.org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.StringUtils;
+
 import com.marvelution.security.crypto.SimpleStringEncryptor;
 import com.marvelution.security.crypto.StringEncryptor;
 

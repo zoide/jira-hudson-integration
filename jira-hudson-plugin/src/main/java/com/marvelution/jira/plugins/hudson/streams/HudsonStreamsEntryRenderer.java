@@ -21,7 +21,8 @@ package com.marvelution.jira.plugins.hudson.streams;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.atlassian.gzipfilter.org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.StringUtils;
+
 import com.atlassian.sal.api.message.I18nResolver;
 import com.atlassian.streams.api.StreamsEntry;
 import com.atlassian.streams.api.StreamsEntry.Html;

@@ -21,11 +21,11 @@ package com.marvelution.jira.plugins.hudson.utils;
 
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.atlassian.crowd.embedded.api.CrowdService;
 import com.atlassian.crowd.embedded.api.User;
-import com.atlassian.gzipfilter.org.apache.commons.lang.StringUtils;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.security.roles.ProjectRole;
