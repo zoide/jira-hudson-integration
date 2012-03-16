@@ -24,6 +24,8 @@ import hudson.model.Hudson;
 import hudson.model.Project;
 
 import java.net.URI;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,8 +36,12 @@ import org.apache.wink.common.annotations.Parent;
 import org.apache.wink.common.annotations.Scope;
 import org.apache.wink.common.annotations.Scope.ScopeType;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Collections2;
 import com.marvelution.hudson.plugins.apiv2.APIv2Plugin;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.ActivityCache;
+import com.marvelution.hudson.plugins.apiv2.cache.activity.ActivityCachePredicates;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.BuildActivityCache;
 import com.marvelution.hudson.plugins.apiv2.cache.activity.JobActivityCache;
 import com.marvelution.hudson.plugins.apiv2.dozer.utils.DozerUtils;
@@ -69,18 +75,13 @@ public class ActivityRestResourceImpl extends BaseRestResource implements Activi
 	@Override
 	public Activities getActivities(ActivityType[] types, String[] jobs, String[] userIds, int maxResults) {
 		Activities activities = new Activities();
-		if (ArrayUtils.isEmpty(types)) {
-			types = ActivityType.values();
-		}
-		for (ActivityCache cache : APIv2Plugin.getActivitiesCache().getSortedActivities()) {
+		for (ActivityCache cache : getFilteredActivities(types, jobs, userIds)) {
 			try {
 				hudson.model.Job<?, ? extends AbstractBuild<?, ?>> job = getHudsonJob(cache.getJob());
-				if ((ArrayUtils.isEmpty(jobs) || ArrayUtils.contains(jobs, job.getFullName()))
-					&& (ArrayUtils.isEmpty(userIds) || ArrayUtils.contains(userIds, cache.getCulprit()))
-					&& job.hasPermission(Project.READ)) {
-					if (cache instanceof BuildActivityCache && ArrayUtils.contains(types, ActivityType.BUILD)) {
+				if (job.hasPermission(Project.READ)) {
+					if (cache instanceof BuildActivityCache) {
 						activities.add(getBuildActivityFromCache((BuildActivityCache) cache, job));
-					} else if (cache instanceof JobActivityCache && ArrayUtils.contains(types, ActivityType.JOB)) {
+					} else if (cache instanceof JobActivityCache) {
 						activities.add(getJobActivityFromCache((JobActivityCache) cache, job));
 					}
 					if (activities.size() == maxResults) {
@@ -89,11 +90,34 @@ public class ActivityRestResourceImpl extends BaseRestResource implements Activi
 					}
 				}
 			} catch (Exception e) {
-				LOGGER.log(Level.WARNING,
-					"Failed to add ActivityCache object " + cache.toString() + ". Reason: " + e.getMessage(), e);
+				LOGGER.log(Level.WARNING, "Failed to add ActivityCache object " + cache.toString() + ". Reason: "
+					+ e.getMessage(), e);
 			}
 		}
 		return activities;
+	}
+
+	/**
+	 * Get the filtered activities
+	 * 
+	 * @param types the {@link ActivityType}s to filter by
+	 * @param jobs the jobnames to filter by
+	 * @param userIds the userIds to filter by
+	 * @return the {@link List} of {@link ActivityCache}s
+	 * @since 4.5.0
+	 */
+	private Collection<ActivityCache> getFilteredActivities(ActivityType[] types, String[] jobs, String[] userIds) {
+		if (ArrayUtils.isEmpty(types)) {
+			types = ActivityType.values();
+		}
+		Predicate<ActivityCache> predicates = ActivityCachePredicates.isActivity(types);
+		if (jobs != null) {
+			predicates = Predicates.and(predicates, ActivityCachePredicates.relatesToJobs(jobs));
+		}
+		if (userIds != null) {
+			predicates = Predicates.and(predicates, ActivityCachePredicates.relatesToUsers(userIds));
+		}
+		return Collections2.filter(APIv2Plugin.getActivitiesCache().getSortedActivities(), predicates);
 	}
 
 	/**
