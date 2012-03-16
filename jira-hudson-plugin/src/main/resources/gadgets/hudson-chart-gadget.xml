@@ -21,8 +21,8 @@
 	<ModulePrefs title="__MSG_hudson.gadget.chart.title__" directory_title="__MSG_hudson.gadget.chart.title__"
 		description="__MSG_hudson.gadget.chart.description__"
 		author="Marvelution" author_email="info@marvelution.com" author_affiliation="Marvelution"
-		author_location="Beverwijk, The Netherlands" title_url="http://www.marvelution.com/" height="100"
-		creenshot='#staticResourceUrl("${atlassian.plugin.key}:hudson-chart-gadget", "chart-screenshot.png")'
+		author_location="Beverwijk, The Netherlands" title_url="http://docs.marvelution.com/x/FgB1" height="100"
+		screenshot='#staticResourceUrl("${atlassian.plugin.key}:hudson-chart-gadget", "chart-screenshot.png")'
 		thumbnail='#staticResourceUrl("${atlassian.plugin.key}:hudson-chart-gadget", "chart-thumb.png")'>
 		<Optional feature="gadget-directory">
 			<Param name="categories">
