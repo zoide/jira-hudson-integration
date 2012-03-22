@@ -24,10 +24,10 @@
 		<version>${project.version}</version>
 		<param name="plugin-icon">marketplace/icon_16.png</param>
 		<param name="plugin-logo">marketplace/icon_48.png</param>
+		<param name="vendor-icon">marketplace/icon_16.png</param>
+		<param name="vendor-logo">marketplace/vendor_48.png</param>
 		<!-- Support for the following marketing assets will be implemented soon -->
 		<!--<param name="plugin-banner">marketplace/banner.png</param>-->
-		<!--<param name="vendor-icon">marketplace/icon_16.png</param>-->
-		<!--<param name="vendor-logo">marketplace/icon_48.png</param>-->
 	</plugin-info>
 
 	<!-- I 1 8 N   R E S O U R C E S -->
